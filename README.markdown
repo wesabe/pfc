@@ -13,7 +13,9 @@ Issues
 ------
 
 * There is a fair amount of unused code that was never purged, so don't be too confused if you find something and you have no idea why it's there. It probably doesn't need to be. This is particularly true in parts of the accounts and transactions systems, much of which were moved to the BRCM (Java) backend. Delete!
+
 * Currency exchange rates are not provided in this initial release. Wesabe used a commercial exchange rate provider (xe.com) for this data, and we can't use that service here or redistribute their data. If anyone would like to add exchange rate support for a particular provider, here's how you would add an exchange rate to the database:
-    # exchange rates are stored in units of USD. If a rate is not present in the database for a given date, the
-    # nearest existing rate will be used
-    CurrencyExchangeRate.create(:currency => "EUR", :rate => 0.7873, :date => Date.parse("2010-07-13"))
+
+        # exchange rates are stored in units of USD. If a rate is not present in the database for a given 
+        # date, the nearest existing rate will be used
+        CurrencyExchangeRate.create(:currency => "EUR", :rate => 0.7873, :date => Date.parse("2010-07-13"))
