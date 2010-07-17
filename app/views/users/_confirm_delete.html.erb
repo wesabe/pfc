@@ -1,0 +1,15 @@
+<div id="confirm_dialog">
+  <div class="hd">Delete Member Account</div>
+  <div class="bd">
+    <p>Are you sure you want to <b>delete your member account?</b></p>
+    <% form_tag destroy_user_path, :method => "delete" do -%>
+      <p>All private information associated with your membership, including all bank data,
+         will be permanently deleted. This cannot be reversed.</p>
+      <p>
+        As a security measure, please enter your password:<br>
+        <%= password_field_tag %> <span class="error"></span>
+      </p>
+    <% end -%>
+  </div>
+</div>
+

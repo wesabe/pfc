@@ -1,0 +1,127 @@
+#!/usr/bin/env ruby
+
+require "optparse"
+require "fileutils"
+
+class ThumbnailCommand
+  attr_reader :args, :processor
+
+  def initialize(args, processor)
+    @args, @processor = args, processor
+  end
+
+  def self.run(args, processor)
+    new(args, processor).run
+  end
+
+  def run
+    begin
+      options = parse_options
+      processor.process(options[:input], options[:output], options[:size])
+    rescue => e
+      puts "#{e.class}: #{e.message}"
+      puts e.backtrace.map { |b| "  #{b}" }.join("\n")
+      exit(-1)
+    end
+  end
+
+  private
+
+  def parse_options
+    options = {}
+
+    parser = OptionParser.new do |opts|
+      opts.banner =  "Usage: ./script/images/thumbnail --size=SIZE INPUT OUTPUT\n"
+
+      opts.separator ""
+      opts.separator "Required options:"
+      opts.on("--size=SIZE", Integer, "Width and height of the resulting image, in pixels") do |s|
+        options[:size] = s
+      end
+
+      opts.on_tail("-h", "--help", "Show this message") do
+        puts parser; exit(-1)
+      end
+    end
+
+    begin
+      parser.parse!
+      options[:input] = args[0]
+      options[:output] = args[1]
+    rescue OptionParser::InvalidArgument => e
+      puts "Error: #{e.message}\n\n"
+      options = {}
+    end
+
+    if options[:input].nil? || options[:output].nil? || options[:size].nil?
+      puts parser; exit(-1)
+    end
+
+    return options
+  end
+end
+
+def require_with_rubygems_if_needed(file)
+  begin
+    # try to load it without rubygems
+    require file
+  rescue LoadError => e
+    begin
+      # couldn't load file, try to load rubygems
+      require 'rubygems'
+    rescue LoadError
+      # no rubygems, no target file, re-raise original exception
+      raise e
+    end
+    # loaded rubygems, try again
+    require file
+  end
+end
+
+class RMagickImageProcessor
+  def process(infile, outfile, size)
+    image = Magick::Image.read(infile).first
+    image.resize_to_square!(size)
+    image.write(outfile)
+  end
+end
+
+class ImageMagickCommandLineImageProcessor
+  attr_reader :script
+
+  def initialize(script)
+    @script = script
+  end
+
+  def process(infile, outfile, size)
+    system script, infile, '-resize', size.to_s, outfile
+    raise "unable to run #{script} with input file #{infile}, output file #{outfile}, and size #{size}" unless $?.success?
+  end
+
+  def self.bundled_processor_for_platform(platform)
+    case platform
+    when /darwin/i
+      new "#{File.dirname(__FILE__)}/macosx/convert"
+    end
+  end
+end
+
+begin
+  require_with_rubygems_if_needed 'RMagick'
+  require File.dirname(__FILE__) + '/rmagick_ext'
+
+  processor = RMagickImageProcessor.new
+rescue LoadError
+  system "which -s convert"
+  if $?.success?
+    $stderr.puts "RMagick is not available, using ImageMagick's `convert' utility."
+    processor = ImageMagickCommandLineImageProcessor.new("convert")
+  elsif processor = ImageMagickCommandLineImageProcessor.bundled_processor_for_platform(RUBY_PLATFORM)
+    $stderr.puts "ImageMagick is not available, using the bundled `convert' utility."
+  else
+    $stderr.puts "ImageMagick is not available and there is no bundled utility for this platform, aborting."
+    exit(-1)
+  end
+end
+
+ThumbnailCommand.run(ARGV, processor)

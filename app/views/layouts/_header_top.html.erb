@@ -1,0 +1,9 @@
+<div id="header-top">
+  <%= logo %>
+  <% if current_user %>
+  <div id="user-nav">
+    Welcome back, <%= link_to(h(current_user.display_name), edit_profile_url) %> &nbsp;|&nbsp; <%= link_to "Sign Out", logout_url %>
+  </div>
+  <% end %>
+  <div class="clear"></div>
+</div>

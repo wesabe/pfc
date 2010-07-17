@@ -1,0 +1,6 @@
+error = Api::Constants::Error::IMPORT_FAILED
+xml.response(:status => "failed", :apiversion => Api::Constants::CURRENT_API_VERSION) do
+  xml.error(:code => error[:code]) do
+    xml.message(error[:message])
+  end
+end

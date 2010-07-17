@@ -1,0 +1,1 @@
+Adds concerned_with class method to ActiveRecord::Base to allow for easy separation of concerns within models. See http://paulbarry.com/articles/2008/08/30/concerned-with-skinny-controller-skinny-model

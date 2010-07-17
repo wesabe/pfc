@@ -1,0 +1,106 @@
+<% @tab = 'accounts' -%>
+<% set_page_title "Automatic Uploader", "Enable Accounts" %>
+
+<% javascript 'wesabe/views/shared/form' %>
+
+<div id="three-col-center">
+  <div class="two-column flat" id="upload-account">
+    <div class="top"><div class="right"><div class="grip"></div></div></div>
+    <div class="middle"><div class="right">
+      <div class="content">
+        <div class="module-header">
+        <h4>Getting Started</h4>
+      </div>
+        <div id="upload-index">
+          <!-- BEGIN steps -->
+          <ul class="upload-steps">
+            <li>1. Find your bank</li>
+            <li>2. Connect to your bank</li>
+            <li class="on">3. Select your accounts</li>
+          </ul>
+          <!-- END steps -->
+          <div id="color_body">
+            <div id="help">
+               <h6 class="color_title">Other ways to Upload&hellip;</h6>
+               <ul>
+                 <li class="manual"><%= link_to "Manual Uploads", manual_upload_path(:fi => @fi) %></li>
+               </ul>
+            </div><!-- END help -->
+            <div id="form_body">
+              <h3><%=h @fi.name %>
+              <%= link_to truncate(@fi.url, 45), @fi.url, :target=>"new", :class=>"fi_url" %></h3>
+
+              <%- form_tag enable_accounts_path do -%>
+              <p class="note_wide">
+              <%- if @new_accounts.any? -%>
+              <%- if @new_accounts.size == 1 -%>
+              <strong>We found one new account.</strong>
+              Rename it if you like, and uncheck it if you don&rsquo;t want to add it.
+              <%- else -%>
+              <strong>We found new accounts.</strong>
+              Rename each if you like, and uncheck those you don&rsquo;t want to add.
+              <%- end # if @new_accounts.size == 1 -%>
+              <%- else -%>
+              <%- if @old_accounts.size == 1 -%>
+              <strong>We found one existing account.</strong>
+              Rename it if you like.
+              <%- else -%>
+              <strong>We found these existing accounts.</strong>
+              Rename them if you like.
+              <%- end # if @old_accounts.size == 1 -%>
+              <%- end # if @new_accounts.any? -%>
+              </p><!-- END note -->
+
+              <ul id="bank_accounts">
+          <%- @new_accounts.each do |account| -%>
+          <li class="new_account">
+            <span class="check_box"><%= check_box_tag "accounts[#{account.to_param}][enabled]", true, true %></span>
+            <%= text_field_tag "accounts[#{account.to_param}][name]", account.name, :class => "medium_text_field account_name" %>
+            <%= text_field_tag "accounts[#{account.to_param}][balance]", number_to_currency(account.balance, :unit => account.currency.unit), :class => "medium_text_field disabled balance", :disabled => true %>
+          </li>
+          <%- end -%>
+
+          <%- if @new_accounts.any? && @old_accounts.any? -%>
+          <li class="existing_account_label">
+            <%- if @old_accounts.size == 1 -%>
+            <br/>
+            &hellip;and this existing account:
+            <%- else -%>
+            <br/>
+            &hellip;and these existing accounts:
+            <%- end # if @old_accounts.size == 1 -%>
+          </li>
+          <%- end -%>
+
+          <%- @old_accounts.each do |account| -%>
+          <li class="existing_account">
+            <%= hidden_field "accounts[#{account.to_param}][enabled]", "1" %>
+            <span class="check_box" <%- unless @new_accounts.any? -%>style="visibility:hidden"<%- end -%>>
+              <input type="checkbox" checked="checked" disabled="disabled" /></span>
+            <%= text_field_tag "accounts[#{account.to_param}][name]", account.name, :class => "medium_text_field account_name" %>
+            <input type="text" class="medium_text_field balance disabled" disabled="disabled" value="<%=h number_to_currency(account.balance, :unit => account.currency.unit) %>" />
+          </li>
+          <%- end -%>
+        </ul><!-- END bank_accounts -->
+
+              <!-- <a class="button submit green"><span>Add Another Bank</span></a> -->
+              <a class="button submit green"><span style="width:80px; min-width:80px; text-align:center;">Save</span></a>
+              <%- end -%>
+            </div><!-- END form_body -->
+
+            <script type="text/javascript" charset="utf-8">
+            $(function() {
+            $('.account_name').focus();
+            });
+            </script>
+
+            <div class="clear">&nbsp;</div>
+          </div><!-- END color_body -->
+
+          <div class="clear">&nbsp;</div>
+        </div><!-- END upload index -->
+      </div>
+    </div></div>
+    <div class="bottom"><div class="right"></div></div>
+  </div>
+</div>

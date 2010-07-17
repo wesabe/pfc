@@ -1,0 +1,42 @@
+<% set_page_title "Don't Panic" %>
+
+<script type="text/javascript">
+  jQuery(function($) {
+    var animals = $('#kittens_para,#puppies_para'),
+        iframe = $('#iframe');
+    animals.click(function(event) {
+      animals.toggle()
+      iframe.attr('src', event.target.href);
+      return false;
+    });
+  });
+</script>
+
+<div id="right">
+  <div class="two-column" id="public-page">
+    <div class="top"><div class="right"><div class="grip"></div></div></div>
+    <div class="middle"><div class="right">
+    <div class="content">
+      <div class="module-header">
+       <h1>Don't Panic!</h1>
+       <h5 class="intro">All this money talk driving you crazy?</h5>
+       <h5 class="intro" id="kittens_para">
+         Relax with some kittens and scroll down when you're ready. (Prefer <a href="http://www.flickr.com/photos/tags/puppy/interesting/show/">puppies</a>?)
+       </h5>
+       <h5 class="intro" id="puppies_para" style="display: none">
+         Relax with some puppies and scroll down when you're ready. (Prefer <a href="http://www.flickr.com/photos/tags/kitten/interesting/show/">kittens</a>?)
+       </h5>
+      </div>
+      <iframe id="iframe" src="http://www.flickr.com/photos/tags/kitten/interesting/show/"
+       frameborder="1" scrolling="no" width="570" height="370"></iframe>
+      <div class="indent1">
+        <h3>That's Better, isn't it?</h3>
+        <p>Remember, <em>everybody</em> has stress about money in one way or another. The good news is that you're here, working on making it better. With the right tools and more importantly with the right people to help, you can make better options for yourself, take control, and get more for your money. Hang in there, keep at it, and don't panic!</p>
+      </div>
+    </div>
+    </div></div>
+    <div class="bottom"><div class="right"></div></div>
+  </div>
+</div>
+<%= render :partial => 'page/help_sidebar' %>
+<div class="clear"></div>

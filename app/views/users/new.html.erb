@@ -1,0 +1,61 @@
+<% set_page_title "Join" %>
+
+<%- content_for :header_action_button do -%>
+  <%= link_to "Already a member? Sign in Here.", login_url, :class => "sign-in" %>
+<%- end -%>
+<div class="module-header">
+  <h1>Welcome!</h1>
+  <h6 class="intro">
+    Please fill out the form below to get started. If you've already
+    signed up, you can <%= link_to "login here", login_url %>.
+  </h6>
+</div>
+<div class="notification error" id="login-error" style="display:none">
+  <div class="top"><div class="right">
+    <p class="title"></p>
+    <p class="message small"></p>
+  </div></div>
+  <div class="bottom"><div class="right"></div></div>
+</div>
+<%= form_tag signup_path do %>
+  <fieldset>
+  <div class="two-col-centered">
+      <div class="field">
+      <label for="user_email" class="field-title">Email<span>will be kept strictly private</span></label>
+      <%= text_field :user, :email, :class => "initial-focus" %>
+      <%= error_message_on "user", "email",
+          :prepend_text => "That email address ", :append_text => '.', :css_class => 'error-message' %>
+      </div>
+      <div class="field">
+      <label for="password" class="field-title">Password</label>
+      <%= password_field :user, :password %>
+      <%= error_message_on "user", "password", :prepend_text => "The password ", :append_text => '.', :css_class => 'error-message' %>
+      </div>
+    <div class="field">
+      <label for="password_confirm" class="field-title">Confirm Password</label>
+      <%= password_field :user, :password_confirmation %>
+      </div>
+  </div>
+  <div class="two-col-centered">
+    <div class="tab-background">
+    <h6>Optional</h6>
+    <div class="field">
+      <label for="user_name" class="field-title">Screen Name<span>your public name</span></label>
+          <%= text_field :user, :name %>
+          <%= error_message_on "user", "name",
+              :prepend_text => "The screen name ", :append_text => '.', :css_class => 'error-message' %>
+        </div>
+    <div class="field">
+      <label for="postal_code" class="field-title">ZIP/Postal Code<span>helps matching tips</span></label>
+          <%= text_field :user, :postal_code %>
+    </div>
+    <div class="field">
+      <label for="country" class="field-title">Country<span>sets default currency</span></label>
+      <%= select('user', 'country_id', Country.find(:all).collect {|c| [ c.name, c.id ] }, {:include_blank => true}) %>
+    </div>
+  </div>
+  <a class="button green submit"><span>Sign Up</span></a><p class="login-message">Already a member? <a href="/login">Sign In</a></p>
+  </div>
+  </fieldset>
+  <input id="tz_offset" name="tz_offset" type="hidden" />
+<% end # form -%>

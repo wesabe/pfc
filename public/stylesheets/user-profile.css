@@ -1,0 +1,97 @@
+
+.user-profile-header .left-side {
+  float:left;
+  width:100px;
+}
+
+.user-profile-header .left-side img {
+  float:right;
+  margin-top:10px;
+}
+
+.user-profile-header .right-side {
+  margin-left:115px;
+}
+
+.user-website {
+  margin:0;
+  font-weight:bold;
+}
+
+#public-page .details,
+.details {
+  color:#999;
+  font-size:0.7em;
+  margin:0;
+}
+.user-name {
+  line-height:1em;
+  margin-bottom:0;
+}
+#public-page p.user-website {
+  margin-bottom:0;
+}
+
+#profile {
+  padding:15px 0;
+  clear:both;
+}
+
+#public-page .two-col-list.header {
+  margin:0 -39px 0 -29px;
+}
+
+.post {
+  clear:both;
+  padding:10px 20px;
+}
+
+.post-header {
+  color:#999999;
+  font-size:0.8em;
+  line-height:2.5em;
+  text-align:center;
+}
+
+.post .post-title {
+  margin-bottom:0;
+}
+
+.post .post-details {
+  color:#999;
+}
+
+.user_profile input#photo_photo,
+.user_profile input#user_name,
+.user_profile input#profile_website,
+.user_profile input#email_change_password,
+.user_profile input#email_change_email,
+.user_profile input#user_postal_code,
+.user_profile select#user_country_id,
+.user_profile select#user_default_currency {
+  width:230px;
+}
+
+.user_profile #start-email-edit {
+  font-style:italic;
+  padding-left:5px;
+  font-size:0.75em;
+}
+
+.user_profile #email-edit {
+  padding-bottom:15px;
+  background:transparent;
+}
+
+.user_profile #email-edit .field-subtext {
+  margin-bottom:0;
+}
+
+.user_profile a.button,
+#change-password-container a.button {
+  float:right;
+  width:80px;
+  font-family:lucida grande, arial, helvetica, sans-serif;
+  text-align:center;
+  margin-right:110px;
+}

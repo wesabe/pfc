@@ -1,0 +1,112 @@
+<%- content_for :header do -%>
+  <style type="text/css" media="screen">
+    a.big-delete {
+      background-color: #f00;
+      font-weight: bold;
+      padding: 5px, 5px, 5px, 5px;
+      margin-top: 15px;
+      text-align: center;
+      color: #fff;
+      width: 100%;
+      display: block; }
+    p img {
+      float: none;
+      margin: 0;
+    }
+  </style>
+<%- end -%>
+
+<%- set_page_title "Edit #{@financial_inst.name} (#{@financial_inst.wesabe_id})" -%>
+
+<div class="top">
+  <div class="right"></div>
+</div>
+<div class="middle">
+  <div class="right">
+    <h2>Edit '<%=h @financial_inst.name %>'</h2>
+
+    <% form_for @financial_inst do |f| %>
+
+      <%= f.error_messages %>
+
+      <p><label for="financial_inst_name">Name</label><br/>
+      <%= f.text_field :name %>
+      <%= link_to image_tag('icon-google-tiny.gif'), "http://www.google.com/search?q=#{CGI.escape(@financial_inst.name)}", :target => '_blank' %></p>
+
+      <p><label for="financial_inst_homepage_url">Homepage URL</label><br/>
+      <%= f.text_field :homepage_url  %>
+      <%= link_to_function image_tag('arrow-next.gif'), "window.open($F('financial_inst_homepage_url'))" %></p>
+
+      <p><label for="financial_inst_login_url">Login URL</label><br/>
+      <%= f.text_field :login_url  %>
+      <%= link_to_function image_tag('arrow-next.gif'), "window.open($F('financial_inst_login_url'))" %></p>
+
+      <p><label for="financial_inst_ofx_fid">OFX Fid</label><br/>
+      <%= f.text_field :ofx_fid  %></p>
+
+      <p><label for="financial_inst_ofx_org">OFX Org</label><br/>
+      <%= f.text_field :ofx_org  %></p>
+
+      <p><label for="financial_inst_ofx_brker">OFX Broker Id</label><br/>
+      <%= f.text_field :ofx_broker  %></p>
+
+      <p><label for="financial_inst_ofx_url">OFX URL</label><br/>
+      <%= f.text_field :ofx_url  %></p>
+
+      <p><label for="financial_inst_connection_type">Connection type: </label>
+      <%= f.select :connection_type, FinancialInst.connection_type_options %></p>
+
+      <p><label for="financial_inst_account_number_regex">Account Number Regex:</label>
+      <%= f.text_field :account_number_regex %></p>
+
+      <p><label for="financial_inst_ssu_support">SSU support?</label>
+      <%= f.select :ssu_support, FinancialInst::SSUSupport.options_for_select  %></p>
+
+      <p><label for="financial_inst_ofx_fee">OFX Fee?</label>
+      <%= f.check_box :ofx_fee  %></p>
+
+      <p><label for="financial_inst_featured">Show in "Popular Bank" list?</label>
+      <%= f.check_box :featured  %></p>
+
+      <p><label for="financial_inst_bad_balance">Bad Balance?</label>
+      <%= f.check_box :bad_balance  %> <em>(Note: Enabling "Bad Balance" makes the balance of all accounts at this FI user editable.)</em></p>
+
+      <p><label for="financial_inst_good_txid">Good Transaction IDs?</label>
+      <%= f.check_box :good_txid  %> <em>(Note: Enabling "Good Transaction IDs" means that when matching transactions we trust the FI's transaction IDs.)</em></p>
+
+      <p><label for="financial_inst_country_id">Country</label><br/>
+      <%= f.select :country_id, Country.ids_and_names %></p>
+
+      <p><label for="financial_inst_statement_date_format">Date Format</label><br/>
+      <%= f.select :statement_date_format, FinancialInst.date_format_options %></p>
+
+      <p><label for="financial_inst_help_text">Help Text</label><br/>
+      <%= f.text_area :help_text, :size => '80x4' %></p>
+
+      <p><label for="financial_inst_notes">Notes (not shown to non-admin users)</label><br/>
+      <%= f.text_area :notes, :size => '80x4'  %></p>
+
+      <p><label for="financial_inst_status">Status</label>
+      <%= f.select :status, FinancialInst::Status.options_for_select  %></p>
+
+      <p><%= f.submit "Save" %></p>
+
+    <% end %>
+
+    <br /><hr /><br />
+
+    <% form_tag("confirm_merge", :method => :get) do %>
+      <%- if @financial_inst.mapped_to_id -%>
+          <h2>This FI is already merged to <%= @financial_inst.mapped_to_id %>.</h2>
+      <%- end -%>
+      <p>Merge into <%= select_tag("target_fi_id", options_for_select(FinancialInst.ids_and_names, @financial_inst.id.to_s)) %> <%= submit_tag "Sanity Check" %></p>
+    <% end %><br />
+
+    <p>
+      <%= link_to "Delete", financial_inst_url(@financial_inst), :method => :delete, :confirm => "Are you sure you want to delete this FI?", :class => 'big-delete' %>
+    </p>
+  </div> <!-- middle right -->
+</div> <!-- middle -->
+<div class="bottom">
+  <div class="right"></div>
+</div>

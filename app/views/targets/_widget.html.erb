@@ -1,0 +1,82 @@
+<%# requires stylesheet "widgets/targets" %>
+<%# requires javascript "wesabe/views/widgets/tags/TagAutocompleterField" %>
+<%# requires javascript 'wesabe/views/widgets/targets' %>
+
+<div class="two-column" id="spending-targets">
+  <div class="top"><div class="movable right"><div class="movable grip"></div></div></div>
+  <div class="middle"><div class="right">
+    <div class="content">
+    <div class="module-header">
+      <div id="add-target">
+        <a id="add-target-button" class="button green"><span>Add Spending Target</span></a>
+        <div class="edit-dialog dialog r-align" style="display:none">
+          <div class="top"><div class="right">
+            <label for="target-tag" class="field-title">Tag</label><br>
+            <input type="text" id="target-tag" name="tag" autocomplete="off"/><br>
+            <label for="target-amount" class="field-title">Spending Target</label><br>
+            <input type="text" id="target-amount" name="amount"/><br>
+          </div></div>
+          <div class="bottom"><div class="right">
+            <a class="button confirm green"><span>Save</span></a>
+            <a class="button cancel gry"><span>Cancel</span></a>
+          </div></div>
+        </div>
+      </div>
+      <!-- <a class="toggle letter"</a>
+      <a class="toggle hbar on"></a> -->
+      <h5><span class="month"></span> Spending Targets</h5>
+    </div>
+    <div id="no-targets" style="display:none">
+      <p>You haven't set any spending targets yet. <%= link_to "Learn more about targets.", "/help/user-manual/targets" %></p>
+    </div>
+    <ul id="date-range-nav" class="date-range-detail" style="display:none">
+      <div class="dividers">
+        <li class="left-arrow"><a>&nbsp;</a></li>
+        <li class="previous-month"><a><span></span>&nbsp;Targets</a></li>
+      </div>
+      <div class="dividers">
+        <li class="current-date-range"></li>
+      </div>
+      <div class="dividers">
+        <li class="next-month"><a><span></span>&nbsp;Targets</a></li>
+        <li class="right-arrow"><a>&nbsp;</a></li>
+      </div>
+    </ul>
+    <ul id="targets-list">
+      <li class="target template">
+        <a class="remove"></a>
+        <a class="edit"></a>
+        <div class="target-name"></div>
+        <div class="target-amount"></div>
+        <div class="target-bar-spent">
+          <div class="target-bar">&nbsp;
+            <span class="amount-spent"></span>
+            <span class="amount-remaining"></span>
+          </div>
+        </div>
+        <div class="clear"></div>
+      </li>
+    </ul>
+    <div id="edit-dialog" class="edit-dialog dialog" style="display:none">
+      <div class="top"><div class="right">
+        <label for="target-amount" class="field-title">New Spending Target for <span class="edit-target-tag"></span></label><br>
+        <input type="text" id="target-amount" name="amount"/><br>
+      </div></div>
+      <div class="bottom"><div class="right">
+        <a class="button confirm green"><span>Save</span></a>
+        <a class="button cancel gry"><span>Cancel</span></a>
+      </div></div>
+    </div>
+    <!-- <ul id="targets-letter-list">
+      <li class="target letter template">
+        <div class="target-name"><a>Entertainment</a></div>
+        <div class="target-amount">1,000<span>target</span></div>
+        <div class="amount-spent">800<span>spent</span></div>
+        <div class="amount-remaining over">200<span>over</span></div>
+      </li>
+    </ul> -->
+    </div>
+    <div class="clear"></div>
+  </div></div>
+  <div class="bottom"><div class="right"></div></div>
+</div>

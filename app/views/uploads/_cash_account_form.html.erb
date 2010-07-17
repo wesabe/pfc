@@ -1,0 +1,14 @@
+<div id="create-cash-account-form" class="edit-dialog" style="display:none">
+  <%= form_tag(accounts_path, :id => 'account_upload') do -%>
+    <%= hidden_field_tag 'account_type', 'Cash' %>
+    <label for="name" class="cash">Account Name</label>
+    <p><%= text_field_tag 'name', 'Cash Account', :style=>"width:140px" %></p>
+    <label for="currency" class="cash">Currency</label>
+     <p><%= select_tag('currency',
+            options_for_select(currency_short_options_for_select,
+            current_user.default_currency.name)) %>
+    </p>
+    <a class="button submit green"><span>Create</span></a>
+    <a class="button cancel gry"><span>Cancel</span></a>
+  <%- end -%>
+</div>

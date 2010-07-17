@@ -1,0 +1,131 @@
+<% set_page_title "Help - Troubleshooting Information for Specific Banks" %>
+
+<div id="right">
+  <div class="two-column" id="public-page">
+    <div class="top"><div class="right"><div class="grip"></div></div></div>
+    <div class="middle">
+      <div class="right">
+        <div class="content">
+          <div class="module-header">
+        <h1>Troubleshooting Information for Specific Banks</h1>
+        <h5 class="intro">This section of the manual contains troubleshooting for specific banks.</h5>
+          </div>
+          <div class="indent1">
+
+             <h3>Banks with Bad Balances in their Uploads</h3>
+
+                <p>The following banks give incorrect balances in their uploads:</p>
+                <ul>
+                  <li class='tight'>BB&amp;T</li>
+                  <li class='tight'>TD Bank NJ, PA, NY &amp; DE</li>
+                  <li class='tight'>Dearborn FCU</li>
+                  <li class='tight'>Nordstrom Bank</li>
+                  <li class='tight'>Wainwright Bank</li>
+                  <li class='tight'>Vancity</li>
+                  <li class='tight'>Virgin Money Credit Card (Australia)</li>
+                  <li class='tight'>Westpac Banking (Australia)</li>
+                  <li class='tight'>Commonwealth Bank of Australia</li>
+                  <li class='tight'>Suncorp (Australia)</li>
+                  <li class='tight'>Virgin Money credit card (South Africa)</li>
+                </ul>
+                <p>To correct the balance for accounts at those banks, edit the account's balance:</p>
+                <ol>
+                  <li>Click on the <strong>My Accounts</strong> tab to view your list of accounts.</li>
+                  <li>Click the <strong>Edit</strong> button at the top of the My Accounts panel. </li>
+                  <li>Click the edit button (the pencil icon) next to the account whose balance you want to set. An edit panel will open.</li>
+                  <li>In the edit panel, edit the current balance amount and then click <strong>Save</strong>.</li>
+                </ol>
+                <p>Once you set the balance, we'll track it automatically. If the balance gets off after that, you can reset it again.</p>
+
+               <h3>USAA</h3>
+
+                 <p>Some sites will maintain a different username or password for programs like Quicken, or our Uploader, to get data from the site. USAA has customers log in with their username and password when using the web site through a web browser, but has them log in with their USAA member number and their PIN code when using Quicken or the Uploader.</p>
+                 <p>For the username, enter your USAA member number (a 7- or 8-digit number), and for the password, enter your PIN code (the four-digit number that USAA prompts you for on their site when you click on <strong>account details</strong>).</p>
+
+               <h3>Smile</h3>
+
+                 <p>Smile apparently doesn't provide any way to download your information. There is, however, a tool that may be helpful, if you use Firefox as a web browser, and if you are willing to install the Greasemonkey extension (available at: <a href="http://greasemonkey.mozdev.org/">http://greasemonkey.mozdev.org/</a>). You might consider trying this Greasemonkey script which converts Smile to OFX (a format that we support). It's available here at <a href="http://userscripts.org/scripts/show/6976">http://userscripts.org/scripts/show/6976</a></p>
+                 <p>Once you have Greasemonkey installed, click the <strong>Install Script</strong> button on that page, follow the instructions, and you should be able to create OFX files that you can upload to Wesabe.</p>
+
+               <h3>Bank of America</h3>
+               <p>The Bank of America site has often been confusing to work with, because it has a lot of variations.</p>
+
+               <h4>Bank of America SafePass Problems</h4>
+
+                <p>SafePass users will need to modify their setting in order to add their Bank of America accounts to Wesabe. To change your settings, log onto the Bank of America Online Banking site, and select <strong>View SafePass Settings</strong> from <strong>the I want to...</strong> box on the left of the Accounts Overview screen.</p>
+                 <p>Once on the SafePass settings page, turn off both <strong>Verify my identity with SafePass instead of SiteKey challenge questions</strong>, and <strong>Require SafePass to sign in to Online Banking</strong>.</p>
+
+               <h4>Bank of America Sitekey Problems</h4>
+
+                 <p>Bank of America uses a sitekey system to identify your computer. The first time you log in with a computer, the Bank of America site makes you identify a sitekey picture. From then on, you should be able to log in (from the same computer) without answering the sitekey question.</p>
+                 <p>This system can get tripped up several ways. If cookies aren't enabled in your browser, the sitekey answer will never get set.</p>
+                 <p>If you create a Firefox uploader script the very first time that you log in to the bank from a particular computer, the script will then contain the sitekey-setting step. It will get stuck every time after that waiting for the sitekey question (which only comes during the initial set up).</p>
+
+               <h4>Bank of America Problems with the Automatic Uploader</h4>
+
+                 <p>When you sign up for an account, we ask Bank of America to allow you to log in without asking security questions every time. It looks like Bank of America will sometimes lose that setting.</p>
+                 <p>To fix this, you need to clear your credentials and re-add them. Here&rsquo;s how:</p>
+                 <ol>
+                   <li>Click on the <strong>My Accounts</strong> tab to view your list of accounts.</li>
+                   <li>Click the <strong>Edit</strong> button at the top of the My Accounts panel. </li>
+                   <li>Click the edit button (the pencil icon) next to the account you want to modify. An edit panel will open.</li>
+                   <li>In the edit panel, select the <strong>Clear Credentials</strong> checkbox, then click <strong>Save</strong> to save your changes.
+                 </ol>
+
+               <h4>Manual Downloads from Bank of America</h4>
+
+                <p>The Bank of America site is sometimes difficult to navigate - many of our users have had difficulty finding the right files to download. The download link with the correct filetype is more difficult to find than the download link for the .pdf - but the .pdf doesn't work.</p>
+                 <p>To find the correct file types on the Bank of America site, go to your account transaction list and click the <strong>Download</strong> link to the right of the screen.</p>
+
+
+               <h3>Michigan State University Federal Credit Union</h3>
+
+                 <p>Michigan State University FCU has a feature called DirectLine. This feature must be enabled for you to access your account information with financial applications such as Wesabe, Quicken, and Microsoft Money. It takes 2 days for DirectLine to take effect after you sign up.</p>
+
+               <h3>ING</h3>
+
+                 <p>We ask all the potential sitekey questions you might have answered at ING because we have no way to know which questions you&rsquo;ve answered on the ING site. If you didn&rsquo;t answer a particular question at ING, you can leave that question blank in Wesabe as well.</p>
+                 <p>To see which questions you&rsquo;ve answered (and how you answered them), log in to ING, click the <strong>My Info</strong> tab, click <strong>Edit Information</strong> (above the <strong>Login Options</strong> box), and you&rsquo;ll see the questions that you've answered on that page.</p>
+
+               <h3>Downloading from Wachovia</h3>
+
+                 <p>After you log in to Wachovia, the link to download your statement is available just underneath the View Accounts tab. It is the third link named <strong>Account Download</strong>.</p>
+                 <p>This takes you to the Account Download page where you&rsquo;ll set up your download. In <strong>Step 1</strong> choose the account(s) you want to download. Next, in <strong>Step 2</strong>, set the beginning date for the time period. (If you&rsquo;re using the Firefox uploader, don&rsquo;t use the pop-up calendar option next to the field. This will cause the Firefox recording to fail.)</p>
+                 <p>Edit the field with the desired date and in the requested format. (If you're using the Firefox uploader, a dialog window will ask you how many days you&rsquo;d like to upload. Something between 30 and 90 days is usually fine. Don&rsquo;t worry about overlapping dates.)</p>
+                 <p>Finally, select <strong>Microsoft Money 2008</strong> in <strong>Step 3</strong> and then click the <strong>Download</strong> button underneath the select box. (If you&rsquo;re using the Firefox uploader, you should see another window asking you to upload the statement to Wesabe. Click <strong>Upload</strong> to finish your script.)</p>
+
+               <h3>Manual Uploading for Citibank</h3>
+
+                 <p>To download your account information in the right format for Wesabe, log in to your account and do the following:</p>
+                 <ol>
+                   <li>Select <strong>Accounts Info</strong>.</li>
+                   <li>Under Services, click on <strong>Download Balances and Activity</strong>.</li>
+                 </ol>
+                 <p>On the &lsquo;Download Account Activity&rsquo; page:</p>
+                 <ol>
+                   <li>Select <strong>Since Last Download</strong> or enter the date range of the transactions you want to download.</li>
+                   <li>Choose the appropriate Citibank account(s).</li>
+                   <li>Select <strong>OFX</strong> from the format choices.</li>
+                   <li>Click on <strong>Download File</strong>.</p>
+                 </ol>
+                 <p>A pop up window will ask if you want to open the file or save it:</p>
+                 <ol>
+                   <li>Select <strong>Save</strong>. The <strong>Save As</strong> window appears.</li>
+                   <li>Click <strong>Save</strong>. When the window closes, you'll return to the <strong>Download Account Activity</strong> screen.</li>
+                   <li>Click <strong>OK</strong>. You now have a file with your transactions.</li>
+                 </ol>
+
+               <h3>Manual Uploading for Chase</h3>
+
+                 <p>Uploading from Chase seems to be different depending on what kind of card you have, and on where you live.</p>
+                 <p>If direct uploading isn&rsquo;t working for you, the best way to handle Chase is probably for you to go to the Chase site, click the <strong>Customer Center</strong> tab, and under the <strong>Reference Center</strong> header, go to the <strong>Tools</strong> subhead and click on <strong>Activate Money, Quicken, etc.</strong> Then pick the free <strong>Download now</strong> option, and download the file to your computer (or directly to Wesabe if you're using the Firefox uploader).</p>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="bottom"><div class="right"></div></div>
+  </div>
+</div>
+<%= render :partial => 'page/help_sidebar' %>
+<div class="clear"></div>

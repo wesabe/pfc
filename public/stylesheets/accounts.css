@@ -1,0 +1,1745 @@
+/*styling for My Accounts view -----------------------------------------------------------------------------------------------------------*/
+
+#accounts .module-header .update-button {
+  float:right;
+  background:transparent url(/images/maincontent/accounts/account-status-icons-sprites-trans.png) no-repeat scroll -45px 0;
+  width:21px;
+  height:21px;
+}
+#accounts .module-header .update-button:hover {
+  background-position:-81px 0;
+}
+#accounts .module-header .update-button.loading {
+  background:transparent url(/images/maincontent/animated-gifs/ssu-uploading-icon.png) no-repeat scroll 0 0;
+  /* FIXME: this is a hack to make the offset correct as compared to the sprite above */
+  padding:0 6px 6px 6px;
+}
+
+/*styling account group-names and group-totals -----------------------------------*/
+
+#accounts.loading .account-groups {
+  display:none;
+}
+
+#accounts .group h6,
+#accounts .group.on h6 {
+  background:transparent url(/images/maincontent/accounts/account-group-icons-sprites-trans.png) no-repeat scroll;
+  overflow:hidden;
+  padding:0 0 0 40px;
+  margin:0;
+  height:36px;
+  width: 234px;
+  float: left;
+}
+
+#accounts .one-col-list.group h6 a {
+  color:#676759;
+  text-decoration:none;
+}
+
+#accounts .one-col-list.group:hover h6 a {
+ color:#35352F;
+}
+
+#accounts .group.on .view {
+  margin-right:17px;
+}
+
+#accounts .group .total {
+  float:right;
+  text-align:right;
+  color:#35352F;
+  font-weight:bold;
+  padding: 0 0 0 15px;
+  margin:0;
+}
+
+#accounts .one-col-list.group.on h6 a,
+#accounts .one-col-list.group.on:hover h6 a{
+  color:#D7EEEB;
+}
+
+#accounts .one-col-list.group.on .total {
+  color:#fff;
+}
+
+/*icon background positions for account groups--------------------------------------------------------------------------*/
+
+#accounts .group.cash h6 {
+  background-position:0 0;
+}
+#accounts .group.cash h6:hover {
+  background-position:0 -36px;
+}
+#accounts .group.cash.on h6 {
+  background-position:0 -72px;
+}
+
+#accounts .group.savings h6 {
+  background-position:0 -108px;
+}
+#accounts .group.savings h6:hover {
+  background-position:0 -144px;
+}
+#accounts .group.savings.on h6 {
+  background-position:0 -180px;
+}
+
+#accounts .group.credit h6 {
+  background-position:0 -216px;
+}
+#accounts .group.credit h6:hover {
+  background-position:0 -252px;
+}
+#accounts .group.credit.on h6 {
+  background-position:0 -288px;
+}
+
+#accounts .group.checking h6 {
+  background-position:0 -1080px;
+}
+#accounts .group.checking h6:hover {
+  background-position:0 -1116px;
+}
+#accounts .group.checking.on h6 {
+  background-position:0 -1152px;
+}
+
+#accounts .group.available-funds h6 {
+  background-position:0 -324px;
+}
+#accounts .group.available-funds h6:hover {
+  background-position:0 -360px;
+}
+#accounts .group.available-funds.on h6 {
+  background-position:0 -396px;
+}
+
+#accounts .group.investments h6 {
+  background-position:0 -432px;
+}
+#accounts .group.investments h6:hover {
+  background-position:0 -468px;
+}
+#accounts .group.investments.on h6 {
+  background-position:0 -504px;
+}
+
+#accounts .group.loans h6 {
+  background-position:0 -540px;
+}
+#accounts .group.loans h6:hover {
+  background-position:0 -576px;
+}
+#accounts .group.loans.on h6 {
+  background-position:0 -612px;
+}
+
+#accounts .group.personal h6 {
+  background-position:0 -648px;
+}
+#accounts .group.personal h6:hover {
+  background-position:0 -684px;
+}
+#accounts .group.personal.on h6 {
+  background-position:0 -720px;
+}
+
+#accounts .group.household h6 {
+  background-position:0 -756px;
+}
+#accounts .group.household h6:hover {
+  background-position:0 -792px;
+}
+#accounts .group.household.on h6 {
+  background-position:0 -828px;
+}
+
+#accounts .group.business h6 {
+  background-position:0 -864px;
+}
+#accounts .group.business h6:hover {
+  background-position:0 -900px;
+}
+#accounts .group.business.on h6 {
+  background-position:0 -936px;
+}
+
+#accounts .group.other h6,
+#accounts .group.archived h6  {
+  background-position:0 -972px;
+}
+#accounts .group.other h6:hover,
+#accounts .group.archived h6:hover {
+  background-position:0 -1008px;
+}
+#accounts .group.other.on h6,
+#accounts .group.archived.on h6 {
+  background-position:0 -1044px;
+}
+
+/*accounts list within groups------------------------*/
+
+#accounts .one-col-list.group li a.text-content {
+  line-height:22px;
+  padding-top:7px;
+  max-height:28px;
+  overflow:hidden;
+}
+
+#accounts li.account .balance {
+  float:right;
+  margin:0;
+  line-height:22px;
+  padding:7px 0 0 15px;
+  color:#363630;
+}
+
+#accounts li.account.on .balance {
+  color:#fff;
+}
+
+/*styles for the account status icons found on the right side of each account --------------------------------------------------------*/
+
+.account.on .account-status {
+  margin-right:17px;
+}
+.account .account-status {
+  float:right;
+  width:36px;
+  height:27px;
+  margin:7px 0 0 0;
+  padding:0;
+  background:transparent url(/images/maincontent/accounts/account-status-icons-sprites-trans.png) no-repeat scroll 0 0;
+  visibility:hidden;
+  position:relative;
+}
+
+.account .error,
+.account .out-of-date,
+.account .visible,
+.account:hover .account-status {
+  visibility:visible;
+  padding:0;
+}
+
+.account:hover .cash {
+  visibility:hidden;
+  background:none;
+}
+
+.account:hover .update {
+  background-position:0 0;
+}
+.account .update:hover {
+  background-position:-36px 0;
+}
+.account .update:active {
+  background-position:-72px 0;
+}
+
+.account .update .updating-spinner,
+.update-button .updating-spinner {
+  visibility:hidden;
+}
+
+
+.account .update .updating-spinner {
+  margin-left:6px;
+}
+.update-button .updating-spinner {
+  margin-left:2px;
+}
+
+.account .update.out-of-date {
+  background-position:-108px 0;
+}
+.account .update.out-of-date:hover {
+  background-position:-144px 0;
+}
+.account .update.out-of-date:active {
+  background-position:-180px 0;
+}
+
+.account .update.error {
+  background-position:-216px 0;
+}
+.account .update.error:hover {
+  background-position:-252px 0;
+}
+.account .update.error:active {
+  background-position:-288px 0;
+}
+
+.account .update.loading .updating-spinner {
+  visibility:visible;
+}
+
+.account .upload {
+  background-position:-324px 0;
+}
+.account .upload:hover {
+  background-position:-360px 0;
+}
+.account .upload:active {
+  background-position:-396px 0;
+}
+
+.account .upload.out-of-date {
+  background-position:-432px 0;
+}
+.account.upload.out-of-date:hover {
+  background-position:-468px 0;
+}
+.account.upload.out-of-date:active {
+  background-position:-504px 0;
+}
+
+.account .upload.error {
+  background-position:-540px 0;
+}
+.account .upload.error:hover {
+  background-position:-576px 0;
+}
+.account .upload.error:active {
+  background-position:-612px 0;
+}
+
+.account .edit-account {
+  position:relative;
+  float:right;
+  width:36px;
+}
+
+.account.on .edit-account {
+  width:53px;
+}
+
+.account.on .edit {
+  margin-right:17px;
+}
+
+/* Account edit dialog ---------------------------------------------------------------------------------- */
+
+#accounts .edit-dialog {
+  display: none;
+  position: absolute;
+  width: 660px;
+  z-index: 2; /* above the tag list */
+}
+.account .account-status .edit-dialog {
+  position:absolute;
+  top: -18px;
+  left:27px;
+  width:320px;
+}
+
+#accounts .edit-dialog input[name=account-name],
+#accounts .edit-dialog select[name=account-currency],
+#accounts .edit-dialog .current-balance input {
+  width:190px;
+  font-size:0.75em;
+  line-height:1.2em;
+  height:14px;
+}
+
+#accounts .edit-dialog .current-balance input {
+  width: 75px;
+}
+
+#accounts .edit-dialog input[name=account-name],
+#accounts .edit-dialog .current-balance {
+  float: left;
+  margin:0 5px 10px 5px;
+}
+
+#accounts .edit-dialog input[name=account-name] {
+  margin-top:3px;
+}
+
+#accounts .edit-dialog select[name=account-currency] {
+  width: 200px;
+  float: left;
+  height:20px;
+  padding-top:2px;
+  margin:5px 5px 10px 5px;
+}
+
+.edit-dialog .inset-tab-text.on {
+  display: block;
+  background:none;
+}
+
+.edit-dialog .inset-tab-text {
+  position: relative;
+  display: none;
+  min-height:42px;
+  margin-top:2px;
+  font-size:10.5px;
+  line-height:14px;
+}
+
+.edit-dialog .inset-tab-text p {
+  font-size: 1em;
+}
+
+.edit-dialog .inset-tab-text .header,
+.hover-box .header {
+  font-weight:bold;
+  margin-bottom:3px;
+}
+
+.edit-dialog .inset-tab-text .help {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  padding-right: 4px;
+  padding-bottom: 0;
+}
+
+#accounts .edit-dialog .inset-tab-text.ssu {
+  padding:0 0 0 50px;
+  background:transparent url(/images/maincontent/accounts/account-edit-au-uploader-trans.png) no-repeat 0 0;
+}
+#accounts .edit-dialog .inset-tab-text.ssu-error {
+  background:transparent url(/images/maincontent/accounts/account-edit-ssu-error-trans.png) no-repeat 0 0;
+  padding:5px 0 5px 60px;
+}
+#accounts .update.error .hover-box .contents {
+  background:url(/images/maincontent/accounts/account-edit-ssu-error-trans.png) no-repeat 0 0;
+  padding:5px 0 5px 60px;
+}
+
+#accounts .edit-dialog .delete-details {
+  display: none;
+}
+
+#accounts .edit-dialog .delete-details.confirmation {
+  background:transparent url(/images/maincontent/accounts/delete-confirmation-icon-trans.png) no-repeat 0 0;
+  padding:8px 20px 0 75px;
+  margin:8px 20px 0 8px;
+  min-height: 60px;
+}
+
+#accounts .edit-dialog .delete-details.confirmation input {
+  width: 15em;
+  font-size: 0.7em;
+}
+
+#accounts .edit-dialog .error-message {
+  display: none;
+  margin: 0em 30px;
+  padding-top: 10px;
+  min-height: 1em;
+  text-align: right;
+  line-height: auto;
+}
+
+#accounts .edit-dialog .bottom .right div {
+  min-height: 50px;
+}
+
+#accounts .edit-dialog .bottom .right .spinner {
+  display: none;
+  position: absolute;
+  left: 400px;
+  bottom: 25px;
+}
+
+/*accounts total -------------------------------------------------*/
+
+.accounts-total {
+  margin:0;
+  padding:9px 34px 0 38px;
+  background:#fff;
+}
+#accounts.loading .accounts-total {
+  display:none;
+}
+#accounts .total {
+  float:right;
+}
+#accounts .archived .total {
+  display: none;
+}
+
+
+/*add an account button on the bottom ----------------- */
+
+#accounts .content {
+  padding-bottom:24px;
+}
+#accounts a.button.orange {
+  padding-left:8px;
+}
+
+
+/*account transaction view  header and control board ----------------------------------------------*/
+
+.module-header .edit {
+  float:left;
+  margin:-4px 0 0 -9px;
+}
+
+#control-panel {
+  padding:0 10px;
+}
+
+#control-panel p.small {
+  color:#9F9993;
+  margin:0;
+}
+
+#control-panel .toggle-button,
+#control-panel .toggle {
+  float:left;
+}
+
+#activity,
+#date-range {
+  float:left;
+}
+
+#date-range {
+  padding-left:15px;
+}
+
+#graphs {
+  float:right;
+}
+
+ul.date-range-detail {
+  margin:0 auto;
+  text-align:center;
+  padding-top:12px;
+}
+
+.date-range-detail li {
+  float:none;
+  padding:9px 7px;
+  font-size:0.687em;
+  color:#999999;
+  display:inline;
+  cursor:pointer;
+  cursor:hand;
+}
+
+.date-range-detail li:hover {
+  color:#35352F;
+}
+
+.date-range-detail li.current-date-range {
+  font-size:0.85em;
+  font-weight:bold;
+  color:#35352F;
+  padding:0 16px;
+}
+
+/*start of transaction list header------------------------------------------*/
+.add-transaction .edit {
+  background: none;
+  float: left;
+  height: 20px;
+  width: auto;
+  padding: 0;
+}
+
+a#add-transaction-link {
+  float:left;
+  clear:both;
+  margin-top:16px;
+  padding-left:8px;
+}
+
+.add-transaction ul {
+  height:auto;
+}
+
+#transactions-found {
+  width:50%;
+  text-align:center;
+  font-style:italic;
+  line-height:2em;
+  color:#999;
+  margin:0 auto;
+}
+
+/*start of transaction list -------------------------------------------------------------------------------------*/
+
+#account-transactions .module-header {
+  padding-bottom: 0;
+}
+
+/*styling for when transactions are loading --------- this should go in main.css once we add loading to other elements*/
+
+.loading-indicator {
+  display:none;
+}
+#account-transactions.loading .transaction {
+  display:none;
+}
+.loading .loading-indicator {
+  display:block;
+  width:100px;
+  height:18px;
+  margin:9px auto;
+}
+
+/*edit form and edit button on transaction items --------------------------------------------------------------------*/
+
+#transactions li .edit {
+  position:relative;
+  float: left;
+  height: 16px;
+  width: 20px;
+  padding: 0;
+  margin-top: 10px;
+  background-position:-163px 26px;
+}
+#transactions li.to-edit .edit,
+#transactions li:hover .edit {
+  background-position:-163px -10px;
+}
+#transactions li .edit:hover {
+  background-position:-163px -62px;
+}
+/* disabling this so the button won't flash when you click on the edit form
+#transactions li .edit:active {
+  background-position:-163px -88px;
+}*/
+
+#transactions li .edit .uploading-spinner {
+  position: relative;
+  top: -2px;
+  left: 3px;
+  height: 20px;
+  width: 20px;
+  margin-bottom: 20px;
+  display: none;
+}
+
+/* transaction edit box */
+.edit-transaction .edit-dialog {
+  position: absolute;
+  width:627px;
+  left:10px;
+  top:-22px;
+  z-index: 2;
+  display:none;
+}
+
+/* add transaction edit box*/
+.add-transaction .edit-dialog {
+  left: 10px;
+  position: relative;
+  top: -37px;
+  width: 627px;
+  z-index: 2;
+}
+
+.edit-transaction .edit-dialog > .top > .right {
+  padding:18px 15px 2px 0;
+}
+
+.edit-transaction .two-col-list.header {
+  padding:0 5px;
+  margin: 0 -7px 0 -3px;
+}
+
+.edit-transaction .edit-dialog input {
+  margin-bottom:6px;
+}
+
+.edit-transaction .ui-datepicker-trigger {
+  display: none;
+}
+
+.edit-transaction input.date-edit {
+  float: left;
+  width:70px;
+  line-height: 16px;
+  margin-top: 2px;
+}
+
+.edit-transaction input.name-edit {
+  font-family: 'Helvetica Neue', helvetica, sans-serif;
+  font-size: 13px;
+  font-weight: bold;
+  width: 270px;
+  margin: 0 4px 0 6px;
+}
+
+.ac_results {
+  margin: 0 4px;
+}
+
+.merchant-autocomplete, .tag-autocomplete {
+  float: left;
+  display:inline;
+  position:relative;
+}
+
+.merchant-autocomplete {
+  z-index: 10000;
+}
+
+.merchant-autocomplete .yui-ac-container {
+  margin-top: -9px;
+  margin-left: -2px;
+}
+
+.tag-autocomplete .yui-ac-container {
+  margin-top: -15px;
+  margin-left: -8px;
+}
+
+.tag-autocomplete .yui-ac-content li {
+  font-size: 11px;
+  padding-top: 1px;
+}
+
+#transactions .edit-dialog .amount,
+#transactions .edit-dialog .amount-edit,
+.add-transaction .edit-dialog .amount-edit {
+  text-align: right;
+  float: right;
+  margin: 1px 10px;
+}
+
+.edit-transaction input[name=amount] {
+  text-align: right;
+  width: 110px;
+  font-family: 'Helvetica Neue', helvetica, sans-serif;
+  font-size: 0.8em;
+  font-weight: bold;
+  margin-bottom: 0;
+}
+
+.edit-transaction .amount-types {
+  clear: right;
+  margin: -2px 0;
+  padding: 0;
+}
+
+.edit-transaction .amount-types label {
+  margin-right: 0.5em;
+  font-weight: normal;
+}
+
+.edit-transaction .amount-types input {
+  font-size: 1em;
+  padding: 0;
+  margin: 0;
+}
+
+.edit-transaction .edit-dialog .edit-dialog-inset-tab span {
+  padding-left: 24px;
+}
+
+.edit-transaction .edit-dialog .edit-dialog-inset-tab .merchant-icons {
+  height: 17px;
+  width: 16px;
+  margin: 5px 2px 3px 6px;
+}
+
+.edit-transaction .edit-dialog .merchant-icons.tags { display: block; }
+.edit-transaction .edit-dialog-inset-tab .merchant-icons.transfer { float: left; }
+
+.edit-transaction .edit-dialog-inset-tab .merchant-icons.tags { background-position:0 -9px; display: block; }
+.edit-transaction .edit-dialog-inset-tab .merchant-icons.notes { background-position:-52px -9px; }
+.edit-transaction .edit-dialog-inset-tab .merchant-icons.attachments { background-position:-26px -9px; }
+.edit-transaction .edit-dialog-inset-tab .merchant-icons.transfer { background-position: -130px -9px; }
+
+.edit-transaction .edit-dialog-inset-tab.on .merchant-icons.tags { background-position:0 -36px; }
+.edit-transaction .edit-dialog-inset-tab.on .merchant-icons.notes { background-position:-52px -36px; }
+.edit-transaction .edit-dialog-inset-tab.on .merchant-icons.attachments { background-position:-26px -36px; }
+.edit-transaction .edit-dialog-inset-tab.on .merchant-icons.transfer { background-position: -130px -36px; }
+
+.edit-transaction .edit-dialog-inset-tab .merchant-icons.tags.on { background-position:0 -88px; }
+.edit-transaction .edit-dialog-inset-tab .merchant-icons.notes.on { background-position:-52px -88px; }
+.edit-transaction .edit-dialog-inset-tab .merchant-icons.attachments.on { background-position:-26px -88px; }
+.edit-transaction .edit-dialog-inset-tab .merchant-icons.transfer.on { background-position: -130px -62px; }
+
+.edit-transaction .inset-tab-text .attachments-list p {
+  display: inline;
+  font-weight: bold;
+}
+
+.edit-transaction .inset-tab-text .delete-attachment {
+  color: #F47878;
+}
+
+.edit-transaction .inset-tab-text .removed-attachment {
+  color: #7D7D7D;
+  cursor: default;
+  text-decoration: none;
+}
+
+.edit-dialog .tab {
+  padding-left:2px;
+  font-weight:bold;
+}
+.edit-dialog .tab-content {
+  z-index: 1;
+  padding: 8px;
+  display: none;
+}
+.edit-dialog .tab-content.tags {
+  display: block;
+}
+
+.edit-dialog .tab-content input {
+  width:330px;
+}
+
+.edit-dialog .tab-content textarea {
+  width: 330px;
+  height: 80px;
+}
+
+.edit-dialog a.autotags-edit-link {
+  display:inline;
+  margin: 0 0 0 6px;
+  height:28px;
+  line-height:18px;
+  width:210px;
+}
+
+.edit-dialog .suggested-tags {
+  clear: left;
+}
+
+.edit-dialog .autotags-edit-field {
+  float: left;
+}
+
+.edit-dialog input[type='checkbox'] {
+  font-size: 1em;
+  margin:0;
+  padding:0;
+}
+
+.edit-dialog .transfer-details label {
+  font-weight:normal;
+  color:#35352F;
+}
+
+.edit-dialog .transfer-details input,
+.edit-dialog .update-all input {
+  width:auto;
+}
+
+.edit-dialog .update-all label {
+  padding:0 5px;
+}
+
+.edit-dialog .transfer-select {
+  margin:10px 0 0 15px;
+}
+
+.edit-dialog .transfer-select select {
+  width: auto;
+}
+
+.edit-dialog .error-message {
+  margin: 0 0 1em 1em;
+  color: #CD3377;
+  display: none;
+}
+
+.edit-transaction .edit-dialog .bottom .right div {
+  min-height: 40px;
+}
+
+.edit-transaction .edit-dialog .autotag-buttons,
+.add-transaction .autotag-buttons {
+  display: none;
+}
+
+.add-transaction .edit-dialog .delete.button {
+  display: none;
+}
+
+
+/*start of the styling for transaction list - merchant names /merchant-icons, etc. -----------------------------------------*/
+.transactions-notice {
+  text-align:center;
+  margin:0.9em;
+  font-style: italic;
+  font-size: 0.9em;
+  color:#676759;
+}
+
+li.transactions-notice:hover {
+  background:#fff;
+}
+
+
+#transactions .transaction, #transactions .investment-transaction {
+  padding:5px 0;
+  min-height: 36px;
+}
+
+#transactions .transaction-date, #transactions .trade-date {
+  font-size: 60%;
+  line-height: 1.4em;
+  float: left;
+  text-align: right;
+  width: 48px;
+  padding: 12px 5px 0 5px;
+  font-weight:normal;
+  font-style:italic;
+  color:#9F9993;
+}
+
+#transactions .merchant-info, #transactions .security-info {
+  font-size: 80%;
+  float: left;
+  width: 22.5em;
+  padding:0 0.8em;
+  margin:0;
+}
+
+#transactions .security-info {
+  width: 25em;
+}
+
+.investment-transaction .memo {
+  font-size: 80%;
+  color: #666;
+}
+
+#transactions li .account-name {
+  visibility:hidden;
+  font-style:italic;
+  font-size: 78%;
+  line-height:9px;
+}
+
+#transactions li .account-name a {
+  color:#9F9993;
+}
+
+#transactions li:hover .account-name {
+  visibility:visible;
+}
+
+
+#transactions .merchant-info .merchant-name, #transactions .security-info .security-name  {
+  font-weight:bold;
+  color:#49989C;
+  margin: 0;
+  line-height: 1.3em;
+  max-height: 2.6em;
+  overflow: hidden;
+}
+
+#transactions .security-info .security-name {
+  color:#635A50;
+}
+
+.investment-transaction .unit-info {
+  float:left;
+  font-size:80%;
+  margin-top:0.7em;
+  overflow:hidden;
+}
+
+#transactions .merchant-info .check-number {
+  font-weight:normal;
+  font-style:italic;
+  font-size:0.85em;
+}
+
+#transactions .merchant-info.pending .merchant-name .text-content,
+#transactions .merchant-info.pending .transaction-amount {
+  color:#9F9993;
+}
+
+#transactions .merchant-info.unedited .merchant-name .text-content {
+  color:#635A50;
+  text-transform:uppercase;
+  cursor: pointer;
+}
+
+.merchant-tags {
+  font-size: 80%;
+  line-height: 12px;
+  padding-left:1px;
+}
+
+.merchant-tags .merchant-tag a,
+.merchant-tags .merchant-tag .split-amount {
+  margin-right: 2px;
+  color:#9F9993;
+}
+
+*:hover .merchant-tags {
+  color:#35352F;
+}
+
+.merchant-icons {
+  background:transparent url(/images/maincontent/accounts/transactions/transaction-icons-sprites-trans.png) no-repeat scroll 0 0;
+  width:18px;
+  height:26px;
+  margin: 0 1px;
+  float:left;
+}
+
+.merchant-icons.tags.on {
+  background-position:0 -26px;
+  display:inline;
+}
+
+.merchant-icons.tags {
+  background-position:0 36px;
+  margin-right: -2px;
+}
+
+*:hover .merchant-icons.tags.on {
+  background-position:0 -52px;
+}
+.merchant-icons.tags.on:hover  {
+/*  background-position:0 -78px;*/
+}
+
+.merchant-icons.notes {
+  background-position:-52px 36px;
+}
+.merchant-icons.notes.on {
+  background-position:-52px -26px;
+  display:inline;
+}
+*:hover .merchant-icons.notes.on {
+  background-position:-52px -52px;
+}
+.merchant-icons.notes.on:hover  {
+  background-position:-52px -78px;
+}
+
+
+.merchant-icons.attachments {
+  background-position:-26px 36px;
+}
+.merchant-icons.attachments.on {
+  background-position:-26px -26px;
+  display:inline;
+}
+*:hover .merchant-icons.attachments.on {
+  background-position:-26px -52px;
+}
+.merchant-icons.attachments.on:hover {
+  background-position:-26px -78px;
+}
+
+.merchant-icons.transfer {
+  float: right;
+  background-position: -128px 36px;
+}
+
+.merchant-icons.transfer.on {
+  background-position: -128px -26px;
+}
+
+*:hover .merchant-icons.transfer.on,
+.merchant-icons.transfer.solo.on:hover {
+  background-position: -128px -52px;
+}
+.merchant-icons.transfer.on:hover {
+  background-position: -128px -78px;
+}
+
+#accounts .hover-box {
+  position:relative;
+  left: 25px;
+  top:-17px;
+  width:500px;
+}
+
+#transactions .transaction-amount .hover-box,
+#transactions .merchant-icons .hover-box,
+#transactions .merchant-icons:hover .hover-box {
+  position:relative;
+  width:180px;
+  z-index:2;
+  left:10px;
+  top:-11px;
+  display:none;
+}
+
+#transactions .transaction-amount .hover-box {
+  left:75px;
+  top:-48px;
+  text-align:left;
+}
+
+#transactions .transaction .hover-box .top .right {
+  padding:15px 12px 2px 3px;
+}
+
+
+#transactions .transaction .hover-box.r-align .top .right {
+  padding:15px 28px 2px 3px;
+}
+
+#transactions .merchant-icons .hover-box.r-align,
+#transactions .merchant-icons:hover .hover-box.r-align {
+  position:relative;
+  z-index:2;
+  left:-175px;
+  top:-11px;
+  display:none;
+}
+
+#transactions .transaction .hover-box .top .right p {
+  margin-bottom:0;
+  font-size:0.8em;
+}
+
+
+#transactions li:hover .tag-name,
+#transactions li:hover .account-name  {
+  color:#635A50;
+}
+
+#transactions a.merchant-name:hover,
+#transactions li:hover .pending .merchant-name,
+#transactions li:hover .unedited .merchant-name,
+#transactions li:hover .merchant-name,
+#transactions li:hover .transaction-amount,
+#transactions li:hover .pending .transaction-amount {
+  color:#365655;
+}
+
+#transactions li:hover .transaction-date,
+#transactions li:hover .balance,
+#transactions li:hover .pending .balance {
+  color:#635A50;
+}
+
+#transactions .amount, .investment-transaction .total {
+  float: left;
+  text-align:right;
+  width: 70px;
+  font-family: 'Helvetica Neue', helvetica, sans-serif;
+  font-size: 80%;
+  font-weight:bold;
+  color:#363630;
+  margin: 8px 0 0 10px;
+}
+
+.investment-transaction .total {
+  float: right;
+  margin-right: 1em;
+}
+
+#transactions .amount.credit {
+  color:#76CE78;
+}
+
+
+#transactions li:hover .amount.credit {
+  color:#078F48;
+}
+
+#transactions .balance {
+  float: right;
+  font-size: 65%;
+  font-style: italic;
+  padding: 11px 5px 0 0;
+  color: #9F9993;
+}
+
+#transactions a.account-name {
+  color:transparent;
+}
+
+#transactions li:hover .account-name {
+  color:#5F9E9A;
+}
+
+
+#transactions .transaction-amount:hover .hover-box,
+#transactions .merchant-icons.on:hover .hover-box  {
+  display:block;
+  font-size:85%;
+}
+
+#transaction-list-footer ul.date-range-detail  {
+  padding-top:2px;
+  margin:0 18%;
+}
+
+#transactions-header ul.date-range-detail {
+  margin-right:18%;
+}
+
+/** Deleted transactions **/
+#transactions .transaction .deleted-cover {
+  display: none;
+}
+
+#transactions .transaction.deleted .deleted-cover {
+  display: block;
+  position: absolute;
+  width: 630px;
+  height: 37px;
+  margin-top: -5px;
+  padding: 5px 0px;
+  opacity: 0.7;
+  background: #FDE8E9;
+  text-align: center;
+  z-index: 1;
+}
+
+#transactions .transaction .undelete {
+  position: absolute;
+  left: 240px;
+  font-weight: bold;
+  z-index: 2;
+}
+
+#transactions .transaction.deleted:hover .edit {
+  background: none;
+}
+
+/* start of transaction totals footer -------------------------------------------------------------------------------------*/
+
+#transaction-totals {
+  margin: 8px 10px 0 10px ;
+  padding-bottom:3px;
+}
+
+#transaction-totals.graph-footer {
+  margin:0 23px;
+  padding:0;
+}
+
+#transaction-totals.graph-footer ul {
+  padding-bottom:0;
+}
+
+#transaction-totals .top {
+  background:transparent url(/images/maincontent/accounts/tl-transaction-totals-trans.png) no-repeat scroll left top;
+  clear:both;
+  padding:0;
+  margin:0;
+  width:100%;
+}
+#transaction-totals .top .right {
+  background:transparent url(/images/maincontent/accounts/tr-transaction-totals-trans.png) no-repeat scroll right top;
+  height:8px;
+  margin-left:8px;
+}
+#transaction-totals .middle {
+  background:transparent url(/images/maincontent/accounts/ml-transaction-totals-trans.png) repeat-y scroll left center;
+  clear:both;
+  width:100%;
+}
+#transaction-totals .middle .right {
+  background:transparent url(/images/maincontent/accounts/mr-transaction-totals-trans.png) repeat-y scroll right center;
+  margin-left:8px;
+  padding:0 15px 0 10px;
+}
+
+#transaction-totals .bottom {
+  background:transparent url(/images/maincontent/accounts/bl-transaction-totals-trans.png) no-repeat scroll left bottom;
+  clear:both;
+  padding:0;
+  width:100%;
+}
+#transaction-totals .bottom .right {
+  background:transparent url(/images/maincontent/accounts/br-transaction-totals-trans.png) no-repeat scroll right bottom;
+  height:8px;
+  margin-left:8px;
+}
+
+#transaction-totals ul {
+  float:left;
+  width:175px;
+  padding:0 10px 10px 0;
+}
+
+#transaction-totals ul.totals-text {
+  padding: 6px 0 0 0;
+  color:#332C25;
+}
+
+.totals-text h5 {
+  color:#6D645C;
+  margin-bottom:0.8em;
+}
+
+.totals-text p {
+  margin:0 0 0.75em 0;
+  line-height:1.3em;
+}
+
+#transaction-totals ul.center {
+  margin:0 13px;
+}
+
+#transaction-totals ul.r-align {
+  float:right;
+}
+
+li.transaction-totals {
+  position:relative;
+  background:transparent url(/images/maincontent/accounts/transaction-totals-pill-a-trans.png) no-repeat scroll top right;
+  float:left;
+  color:#332C25;
+  font-size:0.75em;
+  height:20px;
+  width:100%;
+  margin-top:10px;
+  padding:0 12px 0 0; /*sliding doors padding*/
+  clear:both;
+}
+
+li.transaction-totals span {
+  background:transparent url(/images/maincontent/accounts/transaction-totals-pill-span-trans.png) no-repeat top left;
+  display:block;
+  line-height:12px;
+  padding:4.5px 0 5px 4px;
+}
+
+#transaction-totals .amount {
+  position:absolute;
+  top:4.5px;
+  right:0;
+  text-align:right;
+  font-weight:bold;
+  background:none;
+  padding:0 5px 0 0;
+}
+
+#transaction-totals .spending-dot,
+#transaction-totals .earnings-dot,
+#transaction-totals .net-balance-dot {
+  display:inline;
+  float:left;
+  font-size:34px;
+  width:18px;
+  line-height:0;
+  padding:6px 0;
+}
+
+#transaction-totals .spending-dot {
+  color:#18A4D5;
+}
+
+#transaction-totals .earnings-dot {
+  color:#76CE78;
+}
+
+#transaction-totals .net-balance-dot {
+  color:#F9D273;
+}
+
+/*start of transaction list footer --------------------------------*/
+
+#export {
+  position:relative;
+  float:right;
+  width:auto;
+  text-align:right;
+  height:36px;
+  padding:0 10px;
+  margin:0;
+}
+
+#export a.export-text {
+  color:#999;
+  font-size:0.75em;
+  line-height:3em;
+  display:inline-block;
+  text-decoration:none;
+}
+
+#export .select {
+  padding-right:0;
+}
+
+#export .edit-dialog {
+  position:absolute;
+  bottom:20px;
+  right:-8px;
+  width:270px;
+  text-align:left;
+}
+
+#export .export-details {
+  font-size:11px;
+}
+
+#export .date-range {
+  width:115px;
+  float:left;
+  position:relative;
+  padding-bottom:3px;
+}
+
+#export .date-range .calendar {
+  border:medium none;
+  position:absolute;
+  right:3px;
+}
+
+#export input#start-date,
+#export input#end-date {
+  width:82px;
+}
+
+#export select#export-format {
+  width:235px;
+}
+
+#export-dialog .notification.error {
+  margin-top: 0.5em;
+}
+
+#export-dialog .notification.error .message {
+  padding-bottom: 0.5em;
+}
+
+#export-dialog .notification.error .bottom .right {
+  min-height: 10px;
+  padding: 0;
+}
+
+#export .select {
+  padding-right:0;
+}
+
+#export .edit-dialog {
+  position:absolute;
+  bottom:20px;
+  right:-8px;
+  width:270px;
+  text-align:left;
+}
+
+#export .export-details {
+  font-size:11px;
+}
+
+#export .date-range {
+  width:115px;
+  float:left;
+  position:relative;
+  padding-bottom:3px;
+}
+
+#export .date-range .calendar {
+  border:medium none;
+  position:absolute;
+  right:3px;
+}
+
+#export input#start-date,
+#export input#end-date {
+  width:82px;
+}
+
+#export select#export-format {
+  width:235px;
+}
+
+#export-dialog .notification.error {
+  margin-top: 0.5em;
+}
+
+#export-dialog .notification.error .message {
+  padding-bottom: 0.5em;
+}
+
+#export-dialog .notification.error .bottom .right {
+  min-height: 10px;
+  padding: 0;
+}
+
+/** Tags widget -----------------------------------------------------------------------------------------**/
+#tags .module-header .done-tags,
+#tags.editing .edit-tags,
+#tags.editing .module-header .toggle {
+  display: none;
+}
+
+#tags .content {
+  position: relative;
+}
+
+#tags.editing .done-tags {
+  display: block;
+}
+
+#tags .no-tags-label {
+  text-align:center;
+  padding:0 15px;
+  font-size:0.75em;
+  font-style:italic;
+}
+
+#tags ul.cloud {
+  padding:15px;
+}
+
+#tags ul.cloud li.tag {
+  display:inline;
+}
+
+#tags ul li.tag.template {
+  display:none;
+}
+
+#trends-summary li a,
+#tags li.tag a {
+  display:block;
+  min-height:18px;
+  padding:2px 10px;
+  margin:0;
+}
+#tags li.tag.on a {
+  min-height:28px;
+  padding:9px 10px 0 20px;
+}
+
+#tags ul.cloud li.tag a.text-content {
+  font-size:0.75em;
+  color:#AAA49F;
+  line-height:1em;
+  padding:0;
+  display:inline;
+}
+
+#tags ul.cloud li.tag .text-content:hover {
+  color:#2D8180;
+  text-decoration:none;
+}
+
+#tags ul.cloud li.tag.on .text-content {
+  color:#2D8180;
+}
+
+#tags #filter-tags-edit .hover-box {
+  position: absolute;
+  width: 300px;
+  left: 235px;
+  top: -16px;
+  z-index: 1;
+}
+
+#tags #filter-tags-edit p.small {
+  color: #807970;
+  margin-bottom: 0;
+}
+
+#tags #filter-tags-edit .hover-box .top .right {
+  padding-right: 15px;
+  padding-left: 5px;
+}
+
+#tags #filter-tags-edit .hover-box .tag-autocomplete .yui-ac-container {
+  margin-top: -3px;
+}
+
+#tags #filter-tags-edit .hover-box input {
+  margin: 10px 0;
+}
+
+#tags li.tag {
+  position: relative;
+}
+
+#tags li.tag .count {
+  visibility: hidden;
+  position: absolute;
+  top: 3px;
+  right: 14px;
+  color: #9F9993;
+  font-size: 10px;
+}
+#tags li.tag.on .count {
+  color: #D6EDEA;
+  top: 12px;
+  right: 32px;
+}
+#tags li.tag:hover .count {
+  visibility: visible;
+}
+#tags ul.cloud li.tag:hover .count {
+  visibility: hidden;
+}
+#tags.editing li.tag .count {
+  visibility: visible;
+  right: 35px;
+}
+#tags.editing li.tag.on .count {
+  right: 53px;
+}
+
+#tags li.tag .edit-button {
+  display: none;
+  position: absolute;
+  right: 10px;
+  top: 0;
+  padding: 0;
+  width: 18px;
+  height: 18px;
+  background-color: transparent;
+  background-image: url(/images/maincontent/buttons/line-item-buttons-sprites-trans.png);
+  background-position:-167px -8px;
+}
+#tags li.tag .edit-button:hover {
+  background-position:-167px -60px;
+}
+#tags li.tag .edit-button:active {
+  background-position:-167px -86px;
+}
+#tags li.tag.on .edit-button {
+  right: 27px;
+  top: 10px;
+}
+#tags.editing li.tag .edit-button {
+  display: block;
+}
+#tags.editing li.tag.on .edit-button {
+  right: 27px;
+  padding:0;
+}
+
+
+/** Tag editing dialog ---------------------------------**/
+
+#tags .edit-dialog {
+  display: none;
+  position: absolute;
+  left: 300px;
+  width: 385px;
+}
+
+#tags .edit-dialog .top .right {
+  padding-right: 12px;
+  padding-left: 5px;
+}
+
+#tags .edit-dialog p {
+  font-size: 11px;
+  margin-bottom: 0;
+}
+
+#tags .edit-dialog input {
+  width: 325px;
+  margin-right: 0;
+}
+
+#tags .edit-dialog .tag-name {
+  font-weight: bold;
+  color: #332C25;
+}
+
+#tags .edit-dialog .delete-panel,
+#tags .edit-dialog .rename-panel,
+#tags .edit-dialog .merge-panel {
+  display: none;
+}
+
+#tags .edit-dialog .top .delete-panel p {
+  background: transparent url(/images/tags/tag-delete-trans.png) no-repeat 0 0;
+  margin-top: 5px;
+  padding-left:40px;
+  min-height: 40px;
+}
+#tags .edit-dialog .top .rename-panel p {
+  background: transparent url(/images/tags/tag-rename-trans.png) no-repeat 0 0;
+  margin-top: 5px;
+  padding-left:45px;
+  min-height: 40px;
+}
+#tags .edit-dialog .top .merge-panel p {
+  background: transparent url(/images/tags/tag-merge-trans.png) no-repeat 0 0;
+  margin-top: 5px;
+  padding-left:60px;
+  min-height: 42px;
+}
+
+#tags .edit-dialog .tag-autocomplete {
+  float:none;
+}
+
+/** manual upload form **/
+.account-status.upload .right {
+  padding-left: 5px;
+}
+.account-status.upload .buttons {
+  border-top:1px solid #eee;
+  padding:8px 5px;
+  margin-top:8px;
+  margin-right:5px;
+}
+.account-status.upload .button {
+  float:right;
+}
+
+li.account .account-status .hover-box p a {
+  display:inline;
+  padding:0;
+}
+
+li.account .account-status .hover-box .buttons .button {
+  padding: 0 8px;
+  min-height: 0;
+}
+
+
+/** investments **/
+
+#investment-header tr.header {
+  background:#fff;
+}
+
+#investment-header th {
+  background:#fff;
+}
+
+#investment-header th,
+#investment-header td {
+  font-size:12px;
+  margin:0;
+  padding: 0 0.5em;
+}
+
+#investment-header .amount {
+  text-align: right;
+}
+
+#investment-header .title {
+  background:#f4f6f1;
+}
+
+#investment-header .title td {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+#investment-header table {
+  padding: 0;
+  margin: 0 0 0 0.5em;
+  width: 613px;
+}
+
+#investment-positions .total {
+  font-weight: bold;
+}
+
+#investment-positions tr.subtotal {
+  background:#f4f6f1;
+}
+
+#investment-positions tr.subtotal td {
+  font-weight: bold;
+}
+
+#investment-positions tr.account-value td {
+  font-size: 14px;
+}

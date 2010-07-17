@@ -1,0 +1,687 @@
+/*
+ * Configuration
+ */
+
+// Data and 'global' setup
+var pieCharts = []; // wesCharts.getChartData(curElement.parentNode.id);
+var options = wesCharts.getChartOptions(curElement.parentNode.id);
+options = options ? options : {};
+var logger;
+
+var UNEDITED_TXACTIONS_URL = '/accounts#unedited';
+
+
+var preferences = wesabe.data.preferences;
+
+int current = 0;
+float[] currentPie;
+var history = [];
+boolean transitioning = false;
+boolean loading = false;
+boolean othering = false;
+
+// Values for bezier path pie transition animation
+float curX;
+float curY;
+float curD;
+
+float endX;
+float endY;
+
+float verX;
+float verY;
+
+float bezX;
+float bezY;
+float bezT = 0.0;
+
+var DAY = "Day";
+var WEEK = "Week";
+var MONTH = "Month";
+
+// merge these down into an object?
+var titleLabel = '';
+var rationalTagStr = '';
+var currentRationalTag = '';
+var colorShift = 0;
+
+function echo(o) { return o };
+function zeropad(num) { return ((num < 10) ? "0" : "") + num; }
+
+var currency;
+
+var getProfile = function() {
+  try {
+    wesCharts.text(curElement, 'Loading ...', 0, 0, { notification: true, x: (width/2), y: (height/2) });
+    wesData.getProfile(parseProfile);
+  }
+  catch (ex) { alert(ex.message); }
+}
+
+var parseProfile = function(profileXml) {
+  try {
+    var dc = profileXml.getElementsByTagName('default-currency')[0];
+    currency = echo({
+            'currency': dc.firstChild.nodeValue,
+                'unit': dc.getAttribute('symbol'),
+           'precision': dc.getAttribute('decimal_places'),
+           'separator': dc.getAttribute('separator'),
+           'delimiter': dc.getAttribute('delimiter')
+              });
+  }
+  catch (ex) {}
+
+  getSlice('');
+}
+
+var getSlice = function(value) {
+  try {
+    titleLabel = value;
+
+    // stitch together the BTA string
+    rationalTagStr = '';
+    if (!changingTime) {
+      for (var rt=0;rt <= current;rt++)
+        if (pieCharts[rt])
+          if (pieCharts[rt].rationalTags.length)
+             rationalTagStr += "/" + pieCharts[rt].rationalTags;
+      if (value.length) rationalTagStr += "/" + value;
+      currentRationalTag = value;
+    }
+    else {
+      value = intervals.selected.label;
+    }
+    if (othering) value = "other tags";
+
+    // put up a message of what we're doing - calling for tag dive, new time frame or other slice.
+    wesCharts.text(curElement, 'Loading ' + value + ' ...', 0, 0, { notification: true, x: (width/2), y: (drawHeight/2) });
+
+    var daysBack = new Date();
+    var daysAgo = daysBack.getFullYear() + "0101";
+    if (intervals.selected.timeAgoInDays) {
+      if (intervals.selected.unit === DAY || intervals.selected.unit === MONTH) {
+        daysBack.setMonth(daysBack.getMonth() - intervals.selected.timeAgoInDays);
+      }
+      else { // WEEK
+        daysBack.setDate(daysBack.getDate() - (intervals.selected.timeAgoInDays*7));
+        daysBack.setDate(daysBack.getDate() - daysBack.getDay());
+      }
+      daysAgo = daysBack.getFullYear() + zeropad(daysBack.getMonth() + 1) + zeropad(daysBack.getDate());
+    }
+    var sliceDataUrl = '/transactions/rational' + rationalTagStr + '.xml?start_date=' + daysAgo + '&filter_transfers=true&compact=true&currency=' + currency.currency + '&type=' + view.toLowerCase();
+    wesCharts.getWesabeChartData(sliceDataUrl, setTransactions);
+  }
+  catch (ex) { alert(ex.message); }
+}
+
+var txactionXml = [];
+
+var setTransactions = function(transactionXml) {
+  txactionXml = transactionXml.getElementsByTagName('txaction');
+  parseTransactions();
+}
+
+var parseTransactions = function(clear) {
+
+  if (changingTime) {
+    colorShift = 0;
+    changingTime = false;
+    currentRationalTag = '';
+    clear = true;
+  }
+
+  var tags = new Object();
+  var untags = new Object();
+  var txns = txactionXml;
+  var foundTag = false;
+  for (var t=0; t < txns.length; t++) {
+    var splitAmountElement = txns[t].getElementsByTagName('converted-split-amount')[0];
+    var tagAmount = splitAmountElement ?
+        parseFloat(splitAmountElement.firstChild.nodeValue) :
+        parseFloat(txns[t].getElementsByTagName('converted-amount')[0].firstChild.nodeValue);
+
+    var tagElement = txns[t].getElementsByTagName('tag')[0];
+    if (tagElement) {
+      var tagName = tagElement.firstChild.firstChild.nodeValue;
+      tagName = tagName.replace(/:.*$/,'');
+      if (view === "Earnings" && tagAmount > 0.0) {
+        foundTag = true;
+        tags[tagName] = tags[tagName] ? tags[tagName] + tagAmount : tagAmount;
+      }
+      else if (view === "Spending" && tagAmount < 0.0) {
+        foundTag = true;
+        tags[tagName] = tags[tagName] ? tags[tagName] + Math.abs(tagAmount) : Math.abs(tagAmount);
+      }
+    }
+    else {
+      if (view === "Earnings" && tagAmount > 0.0) {
+        untags["Earnings"] = untags["Earnings"] ? untags["Earnings"] + tagAmount : tagAmount;
+      }
+      else if (view === "Spending" && tagAmount < 0.0) {
+        untags["Spending"] = untags["Spending"] ? untags["Spending"] + Math.abs(tagAmount) : Math.abs(tagAmount);
+      }
+    }
+  }
+
+  if (foundTag) {
+    var ts = [];
+    var t = 0;
+    var tagPos = 0;
+    // someone is requesting an other slice...
+    if (othering) {
+      othering = false;
+      if (pieCharts.length > 0 && (pieCharts[current].tagLength > ((pieCharts[current].tagPosition+1)*5))) {
+        tagPos = pieCharts[current].tagPosition+1;
+      }
+      else {
+        wesCharts.text(curElement, 'Sorry, no further tags.', 0, 0, { notification: true, x: (width/2), y: (drawHeight/2) });
+        loading = false;
+        setTimeout(redraw, 3100);
+        return true;
+      }
+    }
+
+    for (var tag in tags) ts[t++] = echo({'name': tag, 'amount': tags[tag]});
+    ts.sort(tagSorter);
+
+    var tt = 0;
+    var tl = ts.length < (tagPos+1)*5 ? ts.length : (tagPos+1)*5;
+    for (t=tagPos*5; t < tl; t++) tt += ts[t].amount;
+
+    var otherTags = 0.0;
+    for (t=0; t < ts.length; t++)
+      // if (t < (tagPos*5) || t >= (tagPos+1)*5) otherTags += ts[t].amount;
+      // Don't include the previous tags in the amount...
+      if (t >= (tagPos+1)*5) otherTags += ts[t].amount;
+    // Not doing anything with this for now...
+    var untaggedAmt = (untags[view] ? untags[view] : 0.0);
+    var other = otherTags;
+    tt += other;
+    var totalAmt = tt;
+    if ((clear || pieCharts.length === 0) && untaggedAmt > 0.0 ) totalAmt += untaggedAmt;
+
+    var ts2 = ts.slice(tagPos*5, tl);
+    if ((clear || pieCharts.length === 0) && untaggedAmt > 0.0)  ts2.push(echo({'name': 'unedited', 'amount': untaggedAmt}));
+    if (other > 0) ts2.push(echo({'name': 'other tags', 'amount': other}));
+    if (((clear || pieCharts.length === 0) && untaggedAmt > 0.0) || other > 0) ts2.sort(tagSorter);
+    untaggedAmt += tt;
+
+    var colr = [
+      [ 52, 150, 178],
+      [163,  49,  49],
+      [149, 191,  59],
+      [201,  68, 123],
+      [200, 187,  61],
+      [112,  94, 150],
+      [222, 163, 108] ];
+    if (view === "Earnings")
+      colr = [
+        [149, 191,  59],
+        [201,  68, 123],
+        [200, 187,  61],
+        [112,  94, 150],
+        [222, 163, 108],
+        [ 52, 150, 178],
+        [163,  49,  49] ];
+
+    var labels = [];
+    var amounts = [];
+    var angs = [];
+
+    for (t=0; t < ts2.length; t++) {
+      angs.push(ts2[t].amount/totalAmt*360);
+      labels.push(ts2[t].name);
+      if (labels[t] === "unedited") colr[t] = [222, 222, 222];
+      amounts.push(ts2[t].amount);
+    }
+
+    var p55Hack = [{
+      'title'  : (titleLabel === "") ? view : titleLabel + " <strong style='font-weight: normal;'>" + view.toLowerCase() + "</strong>",
+      'tagged' : tt,
+      'unedited': untaggedAmt,
+      'totalAmt': totalAmt,
+      'tagLength': ts.length,
+      'tagPosition': tagPos,
+      'rationalTags': currentRationalTag,
+      'colorShift': colorShift,
+      'angs'   : angs,
+      'colr'   : colr,
+      'labels' : labels,
+      'amounts': amounts,
+      'labelLocs': [] }];
+
+    currentRationalTag = '';
+
+    if (!clear) {
+      if (current < (pieCharts.length-1))
+        pieCharts[current+1] = p55Hack[0];
+      else
+        pieCharts.push(p55Hack[0]);
+
+      if (pieCharts.length > 1)
+        transition();
+      else
+        redraw();
+    }
+    else {
+      current = 0;
+      pieCharts = [];
+      titleLabel = '';
+      currentPie = [];
+      pieCharts = [];
+      pieCharts.push(p55Hack[0]);
+      redraw();
+    }
+  }
+  else if (!txns.length && pieCharts.length > 0 && clear) {
+    //  Eh, this is not optimal - spin, spin, spin - FIXME.
+    wesCharts.text(curElement, 'No data for requested time frame. <br> Please choose another.', 0, 0,
+      { notification: true, x: (width/2), y: (drawHeight/2) });
+  }
+  else {
+    if (pieCharts.length) {
+      var endOfLine = '';
+      if (titleLabel.length) endOfLine = " for '" + titleLabel + "'";
+      wesCharts.text(curElement, 'Sorry, nothing further' + endOfLine + '.', 0, 0, { notification: true, x: (width/2), y: (drawHeight/2) });
+      setTimeout(redraw, 3100);
+    }
+    else {
+      var p55Hack = [{
+        'title': view, 'tagged': 0.0, 'unedited': 0.0, 'totalAmt': 0.0, 'tagLength': 0, 'tagPosition': 0, 'rationalTags': '',
+        'angs': [], 'colr': [], 'labels': [], 'amounts': [], 'labelLocs': [] }];
+      pieCharts.push(p55Hack[0]);
+      redraw();
+      var ops = echo({ fontWeight: 'normal', fontSize: '12', color: "#999" });
+      var message = "No " + view.toLowerCase() + " tagged for the period.";
+      var metrics = wesCharts.textMetrics(curElement, message, ops);
+      wesCharts.text(curElement, message, (width-metrics.width)/2, (drawHeight-metrics.height)/2-57, ops);
+      var ops = echo({ fontWeight: 'normal', fontSize: '12' });
+      var message = "<a href='" + UNEDITED_TXACTIONS_URL + "'>Have transactions?  Click here to tag them.</a>";
+      var metrics = wesCharts.textMetrics(curElement, message, ops);
+      wesCharts.text(curElement, message, (width-metrics.width)/2, (drawHeight-metrics.height)/2-41, ops);
+    }
+  }
+
+  loading = false;
+
+}
+
+var tagSorter = function(tg1, tg2) {
+  return (Math.abs(tg1.amount) > Math.abs(tg2.amount) ? -1 : 1);
+}
+
+var transition = function() {
+  curX = width/2;
+  curY = drawHeight/2-10+y0;
+  endX = (width/2) - (((current == 0 ? 0 :current+1)*17)/2);
+  endY = 181+y0;
+  verX = width/2;
+  verY = 181+y0;
+  endD = 17;
+  curD = ((drawHeight < width) ? drawHeight : width)/2;
+  stpD = (curD-endD)/10;
+  transitioning = true;
+  loop();
+}
+
+var drawHeight = 0;
+var y0 = 30;
+/*
+ * Processing
+ */
+void setup() {
+  size(options.width, options.height);
+  view = options.view ? options.view : "Spending";
+  logger = wesabe.loggerFor('PIE('+view+')');
+  intervals.selected = either(intervals[parseInt(either(preferences.get('charts.pie.'+view.toLowerCase()+'.range'), 1))], intervals[1]);
+  drawHeight = options.height - 30;
+  curContext.translate(0.5, 0.5);
+  frameRate(29);
+  noLoop();
+}
+
+var view = "Spending";
+
+var taggedLabelMetrics;
+void draw() {
+  noStroke();
+  wesCharts.htmlDialog(curElement);
+  wesCharts.clearLabels(curElement);
+  curElement.parentNode.style.cursor = "auto";
+
+  if (pieCharts.length === 0 && !changingTime) {
+    background(255);
+    getProfile();
+    // getSlice('');
+  }
+  else {
+
+    fill(255);
+    stroke(255);
+    rect(0, 0, width, height);
+
+    // wesCharts.text(curElement, pieCharts[current].title, 9, 0, { fontSize: '16', fontWeight: 'bold' });
+    drawTimeSelect();
+
+    // stroke(219);
+    // line(5, 32, width-5, 32);
+
+    int diameter = ((drawHeight < width) ? drawHeight : width)/2;
+    drawPie(width/2, drawHeight/2-10+y0, diameter, true, current);
+
+    if (current > 0) {
+      var st = 75;
+      var historyDiameter = 17;
+      var historyPieMargin = 30;
+      var historyP0 = (width/2) - (((current-1)*historyPieMargin)/2);
+      if (transitioning) historyP0 += (bezT*historyPieMargin)/2;
+      for (int p=current-1;p >= 0;p--) {
+        drawPie(historyP0, 181+y0, historyDiameter, false, p);
+        historyP0 += historyPieMargin;
+      }
+    }
+
+    if (transitioning) {
+      if (bezT <= 1.0) {
+        float bezX = (pow((1-bezT), 2)*curX) + ((2*bezT)*(1-bezT)*verX) + (pow(bezT, 2)*endX);
+        float bezY = (pow((1-bezT), 2)*curY) + ((2*bezT)*(1-bezT)*verY) + (pow(bezT, 2)*endY);
+        drawPie(bezX, bezY, curD, false);
+        bezT += 0.1;
+        curD -= stpD;
+      }
+      else {
+        transitioning = false;
+        bezT = 0.0;
+        noLoop();
+        current++;
+        redraw();
+      }
+    }
+    else {
+      var plw = diameter;
+      var plh = (diameter/118) * 129;
+      image('pielight', width/2-diameter/2-1, 40+y0, plw, plh);
+      // wesCharts.text(curElement, pieCharts[current].title, 5, 20, { color: "#333" });
+    }
+  }
+
+}
+
+
+var intervals = [
+  {key: "0", shortLabel: '1m', label: 'past month', timeAgoInDays: 1, unit: DAY},
+  {key: "1", shortLabel: '3m', label: 'past 3 months', timeAgoInDays: 12, unit: WEEK},
+  {key: "2", shortLabel: '6m', label: 'past 6 months', timeAgoInDays: 6, unit: MONTH},
+  {key: "3", shortLabel: '1y', label: 'past 12 months', timeAgoInDays: 12, unit: MONTH}
+];
+
+intervals.each = function(callback) {
+  for (var i = 0; i < intervals.length; i++) {
+    callback(intervals[i], i, intervals[i] === intervals.selected);
+  }
+};
+
+var changingTime = false;
+void drawTimeSelect() {
+  intervals.each(function(interval, i, selected) {
+    var button = $('#chart-pie .'+view.toLowerCase()+' .toggle-button.time-'+interval.key);
+    if (button.hasClass('on') != selected) {
+      button.toggleClass('on');
+    }
+    button
+      .unbind('click')
+      .click(function(){ setTimeRange(interval) });
+  });
+}
+
+void setTimeRange(interval) {
+  intervals.selected = interval;
+  changingTime = true;
+  preferences.update('charts.pie.'+view.toLowerCase()+'.range', interval.key);
+  redraw();
+  getSlice('');
+}
+
+
+void drawPie(ex, why, diameter, drawLabels, pieNum) {
+
+  if (!pieNum && pieNum != 0) pieNum = current;
+
+
+  noStroke();
+  float lastAng = 0;
+  float lastRealAng = 0;
+
+  // draw pie chart with labels
+  var angs = pieCharts[pieNum].angs;
+  var colr = pieCharts[pieNum].colr;
+  var labels = pieCharts[pieNum].labels;
+  if (drawLabels) currentPie = new float[angs.length];
+  var labelY = 0;
+  var labelX = 0;
+  var pieLabelLocs = [];
+  for (int i=0; i < angs.length; i++) {
+    var c = ((i+pieCharts[pieNum].colorShift)%7);
+    fill(colr[c][0], colr[c][1], colr[c][2]);
+    if (angs.length === 1)
+      // FIXME: just doing this for msie's - figure out why for reals and eliminate...
+      arc(ex, why, diameter, diameter, lastAng, lastAng+radians(angs[i]));
+    else
+      arc(ex, why, diameter, diameter, lastAng-HALF_PI, lastAng+radians(angs[i])-HALF_PI);
+    if (drawLabels && !transitioning) {
+      int xoffset = 0;
+      int yoffset = 0;
+      float midpoint = lastAng+radians(angs[i])/2;
+      if (pieCharts[current].angs.length <= 1) midpoint = radians(angs[i])/4;
+
+      // var percentage = Math.round((angs[i]/360)*100) + "%";
+      // if (percentage === "0%") percentage = "< 1%"
+
+      var sliceLabel = " <strong>" + labels[i] + "</strong> ";
+
+      if (midpoint > PI) {
+        xoffset = wesCharts.textMetrics(curElement, labels[i], { fontSize: '11'}).width;
+        // xoffset = wesCharts.textMetrics(curElement, labels[i] + " " + percentage, { fontSize: '11'}).width;
+        // sliceLabel = sliceLabel + percentage;
+      }
+      else {
+        // sliceLabel = percentage + sliceLabel;
+      }
+
+      var q = 4;
+      if (midpoint < HALF_PI || midpoint > TWO_PI-HALF_PI) {
+        yoffset = wesCharts.textMetrics(curElement, labels[i], { fontSize: '11'}).height;
+        var q = 1;
+        //  Labels can get bunched up in Quadrant II - let's space the out, if needed.
+        if (midpoint > PI+HALF_PI && midpoint < TWO_PI) {
+          var overlap = labelY - ( (sin(midpoint-HALF_PI) * (diameter/2+10) + why) - yoffset/2 );
+          if (overlap < yoffset) yoffset = yoffset + (yoffset - overlap) * 2;
+          var q = 2;
+        }
+      }
+      else if (midpoint < PI+HALF_PI && midpoint > PI) {
+        q = 3;
+      }
+
+      labelY = (sin(midpoint-HALF_PI) * (diameter/2+10) + why) - yoffset/2;
+      labelX = (cos(midpoint-HALF_PI) * (diameter/2+10) + ex) - xoffset;
+      pieLabelLocs.push(
+        echo({
+          x: (cos(midpoint-HALF_PI) * (diameter/2+10) + ex) - ((q == 2 || q == 3) ? 5 : 0),
+          y: (sin(midpoint-HALF_PI) * (diameter/2+10) + why) - (q == 2 ? ((yoffset/2)-7) : 0),
+          quadrant: q
+        })
+      );
+
+      wesCharts.text(curElement, sliceLabel, labelX, labelY,
+        { fontSize: '11', color: 'rgb(' + colr[c].join() + ')', click: function (e) { grabSlice(e); },
+          cursor: 'pointer', mouseover: function (e) { grabSliceDialog(e); } });
+    }
+    lastAng += radians(angs[i]);
+    if (drawLabels) currentPie[i] = lastAng;
+  }
+  pieCharts[pieNum].labelLocs = pieLabelLocs;
+
+}
+
+void grabSlice(e) {
+  var element = e.srcElement ? e.srcElement : e.target;
+  var tagLabel = element.innerText ? element.innerText : element.textContent;
+  tagLabel = tagLabel.replace(/[< ]*[0-9]*%/,"");
+  loading = true;
+  eatSlice(tagLabel);
+}
+
+void grabSliceDialog(e) {
+  var element = e.srcElement ? e.srcElement : e.target;
+  var tagLabel = element.innerText ? element.innerText : element.textContent;
+  tagLabel = tagLabel.replace(/[< ]*[0-9]*%/,"");
+  for (var i=0;i < pieCharts[current].labels.length; i++) {
+    if (tagLabel == pieCharts[current].labels[i]) {
+        var percentage = Math.round((pieCharts[current].amounts[i]/pieCharts[current].totalAmt)*100) + "%";
+        if (percentage === "0%") percentage = "< 1%"
+        var ahref = (pieCharts[current].labels[i] === "unedited") ? UNEDITED_TXACTIONS_URL : "/transactions/tag/" + pieCharts[current].labels[i];
+        var dialogStr =
+          "<div style='text-decoration: underline;cursor: pointer;font-size: 11px;color: rgb(" + pieCharts[current].colr[((i+pieCharts[current].colorShift)%7)] + ");'>" +
+          pieCharts[current].labels[i] + " <span style='font-weight: normal'>" + percentage + "</span></div>" +
+          "<div style='color: #000;padding-top: 3px;font-size: 12px;'>" + wesabe.lang.money.format(pieCharts[current].amounts[i], currency) + "</div>" +
+          ((pieCharts[current].labels[i] !== "other tags") ?
+          "<div style='padding-bottom: 1px;'><a href='" + ahref + "' style='text-decoration: underline;color: #666;padding-top: 2px;font-weight: normal;font-size: 10px;'>View transactions</a></div>" : "");
+        var dialogMets = wesCharts.textMetrics(curElement, dialogStr);
+        wesCharts.htmlDialog(curElement, dialogStr,
+          pieCharts[current].labelLocs[i].x - ((pieCharts[current].labelLocs[i].quadrant === 2 || pieCharts[current].labelLocs[i].quadrant === 3) ? dialogMets.width : 0),
+          pieCharts[current].labelLocs[i].y - (pieCharts[current].labelLocs[i].quadrant <= 2 ? dialogMets.height : 0),
+          { click: function () { eatSlice(tagLabel); } } );
+        break;
+    }
+  }
+}
+
+void eatSlice(name) {
+  if (name == 'other tags') {
+    othering = "true";
+    getSlice('');
+  }
+  else if (name == 'unedited') {
+    window.location = UNEDITED_TXACTIONS_URL;
+  }
+  else
+    getSlice(name);
+}
+
+void mouseMoved() {
+
+  curElement.parentNode.style.cursor = "auto";
+  wesCharts.tooltip(curElement);
+
+  if (loading || transitioning) return;
+
+  float pointIn = (pow((mouseX-width/2), 2) + pow((mouseY-((drawHeight+y0)/2)), 2));
+  int radius = ((drawHeight < width) ? drawHeight : width)/4;
+  if (pointIn < pow(radius, 2)) {
+    curElement.parentNode.style.cursor = "pointer";
+        float rads = atan2(mouseY-(drawHeight+y0)/2, mouseX-width/2);
+    rads = rads+HALF_PI;
+    if (rads < 0) rads = TWO_PI + rads;
+    for (int i=0;i < currentPie.length;i++) {
+      float begRadians = (i == 0 ? 0 : currentPie[i-1]);
+      var angs = pieCharts[current].angs;
+      if (rads > begRadians && currentPie[i] >= rads) {
+        var percentage = Math.round((pieCharts[current].amounts[i]/pieCharts[current].totalAmt)*100) + "%";
+        if (percentage === "0%") percentage = "< 1%"
+        var ahref = (pieCharts[current].labels[i] === "unedited") ? "/accounts?unedited" : "/transactions/tag/" + pieCharts[current].labels[i];
+        var dialogStr =
+          "<div style='text-decoration: underline;cursor: pointer;font-size: 11px;color: rgb(" + pieCharts[current].colr[((i+pieCharts[current].colorShift)%7)] + ");'>" +
+          pieCharts[current].labels[i] + " <span style='font-weight: normal'>" + percentage + "</span></div>" +
+          "<div style='color: #000;padding-top: 3px;font-size: 12px;'>" + wesabe.lang.money.format(pieCharts[current].amounts[i], currency) + "</div>" +
+          ((pieCharts[current].labels[i] !== "other tags") ?
+          "<div style='padding-bottom: 1px;'><a href='" + ahref + "' style='text-decoration: underline;color: #666;padding-top: 2px;font-weight: normal;font-size: 10px;'>View transactions</a></div>" : "");
+        var dialogMets = wesCharts.textMetrics(curElement, dialogStr);
+        wesCharts.htmlDialog(curElement, dialogStr,
+          pieCharts[current].labelLocs[i].x - ((pieCharts[current].labelLocs[i].quadrant === 2 || pieCharts[current].labelLocs[i].quadrant === 3) ? dialogMets.width : 0),
+          pieCharts[current].labelLocs[i].y - (pieCharts[current].labelLocs[i].quadrant <= 2 ? dialogMets.height : 0),
+          { click: function () { eatSlice(pieCharts[current].labels[i]); } });
+        break;
+      }
+    }
+  }
+
+  // check history
+  if (current > 0) {
+    int historyDiameter = 17;
+    int radius = historyDiameter/2;
+    int historyPieMargin = 30;
+    int historyP0 = (width/2) - (((current-1)*historyPieMargin)/2);
+    for (int p=current-1;p >= 0;p--) {
+      float pointIn = (pow((mouseX-historyP0), 2) + pow((mouseY-181-y0), 2));
+      if ( pointIn < pow(radius, 2) ) {
+        curElement.parentNode.style.cursor = "pointer";
+        wesCharts.tooltip(curElement, pieCharts[p].title.replace("<strong>Click a slice</strong> for more.", ""), mouseX, mouseY);
+      }
+      historyP0 += historyPieMargin;
+    }
+  }
+}
+
+function closeIt(e) {
+  var container = (wesCharts.msie) ? curElement : curElement.parentNode;
+  if (document.getElementById('wesabeChartDialog'))
+    container.removeChild(document.getElementById('wesabeChartDialog'));
+}
+
+
+void mousePressed() {
+  if (loading || transitioning) return;
+  // Freakin' hack for ie6.0
+  if (!wesCharts.msie && document.getElementById('wesabeChartDialog')) wesCharts.htmlDialog(curElement);
+
+  var angs = pieCharts[current].angs;
+  var labels = pieCharts[current].labels;
+  wesCharts.tooltip(curElement);
+
+  // check Pie
+  int radius = ((drawHeight < width) ? drawHeight : width)/4;
+  float pointIn = (pow((mouseX-width/2), 2) + pow((mouseY-(drawHeight+y0)/2), 2));
+  if ( pointIn < pow(radius, 2) ) {
+    float rads = atan2(mouseY-(drawHeight+y0)/2, mouseX-width/2);
+    rads = rads+HALF_PI;
+    if (rads < 0) rads = TWO_PI + rads;
+    for (int i=0;i < currentPie.length;i++) {
+      float begRadians = (i == 0 ? 0 : currentPie[i-1]);
+      if (rads > begRadians && currentPie[i] >= rads) {
+        loading = true;
+        colorShift = ((i+pieCharts[current].colorShift)%7);
+        if (labels[i] === "other tags") {
+          othering = true;
+          getSlice('');
+        }
+        else if (labels[i] === "unedited") {
+          window.location = "/accounts?unedited";
+        }
+        else {
+          getSlice(labels[i]);
+        }
+        break;
+      }
+    }
+  }
+  // check History
+  if (current > 0) {
+    int historyDiameter = 17;
+    int radius = historyDiameter/2;
+    int historyPieMargin = 30;
+    int historyP0 = (width/2) - (((current-1)*historyPieMargin)/2);
+    if (transitioning) historyP0 += (bezT*historyPieMargin)/2;
+    for (int p=current-1;p >= 0;p--) {
+      float pointIn = (pow((mouseX-historyP0), 2) + pow((mouseY-181-y0), 2));
+      if ( pointIn < pow(radius, 2) ) {
+        current = p;
+        redraw();
+      }
+      historyP0 += historyPieMargin;
+    }
+  }
+
+}
+
+void mouseReleased() { curElement.parentNode.style.cursor = "auto"; }

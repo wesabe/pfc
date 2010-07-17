@@ -1,0 +1,10 @@
+<% if current_user.nil? %>
+  <%- form_tag(login_action_url) do -%>
+    <label for="email" class="field-title">Email <span>old usernames still work</span></label>
+    <input type="text" id="email" name="email"/>
+    <label for="password" class="field-title">Password</label>
+    <input type="password" id="password" name="password"/>
+    <p class="subtext"><span id="forgot-password-link">Forgot your Password? Too bad!</span></p>
+    <button class="button green" type="submit"><span>Sign In</span></button>
+  <%- end -%>
+<% end %>

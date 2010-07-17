@@ -1,0 +1,60 @@
+<% set_page_title 'Delete My Membership' %>
+<% javascript 'wesabe/views/shared/form' %>
+<% content_for :footer do -%>
+<script type="text/javascript" charset="utf-8">
+  $("#user-delete-button").click(function() {
+    $(this).hide();
+    $("#confirm-dialog").fadeIn();
+  });
+  $("#confirm-dialog .cancel").click(function(){
+    $("#confirm-dialog").hide();
+    $("#user-delete-button").fadeIn();
+  });
+</script>
+<% end -%>
+<div id="right">
+  <div class="two-column" id="public-page">
+    <div class="top"><div class="right"><div class="grip"></div></div></div>
+    <div class="middle"><div class="right">
+    <div class="content">
+      <div class="module-header"><h1>Delete My Membership</h1></div>
+      <div class="form-info">
+        <p class="large">If you've decided that Wesabe is not for you and would like to delete your account, you may
+        do so by clicking the button below. We will permanently delete
+        from our system any bank data that you have uploaded and delete your login. This process cannot
+        be reversed. However, any public information you have created, such as tips or groups postings, will
+        remain.</p>
+        <a id="user-delete-button" class="button delete red" <% if flash[:error] -%>style="display:none"<% end -%>><span>Delete Account</span></a>
+        <div id="confirm-dialog" <% unless flash[:error] -%>style="display:none"<% end -%>>
+          <fieldset>
+            <div class="two-col-centered">
+            <h6>Are you sure you want to <b>delete your member account?</b></h6>
+            <% form_tag destroy_user_path, :method => "delete" do -%>
+              <div class="form-info">All private information associated with your membership, including all bank data,
+                 will be permanently deleted. This cannot be reversed.</div>
+                 <div class="field">
+                   <label class="field-title" for="password">
+                     As a security measure, please enter your password:
+                   </label>
+                <%= password_field_tag :password %>
+                <% if flash[:error] -%>
+                <p class="error-message"><%= flash[:error] %></p>
+                <% end -%>
+              </div>
+              <a class="button submit delete red"><span>Delete My Account</span></a>
+              <a class="button cancel gry"><span>Cancel</span></a>
+            <% end -%>
+            </div>
+            </fieldset>
+        </div>
+
+        <div class="clear"></div>
+      </div>
+    </div>
+    </div></div>
+    <div class="bottom"><div class="right"></div></div>
+  </div>
+</div>
+<div id="left">
+  <%= render :partial => "user/sidebar" %>
+</div>

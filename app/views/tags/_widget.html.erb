@@ -1,0 +1,98 @@
+<%# requires javascript 'wesabe/views/widgets/tags' %>
+
+<%# wesabe.views.widgets.tags.TagWidget %>
+<div class="one-column" id="tags">
+  <div class="top"><div class="right"><div class="grip"></div></div></div>
+  <div class="middle"><div class="right">
+    <div class="content">
+      <div class="module-header">
+        <a class="edit-tags button gry"><span>Edit</span></a>
+        <a class="done-tags button green"><span>Done</span></a>
+        <div id="filter-tags-edit">
+          <a id="filtered-tags-button" class="toggle vbar" title="Filtered Tags"></a>
+          <div class="hover-box l-align" style="display:none;">
+            <div class="top"><div class="right">
+              <label for="filter-tags" class="field-title">Filtered Tags</label>
+              <p class="small">Transactions with these tags will be ignored in graphs and charts.</p>
+              <%= text_field_tag "filter-tags", current_user.filter_tags.map(&:display_name).join(" "), :autocomplete => "off" %><br>
+              <a class="button confirm green"><span>Save</span></a>
+              <a class="button cancel gry"><span>Cancel</span></a>
+              <div class="clear"></div>
+            </div></div>
+            <div class="bottom"><div class="right"></div></div>
+          </div>
+        </div>
+        <a class="toggle cloud"></a>
+        <a class="toggle list"></a>
+        <h5>My Tags</h5>
+      </div>
+      <div class="no-tags-label" style="display:none">
+        You have no tags yet.<br>Tag your transactions and they&rsquo;ll be listed here.
+      </div>
+      <div class="one-col-list">
+        <%# wesabe.views.widgets.tags.TagList %>
+        <ul class="one-col-list tags">
+          <%# wesabe.views.widgets.tags.TagListItem %>
+          <li class="tag template">
+            <a class="text-content">Tag Name</a>
+            <p class="count">Tag Count</p>
+            <a class="edit-button"></a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div></div>
+  <div class="bottom"><div class="right"></div></div>
+  <%# wesabe.views.widgets.tags.TagEditDialog %>
+  <div class="edit-dialog">
+    <div class="top"><div class="right">
+      <%# wesabe.views.widgets.tags.TagEditDialogPromptPanel %>
+      <div class="edit-panel">
+        <label>Editing tag <span class="tag-name">Tag Name</span></label>
+        <form><input name="tag-name" type="text"></form>
+      </div>
+      <%# wesabe.views.widgets.tags.TagEditDialogPanel %>
+      <div class="rename-panel">
+        <p>Are you sure you want to rename the <span class="tag-name">Tag Name</span> tag
+          to <span class="tag-name new">New Tag Name</span>?</p>
+      </div>
+      <%# wesabe.views.widgets.tags.TagEditDialogPanel %>
+      <div class="delete-panel">
+        <p>Are you sure you want to delete the <span class="tag-name">Tag Name</span> tag
+          from all of your transactions?</p>
+      </div>
+      <%# wesabe.views.widgets.tags.TagEditDialogPanel %>
+      <div class="merge-panel">
+        <p>Are you sure you want to merge the <span class="tag-name">Tag Name</span> tag
+          into the <span class="tag-name new">New Tag Name</span> tag?</p>
+      </div>
+    </div></div>
+    <div class="bottom"><div class="right">
+      <%# wesabe.views.widgets.tags.TagEditDialogPromptPanel %>
+      <div class="edit-panel">
+        <a class="button green confirm save"><span class="text-content">Save</span></a>
+        <a class="button gry cancel"><span class="text-content">Cancel</span></a>
+        <a class="button delete conf">Delete Tag&hellip;</a>
+        <div class="clear"></div>
+      </div>
+      <%# wesabe.views.widgets.tags.TagEditDialogPanel %>
+      <div class="rename-panel">
+        <a class="button green confirm save"><span class="text-content">Rename</span></a>
+        <a class="button gry cancel"><span class="text-content">Cancel</span></a>
+        <div class="clear"></div>
+      </div>
+      <%# wesabe.views.widgets.tags.TagEditDialogPanel %>
+      <div class="delete-panel">
+        <a class="button red confirm delete"><span class="text-content">Delete</span></a>
+        <a class="button gry cancel"><span class="text-content">Cancel</span></a>
+        <div class="clear"></div>
+      </div>
+      <%# wesabe.views.widgets.tags.TagEditDialogPanel %>
+      <div class="merge-panel">
+        <a class="button green confirm save"><span class="text-content">Merge</span></a>
+        <a class="button gry cancel"><span class="text-content">Cancel</span></a>
+        <div class="clear"></div>
+      </div>
+    </div></div>
+  </div>
+</div>

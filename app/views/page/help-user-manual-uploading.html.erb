@@ -1,0 +1,49 @@
+<% set_page_title "Help - Uploading Data" %>
+
+<div id="right">
+  <div class="two-column" id="public-page">
+    <div class="top"><div class="right"><div class="grip"></div></div></div>
+    <div class="middle">
+      <div class="right">
+        <div class="content">
+          <div class="module-header">
+        <h1>Uploading to Wesabe</h1>
+        <h5 class="intro">This section of the manual contains general information about uploading your data to Wesabe.</h5>
+          </div>
+          <div class="indent1">
+            <h3>General Information</h3>
+
+              <p>Most banks allow their customers to download their transaction histories in one of four similar download formats, (QIF, OFX, OFC, and QFX), for use with financial programs such as Wesabe. Banks let their customers get this information in a couple of different ways.</p>
+              <p>Most banks let their customers to manually download their account information. Some banks (often the larger ones) also have a system that they put into place to work with standalone programs like Quicken and Microsoft Money. These use a special computer connection that lets those programs (and Wesabe) communicate with a specific kind of server (called an OFX server) and upload your data directly to the program.</p>
+              <p>Wesabe uses both methods. When it&rsquo;s possible, we like to use the server-to-server connection - it&rsquo;s fast and easy, and the data winds up in Wesabe, not on your computer, where you still need to go through another step to get it to us.</p>
+
+
+            <h3>Uploading data</h3>
+
+              <p>There are two ways to upload data to Wesabe. You can upload manually or use the Automatic uploader.</p>
+              <h4>Manual Uploads</h4>
+              <p>The manual method is just what it sounds like - you go to your bank, download a QIF, OFX, OFC, or QFX file, and then upload it to Wesabe directly. This is a good way to try out the service, and it&rsquo;s also useful for dealing with smaller financial institutions that don&rsquo;t have the server-to-server option. With manual uploading, your bank&rsquo;s username and password information is also never stored or saved.</p>
+              <h4>The Automatic Uploader</h4>
+              <p>The Automatic uploader uses the server-to-server method almost entirely. What makes the Automatic uploader different is that it works from our servers rather than from your computer. That means that your accounts are always automatically updated every time you log in. When you use the Automatic uploader, your bank username and password is encrypted and stored on our servers, completely separate from your other personal information.</p>
+              <p>When you first sign up for Wesabe, we try to direct you to the easiest and most convenient way to upload. This depends on your financial institution, and on your browser. If your bank is supported by the Automatic uploader (and all the ones that do the server-to-server connections are), we suggest that, since it&rsquo;s definitely the easiest. You can always choose another upload method, though, if you prefer.</p>
+              <p>If a bank isn&rsquo;t supported by the Automatic uploader, this means it has to be downloaded manually. In that case, we suggest the Firefox uploader if we detect that you&rsquo;re using the Firefox web browser, or we send you to the manual uploads page if you&rsquo;re using something else.</p>
+
+            <h3>Supported banks</h3>
+
+              <p>We support thousands of banks and credit cards, for financial institutions all over the world. Your can also <a href="/financial-institutions/new">add your own financial institution</a> if you can&rsquo;t find it in our list.</p>
+              <p>You can add any financial institution that provides an &ldquo;export&rdquo; or &ldquo;download your accounts&rdquo; option in OFX, QFX, QIF, or OFC format. Wesabe currently only supports financial institutions with deposit accounts (checking, savings, money market) and credit accounts (credit line, credit card), and we&rsquo;re testing support for investment accounts in Wesabe Labs.</p>
+              <p>The bank will be immediately available for manual uploads, and can be made available within a day or two on the Wesabe Firefox uploader. Unfortunately at the moment the bank list in the Desktop Uploader isn&rsquo;t being updated.</p>
+              <p>In addition to bank accounts, cash accounts are available on the site. To create a cash account, click the <a href="/uploads/new">Add an Account</a> button, and then, click the <strong>Create a Cash Account</strong> link on the right side of the Add an Account page.</p>
+              <p>You can enter the amount spent or earned, tag transactions, and generally treat the cash account like any other account.</p>
+
+          </dl>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="bottom"><div class="right"></div></div>
+  </div>
+</div>
+<%= render :partial => 'page/help_sidebar' %>
+<div class="clear"></div>

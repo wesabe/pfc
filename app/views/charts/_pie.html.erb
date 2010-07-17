@@ -1,0 +1,35 @@
+<%# requires javascript "excanvas" for IE %>
+<%# requires javascript "processing" %>
+<%# requires javascript "wesabeCharts" %>
+
+<div class="two-column" id="chart-pie">
+  <div class="top"><div class="movable right"><div class="movable grip"></div></div></div>
+  <div class="middle"><div class="right">
+    <div class="content">
+      <div class="module-header">
+        <div class="spending half-left">
+          <a class="toggle-button time-3"><span>1y</span></a>
+          <a class="toggle-button time-2"><span>6m</span></a>
+          <a class="toggle-button time-1"><span>3m</span></a>
+          <a class="toggle-button time-0"><span>1m</span></a>
+          <h5>Spending</h5>
+        </div>
+
+        <div class="earnings half-right">
+          <a class="toggle-button time-3"><span>1y</span></a>
+          <a class="toggle-button time-2"><span>6m</span></a>
+          <a class="toggle-button time-1"><span>3m</span></a>
+          <a class="toggle-button time-0"><span>1m</span></a>
+          <h5>Earnings</h5>
+        </div>
+      </div>
+      <div class="canvas-container">
+        <div id="spending-pie"></div>
+        <div id="earnings-pie"></div>
+        <!-- image with id="pielight" required by pie.p55 -->
+        <%= image_tag 'pielight.png', :id => 'pielight', :style => 'display:none' %>
+      </div>
+    </div>
+  </div></div>
+  <div class="bottom"><div class="right"></div></div>
+</div>

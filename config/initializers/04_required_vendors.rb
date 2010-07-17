@@ -1,0 +1,1 @@
+require "hmac/sha2"

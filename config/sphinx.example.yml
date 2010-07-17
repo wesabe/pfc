@@ -1,0 +1,7 @@
+development:
+  txactions: localhost:3312
+production:
+  # if an index has multiple servers, each query goes to a randomly selected one
+  txactions:
+  - sphinx1.example.com:3312
+  - sphinx2.example.com:3312

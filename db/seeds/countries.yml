@@ -1,0 +1,541 @@
+---
+- name: United States of America
+  code: USD
+- name: Afghanistan
+  code: AFN
+- name: Albania
+  code: ALL
+- name: Algeria
+  code: DZD
+- name: American Samoa
+  code: USD
+- name: American Virgin Islands
+  code: USD
+- name: Andorra
+  code: EUR
+- name: Angola
+  code: AOA
+- name: Anguilla
+  code: XCD
+- name: Antigua and Barbuda
+  code: XCD
+- name: Argentina
+  code: ARS
+- name: Armenia
+  code: AMD
+- name: Aruba
+  code: AWG
+- name: Australia
+  code: AUD
+- name: Austria
+  code: EUR
+- name: Azerbaijan
+  code: AZN
+- name: Azores
+  code: EUR
+- name: Bahamas
+  code: BSD
+- name: Bahrain
+  code: BHD
+- name: Baleares (Balearic Islands)
+  code: EUR
+- name: Bangladesh
+  code: BDT
+- name: Barbados
+  code: BBD
+- name: Barbuda and Antigua
+  code: XCD
+- name: Belarus
+  code: BYR
+- name: Belgium
+  code: EUR
+- name: Belize
+  code: BZD
+- name: Benin
+  code: XOF
+- name: Bermuda
+  code: BMD
+- name: Bhutan
+  code: BTN
+- name: Bolivia
+  code: BOB
+- name: Bonaire
+  code: ANG
+- name: Bosnia and Herzegovina
+  code: BAM
+- name: Botswana
+  code: BWP
+- name: Bouvet Island
+  code: NOK
+- name: Brazil
+  code: BRL
+- name: British Indian Ocean Territory
+  code: USD
+- name: British Virgin Islands
+  code: USD
+- name: Brunei Darussalam
+  code: BND
+- name: Bulgaria
+  code: BGN
+- name: Burkina Faso
+  code: XOF
+- name: Burundi
+  code: BIF
+- name: Côte D'Ivoire
+  code: XOF
+- name: Caicos and Turks Islands
+  code: USD
+- name: Cambodia
+  code: KHR
+- name: Cameroon
+  code: XAF
+- name: Canada
+  code: CAD
+- name: Canary Islands
+  code: EUR
+- name: Cape Verde
+  code: CVE
+- name: Cayman Islands
+  code: KYD
+- name: Central African Republic
+  code: XAF
+- name: Chad
+  code: XAF
+- name: Chile
+  code: CLP
+- name: China
+  code: CNY
+- name: Christmas Island
+  code: AUD
+- name: Cocos (Keeling) Islands
+  code: AUD
+- name: Colombia
+  code: COP
+- name: Communauté Financière Africaine (CFA)
+  code: XAF
+- name: Comoros
+  code: KMF
+- name: Comptoirs Français du Pacifique (CFP)
+  code: XPF
+- name: Congo/Brazzaville
+  code: XAF
+- name: Congo/Kinshasa
+  code: CDF
+- name: Cook Islands
+  code: NZD
+- name: Costa Rica
+  code: CRC
+- name: Croatia
+  code: HRK
+- name: Cuba
+  code: CUP
+- name: Curaço
+  code: ANG
+- name: Cyprus
+  code: CYP
+- name: Czech Republic
+  code: CZK
+- name: Denmark
+  code: DKK
+- name: Djibouti
+  code: DJF
+- name: Dominica
+  code: XCD
+- name: Dominican Republic
+  code: DOP
+- name: East Timor
+  code: IDR
+- name: Ecuador
+  code: USD
+- name: Egypt
+  code: EGP
+- name: El Salvador
+  code: SVC
+- name: Equatorial Guinea
+  code: XAF
+- name: Eritrea
+  code: ERN
+- name: Estonia
+  code: EEK
+- name: Ethiopia
+  code: ETB
+- name: Euro Member Countries
+  code: EUR
+- name: Falkland Islands (Malvinas)
+  code: FKP
+- name: Faroe Islands
+  code: DKK
+- name: Fiji
+  code: FJD
+- name: Finland
+  code: EUR
+- name: France
+  code: EUR
+- name: French Guiana
+  code: EUR
+- name: French Polynesia (French Pacific Islands)
+  code: XPF
+- name: French Southern Territories
+  code: EUR
+- name: Gabon
+  code: XAF
+- name: Gambia
+  code: GMD
+- name: Georgia
+  code: GEL
+- name: Germany
+  code: EUR
+- name: Ghana
+  code: GHC
+- name: Gibraltar
+  code: GIP
+- name: Greece
+  code: EUR
+- name: Greenland
+  code: DKK
+- name: Grenada
+  code: XCD
+- name: Guadeloupe
+  code: EUR
+- name: Guam
+  code: USD
+- name: Guatemala
+  code: GTQ
+- name: Guernsey
+  code: GGP
+- name: Guinea
+  code: GNF
+- name: Guinea-Bissau
+  code: XOF
+- name: Guyana
+  code: GYD
+- name: Haiti
+  code: HTG
+- name: Heard Island and McDonald Islands
+  code: AUD
+- name: Honduras
+  code: HNL
+- name: Hong Kong
+  code: HKD
+- name: Hungary
+  code: HUF
+- name: Iceland
+  code: ISK
+- name: India
+  code: INR
+- name: Indonesia
+  code: IDR
+- name: Iran
+  code: IRR
+- name: Iraq
+  code: IQD
+- name: Ireland (Eire)
+  code: EUR
+- name: Isle of Man
+  code: IMP
+- name: Israel
+  code: ILS
+- name: Italy
+  code: EUR
+- name: Jamaica
+  code: JMD
+- name: Jan Mayen and Svalbard
+  code: NOK
+- name: Japan
+  code: JPY
+- name: Jersey
+  code: JEP
+- name: Jordan
+  code: JOD
+- name: Kazakhstan
+  code: KZT
+- name: Kenya
+  code: KES
+- name: Kiribati
+  code: AUD
+- name: Korea (North)
+  code: KPW
+- name: Korea (South)
+  code: KRW
+- name: Kuwait
+  code: KWD
+- name: Kyrgyzstan
+  code: KGS
+- name: Laos
+  code: LAK
+- name: Latvia
+  code: LVL
+- name: Lebanon
+  code: LBP
+- name: Lesotho
+  code: LSL
+- name: Liberia
+  code: LRD
+- name: Libya
+  code: LYD
+- name: Liechtenstein
+  code: CHF
+- name: Lithuania
+  code: LTL
+- name: Luxembourg
+  code: EUR
+- name: Macau
+  code: MOP
+- name: Macedonia
+  code: MKD
+- name: Madagascar
+  code: MGA
+- name: Madeira Islands
+  code: EUR
+- name: Malawi
+  code: MWK
+- name: Malaysia
+  code: MYR
+- name: Maldives (Maldive Islands)
+  code: MVR
+- name: Mali
+  code: XOF
+- name: Malta
+  code: MTL
+- name: Mariana Islands (Northern)
+  code: USD
+- name: Marshall Islands
+  code: USD
+- name: Martinique
+  code: EUR
+- name: Mauritania
+  code: MRO
+- name: Mauritius
+  code: MUR
+- name: Mayotte
+  code: EUR
+- name: Mexico
+  code: MXN
+- name: Micronesia (Federated States of)
+  code: USD
+- name: Midway Islands
+  code: USD
+- name: Moldova
+  code: MDL
+- name: Monaco
+  code: EUR
+- name: Mongolia
+  code: MNT
+- name: Montenegro
+  code: EUR
+- name: Montserrat
+  code: XCD
+- name: Morocco
+  code: MAD
+- name: Mozambique
+  code: MZN
+- name: Myanmar (Burma)
+  code: MMK
+- name: Namibia
+  code: NAD
+- name: Nauru
+  code: AUD
+- name: Nepal
+  code: NPR
+- name: Netherlands Antilles
+  code: ANG
+- name: Netherlands
+  code: EUR
+- name: New Caledonia
+  code: XPF
+- name: New Zealand
+  code: NZD
+- name: Nicaragua
+  code: NIO
+- name: Niger
+  code: XOF
+- name: Nigeria
+  code: NGN
+- name: Niue
+  code: NZD
+- name: Norfolk Island
+  code: AUD
+- name: Norway
+  code: NOK
+- name: Oman
+  code: OMR
+- name: Pakistan
+  code: PKR
+- name: Palau
+  code: USD
+- name: Palladium
+  code: XPD
+- name: Panama
+  code: PAB
+- name: Papua New Guinea
+  code: PGK
+- name: Paraguay
+  code: PYG
+- name: Peru
+  code: PEN
+- name: Philippines
+  code: PHP
+- name: Pitcairn Islands
+  code: NZD
+- name: Platinum
+  code: XPT
+- name: Poland
+  code: PLN
+- name: Portugal
+  code: EUR
+- name: Puerto Rico
+  code: USD
+- name: Qatar
+  code: QAR
+- name: Réunion
+  code: EUR
+- name: Romania
+  code: RON
+- name: Russia
+  code: RUB
+- name: Rwanda
+  code: RWF
+- name: São Tome and Principe
+  code: STD
+- name: Saba
+  code: ANG
+- name: Sahara (Western)
+  code: MAD
+- name: Saint Christopher
+  code: XCD
+- name: Saint Helena
+  code: SHP
+- name: Saint Kitts and Nevis
+  code: XCD
+- name: Saint Lucia
+  code: XCD
+- name: Saint Pierre and Miquelon
+  code: EUR
+- name: Saint Vincent and The Grenadines
+  code: XCD
+- name: Saint-Martin
+  code: EUR
+- name: Samoa (American)
+  code: USD
+- name: Samoa (Western)
+  code: WST
+- name: San Marino
+  code: EUR
+- name: Saudi Arabia
+  code: SAR
+- name: Seborga
+  code: SPL
+- name: Senegal
+  code: XOF
+- name: Serbia
+  code: RSD
+- name: Seychelles
+  code: SCR
+- name: Sierra Leone
+  code: SLL
+- name: Silver
+  code: XAG
+- name: Singapore
+  code: SGD
+- name: Sint Eustatius
+  code: ANG
+- name: Sint Maarten
+  code: ANG
+- name: Slovakia
+  code: SKK
+- name: Slovenia
+  code: SIT
+- name: Solomon Islands
+  code: SBD
+- name: Somalia
+  code: SOS
+- name: South Africa
+  code: ZAR
+- name: South Georgia
+  code: GBP
+- name: South Sandwich Islands
+  code: GBP
+- name: Spain
+  code: EUR
+- name: Sri Lanka
+  code: LKR
+- name: Sudan
+  code: SDD
+- name: Suriname
+  code: SRD
+- name: Swaziland
+  code: SZL
+- name: Sweden
+  code: SEK
+- name: Switzerland
+  code: CHF
+- name: Syria
+  code: SYP
+- name: Taiwan
+  code: TWD
+- name: Tajikistan
+  code: TJS
+- name: Tanzania
+  code: TZS
+- name: Thailand
+  code: THB
+- name: Timor (East)
+  code: IDR
+- name: Togo
+  code: XOF
+- name: Tokelau
+  code: NZD
+- name: Tonga
+  code: TOP
+- name: Trinidad and Tobago
+  code: TTD
+- name: Tunisia
+  code: TND
+- name: Turkey
+  code: TRY
+- name: Turkmenistan
+  code: TMM
+- name: Turks and Caicos Islands
+  code: USD
+- name: Tuvalu
+  code: TVD
+- name: Uganda
+  code: UGX
+- name: Ukraine
+  code: UAH
+- name: United Arab Emirates
+  code: AED
+- name: United Kingdom
+  code: GBP
+- name: United States Minor Outlying Islands
+  code: USD
+- name: United States of America
+  code: USD
+- name: Uruguay
+  code: UYU
+- name: US Virgin Islands
+  code: USD
+- name: Uzbekistan
+  code: UZS
+- name: Vanuatu
+  code: VUV
+- name: Vatican City (The Holy See)
+  code: EUR
+- name: Venezuela
+  code: VEB
+- name: Vietnam
+  code: VND
+- name: Virgin Islands (American)
+  code: USD
+- name: Virgin Islands (British)
+  code: USD
+- name: Wake Island
+  code: USD
+- name: Wallis and Futuna Islands
+  code: XPF
+- name: Yemen
+  code: YER
+- name: Zambia
+  code: ZMK
+- name: Zimbabwe
+  code: ZWN

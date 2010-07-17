@@ -1,0 +1,9 @@
+<% if flash[:notification] %>
+<div class="notification <%= flash[:notification][:type] %>">
+  <div class="top"><div class="right">
+    <div class="title"><%= flash[:notification][:title] %></div>
+    <div class="message small"><%= flash[:notification][:message] %></div>
+  </div></div>
+  <div class="bottom"><div class="right"></div></div>
+</div>
+<% end %>

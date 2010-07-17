@@ -1,0 +1,86 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>Wesabe: Your money. Your community.</title>
+
+  <link rel="Shortcut Icon" href="/favicon.ico" />
+
+  <!-- Blueprint CSS -->
+  <link href="/stylesheets/blueprint/screen.css" media="screen, projection" rel="stylesheet" type="text/css" />
+  <link href="/stylesheets/blueprint/print.css" media="print" rel="stylesheet" type="text/css" />
+
+  <!-- main CSS -->
+  <link href="/stylesheets/main.css" media="screen" rel="stylesheet" type="text/css" />
+  <link href="/stylesheets/public.css" media="screen" rel="stylesheet" type="text/css" />
+</head>
+<body>
+  <div class="container two-col">
+    <div id="header">
+      <div id="header-top">
+        <%= logo %>
+        <div class="clear"></div>
+      </div>
+    </div>
+    <div id="center">
+      <div class="two-column flat">
+        <div class="top">
+          <div class="right">
+            <div class="grip"></div>
+          </div>
+        </div>
+        <div class="middle">
+          <div class="right">
+            <div class="content error">
+              <img src="/images/500.png">
+              <p class="message">Sorry, we weren&rsquo;t expecting <em>that!</em></p>
+              <p class="actions">
+                We know about it now, though, and hopefully we'll get things worked out soon.<br />
+                Right now, you should probably <a href="/">return to our homepage</a>.
+              </p>
+
+            </div>
+          </div>
+        </div>
+        <div class="bottom">
+          <div class="right"></div>
+        </div>
+      </div>
+    </div>
+    <div class="clear"></div>
+    <div id="footer" class="transparent">
+      <div class="top">
+        <div class="right">
+          <div class="grip"></div>
+        </div>
+      </div>
+      <div class="middle">
+        <div class="right">
+          <div class="content">
+            <ul>
+              <li>
+                <a href="http://blog.wesabe.com">Wesabe Blog</a>
+              </li>
+              <li>
+                <a href="/page/what">About</a>
+              </li>
+              <li>
+                <a href="/page/security">Security &amp; Privacy</a>
+              </li>
+              <li>
+                <a href="/page/contact">Contact Us</a>
+              </li>
+            </ul>
+            <div class="copyright">
+              ©2006-<%= Time.now.year %> Wesabe, Inc. <a href="/page/terms">Terms of Use</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="bottom">
+        <div class="right"></div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

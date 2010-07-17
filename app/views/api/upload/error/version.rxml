@@ -1,0 +1,6 @@
+xml.response(:status => "failed", :apiversion => Api::Constants::CURRENT_API_VERSION) do
+  xml.error(:code => Api::Constants::Error::VERSION[:code]) do
+    xml.message(Api::Constants::Error::VERSION[:message])
+  end
+  xml.upgrade(:url => desktop_new_upload_url(:host => "www.wesabe.com"))
+end

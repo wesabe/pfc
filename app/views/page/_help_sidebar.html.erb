@@ -1,0 +1,151 @@
+<div id="left">
+   <div class="one-column" id="user-manual">
+    <div class="top"><div class="right"><div class="grip"></div></div></div>
+    <div class="middle"><div class="right">
+      <div class="content">
+      <div class="module-header">
+        <h5>User Manual</h5>
+      </div>
+      <ul>
+        <li class="one-col-list group">
+          <span class="view"></span>
+          <h6>Uploading Accounts</h6>
+          <ul>
+            <li>
+              <%= link_to "Uploading to Wesabe", help_url("user-manual/uploading") %>
+            </li>
+            <li class="even">
+              <%= link_to 'Downloading from Your Bank', help_url("user-manual/downloading") %>
+            </li>
+            <li>
+              <%= link_to 'The Automatic Uploader', help_url("user-manual/automatic-uploader") %>
+            </li>
+            <li class="even">
+               <%= link_to 'Uploading Manually', help_url("user-manual/manual-upload") %>
+            </li>
+            <li>
+              <%= link_to 'Troubleshooting Information for Specific Banks', help_url("user-manual/specific-fis") %>
+            </li>
+          </ul>
+        </li>
+        <li class="one-col-list group">
+          <span class="view"></span>
+          <h6>Features</h6>
+          <ul>
+            <li>
+              <%= link_to 'Account Settings &amp; Security', help_url("user-manual/user-options") %>
+            </li>
+            <li class="even">
+              <%= link_to 'Cash Accounts', help_url("user-manual/cash-accounts") %>
+            </li>
+            <li>
+              <%= link_to "Exporting Data from Wesabe", help_url("user-manual/export") %>
+            </li>
+            <!-- Commented out until the "My Trends" panel is in place. Remember to change the odd/even class.
+              <li class="even">
+              <%= link_to 'Filtering Tags from Graphs', help_url("user-manual/graphs-filters") %>
+            </li>
+            -->
+            <li>
+              <%= link_to 'Investments, Loans, &amp; Other Account Types', help_url("user-manual/loans-investments") %>
+            </li>
+            <li class="even">
+              <%= link_to 'Managing your Accounts', help_url("user-manual/account-management") %>
+            </li>
+            <li>
+              <%= link_to 'Search', help_url("user-manual/search") %>
+            </li>
+            <li class="even">
+              <%= link_to 'Naming Transactions', help_url("user-manual/transaction-names") %>
+            </li>
+            <li>
+              <%= link_to 'Viewing Transactions', help_url("user-manual/view-transactions") %>
+            </li>
+            <li class="even">
+              <%= link_to 'Tags', help_url("user-manual/tags") %>
+            </li>
+            <li>
+              <%= link_to 'Targets', help_url("user-manual/targets") %>
+            </li>
+            <li class="even">
+              <%= link_to 'Transfers', help_url("user-manual/transfers") %>
+            </li>
+          </ul>
+        </li>
+        <li class="one-col-list group">
+          <span class="view"></span>
+          <h6>Troubleshooting Problems</h6>
+          <ul>
+            <li>
+              <%= link_to 'General Troubleshooting', help_url("user-manual/troubleshooting") %>
+            </li>
+            <li class="even">
+              <%= link_to 'Problems with Balance Totals', help_url("user-manual/balances") %>
+            </li>
+            <li>
+              <%= link_to 'Data Format Problems', help_url("user-manual/data-format") %>
+            </li>
+            <li class="even">
+              <%= link_to 'Date Problems', help_url("user-manual/dates") %>
+            </li>
+            <li>
+              <%= link_to 'Duplicate Transactions or Duplicate Accounts', help_url("user-manual/duplicates") %>
+            </li>
+            <li class="even">
+              <%= link_to 'Password Problems', help_url("user-manual/passwords") %>
+            </li>
+            <li>
+              <%= link_to 'Troubleshooting Information for Specific Banks', help_url("user-manual/specific-fis") %>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    </div></div>
+    <div class="bottom"><div class="right"></div></div>
+  </div>
+  <div class="one-column" id="support">
+    <div class="top"><div class="right"><div class="grip"></div></div></div>
+    <div class="middle"><div class="right">
+      <div class="content">
+        <div class="module-header">
+          <h5>Support</h5>
+        </div>
+        <ul class="one-col-list">
+          <li><%= link_to 'Make Wesabe Better', help_url("support/make-wesabe-better") %></li>
+          <li class="even"><%= link_to 'Community Resources', help_url("support/community-resources") %></li>
+          <li><%= link_to 'Request Support', help_url("support/request-support") %></li>
+        </ul>
+      </div>
+    </div></div>
+    <div class="bottom"><div class="right"></div></div>
+  </div>
+
+  <%#
+  <!-- REVIEW: This is commented out due to this picture:
+    http://www.flickr.com/photos/mongol/427366315/
+  which is currently the #11 "most interesting" photo on Flickr tagged 'puppy'. (Thanks,
+  mongol.)  I don't like removing the feature but on the other hand, I can't even imagine
+  how a Springboard customer would react if that picture showed up on their site.  I'm
+  going to leave it out for now and see if there's something better we can do for the
+  feature. -->
+
+  <a href="/help/dont-panic">
+  <div class="one-column" id="freaking-out">
+    <div class="top"><div class="right"><div class="grip"></div></div></div>
+    <div class="middle"><div class="right">
+      <div class="content">
+        <div class="module-header">
+            <p class="freaking-out">Take a deep breath, sit back and relax...</p>
+        </div>
+      </div>
+    </div></div>
+    <div class="bottom"><div class="right"></div></div>
+  </div>
+  </a>
+  %>
+
+</div>
+<script type="text/javascript">
+  $(function(){ wesabe.views.shared.setCurrentTab('help') });
+</script>

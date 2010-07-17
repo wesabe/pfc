@@ -1,0 +1,117 @@
+<% @tab = 'accounts' -%>
+
+<%= javascript 'wesabe/views/shared/form' %>
+
+<%- content_for :header do -%>
+  <style type="text/css">
+  div#errorExplanation {width:90%; margin:0 auto 1em; font-size:90%; background: #fff; padding-top: 0}
+  </style>
+<%- end -%>
+
+<div id="three-col-center">
+  <div class="two-column flat" id="upload-account">
+    <div class="top"><div class="right"><div class="grip"></div></div></div>
+    <div class="middle"><div class="right">
+      <div class="content">
+        <div class="module-header">
+        <h4>Getting Started</h4>
+        </div>
+        <div id="upload-index">
+          <!-- BEGIN steps -->
+          <ul class="upload-steps">
+            <li>1. <%= link_to "Find", new_upload_path %> your bank</li>
+            <li class="on">2. Connect to your bank</li>
+            <li>3. Select your accounts</li>
+          </ul>
+          <!-- END steps -->
+          <div id="color_body">
+            <div id="help" style="clear:both">
+              <h6 class="color_title">Finding Your Account Activity File</h6>
+              <ol class="sidebar_list">
+                <li>Each bank may not call the file &lsquo;Account Activity&rsquo;.</li>
+                <li>Log into your online banking site &amp; look for something like:<br/>
+                  <ul class="nested_bullets">
+                    <li>Download Transactions</li>
+                    <li>Account Downloads</li>
+                    <li>Account Tools</li>
+                    <li>Download Account Activity</li>
+                  </ul>
+                </li>
+                <li>These formats work best:
+                  <ul class="nested_bullets">
+                    <li>Microsoft Money,</li>
+                    <li>Quicken,</li>
+                    <li>or Active Statement.</li>
+                  </ul>
+                </li>
+              </ol>
+            </div><!-- END help -->
+            <div id="form_body">
+              <%= content_tag(:h3, h(@financial_inst.name)) if @financial_inst %>
+              <%= content_tag :p, h(flash[:fi_confirmation]) if flash[:fi_confirmation] %>
+
+              <%- unless @need_more_info -%>
+              <!-- BEGIN textBox -->
+              <div class="textBox">
+                <div id="manual_dek" class="dek">
+                <%= image_tag "/images/upload-accounts/upload-file-trans.png", :alt => "Begin Manual Upload", :title => "Only takes a few minutes" %>
+                <% if flash[:error] -%>
+                <div class="notification error" style="float:left">
+                  <div class="top"><div class="right">
+                    <p class="message"><%= flash[:error][:message] if flash[:error] %></p>
+                  </div></div>
+                  <div class="bottom"><div class="right"></div></div>
+                </div>
+                <% end -%>
+
+                  <h6 style="clear:left">Follow these steps</h6>
+                  <%- form_tag(uploads_path, {:multipart=>true, :class => 'account_upload', :id => 'account_upload'}) do -%>
+                  <ol>
+                    <li>Go to <%= fi_homepage_link(@financial_inst) %> and log in.
+              From there, <strong>download an Account Activity file</strong> to your computer.</li>
+                    <li>Browse your computer and choose the file, then upload it.
+                      <%= hidden_field_tag 'fi', @financial_inst.wesabe_id, :id => 'fi' %>
+                      <%= file_field_tag('statement', :class => 'browse', :size => 20) %>
+                      <%= image_tag 'activity-indicator.gif', :id => 'spinner', :style => 'display:none;' %>
+                    </li>
+                  </ol>
+                  <a class="button submit green"><span>Upload File</span></a>
+                  <div class="clear">&nbsp;</div>
+                  <%- end -%>
+                </div>
+                <%- else -%>
+              <div class="step" id="web_step_4" style="float:right;">
+                <p>
+                  We need some more information that isn&rsquo;t included in QIF statements.
+                  If <%=h @financial_inst.name %> offers OFX or QFX downloads, you won't have to fill in these additional questions.
+                  We recommend OFX if it is available.
+                </p>
+            <% form_tag(uploads_path, {:class => 'account_upload'}) do -%>
+              <fieldset>
+                <label for="account_type" class="field-title">What kind of account are you uploading?</label>
+              <%= flash_error 'account_type' %>
+              <%= select_tag('account_type', options_for_select(AccountType.visible_names - ["Cash"], params[:account_type] || "Checking")) %><br>
+              <label for="account_number" class="field-title">Last 4 digits of your account number</label>
+              <%= flash_error 'account_number' %>
+              <%= text_field_tag 'account_number', params[:account_number], :size => 6 %><br>
+              <label for="balance" class="field-title">Current balance of this account</label>
+              <%= flash_error 'balance' %>
+              <%= text_field_tag 'balance', params[:balance], :size => 10 %><br>
+              </fieldset>
+              <a class="button submit green"><span>Save</span></a>
+              <%= hidden_field_tag 'fi', @financial_inst.wesabe_id, :id => 'fi' %>
+              <%- end -%>
+              </div>
+              <%- end -%>
+              <!-- END uploaders -->
+          </div>
+              <!-- END textBox -->
+            </div><!-- END form_body -->
+          </div><!-- END color_body -->
+          <div class="clear">&nbsp;</div>
+      </div><!-- END upload index -->
+      </div>
+    </div></div>
+    <div class="bottom"><div class="right"></div></div>
+  </div>
+</div>

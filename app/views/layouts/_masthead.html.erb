@@ -1,0 +1,74 @@
+<div id="header">
+  <%= render :partial => "layouts/header_top" %>
+  <div id="global-nav">
+    <ul id="primary-nav">
+      <li id="nav-dashboard"><%= link_to "My Dashboard", dashboard_url, :class => "menu-header" %></li>
+      <li id="nav-accounts"><%= link_to "My Accounts", accounts_url, :class => "menu-header" %>
+        <ul>
+          <div class="menu-content">
+            <li class="menu-head">To see your bank accounts</li>
+            <li><%= link_to "Sign in", login_url %></li>
+            <li class="menu-head">Or create a new account</li>
+            <li><%= link_to "Sign up", signup_url %></li>
+          </div>
+        </ul>
+      </li>
+      <li id="nav-trends"><%= link_to "My Trends", trends_path, :class => "menu-header" %>
+        <ul>
+          <div class="menu-content">
+            <li class="menu-head">Trends</li>
+            <li><%= link_to "Spending Trends", trends_path(:anchor => "spending"), :class => "hash-link" %></li>
+            <li><%= link_to "Earnings Trends", trends_path(:anchor => "earnings"), :class => "hash-link" %></li>
+          </div>
+        </ul>
+      </li>
+    </ul><!-- end #primary-nav -->
+    <ul id="secondary-nav">
+      <li id="nav-help"><%= link_to 'Help', help_url, :class => "menu-header" %>
+        <ul>
+          <div class="menu-content">
+            <div class="menu-column">
+              <li class="menu-head">User Manual</li>
+              <li><%= link_to 'Uploading to Wesabe', help_url("user-manual/uploading") %></li>
+              <li><%= link_to 'Features', help_url("user-manual/user-options") %></li>
+              <li><%= link_to 'Troubleshooting Problems', help_url("user-manual/troubleshooting") %></li>
+              <li class="menu-head">Support</li>
+              <li><%= link_to 'Community Resources', help_url("support/community-resources") %></li>
+              <li><%= link_to 'Request Support', help_url("support/request-support") %></li>
+
+              <%# See comment in app/views/page/_help_sidebar.html.erb for an explanation. %>
+              <%# <li class="menu-head"> %><%# link_to "I'm Freaking Out!", help_url("dont-panic") %><%# </li> %>
+            </div>
+          <div class="clear"></div>
+          </div>
+        </ul>
+      </li>
+      <li id="nav-profile"><%= link_to 'Profile Settings', edit_profile_url, :class => "menu-header" %>
+        <ul>
+          <div class="menu-content">
+            <div class="menu-column">
+              <li class="menu-head">My Profile</li>
+              <li><%= user_profile_link current_user, :include_photo => false, :link_text => 'View My Profile' %></li>
+              <li><%= link_to 'Profile Settings', edit_profile_url %></li>
+              <li><%= link_to 'Change My Password', change_password_user_url %></li>
+              <li><%= link_to 'Download My Data', download_data_user_url %></li>
+              <li><%= link_to 'Delete My Membership', delete_membership_user_url %></li>
+            </div>
+            <div class="clear"></div>
+          </div>
+        </ul>
+      </li>
+      <li id="nav-search" style="display:none">
+        <form id="searchform" action="/accounts/search" method="get">
+         <fieldset>
+          <label for="query">Search Accounts</label>
+          <input type="text" name="query" id="query" value="" />
+          <input type="submit" name="submitquery" id="submitquery" value="Go" />
+         </fieldset>
+        </form>
+      </li>
+    </ul><!-- end of #secondary-nav-->
+    <div class="clear"></div>
+  </div>
+  <div class="clear"></div>
+</div>

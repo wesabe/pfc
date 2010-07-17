@@ -1,0 +1,52 @@
+.edit-dialog #alert-subscribe-discussion label,
+.edit-dialog #alert-subscribe-group label {
+  margin-top:0;
+}
+
+/*ACCOUNTS WIDGET ---------------------------------------------------------------*/
+
+.account-groups .one-col-list.group {
+  margin-bottom:-3px;
+}
+
+.account-groups span.account-name {
+  display: block;
+}
+
+#accounts .group.one-col-list li.account {
+  line-height: 0;
+}
+
+#accounts .account-status .hover-box .header {
+  padding-top: 8px;
+  margin-bottom: 8px;
+}
+
+/*TARGETS WIDGET ---------------------------------------------------------------*/
+
+#targets-list .target .amount-remaining {
+  top:0;
+  margin-top:-3px;
+}
+
+#spending-targets input#target-amount {
+  margin-left:-15px;
+}
+
+#spending-targets #edit-dialog input {
+  padding-top:2px;
+  margin-left:-29px;
+}
+
+/*GROUPS TAB -------------------------------------------------------------------*/
+
+.add-group .dialog {
+  bottom:0;
+}
+.add-group .button.orange {
+  margin-top:5px;
+}
+
+.discussion-comments .bottom {
+  margin-top:-3px;
+}

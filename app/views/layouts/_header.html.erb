@@ -1,0 +1,31 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <title><%=h page_title %></title>
+  <link rel="Shortcut Icon" href="/favicon.ico">
+
+  <%= stylesheet_link_manifest :wesabe %>
+  <%= stylesheet_link_tag "blueprint/print", :media => "print" %>
+  <!--[if IE]>
+    <%= stylesheet_link_tag "blueprint/ie", :media => "screen, projection" %>
+  <![endif]-->
+  <!--[if IE 7]>
+      <%= stylesheet_link_tag "ie7" %>
+  <![endif]-->
+  <!--[if IE 6]>
+      <%= stylesheet_link_tag "ie6" %>
+  <![endif]-->
+
+  <%- Array(stylesheets).each do |s| -%>
+    <%= stylesheet_link_tag s, :media => "screen" %>
+  <%- end if stylesheets -%>
+
+  <%= javascript_include_manifest :wesabe %>
+  <% if current_user -%>
+    <%= javascript_tag %{wesabe.data.preferences.set(#{present(current_user.preferences).to_json});} %>
+    <%= javascript_tag %{wesabe.views.shared.loggedIn(true);} %>
+  <% end -%>
+
+  <%= yield :header %>
+</head>

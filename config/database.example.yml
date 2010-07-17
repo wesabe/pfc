@@ -1,0 +1,14 @@
+development: &defaults
+  adapter: mysql
+  username: root
+  password: 
+  database: pfc_development
+  host: localhost
+  port: 3306
+
+test:
+  <<: *defaults
+  database: pfc_test
+
+production:
+  <<: *defaults

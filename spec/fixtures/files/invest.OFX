@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<?OFX OFXHEADER="200" VERSION="200" SECURITY="NONE" OLDFILEUID="NONE" NEWFILEUID="NONE"?>
+<!-- Converted from: OFX/1.02 -->
+<OFX>
+  <SIGNONMSGSRSV1>
+    <SONRS>
+      <STATUS>
+        <CODE>0</CODE>
+        <SEVERITY>INFO</SEVERITY>
+      </STATUS>
+      <DTSERVER>20070314153945.000</DTSERVER>
+      <LANGUAGE>ENG</LANGUAGE>
+      <DTPROFUP>20021119140000</DTPROFUP>
+      <FI>
+        <ORG>E*TRADE</ORG>
+        <FID>9999</FID>
+      </FI>
+      <INTU.BID>9999</INTU.BID>
+      <INTU.USERID>0000</INTU.USERID>
+    </SONRS>
+  </SIGNONMSGSRSV1>
+  <INVSTMTMSGSRSV1>
+    <INVSTMTTRNRS>
+      <TRNUID>0</TRNUID>
+      <STATUS>
+        <CODE>0</CODE>
+        <SEVERITY>INFO</SEVERITY>
+      </STATUS>
+      <INVSTMTRS>
+        <DTASOF>20070314153945.000</DTASOF>
+        <CURDEF>USD</CURDEF>
+        <INVACCTFROM>
+          <BROKERID>etrade.com</BROKERID>
+          <ACCTID>1234-5678</ACCTID>
+        </INVACCTFROM>
+        <INVTRANLIST>
+          <DTSTART>20070215160000.000</DTSTART>
+          <DTEND>20070314000000.000</DTEND>
+          <INCOME>
+            <INVTRAN>
+              <FITID>070226_DIV_0</FITID>
+              <DTTRADE>20070226160000.000</DTTRADE>
+              <MEMO>INVESTCO - MONTHLY DIVIDEND</MEMO>
+            </INVTRAN>
+            <SECID>
+              <UNIQUEID>XXXXXXX</UNIQUEID>
+              <UNIQUEIDTYPE>CUSIP</UNIQUEIDTYPE>
+            </SECID>
+            <INCOMETYPE>DIV</INCOMETYPE>
+            <TOTAL>1.11</TOTAL>
+            <SUBACCTSEC>CASH</SUBACCTSEC>
+            <SUBACCTFUND>CASH</SUBACCTFUND>
+          </INCOME>
+          <INVBANKTRAN>
+            <STMTTRN>
+              <TRNTYPE>POS</TRNTYPE>
+              <DTPOSTED>20070305160000.000</DTPOSTED>
+              <TRNAMT>-19.75</TRNAMT>
+              <FITID>070305_POS_0</FITID>
+              <NAME>POS</NAME>
+              <MEMO>POS - FOO</MEMO>
+            </STMTTRN>
+            <SUBACCTFUND>CASH</SUBACCTFUND>
+          </INVBANKTRAN>
+        </INVTRANLIST>
+        <INVBAL>
+          <AVAILCASH>854.31</AVAILCASH>
+          <MARGINBALANCE>0</MARGINBALANCE>
+          <SHORTBALANCE>0</SHORTBALANCE>
+          <BUYPOWER>854.31</BUYPOWER>
+          <BALLIST>
+            <BAL>
+              <NAME>Total Account Value</NAME>
+              <DESC>Total Account Value</DESC>
+              <BALTYPE>DOLLAR</BALTYPE>
+              <VALUE>0</VALUE>
+              <DTASOF>20070314160000.000</DTASOF>
+            </BAL>
+            <BAL>
+              <NAME>Total Long Securities Value</NAME>
+              <DESC>Total Value of Securities Held Long</DESC>
+              <BALTYPE>DOLLAR</BALTYPE>
+              <VALUE>0</VALUE>
+              <DTASOF>20070314160000.000</DTASOF>
+            </BAL>
+          </BALLIST>
+        </INVBAL>
+      </INVSTMTRS>
+    </INVSTMTTRNRS>
+  </INVSTMTMSGSRSV1>
+</OFX>

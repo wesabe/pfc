@@ -1,0 +1,6 @@
+xml.response(:status => "failed", :apiversion => Api::Constants::CURRENT_API_VERSION) do
+  xml.error(:code => Api::Constants::Error::UNSUPPORTED_UPLOADER_VERSION[:code]) do
+    xml.message(Api::Constants::Error::UNSUPPORTED_UPLOADER_VERSION[:message])
+  end
+  xml.upgrade(:url => url_for(:host=>"www.wesabe.com", :controller=>"page", :action=>"download"))
+end

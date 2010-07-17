@@ -1,0 +1,1 @@
+xml.response(:status => "processed", :apiversion => Api::Constants::CURRENT_API_VERSION)

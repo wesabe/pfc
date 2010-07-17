@@ -1,0 +1,71 @@
+    <%# error_messages_for 'user' %>
+
+    <!--[form:user]-->
+    <table class="user_form" style="margin:0 auto;">
+    <tr class="field">
+      <td class="label" style="vertical-align: top; padding-top: 0.5em;">
+        <label for="user_email">Email Address</label>
+      </td>
+      <td class="input">
+        <%= text_field 'user', 'email', :size => 32  %>
+        <%= error_message_on "user", "email", "That email address ", '.', 'error' %>
+      </td>
+      <td class="note">
+        Your email will be kept strictly private
+      </td>
+    </tr>
+
+    <tr class="field">
+      <td class="label"><label for="password">Password</label></td>
+      <td class="input">
+        <%= password_field 'user', 'password', :size => 32  %>
+        <%= error_message_on "user", "password", :prepend_text => "The password ", :append_text => '.', :css_class => 'error' %>
+      </td>
+    </tr>
+
+    <tr class="field">
+      <td class="label"><label for="password_confirm">Confirm Password</label></td>
+      <td class="input"><%= password_field 'user', 'password_confirmation', :size => 32 %></td>
+    </tr>
+
+    <tr class="optional-header">
+      <td colspan="3">Optional</td>
+    </tr>
+
+    <tr class="field optional">
+      <td class="label">
+        <label for="user_name">Screen Name</label>
+      </td>
+      <td class="input">
+        <%= text_field 'user', 'name', "size" => 32, "maxlength" => 32 %><br>
+        <%= error_message_on "user", "normalized_name", "The screen name ", '.', 'error' %>
+      </td>
+      <td class="note">
+        Your profile name in the Wesabe Community
+      </td>
+    </tr>
+
+    <tr class="field optional">
+      <td class="label">
+        <label for="postal_code">ZIP/Postal Code</label></td>
+      <td class="input">
+        <%= text_field 'user', 'postal_code', :size => 10 %>
+      </td>
+      <td class="note">
+        Helps matching tips
+      </td>
+    </tr>
+
+    <tr class="field optional">
+      <td class="label" style="vertical-align: top; padding-top: 0.5em;">
+        <label for="country">Country</label></td>
+      <td class="input"><%= select('user', 'country_id', Country.find(:all).collect {|c| [ c.name, c.id ] }, {:include_blank => true}) %>
+      </td>
+      <td class="note">
+      Sets default currency
+      </td>
+    </tr>
+
+    </table>
+    <!--[eoform:user]-->
+

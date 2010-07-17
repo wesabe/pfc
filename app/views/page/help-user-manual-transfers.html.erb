@@ -1,0 +1,32 @@
+<% set_page_title "Help - Transfers" %>
+
+<div id="right">
+  <div class="two-column" id="public-page">
+    <div class="top"><div class="right"><div class="grip"></div></div></div>
+    <div class="middle"><div class="right">
+    <div class="content">
+      <div class="module-header">
+        <h1>Transfers</h1>
+        <h5 class="intro">This section of the manual contains information about how Wesabe handles transfers between accounts.</h5>
+      </div>
+      <div class="indent1">
+         <h3>Transfers Between Accounts</h3>
+           <p>Wesabe automatically recognizes transfers between accounts, and keeps them from being counted in the spending and earnings summaries.</p>
+           <p>Transfers are recognized as debit/credit pairs within a certain time period. You can tell that a transaction has been identified as a transfer because it's followed by a special transfer symbol.</p>
+           <p>This works for almost every transfer, but there are cases where things don't work - either a transaction is misidentified as a transfer, or a legitimate transfer isn't recognized. To manually set the transfer status, do the following:</p>
+           <ol>
+             <li>Click on the <strong>My Accounts</strong> tab to view your list of accounts.</li>
+             <li>In My Accounts panel, choose the Account that has the transaction that you want to modify. </li>
+             <li>Click the edit button (the pencil icon) next to the transaction you want to modify. An edit panel will open. If the transaction has been edited already, you'll need to hover over it to see the edit button.</li>
+             <li>In the edit panel, click the <strong>Transaction Details</strong> tab.</li>
+             <li>Check the <strong>This is a transfer</strong> box if you want the transaction to be ignored in the summaries, or make sure it's unchecked if you want it to be counted.</li>
+             <li>Click <strong>Save</strong> to save your change.</li>
+           </ol>
+          </div>
+        </div>
+        </div></div>
+        <div class="bottom"><div class="right"></div></div>
+      </div>
+    </div>
+    <%= render :partial => 'page/help_sidebar' %>
+    <div class="clear"></div>

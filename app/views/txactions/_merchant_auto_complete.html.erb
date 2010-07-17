@@ -1,0 +1,8 @@
+<ul class="merchant_auto_complete_list">
+<% for merchant in @merchants do -%>
+  <li>
+      <span class="name"><%= h merchant.name %></span>
+      <span class="tags" style="display:none;"><%= merchant.default_tags(current_user_id).map {|t| h t.name }.join(" ") %></span>
+  </li>
+<% end -%>
+</ul>

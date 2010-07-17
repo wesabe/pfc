@@ -1,0 +1,230 @@
+.target * {
+  position: relative;
+}
+/*styling for the target bars -----------------------------------------------------------------------*/
+
+.target {
+  position: relative;
+  padding: 5px 0;
+}
+
+.target .target-name,
+.target .target-amount,
+.target .target-bar-spent {
+  cursor: pointer;
+}
+
+#targets-list,
+#targets-letter-list {
+  clear:both;
+}
+
+#targets-list .target .edit {
+  float:left;
+  background-position:-163px 26px;
+	padding:8px 2px;
+  top: -7px;
+}
+
+#targets-list .target:hover .edit {
+  background-position:-163px 0;
+}
+
+#targets-list .target .edit:hover {
+  background-position:-163px -52px;
+}
+
+.edit-dialog {
+  position: absolute;
+}
+
+.edit-dialog .top .right {
+  padding:15px 17px 10px 5px;
+}
+
+/* override the style set by label > span in main.css. grr */
+.edit-dialog .edit-target-tag {
+  color:#332C25;
+  font-size:1em;
+  font-weight:bold;
+  padding-left: 0;
+}
+
+#targets-list .target .remove {
+  float: right;
+  padding:8px 5px;
+  background-position:-80px 26px;
+  top: -6px;
+}
+
+#targets-list .target:hover .remove {
+  background-position:-80px 0;
+}
+
+#targets-list .target .remove:hover {
+  background-position:-80px -52px;
+}
+
+#targets-list .target .target-name {
+  float: left;
+  top: 3px;
+  color:#948c8c;
+  font-weight: bold;
+  font-size: 0.8em;
+  width: 100px;
+  text-align: right;
+  overflow: hidden;
+}
+
+#targets-list .target .target-bar-spent {
+  margin-left: 130px;
+  margin-right: auto;
+  width:400px;
+  background: url(/images/targets/target-bar-spent.png) no-repeat;
+  background-position: -200px 4px;
+}
+#targets-list .target .target-bar {
+  background: url(/images/targets/target-bar-container-trans.png) no-repeat;
+}
+
+#targets-list .target .amount-spent,
+#targets-list .target .amount-remaining {
+  top: -1px;
+  font-size: 0.8em;
+  font-style: italic;
+}
+
+#targets-list .target .amount-spent {
+  color: #fff;
+  font-weight: bold;
+}
+#targets-list .target .amount-remaining {
+  position: absolute;
+  top: 3px;
+  color:#6D645C;
+}
+#targets-list .target .target-amount {
+  float:right;
+  top: 2px;
+  font-weight: bold;
+  font-size: 0.8em;
+  font-style: italic;
+  width: 65px;
+}
+
+#targets-list .target .target-amount.over {
+ color: #F27778;
+}
+
+/*soon to be styling for the target letter view-------------------------------------------------------------*/
+
+.target.letter {
+  float:left;
+  position:relative;
+  width:18%;
+  padding:10px 5px;
+  margin:0 auto;
+}
+
+.target.letter .target-name {
+  float:right;
+  color: #999;
+  font-weight: bold;
+  font-size: 0.8em;
+  text-align:right;
+  width:90%;
+}
+
+.target.letter .target-amount {
+  float:right;
+  color:#FFCC66;
+  font-size:2.5em;
+  width:90%;
+  font-weight:normal;
+  font-style:normal;
+  text-align:right;
+  margin:0;
+  padding:0;
+}
+.target.letter .target-amount span {
+  font-size:0.7em;
+}
+
+.target.letter .amount-spent {
+  float:right;
+  color: #5DC6E2;
+  font-size:2.5em;
+  width:90%;
+  font-weight:normal;
+  font-style:normal;
+  text-align:right;
+  margin:0;
+  padding:0;
+}
+
+.target.letter .amount-spent span {
+  font-size:0.7em;
+}
+
+.target.letter .amount-remaining {
+  float:right;
+  color: #77CC99;
+  font-size:2.5em;
+  width:90%;
+  font-weight:normal;
+  font-style:normal;
+  text-align:right;
+  margin:0;
+  padding:0;
+  border-top:2px solid #ECEDE6;
+}
+
+.target.letter .amount-remaining span {
+  font-size:0.7em;
+}
+
+.target.letter .amount-remaining.over {
+ color: #F27778;
+}
+.targets-total {
+  clear:both;
+  font-size:0.7em;
+  font-style:italic;
+  color:#999;
+  text-align:right;
+  padding:10px 15px 0;
+}
+
+/* crap for add targets dialog */
+
+#spending-targets {
+  position: relative;
+}
+
+#spending-targets #edit-dialog {
+  width:300px;
+}
+
+#spending-targets #edit-dialog input,
+#spending-targets #edit-dialog label {
+  width:245px;
+}
+
+#add-target .edit-dialog {
+  position: absolute;
+  right: 150px;
+  width:270px;
+  top: 0px;
+}
+
+#add-target .edit-dialog input[type=text] {
+  width: 210px;
+}
+
+#no-targets p {
+  color:#999;
+  font-size:1em;
+  font-style:italic;
+  text-align:center;
+  margin:0;
+}

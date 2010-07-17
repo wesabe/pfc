@@ -1,0 +1,27 @@
+<% set_page_title "Help - Transaction Naming" %>
+
+<div id="right">
+  <div class="two-column" id="public-page">
+    <div class="top"><div class="right"><div class="grip"></div></div></div>
+    <div class="middle"><div class="right">
+    <div class="content">
+      <div class="module-header">
+        <h1>Naming Transactions</h1>
+        <h5 class="intro">This section of the manual contains information about automatic and manual transaction naming.</h5>
+      </div>
+      <div class="indent1">
+            <h3>Checks</h3>
+            <p>We don't automatically change the transaction of checks, but we do try to make editing them as fast as possible. We use a special method for suggesting appropriate check names once you have a history of check transactions. We try to present transaction name choices based on the check amount. For example, if you write a check for $150, and you name the transaction &ldquo;Sprint&rdquo;, &ldquo;Sprint&rdquo; will appear as the first option in the auto-complete field the next time you edit a check for $150.</p>
+            <h3>Transaction Names that Shouldn&rsquo;t Be Automatically Changed</h3>
+              <p>Most of the time it&rsquo;s helpful to have transaction or merchant name automatically change from the unedited bank encoding to the edited name that a user created. With certain types of transactions such as checks, we don&rsquo;t automatically change the name, since checks are generally written to many different merchants.</p>
+              <p>Sometimes (often due to poor bank information) the merchant auto-matching works when it shouldn&rsquo;t. We've created a workaround for cases like this. You can put an exclamation point in front of the merchant name to tell Wesabe to ignore name auto-matching for that transaction. For example, renaming a transaction to:</p>
+              <p><code>!Payment to my credit card</code></p>
+              <p>will not rename any other transactions, even if Wesabe thinks they're from the same merchant. Once you save the transaction, the exclamation point will disappear.</p>
+          </div>
+        </div>
+      </div></div>
+    <div class="bottom"><div class="right"></div></div>
+  </div>
+</div>
+<%= render :partial => 'page/help_sidebar' %>
+<div class="clear"></div>

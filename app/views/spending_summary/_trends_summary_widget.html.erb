@@ -1,0 +1,19 @@
+<%# requires javascript 'wesabe/views/widgets/trends-summary' %>
+
+<div class="one-column" id="trends-summary">
+  <div class="top"><div class="right"><div class="grip"></div></div></div>
+  <div class="middle"><div class="right">
+    <div class="content">
+      <div class="module-header">
+        <h5>My Trends</h5>
+      </div>
+      <div class="one-col-list">
+        <ul class="one-col-list" id="spending-earnings-summary">
+          <li class="spending"><%= link_to "Spending Trends", trends_path(:anchor => "spending"), :class => "hash-link" %></li>
+          <li class="earnings"><%= link_to "Earnings Trends", trends_path(:anchor => "earnings"), :class => "hash-link" %></li>
+        </ul>
+      </div>
+    </div>
+  </div></div>
+  <div class="bottom"><div class="right"></div></div>
+</div>

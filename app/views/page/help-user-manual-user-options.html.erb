@@ -1,0 +1,58 @@
+<% set_page_title "Help - Account Settings and Security" %>
+
+<div id="right">
+  <div class="two-column" id="public-page">
+    <div class="top"><div class="right"><div class="grip"></div></div></div>
+    <div class="middle"><div class="right">
+    <div class="content">
+      <div class="module-header">
+        <h1>Account Settings and Security</h1>
+        <h5 class="intro">This section of the manual contains information about Privacy, Security, and your personal information.</h5>
+      </div>
+      <div class="indent1">
+
+           <h3>International Accounts</h3>
+
+             <p>Although most of our users are in the US, Wesabe is international in scope, and we support users all over the globe.</p>
+             <p>We support all international currency formats and many international banks. You can also <%= link_to 'add your own financial institution', new_financial_inst_url %> if you can't find it in our list. You can add any financial institution that provides an &ldquo;export&rdquo; or &ldquo;download your accounts&rdquo; option in OFX, QFX, QIF, or OFC format. Wesabe currently supports only international financial institutions with deposit accounts (checking, savings, money market) and credit accounts (credit line, credit card).</p>
+
+           <h3>Couples Accounts</h3>
+
+             <p>We don't specifically support couples accounts yet. Many couples currently maintain separate Wesabe logins with their own username and password. These accounts don't share edits or tags.</p>
+             <p>Other couples on Wesabe share a single login between them. If most of your accounts are joint accounts, you can tag your personal spending with your names as a tag. If you do this, you can filter the &lsquo;myname&rsquo; tag from your spending summary, and that will set the graphs to show only your joint finances . (Conversely, you could also tag all of your joint purchases as 'joint', and then filter that tag to see only your personal spending.)</p>
+
+           <h3>Changing your Photo</h3>
+
+            <p>To change your photograph, do the following:</p>
+             <ol>
+               <li>Click the <strong>My Profile</strong> tab.</li>
+               <li>On the Profile page, click the <strong>Browse</strong> button to open the file upload screen.</li>
+               <li>Navigate to the picture you want to use, and click <strong>Open</strong>. </li>
+               <li>Click <strong>Save</strong>. You should see the new picture on you Profile page.</li>
+             </ol>
+
+           <h3>Changing your Email Address</h3>
+
+             <p>Here's how to change your email address:</p>
+             <ol>
+               <li>Click the <strong>My Profile</strong> tab.</li>
+               <li>On the Profile page, click the <strong>Change email</strong> link next to your email address. A panel will open.</li>
+               <li>In the Password panel, enter your new email address and your password, and click <strong>Save</strong>.</li>
+             </ol>
+
+           <h3>Changing your Password</h3>
+
+             <p>Here's how to change your Wesabe password:</p>
+             <ol>
+               <li>Click the <strong>My Profile</strong> tab.</li>
+               <li>On the Profile page, click <strong>Change your Password</strong> in the Membership Options panel.</li>
+               <li>Enter your old password, your new password, and your new password a second time to confirm it.</li>
+             </ol>
+          </div>
+        </div>
+        </div></div>
+        <div class="bottom"><div class="right"></div></div>
+      </div>
+    </div>
+    <%= render :partial => 'page/help_sidebar' %>
+    <div class="clear"></div>

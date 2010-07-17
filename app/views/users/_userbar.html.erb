@@ -1,0 +1,15 @@
+<ul id="userbar" class="dynamic extraNav" href="/user/userbar">
+  <ul id="userbar-wrapper">
+  <% if current_user && controller.controller_name != 'page' -%>
+    <%- content_tag :li do -%>
+      <%= userbar_profile_link(current_user) %>
+    <%- end -%>
+    <%= content_tag :li, link_to('Help', :controller => 'page', :action => 'help') %>
+    <%= content_tag :li, link_to('Sign Out', logout_url) %>
+  <% else -%>
+    <%= content_tag :li, link_to('<strong>Sign In</strong>', login_url) %>
+    <%= content_tag :li, link_to('Help', :controller => 'page', :action => 'contact') %>
+    <%= content_tag :li, link_to('Join Now', :controller => 'user', :action => 'signup') %>
+  <% end -%>
+  </ul>
+</ul>

@@ -1,0 +1,65 @@
+<% stylesheet "upload-accounts" %>
+<% javascript 'wesabe/views/shared/form' %>
+
+<style type="text/css" media="screen">
+  #form_body form { float: left;}
+</style>
+
+<div id="three-col-center">
+  <div class="two-column flat" id="upload-account">
+    <div class="top"><div class="right"><div class="grip"></div></div></div>
+    <div class="middle"><div class="right">
+    <div class="content">
+      <div class="module-header">
+        <h4>Getting Started</h4>
+      </div>
+      <div id="upload-index">
+        <!-- BEGIN steps -->
+        <ul class="upload-steps">
+          <li class="on">1. Find your bank</li>
+          <li>2. Connect to your bank</li>
+          <li>3. Select your accounts</li>
+        </ul>
+        <!-- END steps -->
+        <div id="color_body">
+
+          <div id="help">
+              <h6>Keep track of your cash expenses&hellip;</h6>
+              <a id="create-cash-account-button" class="button orange"><span>Create a Cash Account</span></a>
+              <%= render :partial => "uploads/cash_account_form" %>
+          </div>
+
+<!-- BEGIN form_body --><div id="form_body">
+
+<h6>Add Your Bank</h6>
+  <% form_for @financial_inst do |f| %>
+    <%= error_messages_for(:financial_inst).gsub("financial inst.", "financial institution.") %>
+    <fieldset>
+      <div class="field">
+        <label for="financial_inst_name" class="field-title">Your Bank&rsquo;s Full Name</label>
+        <%= f.text_field :name %>
+      </div>
+
+      <div class="field">
+        <label for="financial_inst_homepage_url" class="field-title">Your Bank&rsquo;s Home Page</label>
+        <%= f.text_field :homepage_url %>
+      </div>
+
+      <div class="field">
+        <label for="financial_inst_country_id" class="field-title">Your Bank&rsquo;s Country</label>
+        <%= f.select :country_id, @countries, {} %>
+      </div>
+      <a id="bank_next_on" class="button submit green"><span>Continue</span></a>
+      <a class="button cancel gry" onclick="javascript:history.go(-1);"><span>Cancel</span></a>
+  </fieldset>
+  <%- end -%>
+</div><!-- END form_body -->
+<div class="clear">&nbsp;</div>
+</div><!-- END color_body -->
+        <div style="clear">&nbsp;</div>
+      </div>
+    </div>
+  </div></div>
+  <div class="bottom"><div class="right"></div></div>
+  </div>
+</div>

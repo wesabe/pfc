@@ -1,0 +1,136 @@
+dl {
+  font-size: 0.9em;
+  margin: 0 0 10px 0;
+}
+.guid {
+  color: #999;
+  font-size: 15px;
+  font-weight: normal;
+  font-family: Monaco, Courier;
+  background-color: #fff;
+  padding: 5px;
+  border: 1px solid #ccc;
+}
+.one-column .content p {
+  padding: 0 1em;
+  margin: 0;
+}
+
+table tr {
+  font-size: 12px;
+}
+thead th {
+  background-color: #e0e0e0;
+}
+tbody tr:nth-child(even) {
+  background-color: #efefef;
+}
+tbody tr.invalid {
+  background-color: #ffefef;
+}
+
+table.properties {
+  padding: 0 20px;
+}
+table.properties td {
+  width: 50%;
+  overflow: auto;
+}
+table.properties td:first-child {
+  font-weight: bold;
+  text-align: left;
+}
+table.properties td:last-child {
+  text-align: right;
+}
+
+
+dl.summary {
+  padding: 0 15px;
+}
+#left .delete.button {
+  margin: 0 15px;
+}
+.credential {
+  padding: 10px;
+  border: 1px solid #ddd;
+  background: -webkit-gradient(linear, left top, left bottom, from(#ddd), to(#fff));
+  -webkit-background-clip: border-box;
+}
+.credential .date {
+  float: right;
+  font-size: 0.9em;
+}
+.credential .date em {
+  font-weight: bold;
+}
+.credential .account-list {
+  border: 1px solid #ddd;
+  background-color: #fff;
+  font-size: 0.8em;
+  line-height: 1.1em;
+}
+.credential .account-list .account-name {
+  display: block;
+}
+.credential .account-list .url {
+  display: block;
+  font-family: Monaco, Courier;
+  font-size: 0.9em;
+}
+.credential .account-list .line2 {
+  font-size: 0.8em;
+  color: #999;
+}
+.credential .account-list .account-status {
+  text-align: right;
+}
+.credential .account-list .deleted-status .account-name,
+.credential .account-list .disabled-status .account-name {
+  text-decoration: line-through;
+}
+.credential .troubleshoot {
+  color: #999;
+  font-size: 10px;
+}
+.credential .troubleshoot-container {
+  padding: 15px;
+}
+.credential .troubleshoot-container .section {
+  margin-bottom: 15px;
+}
+
+
+#credentials {
+  padding: 15px;
+}
+ul#credential-list .delete.button {
+  float: left;
+}
+ul#credential-list .credential {
+  margin-bottom: 25px;
+}
+ul#credential-list .credential dl {
+  font-size: 0.7em;
+}
+ul#credential-list .credential .status {
+  font-weight: bold;
+}
+ul#credential-list .credential.successful .status {
+  color:#393;
+}
+ul#credential-list .credential.failed .status {
+  color:#933;
+}
+ul#credential-list .credential.pending .status {
+  color:#639;
+}
+
+
+/* admin account edit */
+#balance-flip-module .button {
+  margin-left: 1em;
+}
+table#balances {
+  padding: 0 20px;
+}

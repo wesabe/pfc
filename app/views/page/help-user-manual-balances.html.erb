@@ -1,0 +1,87 @@
+<% set_page_title "Help - Problems with Balance Totals" %>
+
+<div id="right">
+  <div class="two-column" id="public-page">
+    <div class="top"><div class="right"><div class="grip"></div></div></div>
+    <div class="middle">
+      <div class="right">
+        <div class="content">
+          <div class="module-header">
+        <h1>Problems with Balance Totals</h1>
+        <h5 class="intro">This section of the manual contains troubleshooting information for dealing with incorrect balances.</h5>
+          </div>
+          <div class="indent1">
+
+               <h3>Balances Don&rsquo;t Show Pending Transactions</h3>
+
+                 <p>Sometimes balances are off compared to the bank&rsquo;s website by the amount of your most recent transactions. Transactions that are still pending are rarely if ever included in the updates, so you may see pending transactions on your bank&rsquo;s website, but not on the Wesabe site. Once those transactions post, they&rsquo;ll be included in the upload.</p>
+
+               <h3>Balance Problems Associated with QIF files</h3>
+
+                 <p>QIF files don&rsquo;t have balance information in them.</p>
+                 <p>If you have transaction history not included in the uploaded QIF and you haven't set your balance before, you'll need to set the balance on that account. To edit the balance for an account:</p>
+                 <ol>
+                   <li>Click on the <strong>My Accounts</strong> tab to view your list of accounts.</li>
+                   <li>Click the <strong>Edit</strong> button at the top of the My Accounts panel. </li>
+                   <li>Click the edit button (the pencil icon) next to the account. An edit panel will open.</li>
+                   <li>In the edit panel, edit the amount to the right of <strong>Current Balance:</strong> and then click <strong>Save</strong>.</li>
+                 </ol>
+
+               <h3>Banks with Bad Balances in their Uploads</h3>
+
+                 <p>The following banks give incorrect balances in their uploads:</p>
+                 <ul>
+                   <li class='tight'>BB&amp;T</li>
+                   <li class='tight'>TD Bank NJ, PA, NY &amp; DE</li>
+                   <li class='tight'>Dearborn FCU</li>
+                   <li class='tight'>Nordstrom Bank</li>
+                   <li class='tight'>Wainwright Bank</li>
+                   <li class='tight'>Vancity</li>
+                   <li class='tight'>Virgin Money Credit Card (Australia)</li>
+                   <li class='tight'>Westpac Banking (Australia)</li>
+                   <li class='tight'>Commonwealth Bank of Australia</li>
+                   <li class='tight'>Suncorp (Australia)</li>
+                   <li class='tight'>Virgin Money credit card (South Africa)</li>
+                 </ul>
+                 <p>To correct the balance for accounts at those banks, edit the account's balance:</p>
+                 <ol>
+                   <li>Click on the <strong>My Accounts</strong> tab to view your list of accounts.</li>
+                   <li>Click the <strong>Edit</strong> button at the top of the My Accounts panel. </li>
+                   <li>Click the edit button (the pencil icon) next to the account. An edit panel will open.</li>
+                   <li>In the edit panel, edit the amount to the right of <strong>Current Balance:</strong> and then click <strong>Save</strong>.</li>
+                 </ol>
+                 <p>You should only have to set the balance once, and after that we'll track the balance automatically.</p>
+
+                 <h3>Currency Related Balance Problems</h3>
+
+                 <p>You may see your individual bank accounts, or the entire Wesabe site, displayed in the wrong currency. If the totals and graphs on the site are wrong, it may be that because you have US dollars selected as the default currency. This causes all the summaries, as well as the totals for all account balances, to show up in dollars, with the exchange rate taken into account. (This creates confusing totals if all the separate accounts are in another currency.)</p>
+
+                <h4>Setting the Default Currency</h4>
+
+                 <p>Here's how to change your default currency:</p>
+                  <ol>
+                    <li>Click the <strong>My Profile</strong> tab.</li>
+                    <li>On the Profile page, choose the correct currency from the list (the most common choices are grouped at the top).</li>
+                    <li>Click <strong>Save</strong>.</li>
+                  </ol>
+
+                <h4>Setting the Currency for an Account</h4>
+
+                 <p>Some data files will include the currency format as part of the file. OFX, QFX, and some QIF files will provide this, and when we recognize the format, we set it for your account automatically.</p>
+                 <p>If your bank or credit card doesn&rsquo;t include a currency format in its data files, or if they or we get it wrong for some reason, we allow you to edit the currency format for any account, any time you want. You can edit the currency format like this:</p>
+                 <ol>
+                   <li>Click on the <strong>My Accounts</strong> tab to view your list of accounts.</li>
+                   <li>Click the <strong>Edit</strong> button at the top of the My Accounts panel. </li>
+                   <li>Click the edit button (the pencil icon) next to the account. An edit panel will open.</li>
+                   <li>In the edit panel, choose the correct currency from the list (the most common choices are grouped at the top), and click <strong>Save</strong></li>
+                 </ol>
+                 <p>You'll have to edit each account individually (since some of our users maintain accounts in several currencies). Also, please note that right now, graphs and charts all default to the default currency.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="bottom"><div class="right"></div></div>
+  </div>
+</div>
+<%= render :partial => 'page/help_sidebar' %>
+<div class="clear"></div>

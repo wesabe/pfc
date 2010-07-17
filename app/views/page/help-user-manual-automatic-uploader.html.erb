@@ -1,0 +1,41 @@
+<% set_page_title "Help - The Automatic Uploader" %>
+
+<div id="right">
+  <div class="two-column" id="public-page">
+    <div class="top"><div class="right"><div class="grip"></div></div></div>
+    <div class="middle">
+      <div class="right">
+        <div class="content">
+          <div class="module-header">
+            <h1>The Automatic Uploader</h1>
+            <h5 class="intro">This section of the manual contains information about the automatic uploader.</h5>
+          </div>
+          <div class="indent1">
+            <h3>About the Automatic Uploader</h3>
+
+            <p>When you first sign up for Wesabe, we try to direct you to the easiest and most convenient way to upload. This depends on your financial institution, and on your browser. If your bank is supported by the Automatic uploader, you&rsquo;ll be led through the two-step process to enable your account.</p>
+
+            <h3>Automatic Uploader Compatibility</h3>
+
+            <p>Many banks aren&rsquo;t compatible with the automatic uploader. In general, the Automatic uploader requires bank support - they need to have a special server that&rsquo;s meant to work directly with programs like ours. If they don't have it, we can&rsquo;t easily add the bank to the uploader.</p>
+            <p>The best way to upload when the automatic uploader doesn&rsquo;t work with your bank is to use the manual uploader.</p>
+
+            <h3>Trouble Connecting the Automatic Uploader to a Supported Bank</h3>
+
+              <p>Sometimes the Automatic uploader has difficulty connecting to the bank. As a first step, it&rsquo;s often useful to clear your bank credentials from the uploader and then add them back again. Here&rsquo;s how:</p>
+              <ol>
+                <li>Click on the <strong>My Accounts</strong> tab to view your list of accounts.</li>
+                <li>Click the <strong>Edit</strong> button at the top of the My Accounts panel. </li>
+                <li>Click the edit button (the pencil icon) next to the account whose credentials you want to delete. An edit panel will open.</li>
+                <li>In the edit panel, select the <strong>Clear Credentials</strong> checkbox, and then click <strong>Save</strong>.</li>
+                <li><%= link_to 'Add the account', new_upload_path %> again. Wesabe will update the existing account with the newly entered credentials and attempt to connect again.</li>
+              </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="bottom"><div class="right"></div></div>
+  </div>
+</div>
+<%= render :partial => 'page/help_sidebar' %>
+<div class="clear"></div>

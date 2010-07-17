@@ -1,0 +1,81 @@
+<%# requires stylesheet "trends" %>
+<%# requires javascript "jquery.history" %>
+<%# requires javascript 'wesabe/views/trends' %>
+<%# requires javascript 'wesabe/views/widgets/spending-summary' %>
+<%# requires javascript "wesabe/date-range-picker" %>
+
+<div class="two-column flat" id="spending-summary">
+  <div class="top"><div class="right"><div class="grip"></div></div></div>
+  <div class="middle"><div class="right">
+  <div class="content">
+    <div class="module-header">
+      <h4><span class="spending-earnings">Spending</span> Trends</h4>
+    </div>
+    <div id="control-panel">
+      <div class="button-group" id="tag-scope">
+        <p class="small">Tags:</p>
+        <a class="toggle-button on" id="tag-scope-all-button" title="Show all tags"><span>All</span></a>
+        <a class="toggle-button" id="tag-scope-top-button" title="Show top tags"><span>Top</span></a>
+      </div>
+      <div class="button-group" id="compare">
+        <p class="small">Compare To:</p>
+        <a class="toggle-button on" id="compare-none-button" title="Don't compare"><span>None</span></a>
+        <a class="toggle-button" id="compare-previous-button" title="Compare to previous date range"><span>Previous</span></a>
+        <!-- <a class="toggle-button" id="compare-average-button" title="Compare to average"><span>Average</span></a> -->
+      </div>
+      <div class="button-group" id="date-range">
+        <p class="small">Date Range:</p>
+        <a class="toggle-button on" id="date-range-month-button" title="Monthly"><span>Month</span></a>
+        <a class="toggle-button" id="date-range-quarter-button" title="Quarter"><span>Quarter</span></a>
+        <a class="toggle-button" id="date-range-year-button" title="Year"><span>Year</span></a>
+        <a class="toggle-button multi-button" id="date-range-custom-button" title="Custom"><span>Custom <div class="divider">|</div></span><div id="custom-edit" class="edit light"></div></a>
+        <div id="date-range-dialog" class="edit-dialog dialog top-r-align" style="display:none">
+          <div class="top"><div class="right">
+            <h6>Set Date Range</h6>
+            <form>
+            <label for="start-date" class="field-title">Starting</label><br>
+            <div class="start-date-error error-message" style="display:none"></div>
+            <input type="text" name="start-date"/><br>
+            <label for="end-date" class="field-title">Ending</label><br>
+            <div class="end-date-error error-message" style="display:none"></div>
+            <input type="text" name="end-date"/><br>
+            </form>
+          </div></div>
+          <div class="bottom"><div class="right">
+            <a class="button save green"><span>Save</span></a>
+            <a class="button cancel gry"><span>Cancel</span></a>
+          </div></div>
+        </div>
+      </div>
+    </div>
+    <ul id="date-range-nav" class="date-range-detail">
+      <div class="dividers">
+        <li class="left-arrow"><a>&nbsp;</a></li>
+        <li class="previous-date-range"><a>Earlier</a></li>
+      </div>
+      <div class="dividers">
+        <li class="current-date-range"></li>
+      </div>
+      <div class="dividers">
+        <li class="next-date-range"><a>Later</a></li>
+        <li class="right-arrow"><a>&nbsp;</a></li>
+      </div>
+    </ul>
+    <div id="no-tags" style="display:none">
+      You have no tagged <span class="type">spending</span> for this period.
+    </div>
+    <ul id="tags-list" class="comparison">
+      <li class="tag template">
+        <div class="tag-name"></div>
+        <div class="tag-bar-amount current">&nbsp;
+          <span class="tag-amount"></span>
+        </div>
+        <div class="tag-bar-amount comparison">&nbsp;
+          <span class="tag-amount"></span>
+        </div>
+      </li>
+    </ul>
+  </div>
+  </div></div>
+  <div class="bottom"><div class="right"></div></div>
+</div>

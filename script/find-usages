@@ -1,0 +1,1228 @@
+#!/usr/bin/env ruby
+
+# DESCRIPTION
+#
+# Finds usages of files given on the command line within the project.
+# Currently supports .css, .js, .png, .gif, and .jpg.
+#
+# EXAMPLE
+#
+# $ script/find-usages public/stylesheets/main.css
+# app/views/layouts/_header.html.erb
+# 16:  <%= stylesheet_link_tag "main", :media => "screen" %>
+#
+# app/views/page/index.html.erb
+# 20:  <%= stylesheet_link_tag "main", :media => "screen" %>
+#
+# public/404.html
+# 14:  <link href="/stylesheets/main.css" media="screen" rel="stylesheet" type="text/css" />
+#
+# public/500.html
+# 14:  <link href="/stylesheets/main.css" media="screen" rel="stylesheet" type="text/css" />
+#
+# LICENSE
+#
+# Copyright 2009 Brian Donovan. This script is licensed with the MIT license.
+# http://www.opensource.org/licenses/mit-license.php
+
+def run
+  require 'optparse'
+
+  printer = UsagePrinter.new
+  options = {}
+  force = false
+
+  parser = OptionParser.new do |opts|
+    opts.banner = "Usage: script/find-usages [<options>] <file1> [<file2> ...]"
+
+    opts.on('-h', '--help', "Help") do
+      puts opts
+      exit
+    end
+
+    opts.on('--run-specs', "Run the specs to verify the behavior") do
+      exec "spec #{__FILE__}"
+    end
+
+    opts.on('-c', '--count', "Display the number of usages per file") do
+      printer = CountingUsagePrinter.new
+    end
+
+    opts.on('-t', '--total', "Display the total number of usages") do
+      printer = TotalUsagePrinter.new
+    end
+
+    opts.on('-f', "Print only the matching files") do
+      printer = FileUsagePrinter.new
+    end
+
+    opts.on('-x', "Display only the input files that had no usages") do
+      printer = NoUsagePrinter.new
+    end
+
+    opts.on('--force', "Force finding files even if they don't exist") do
+      force = true
+    end
+
+    opts.on('--[no-]color', "Run with(out) color") do |v|
+      options[:color] = v
+    end
+  end
+  parser.parse!
+
+  options.each {|k,v| printer.send("#{k}=", v)}
+
+  if ARGV.empty?
+    puts parser
+    exit(127)
+  else
+    ARGV.each do |file|
+      if not (force || File.exist?(file))
+        $stderr.puts "#{$0}: no such file: #{file} (run with --force to search anyway)"
+        exit(127)
+      end
+      printer.print UsageFinder.generate(file)
+    end
+    exit(0)
+  end
+end
+
+
+class Usage
+  attr_reader :file, :lineno, :finder
+
+  def initialize(file, lineno, line=nil)
+    @file, @lineno, @line = file, lineno, line
+  end
+
+  def line
+    return @line if @line
+
+    if lines
+      return @line = lines[lineno-1].chomp
+    else
+      return '<file could not be read>'
+    end
+  end
+
+  def ==(other)
+    other.is_a?(self.class) &&
+      other.file == self.file &&
+      other.lineno == self.lineno
+  end
+
+  def to_s
+    [file, lineno, line].join(':')
+  end
+
+  def inspect
+    "#<Usage #{self}>"
+  end
+
+  protected
+
+  def lines
+    File.exist?(file) ? File.read(file).to_a : nil
+  end
+end
+
+class UsageFinder
+  attr_reader :file
+
+  def initialize(file)
+    @file = file
+  end
+
+  def full_file_path
+    File.expand_path(file)
+  end
+
+  def file_basename
+    File.basename(file).split('.').first
+  end
+
+  def usages
+    @usages ||= begin
+      result = []
+      each_usage { |usage| result << usage }
+      result
+    end
+  end
+
+  def each_usage(&block)
+    candidate_files.each do |file|
+      each_usage_in_file_and_content(file, File.read(file).to_a, &block)
+    end
+  end
+
+  def usages_in_file_and_content(search_path, content)
+    usages = []
+    each_usage_in_file_and_content(search_path, content) { |usage| usages << usage }
+    return usages
+  end
+
+  def self.generate(file)
+    case File.extname(file).downcase
+    when '.css'
+      StylesheetUsageFinder.new(file)
+    when '.js'
+      JavaScriptUsageFinder.new(file)
+    when '.png', '.gif', '.jpg'
+      ImageUsageFinder.new(file)
+    when '.erb', '.rhtml', '.rxml'
+      if File.basename(file) =~ %r{^_}
+        PartialTemplateUsageFinder.new(file)
+      elsif file.include?('app/views/layouts')
+        LayoutTemplateUsageFinder.new(file)
+      else
+        TemplateUsageFinder.new(file)
+      end
+    else
+      if file.include?('public/')
+        PublicFileUsageFinder.new(file)
+      end
+    end
+  end
+
+  protected
+
+  def resolve(url, source_file)
+    if url =~ %r{^/}
+      file = "public#{url}"
+    else
+      file = File.join(File.dirname(source_file), url)
+    end
+
+    return File.expand_path(file)
+  end
+
+  def candidate_files
+    Dir["{**,.}/*.{#{file_types.join(',')}}"]
+  end
+
+  def select_lines(search_path, content, callback)
+    content.each_with_index do |line, i|
+      callback[Usage.new(search_path, i+1, line.chomp)] if yield(line)
+    end
+  end
+
+  def parse_attributes(text)
+    text.scan(%r{([a-z]+)\s*=\s*(?:'([^']*)'|"([^"]*)"|(\S*))}).inject({}) do |attrs, m|
+      attrs.update(m[0] => m[1] || m[2] || m[3])
+    end
+  end
+end
+
+class JavaScriptUsageFinder < UsageFinder
+  def file_types
+    %w[erb rhtml html rb]
+  end
+
+  def each_usage_in_file_and_content(search_path, content, &callback)
+    case File.extname(search_path).downcase
+    when '.rb', '.erb', '.rhtml'
+      select_lines(search_path, content, callback) do |line|
+        matches_javascript_rails_helper?(search_path, line) ||
+          matches_javascript_include_tag?(search_path, line)
+      end
+    when '.html'
+      select_lines(search_path, content, callback) do |line|
+        matches_javascript_include_tag?(search_path, line)
+      end
+    end
+  end
+
+  private
+
+  def matches_javascript_rails_helper?(search_path, line)
+    match = line.match(%r{javascript(?:_include_tag)?[\(\s]?\s*(['"])([-\w\./]+)(\1)})
+    return false if match.nil?
+
+    resolved_path = File.expand_path("public/javascripts/#{match[2]}")
+    resolved_path += '.js' unless resolved_path =~ /\.js$/i
+    return resolved_path == full_file_path
+  end
+
+  def matches_javascript_include_tag?(search_path, line)
+    match = line.match(%r{<script\s*([^>]+)\s*>})
+    return false if match.nil?
+
+    attributes = parse_attributes(match[1])
+    if attributes['src']
+      resolved_path = resolve(attributes['src'], search_path)
+      return resolved_path == full_file_path
+    end
+  end
+end
+
+class ImageUsageFinder < UsageFinder
+  def file_types
+    %w[erb rhtml html css rb]
+  end
+
+  def each_usage_in_file_and_content(search_path, content, &callback)
+    case File.extname(search_path).downcase
+    when '.rb', '.erb', '.rhtml'
+      select_lines(search_path, content, callback) do |line|
+        matches_image_rails_helper?(search_path, line) ||
+          matches_image_tag?(search_path, line)
+      end
+    when '.html'
+      select_lines(search_path, content, callback) do |line|
+        matches_image_tag?(search_path, line)
+      end
+    when '.css'
+      select_lines(search_path, content, callback) do |line|
+        matches_css_reference?(search_path, line)
+      end
+    end
+  end
+
+  private
+
+  def matches_image_rails_helper?(search_path, line)
+    match = line.match(%r{image_tag[\(\s]?\s*(['"])([-_\w\./]+)(\1)})
+    return false if match.nil?
+
+    path = match[2]
+    if path =~ %r{^/}
+      resolved_path = File.expand_path("public#{path}")
+    else
+      resolved_path = File.expand_path("public/images/#{path}")
+    end
+    return resolved_path == full_file_path
+  end
+
+  def matches_image_tag?(search_path, line)
+    match = line.match(%r{<img\s*([^>]+)\s*/?>})
+    return false if match.nil?
+
+    attributes = parse_attributes(match[1])
+    if attributes['src']
+      resolved_path = resolve(attributes['src'], search_path)
+      return resolved_path == full_file_path
+    end
+  end
+
+  def matches_css_reference?(search_path, line)
+    match = line.match(%r{[-a-z]+:.*(?:url\(([^\)]+)\)|'([^']+)'|"([^"]+)")})
+    return false if match.nil?
+
+    resolved_path = resolve(match[1] || match[2] || match[3], search_path)
+    return resolved_path == full_file_path
+  end
+end
+
+class StylesheetUsageFinder < UsageFinder
+  def file_types
+    %w[erb rhtml html css rb]
+  end
+
+  def each_usage_in_file_and_content(search_path, content, &callback)
+    case File.extname(search_path).downcase
+    when '.rb', '.erb', '.rhtml'
+      select_lines(search_path, content, callback) do |line|
+        matches_stylesheet_rails_helper?(search_path, line) ||
+          matches_stylesheet_link_tag?(search_path, line)
+      end
+    when '.html'
+      select_lines(search_path, content, callback) do |line|
+        matches_stylesheet_link_tag?(search_path, line)
+      end
+    when '.css'
+      select_lines(search_path, content, callback) do |line|
+        matches_css_import_directive?(search_path, line)
+      end
+    end
+  end
+
+  protected
+
+  def matches_stylesheet_rails_helper?(search_path, line)
+    match = line.match(%r{stylesheet(?:_link_tag)?[\(\s]?\s*(['"])([\w\./]+)(\1)})
+    return false if match.nil?
+
+    resolved_path = File.expand_path("public/stylesheets/#{match[2]}")
+    resolved_path += '.css' unless resolved_path =~ /\.css$/i
+    return resolved_path == full_file_path
+  end
+
+  def matches_stylesheet_link_tag?(search_path, line)
+    match = line.match(%r{<link\s*([^>]+)\s*/?>})
+    return false if match.nil?
+
+    attributes = parse_attributes(match[1])
+    if attributes['rel'] == 'stylesheet' && attributes['href']
+      resolved_path = resolve(attributes['href'], search_path)
+      return resolved_path == full_file_path
+    end
+  end
+
+  def matches_css_import_directive?(search_path, line)
+    match = line.match(%r{@import (?:url\(([^\)]+)\)|'([^']+)'|"([^"]+)")})
+    return false if match.nil?
+
+    resolved_path = resolve(match[1] || match[2] || match[3], search_path)
+    return resolved_path == full_file_path
+  end
+end
+
+class TemplateUsageFinder < UsageFinder
+  def file_types
+    %w[rb erb rhtml rxml]
+  end
+
+  def each_usage_in_file_and_content(search_path, content, &callback)
+    case File.extname(search_path).downcase
+    when '.rb', '.erb', '.rhtml', '.rxml'
+      select_lines(search_path, content, callback) do |line|
+        matches_render_template_helper?(search_path, line)
+      end
+    end
+  end
+
+  protected
+
+  def matches_render_template_helper?(search_path, line)
+    match = line.match(%r{\brender(?:_to_string)?[\(\s]?\s*:(template|action|file)\s*=>\s*(['"])([^\2]+)\2})
+    return false if match.nil?
+
+    type = match[1]
+    template = match[3]
+
+    case type
+    when 'template'
+      resolved_path = File.expand_path("app/views/#{template}")
+    when 'action'
+      resolved_path = resolve(template, search_path)
+    when 'file'
+      resolved_path = File.expand_path(template)
+      return resolved_path == full_file_path
+    end
+    return full_file_path[0,resolved_path.size] == resolved_path
+  end
+
+  def resolve(url, search_path)
+    # dummy is here so that File.dirname in super gets the right value
+    super(url, search_path.sub(%r{app/controllers/(.+)_controller\.rb$}, 'app/views/\1/dummy'))
+  end
+end
+
+class PartialTemplateUsageFinder < TemplateUsageFinder
+  def each_usage_in_file_and_content(search_path, content, &callback)
+    case File.extname(search_path).downcase
+    when '.rb', '.erb', '.rhtml', '.rxml'
+      select_lines(search_path, content, callback) do |line|
+        matches_render_partial_helper?(search_path, line) ||
+          matches_render_template_helper?(search_path, line)
+      end
+    end
+  end
+
+  protected
+
+  def matches_render_partial_helper?(search_path, line)
+    match = line.match(%r{\brender(?:_to_string)?[\(\s]?\s*:partial\s*=>\s*(['"])([^\1]+)(\1)})
+    return false if match.nil?
+
+    render_path = match[2]
+    if render_path.include?('/')
+      resolved_path = File.expand_path("app/views/#{render_path}")
+    else
+      resolved_path = resolve(render_path, search_path)
+    end
+    resolved_path.sub!(%r{([^/]+)$}, '_\1')
+    return full_file_path[0,resolved_path.size] == resolved_path
+  end
+end
+
+class LayoutTemplateUsageFinder < TemplateUsageFinder
+  def each_usage_in_file_and_content(search_path, content, &callback)
+    if controller_explicitly_declares_layout?(search_path, content)
+      select_lines(search_path, content, callback) do |line|
+        matches_layout_declaration?(search_path, line)
+      end
+    elsif controller_implicitly_uses_layout?(search_path, content)
+      select_lines(search_path, content, callback) do |line|
+        matches_class_declaration?(search_path, line)
+      end
+    end
+
+    case File.extname(search_path).downcase
+    when '.rb', '.erb', '.rhtml', '.rxml'
+      select_lines(search_path, content, callback) do |line|
+        matches_render_with_layout_option?(search_path, line)
+      end
+    end
+  end
+
+  protected
+
+  def matches_class_declaration?(search_path, line)
+    return line =~ %r{^\s*class\s+\w+Controller\s+<\s+\w+}
+  end
+
+  def matches_render_with_layout_option?(search_path, line)
+    match = line.match(%r{\brender(?:_to_string)?[\(\s].*:layout\s*=>\s*(['"])([^\1]+)\1})
+    return match && match[2] == layout_name
+  end
+
+  def matches_layout_declaration?(search_path, line)
+    match = line.match(%r{^\s*layout[\(\s]\s*(?::?(['"])([^\1]+)\1|:([a-zA-Z0-9_]+))})
+    return match && (match[2] || match[3]) == layout_name
+  end
+
+  def controller_implicitly_uses_layout?(search_path, content)
+    if search_path =~ %r{app/controllers/}
+      return layout_name == 'application' || File.basename(search_path) == "#{controller_name}_controller.rb"
+    end
+  end
+
+  def controller_explicitly_declares_layout?(search_path, content)
+    content.any? {|line| line =~ %r{^\s*layout[\(\s]\s*[:'"]}}
+  end
+
+  def controller_name
+    file_basename
+  end
+
+  def layout_name
+    file_basename
+  end
+end
+
+class PublicFileUsageFinder < UsageFinder
+  def file_types
+    %w[html rhtml erb]
+  end
+
+  def each_usage_in_file_and_content(search_path, content, &callback)
+    case File.extname(search_path).downcase
+    when '.html', '.rhtml', '.erb'
+      select_lines(search_path, content, callback) do |line|
+        matches_url_attribute?(search_path, line)
+      end
+    end
+  end
+
+  def matches_url_attribute?(search_path, line)
+    match = line.match(%r{\b(?:src|href)\s*=\s*(?:(['"])([^\1]*)\1|([^\s>]+))})
+    return false unless match
+
+    src = match[2] || match[3]
+    if search_path.include?('public/')
+      resolved_path = resolve(src, search_path)
+    else
+      resolved_path = File.expand_path("public#{src}")
+    end
+    return resolved_path == full_file_path
+  end
+end
+
+class UsagePrinter
+  GREEN = "\e[32m"
+  RESET = "\e[0m"
+
+  attr_reader :stream
+  attr_accessor :color, :count
+
+  def initialize(stream=$stdout)
+    @stream = stream
+
+    # defaults
+    self.color = stream.tty?
+    self.count = false
+
+    yield self if block_given?
+  end
+
+  def print(object)
+    case object
+    when UsageFinder
+      print_finder(object)
+    when Usage
+      print_usage(object)
+    end
+    return self
+  end
+
+  def self.print(finder, stream=$stdout)
+    new(stream).print(finder)
+  end
+
+  private
+
+  def print_finder(finder)
+    finder.each_usage {|usage| print(usage)}
+  end
+
+  def print_usage(usage)
+    if @last_usage.nil?
+      print_file(usage.file)
+    elsif @last_usage.file != usage.file
+      spacer
+      print_file(usage.file)
+    end
+
+    print_line(usage)
+    @last_usage = usage
+  end
+
+  def print_file(file)
+    puts green(file)
+  end
+
+  def print_line(usage)
+    puts "#{usage.lineno}:#{usage.line}"
+  end
+
+  def spacer
+    puts
+  end
+
+  def puts(*args)
+    stream.puts(*args)
+  end
+
+  def green(str=nil)
+    return str || '' unless color
+    str ? "#{GREEN}#{str}#{RESET}" : GREEN
+  end
+end
+
+class CountingUsagePrinter < UsagePrinter
+  private
+
+  def counts
+    @counts ||= Hash.new(0)
+  end
+
+  def print_finder(finder)
+    super
+    print_file(nil)
+  end
+
+  def print_usage(usage)
+    super
+    counts[usage.file] += 1
+  end
+
+  def print_file(usage)
+    if @last_usage
+      puts "#{counts[@last_usage.file]} #{@last_usage.file}"
+    end
+  end
+
+  def print_line(usage)
+    # noop
+  end
+
+  def spacer
+    # noop
+  end
+end
+
+class TotalUsagePrinter < CountingUsagePrinter
+  private
+
+  def print_finder(finder)
+    super
+    puts counts.values.inject(0) {|t, c| t+c}
+  end
+
+  def print_file(usage)
+    # noop
+  end
+end
+
+class FileUsagePrinter < UsagePrinter
+  def initialize(stream=$stdout)
+    super(stream)
+    self.color = false
+  end
+
+  private
+
+  def print_line(usage)
+    # noop
+  end
+
+  def spacer
+    # noop
+  end
+end
+
+class NoUsagePrinter < UsagePrinter
+  private
+
+  def print_finder(finder)
+    super
+    puts finder.file if finder.usages.empty?
+  end
+
+  def print_file(usage)
+    # noop
+  end
+
+  private
+
+  def print_line(usage)
+     # noop
+  end
+
+  def spacer
+    # noop
+  end
+end
+
+def run_specs
+  describe Usage do
+    before do
+      @first_line = Usage.new(__FILE__, 1)
+      @second_line = Usage.new(__FILE__, 2)
+      @first_line_of_foo = Usage.new('foo', 1)
+    end
+
+    it "accepts file name and line number" do
+      @first_line.file.should == __FILE__
+      @first_line.lineno.should == 1
+    end
+
+    it "reads the correct line from the file" do
+      @first_line.line.should == "#!/usr/bin/env ruby"
+    end
+
+    it "prints itself as FILE:LINENO:LINE" do
+      @first_line.to_s.should == "#{__FILE__}:1:#!/usr/bin/env ruby"
+    end
+
+    it "equals another Usage with the same file and lineno" do
+      @first_line.dup.should == @first_line
+    end
+
+    it "does not equal non-Usage objects" do
+      @first_line.should_not == nil
+    end
+
+    it "does not equal Usages that have the same file but not the same lineno" do
+      @first_line.should_not == @second_line
+    end
+
+    it "does not equal Usages from different files" do
+      @first_line.should_not == @first_line_of_foo
+    end
+  end
+
+  describe UsageFinder do
+    describe ".generate" do
+      it "returns a StylesheetUsageFinder given a .css file" do
+        UsageFinder.generate('public/stylesheets/main.css').should be_a(StylesheetUsageFinder)
+      end
+
+      it "returns a JavaScriptUsageFinder given a .js file" do
+        UsageFinder.generate('public/javascripts/clippy.js').should be_a(JavaScriptUsageFinder)
+      end
+
+      it "returns an ImageUsageFinder given a .png file" do
+        UsageFinder.generate('public/images/500.png').should be_an(ImageUsageFinder)
+      end
+
+      it "returns an ImageUsageFinder given a .jpg file" do
+        UsageFinder.generate('public/images/500.jpg').should be_an(ImageUsageFinder)
+      end
+
+      it "returns an ImageUsageFinder given a .gif file" do
+        UsageFinder.generate('public/images/500.gif').should be_an(ImageUsageFinder)
+      end
+    end
+  end
+
+  describe StylesheetUsageFinder do
+    shared_examples_for "a CSS finder" do
+      before do
+        @not_there_css = StylesheetUsageFinder.new('public/stylesheets/not-there.css')
+        @test_css = StylesheetUsageFinder.new('public/stylesheets/test.css')
+        @test2_css = StylesheetUsageFinder.new('public/stylesheets/test2.css')
+        @test_css_at_wrong_level = StylesheetUsageFinder.new('test.css')
+      end
+
+      it "returns no Usages when the file to find is not referenced" do
+        @not_there_css.usages_in_file_and_content(@path, @content).should be_empty
+      end
+
+      it "returns no Usages when the file to find is at the wrong path" do
+        @test_css_at_wrong_level.usages_in_file_and_content(@path, @content).should be_empty
+      end
+
+      it "returns a Usage for each time the file is referenced" do
+        @test_css.usages_in_file_and_content(@path, @content).should == @usages
+      end
+    end
+
+    context "searching ERB" do
+      before do
+        @path = 'app/layouts/_header.html.erb'
+        @content = <<-RHTML
+<head>
+  <title><%= @title %></title>
+  <%= stylesheet_link_tag 'test' %>
+  <link rel="stylesheet" href="/stylesheets/test2.css" media="screen"/>
+</head>
+RHTML
+        @usages = [Usage.new(@path, 3, @content.to_a[2])]
+      end
+
+      it_should_behave_like "a CSS finder"
+
+      it "returns a Usage when a file is referenced using a link tag" do
+        @test2_css.usages_in_file_and_content(@path, @content).should == [Usage.new(@path, 4, @content.to_a[3].chomp)]
+      end
+    end
+
+    context "searching HTML" do
+      before do
+        @path = 'public/about.html'
+        @content = <<-HTML
+<head>
+  <title>About</title>
+  <link rel="stylesheet" href="stylesheets/test.css" media="screen"/>
+  <link rel="stylesheet" href="/stylesheets/test2.css" media="screen"/>
+</head>
+HTML
+        @usages = [Usage.new(@path, 3, @content.to_a[2])]
+      end
+
+      it_should_behave_like "a CSS finder"
+
+      it "returns a Usage when a file is referenced using a link tag" do
+        @test2_css.usages_in_file_and_content(@path, @content).should == [Usage.new(@path, 4, @content.to_a[3].chomp)]
+      end
+    end
+
+    context "searching CSS" do
+      before do
+        @path = 'public/stylesheets/main.css'
+        @content = <<-CSS
+@import url(test.css);
+@import "/stylesheets/test2.css";
+CSS
+        @usages = [Usage.new(@path, 1, @content.to_a[0])]
+      end
+
+      it_should_behave_like "a CSS finder"
+
+      it "returns a Usage when a file is @imported via an absolute url" do
+        @test2_css.usages_in_file_and_content(@path, @content).should == [Usage.new(@path, 2, @content.to_a[1].chomp)]
+      end
+    end
+
+    context "searching XML" do
+      before do
+        @path = 'public/test.xml'
+        @content = <<-XML
+<?xml version="1.0"?>
+<root/>
+XML
+        @usages = []
+      end
+
+      it_should_behave_like "a CSS finder"
+    end
+  end
+
+  describe JavaScriptUsageFinder do
+    shared_examples_for "a JS finder" do
+      before do
+        @not_there_js = JavaScriptUsageFinder.new('public/javascripts/not-there.js')
+        @test_js = JavaScriptUsageFinder.new('public/javascripts/test.js')
+        @test2_js = JavaScriptUsageFinder.new('public/javascripts/test2.js')
+        @test_js_at_wrong_level = JavaScriptUsageFinder.new('test.js')
+      end
+
+      it "returns no Usages when the file to find is not referenced" do
+        @not_there_js.usages_in_file_and_content(@path, @content).should be_empty
+      end
+
+      it "returns no Usages when the file to find is at the wrong path" do
+        @test_js_at_wrong_level.usages_in_file_and_content(@path, @content).should be_empty
+      end
+
+      it "returns a Usage for each time the file is referenced" do
+        @test_js.usages_in_file_and_content(@path, @content).should == @usages
+      end
+    end
+
+    context "searching ERB" do
+      before do
+        @path = 'app/layouts/_header.html.erb'
+        @content = <<-RHTML
+<head>
+  <title><%= @title %></title>
+  <%= javascript_include_tag 'test' %>
+  <script type="text/javascript" src="/javascripts/test2.js"></script>
+</head>
+RHTML
+        @usages = [Usage.new(@path, 3, @content.to_a[2])]
+      end
+
+      it_should_behave_like "a JS finder"
+
+      it "returns a Usage when a file is referenced using a script tag" do
+        @test2_js.usages_in_file_and_content(@path, @content).should == [Usage.new(@path, 4, @content.to_a[3].chomp)]
+      end
+    end
+
+    context "searching HTML" do
+      before do
+        @path = 'public/about.html'
+        @content = <<-HTML
+<head>
+  <title>About</title>
+  <script type="text/javascript" src="javascripts/test.js"></script>
+  <script src="/javascripts/test2.js" type="text/javascript"></script>
+</head>
+HTML
+        @usages = [Usage.new(@path, 3, @content.to_a[2])]
+      end
+
+      it_should_behave_like "a JS finder"
+
+      it "returns a Usage when a file is referenced using a script tag" do
+        @test2_js.usages_in_file_and_content(@path, @content).should == [Usage.new(@path, 4, @content.to_a[3].chomp)]
+      end
+    end
+  end
+
+  describe ImageUsageFinder do
+    shared_examples_for "an image finder" do
+      before do
+        @not_there_png = ImageUsageFinder.new('public/images/not-there.png')
+        @test_png = ImageUsageFinder.new('public/images/test.png')
+        @test2_gif = ImageUsageFinder.new('public/images/test-2.gif')
+        @test_png_at_wrong_level = ImageUsageFinder.new('test.png')
+      end
+
+      it "returns no Usages when the file to find is not referenced" do
+        @not_there_png.usages_in_file_and_content(@path, @content).should be_empty
+      end
+
+      it "returns no Usages when the file to find is at the wrong path" do
+        @test_png_at_wrong_level.usages_in_file_and_content(@path, @content).should be_empty
+      end
+
+      it "returns a Usage for each time the file is referenced" do
+        @test_png.usages_in_file_and_content(@path, @content).should == @usages
+      end
+    end
+
+    context "searching ERB" do
+      before do
+        @path = 'app/layouts/_masthead.html.erb'
+        @content = <<-RHTML
+<div>
+  <%= image_tag 'test.png', :id => 'logo' %>
+  <%= image_tag '/images/test.png', :id => 'logo' %>
+  <img src="/images/test-2.gif"/>
+</div>
+RHTML
+        @usages = [Usage.new(@path, 2, @content.to_a[1]), Usage.new(@path, 3, @content.to_a[2])]
+      end
+
+      it_should_behave_like "an image finder"
+
+      it "returns a Usage when a file is referenced using a image tag" do
+        @test2_gif.usages_in_file_and_content(@path, @content).should == [Usage.new(@path, 4, @content.to_a[3].chomp)]
+      end
+    end
+
+    context "searching HTML" do
+      before do
+        @path = 'public/about.html'
+        @content = <<-HTML
+<body>
+  <h1>Hello World</h1>
+  <img src="/images/test.png"/>
+  <img src="/images/test-2.gif">
+</body>
+HTML
+        @usages = [Usage.new(@path, 3, @content.to_a[2])]
+      end
+
+      it_should_behave_like "an image finder"
+
+      it "returns a Usage when a file is referenced using a image tag" do
+        @test2_gif.usages_in_file_and_content(@path, @content).should == [Usage.new(@path, 4, @content.to_a[3].chomp)]
+      end
+    end
+
+    context "searching CSS" do
+      before do
+        @path = 'public/stylesheets/main.css'
+        @content = <<-CSS
+body { background-image: url(/images/test.png); }
+#logo {
+  background-image: "/images/test-2.gif";
+}
+CSS
+        @usages = [Usage.new(@path, 1, @content.to_a[0])]
+      end
+
+      it_should_behave_like "an image finder"
+
+      it "returns a Usage when a file is referenced with quotes" do
+        @test2_gif.usages_in_file_and_content(@path, @content).should == [Usage.new(@path, 3, @content.to_a[2].chomp)]
+      end
+    end
+  end
+
+  describe PartialTemplateUsageFinder do
+    before do
+      @header_finder = PartialTemplateUsageFinder.new('app/views/layouts/_header.html.erb')
+      @footer_finder = PartialTemplateUsageFinder.new('app/views/layouts/_footer.html.erb')
+      @notice_finder = PartialTemplateUsageFinder.new('app/views/layouts/_notice.html.erb')
+      @not_there_finder = PartialTemplateUsageFinder.new('app/views/layouts/_not_there.html.erb')
+    end
+
+    it "searches Ruby files and templates" do
+      @header_finder.file_types.should == %w[rb erb rhtml rxml]
+    end
+
+    context "searching Ruby" do
+      before do
+        @path = 'app/views/layouts/application.html.erb'
+        @content = <<-ERB
+<html>
+  <head>
+    <title>Hello World</title>
+  </head>
+  <body>
+    <%= render :template => "layouts/_notice" # rare, using :template to render a partial %>
+    <%= render :partial => 'header' # relative %>
+    <%= render :partial => 'layouts/footer' # qualified %>
+  </body>
+</html>
+ERB
+      end
+
+      it "does not find any Usages for a file that is not used" do
+        @not_there_finder.usages_in_file_and_content(@path, @content).should be_empty
+      end
+
+      it "finds a Usage of a relative render partial command" do
+        @header_finder.usages_in_file_and_content(@path, @content).should == [Usage.new(@path, 7, @content.to_a[6].chomp)]
+      end
+
+      it "finds a Usage of a qualified render partial command" do
+        @footer_finder.usages_in_file_and_content(@path, @content).should == [Usage.new(@path, 8, @content.to_a[7].chomp)]
+      end
+
+      it "finds a Usage of a render template command" do
+        @notice_finder.usages_in_file_and_content(@path, @content).should == [Usage.new(@path, 6, @content.to_a[5].chomp)]
+      end
+    end
+
+    context "searching a controller" do
+      before do
+        @greeting_finder = PartialTemplateUsageFinder.new('app/views/hello/_greeting.html.erb')
+        @path = 'app/controllers/hello_controller.rb'
+        @content = <<-RUBY
+class HelloController < ApplicationController
+  def index
+    logger.debug render_to_string(:partial => 'greeting')
+  end
+end
+RUBY
+      end
+
+      it "finds a Usage of render_to_string with the right template" do
+        @greeting_finder.usages_in_file_and_content(@path, @content).should == [Usage.new(@path, 3, @content.to_a[2].chomp)]
+      end
+    end
+  end
+
+  describe TemplateUsageFinder do
+    before do
+      @test_finder = TemplateUsageFinder.new('app/views/layouts/test.html.erb')
+      @foo_finder = TemplateUsageFinder.new('app/views/hello/foo.html.erb')
+      @bar_finder = TemplateUsageFinder.new('app/views/hello/bar.html.erb')
+      @not_there_finder = TemplateUsageFinder.new('app/views/layouts/not_there.html.erb')
+    end
+
+    it "searches Ruby files and templates" do
+      @test_finder.file_types.should == %w[rb erb rhtml rxml]
+    end
+
+    context "searching a template" do
+      before do
+        @path = 'app/views/layouts/application.html.erb'
+        @content = <<-ERB
+<html>
+  <head>
+    <title>Hello World</title>
+  </head>
+  <body>
+    <%= render :template => "layouts/test" %>
+  </body>
+</html>
+ERB
+      end
+
+      it "does not find any Usages for a file that is not used" do
+        @not_there_finder.usages_in_file_and_content(@path, @content).should be_empty
+      end
+
+      it "finds a Usage of a relative render template command" do
+        @test_finder.usages_in_file_and_content(@path, @content).should == [Usage.new(@path, 6, @content.to_a[5].chomp)]
+      end
+    end
+
+    context "searching a controller" do
+      before do
+        @path = 'app/controllers/hello_controller.rb'
+        @content = <<-RUBY
+class HelloController < ApplicationController
+  def index
+    logger.debug render_to_string(:template => 'layouts/test')
+  end
+
+  def foo
+    render :action => 'foo'
+  end
+
+  def bar
+    render :file => 'app/views/hello/bar.html.erb'
+  end
+end
+RUBY
+      end
+
+      it "finds a Usage of render_to_string with the right template" do
+        @test_finder.usages_in_file_and_content(@path, @content).should == [Usage.new(@path, 3, @content.to_a[2].chomp)]
+      end
+
+      it "finds a Usage of render :action with the right template" do
+        @foo_finder.usages_in_file_and_content(@path, @content).should == [Usage.new(@path, 7, @content.to_a[6].chomp)]
+      end
+
+      it "finds a Usage of render :file with the right template" do
+        @bar_finder.usages_in_file_and_content(@path, @content).should == [Usage.new(@path, 11, @content.to_a[10].chomp)]
+      end
+    end
+  end
+
+  describe LayoutTemplateUsageFinder do
+    before do
+      @test_finder = LayoutTemplateUsageFinder.new('app/views/layouts/test.html.erb')
+      @hello_finder = LayoutTemplateUsageFinder.new('app/views/layouts/hello.html.erb')
+      @application_finder = LayoutTemplateUsageFinder.new('app/views/layouts/application.html.erb')
+    end
+
+    it "searches Ruby files and templates" do
+      @test_finder.file_types.should == %w[rb erb rhtml rxml]
+    end
+
+    context "searching a controller without a layout declaration" do
+      before do
+        @path = 'app/controllers/hello_controller.rb'
+        @content = <<-ERB
+class HelloController < ApplicationController
+  def index
+    render :layout => 'test'
+  end
+end
+ERB
+      end
+
+      it "finds an implicit Usage of the layout matching its name" do
+        @hello_finder.usages_in_file_and_content(@path, @content).should == [Usage.new(@path, 1, @content.to_a[0].chomp)]
+      end
+
+      it "finds an explicit Usage of any layout" do
+        @test_finder.usages_in_file_and_content(@path, @content).should == [Usage.new(@path, 3, @content.to_a[2].chomp)]
+      end
+
+      it "finds an implicit Usage of the application layout" do
+        @application_finder.usages_in_file_and_content(@path, @content).should == [Usage.new(@path, 1, @content.to_a[0].chomp)]
+      end
+    end
+
+    context "searching a controller with an explicit layout declaration" do
+      before do
+        @path = 'app/controllers/hello_controller.rb'
+        @content = <<-ERB
+class HelloController < ApplicationController
+  layout :test
+
+  def index
+    render :layout => 'hello'
+  end
+end
+ERB
+      end
+
+      it "finds an explicit Usage of the layout declaration" do
+        @test_finder.usages_in_file_and_content(@path, @content).should == [Usage.new(@path, 2, @content.to_a[1].chomp)]
+      end
+
+      it "finds an explicit Usage of any layout" do
+        @hello_finder.usages_in_file_and_content(@path, @content).should == [Usage.new(@path, 5, @content.to_a[4].chomp)]
+      end
+    end
+
+    context "searching a controller" do
+      before do
+        @path = 'app/controllers/hello_controller.rb'
+        @content = <<-RUBY
+class HelloController < ApplicationController
+  def index
+    logger.debug render_to_string(:layout => 'test')
+  end
+end
+RUBY
+      end
+
+      it "finds a Usage of render_to_string with the right layout" do
+        @test_finder.usages_in_file_and_content(@path, @content).should == [Usage.new(@path, 3, @content.to_a[2].chomp)]
+      end
+    end
+  end
+
+  describe PublicFileUsageFinder do
+    before do
+      @blank_finder = PublicFileUsageFinder.new("public/blank.html")
+      @about_finder = PublicFileUsageFinder.new("public/downloads/about.html")
+      @path = 'public/index.html'
+      @content = <<-HTML
+<html>
+  <head>
+    <title>Index</title>
+  </head>
+  <body>
+    <iframe src="/blank.html" />
+    <a href="/downloads/about.html">About Us</a>
+  </body>
+</html>
+HTML
+    end
+
+    it "searches html, rhtml, and erb files" do
+      @blank_finder.file_types.should == %w[html rhtml erb]
+    end
+
+    it "finds a Usage when the file is referenced via a src attribute" do
+      @blank_finder.usages_in_file_and_content(@path, @content).should == [Usage.new(@path, 6, @content.to_a[5].chomp)]
+    end
+
+    it "finds a Usage when the file is referenced via an href attribute" do
+      @about_finder.usages_in_file_and_content(@path, @content).should == [Usage.new(@path, 7, @content.to_a[6].chomp)]
+    end
+  end
+end
+
+
+case $0
+when __FILE__
+  run
+else 'spec'
+  run_specs
+end

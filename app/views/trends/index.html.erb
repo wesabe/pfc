@@ -1,0 +1,17 @@
+<%= stylesheet_link_manifest :trends %>
+<%= javascript_include_manifest :trends %>
+
+<div id="right">
+  <%= render :partial => 'spending_summary/widget' %>
+</div>
+<div id="left">
+  <%= render :partial => 'accounts/widget' %>
+  <%= render :partial => 'spending_summary/trends_summary_widget' %>
+  <%= render :partial => 'tags/widget' %>
+</div>
+
+<script type="text/javascript">
+  jQuery(function(){ page = new wesabe.views.pages.trends() });
+</script>
+
+<% preload_accounts %>

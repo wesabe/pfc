@@ -1,0 +1,227 @@
+.sign-in,
+.sign-up,
+.signed-in {
+  position:relative;
+	background:transparent url(/images/homepage/signin-signup-buttons-sprites-trans.png) no-repeat scroll 0 0;
+  float: right;
+	height:38px;
+  font-size: 75%;
+	text-indent:-1000em;
+  margin:-2px;
+}
+
+.sign-in {
+	width:92px;
+}
+
+.sign-in:hover {
+	background-position: 0 -54px;
+}
+
+.sign-in.open {
+	background-position: 0 -108px;
+}
+
+.sign-up {
+	background-position:-100px 0;
+	width:177px;
+
+}
+.sign-up:hover {
+	background-position:-100px -54px;
+}
+.sign-up:active {
+	background-position:-100px -108px;
+}
+
+.signed-in {
+	background-position:-295px 0;
+	width:117px;
+	margin-right:7px;
+
+}
+.signed-in:hover {
+	background-position:-295px -54px;
+}
+.signed-in:active {
+	background-position:-295px -108px;
+}
+
+.login-message {
+  padding:15px 10px 0;
+  float:left;
+  color:#948c8c;
+}
+
+/*general styles for all 2-col(630px-wide module) views such as signin/signup----------------------------------------------------*/
+
+.container.two-col {
+  width:680px;
+  background:transparent url(/images/header/2col-header-bg-trans.png) scroll no-repeat top left;
+}
+
+.two-col #header {
+	padding:1.2em 1.5em 0.9em;
+}
+
+.two-col #footer {
+  width: 640px;
+}
+
+/*start of styling for all peripheral static pages such as help/about/privacy&security------------*/
+
+#user-manual .group.open ul {
+  display:block;
+}
+
+#user-manual .one-col-list.group ul li {
+	background:#fff;
+}
+
+#user-manual .one-col-list.group ul li.even { /*this is what creates the zebra stripped lists*/
+	background:#fff url(/images/maincontent/lists/1column-list-sprites-trans.png) scroll no-repeat top left;
+}
+
+#user-manual .one-col-list.group ul li:hover {
+	background:transparent url(/images/maincontent/lists/1column-list-sprites-trans.png) scroll no-repeat top right;
+}
+
+#user-manual .one-col-list.group ul li.even.on,
+#user-manual .one-col-list.group ul li.on {
+	background:transparent url(/images/maincontent/lists/1column-group-sprites-trans.png) no-repeat scroll 0 -145px;
+}
+
+#public-page .content {
+  padding:10px 30px;
+  max-width:560px;
+}
+
+#public-page .intro,
+.groups .intro  {
+  font-family:georgia, sans-serif;
+  font-weight:normal;
+  color:#999;
+  padding-right:180px;
+  margin-top:0;
+}
+
+#public-page p {
+  color:#676759;
+  margin-bottom:1.5em;
+}
+
+#public-page strong {
+  color:#203E3D;
+}
+
+#public-page h3,
+#public-page h4,
+#public-page h5,
+#public-page h6 {
+  margin-top:18px;
+}
+
+#public-page h3 {
+  font-family:georgia, sans-serif;
+  font-style:italic;
+  color:#FFCC66;
+}
+
+#public-page h4,
+#public-page h5,
+#public-page h6 {
+  color:#363630;
+}
+
+
+#public-page .side-note {
+  font-style:italic;
+  font-weight:bold;
+  color:#7F7F75;
+}
+
+#public-page ul {
+  margin:1.5em 1.5em 1.5em 4em;
+  font-size:0.75em;
+  color:#676759;
+}
+
+#public-page ul li {
+  margin-bottom:1em;
+}
+
+
+/*pjb added styles -------------------------------------------------------------------------*/
+#public-page dl {
+    margin: 2em auto 0 auto;
+    padding: 0;
+}
+
+#public-page dt {
+    width: 18em;
+    float: left;
+	font-size:0.6em;
+    margin: 0 0 0 0;
+    padding: .5em;
+    border-top: 1px solid #C3C2BE;
+    font-weight: bold;
+}
+
+#public-page dd {
+    float: left;
+	font-size:0.6em;
+    width: 30em;
+    margin: 0 0 0 0;
+    padding: .5em;
+    border-top: 1px solid #C3C2BE;
+}
+
+#public-page .tight {
+  margin-bottom:.1em;
+}
+
+#public-page code {
+  font-family:"Courier New",Courier,mono;
+  font-size:0.95em;
+  color:#666658;
+}
+
+
+
+/*freaking out styles as found on the help pages -------------------------------------------------------------------------*/
+
+.content .freaking-out {
+  background:transparent url(/images/help/freaking-out-trans.png) no-repeat scroll top left;
+  padding-top:67px;
+  text-align:right;
+  font-style:italic;
+  color:#999;
+  margin:0;
+}
+
+.content .freaking-out:hover {
+  text-decoration:none;
+}
+
+.content.on .freaking-out {
+	color:#D6EDEA;
+	padding-right:17px;
+}
+
+.content.on {
+	background:transparent url(/images/maincontent/lists/1column-group-sprites-trans.png) no-repeat scroll 0 -144px;
+	width:327px;
+}
+
+/** Error pages **/
+
+.flat .middle .right .content.error {
+  text-align: center;
+  padding-bottom: 5px;
+  color: #999;
+}
+
+.content.error .message {
+  font-family: palatino, times, "Times New Roman";
+  font-size: 120%;
+}

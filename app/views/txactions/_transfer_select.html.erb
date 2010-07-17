@@ -1,0 +1,6 @@
+<% if @possibilities.empty? -%>
+  No matching transactions found. Continue only if you want to mark this as a transfer anyway.
+<% else -%>
+  <%= select_tag "transfer_buddy",
+    options_for_select(@possibilities.map{|t| [t.display_name + " on " + t.date_posted.strftime("%b%e"), t.id]} + [["Other", nil]], (txaction.transfer_txaction_id if txaction.paired_transfer?)) %>
+<% end -%>

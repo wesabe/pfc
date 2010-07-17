@@ -1,0 +1,35 @@
+<% set_page_title "Help - Date Problems" %>
+
+<div id="right">
+  <div class="two-column" id="public-page">
+    <div class="top"><div class="right"><div class="grip"></div></div></div>
+    <div class="middle">
+      <div class="right">
+        <div class="content">
+          <div class="module-header">
+        <h1>Date Problems</h1>
+        <h5 class="intro">This section of the manual contains troubleshooting information about problems with dates.</h5>
+          </div>
+          <div class="indent1">
+
+               <h3>Accounts Are One Day Off</h3>
+
+                 <p>In almost every case where the dates in an account are one day off, the transactions come from a bank that doesn&rsquo;t specify an exact time at which the transaction took place, or if they do, they specify it as noon or midnight. For example, one Canadian bank specifies that all of your transactions take place at exactly 2:00am Eastern time, which is 11:00pm Pacific time (where our servers are) on the previous day.</p>
+                 <p>It would be ideal if all dates were specified in GMT, but almost no banks do that - they either specify the transaction date only (no time) or a time in their local timezone, whatever that happens to be. We could also ignore the time zone altogether, but that would cause problems for banks that are time-zone sensitive, and could cause a duplicate transaction to appear the next time the same transactions get uploaded.</p>
+                 <p>Wesabe allows you to change the transaction date for cases like this. To change the date of the transaction, do the following:</p>
+                 <ol>
+                   <li>Click on the <strong>My Accounts</strong> tab to view your list of accounts.</li>
+                   <li>Click on the account that has the transactions whose date you want to change.</p>
+                   <li>In the Transaction panel, hover over the transaction you want to change and click the pencil edit button that appears. An edit panel will open.</li>
+                   <li>In the edit panel, enter the new date in the date field, or click the calendar icon to pick a date from the calendar.</li>
+                   <li>Click <strong>Save</strong>.
+                 </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="bottom"><div class="right"></div></div>
+  </div>
+</div>
+<%= render :partial => 'page/help_sidebar' %>
+<div class="clear"></div>

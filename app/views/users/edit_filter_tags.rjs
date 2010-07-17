@@ -1,0 +1,2 @@
+page.call %{$("#filter_tags").val}, @filter_tags
+page.call %{$("#summary_for_#{params[:add_filter_tag].as_id}").hide}

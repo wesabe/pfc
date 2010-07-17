@@ -1,0 +1,5 @@
+xml.response(:status => "failed", :apiversion => Api::Constants::CURRENT_API_VERSION) do
+  xml.error(:code => Api::Constants::Error::FORMAT_CHANGE_OFX_TO_QIF[:code]) do
+    xml.message(Api::Constants::Error::FORMAT_CHANGE_OFX_TO_QIF[:message])
+  end
+end

@@ -1,0 +1,10 @@
+.investment-section { margin-bottom: 1em }
+.investment-section h2 { color:#333; background: #eee; padding-left: 0.25em;}
+.investment-section table {  margin-left: 0.5em; padding-right: 0.5em; font-size: 80%; width: 100%;}
+#investment-balances table { width: auto; }
+.investment-section table th { color: #666; font-size: 90%;}
+.investment-section table tr.total { font-weight: bold;}
+.investment-section table td { vertical-align: top; padding-right: 0.5em; }
+.investment-section table td.numeric { text-align: right; }
+.investment-section table td.memo { color: #666;}
+.investment-section p.note {color: #666; font-style: italic; font-size: 90%;}

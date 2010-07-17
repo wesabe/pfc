@@ -1,0 +1,1 @@
+require "http_only_session_cookies"

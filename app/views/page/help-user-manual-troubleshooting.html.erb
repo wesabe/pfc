@@ -1,0 +1,55 @@
+<% set_page_title "Help - General Troubleshooting" %>
+
+<div id="right">
+  <div class="two-column" id="public-page">
+    <div class="top"><div class="right"><div class="grip"></div></div></div>
+    <div class="middle">
+      <div class="right">
+        <div class="content">
+          <div class="module-header">
+        <h1>General Troubleshooting</h1>
+        <h5 class="intro">This section of the manual contains general troubleshooting information.</h5>
+          </div>
+          <div class="indent1">
+
+              <h3>Downloading Historical Data</h3>
+
+                <p>Every bank has different policies about how much historical data they let you have.</p>
+                <p>Some banks have up to seven years, and others only let you see back to the beginning of the month. Most allow you to see about a year&rsquo;s worth of transactions though, and there may be a way to get that from your bank - but the best way would be to call them and to ask how you could download your account history in a form that Microsoft Money or Quicken could import.</p>
+
+              <h3>No Upload Options</h3>
+
+                <p>Banks are added to the site without verifying whether they can offer the right formats. In general, this is because we don't have accounts with the banks, and that makes it hard to get information about what sort of downloads they support. We hope that people who add banks have read the information on our site and have confirmed that the bank supports one of the right formats, but we know this isn't always true.</p>
+                <p>In some cases, adding banks this way creates the false positives - it looks like we have the bank, but then it turns out there's no way to access it.</p>
+
+              <h3>Randomized Login Procedures</h3>
+
+                <p>There are a few banks that use random elements to create a more difficult login procedure. In some cases, the automatic uploader handles those logins, but those strategies currently make it impossible for Wesabe to login correctly with the Firefox uploader and the desktop uploader.</p>
+
+              <h3>Bank is Hard to Find</h3>
+
+                <p>There are a couple common reasons that a bank is hard to find or choose. If you type in the name of your bank, but don&rsquo;t select it in the list (either by clicking it or by hitting the tab key) the web interface won&rsquo;t select the appropriate bank.</p>
+                <p>The other possibility is that your bank or credit card isn&rsquo;t on the list. If that&rsquo;s the problem, you can <a href="https://www.wesabe.com/financial-institutions/new">add it yourself</a>.</p>
+                <p>You can add any financial institution that provides an <strong>export</strong> or <strong>download your accounts</strong> option in OFX, QFX, QIF, or OFC format. The bank will be immediately available for manual uploads.</p>
+
+              <h3>Trouble Logging In</h3>
+
+                <p>You may have trouble logging in if your browser is not set to accept cookies. For security reasons we have a cookie that logs you out if you haven&rsquo;t done anything for a while. When we can&rsquo;t set that cookie, it can be difficult to stay logged in.</p>
+                <h3>Trouble Connecting the Automatic Uploader to a Supported Bank</h3>
+
+                  <p>Sometimes the Automatic uploader has difficulty connecting to the bank. As a first step, it&rsquo;s often useful to clear your bank credentials from the uploader and then add them back again. Here&rsquo;s how:</p>
+                     <ol>
+                       <li>Click on the <strong>My Accounts</strong> tab to view your list of accounts.</li>
+                       <li>Click the <strong>Edit</strong> button at the top of the My Accounts panel. </li>
+                       <li>Click the edit button (the pencil icon) next to the account whose credentials you want to delete. An edit panel will open.</li>
+                       <li>In the edit panel, you should see an error message, with "To reset your bank credentials, click here." Click that link, and you'll be prompted to re-enter your credentials. <em>Note: Be careful not to click the <strong>Delete Account</strong> button - that will delete all your transactions and tags.</em></li>
+                     </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="bottom"><div class="right"></div></div>
+  </div>
+</div>
+<%= render :partial => 'page/help_sidebar' %>
+<div class="clear"></div>

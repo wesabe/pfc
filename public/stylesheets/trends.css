@@ -1,0 +1,157 @@
+#spending-summary #control-panel {
+  width:600px;
+  margin:0 0 18px 0;
+  height:36px;
+  clear:both;
+}
+
+#spending-summary #control-panel .button-group {
+  position: relative;
+  float: left;
+  margin: 0 20px;
+}
+
+#tags-list .tag {
+  padding: 10px 0;
+  background:#fff;
+}
+
+#tags-list .tag-name,
+#tags-list .tag-amount,
+#tags-list .tag-bar-amount {
+  cursor: pointer;
+}
+
+#tags-list {
+  clear:both;
+}
+
+#tags-list .tag-name {
+  float: left;
+  color: #999;
+  background:#fff;
+  font-weight: bold;
+  font-size: 0.8em;
+  width: 120px;
+  margin-top: 4px;
+  text-align: right;
+  overflow: hidden;
+}
+
+#tags-list.comparison .tag-name {
+  margin-top: 14px;
+  background:#fff;
+}
+
+#tags-list .tag-bar-amount {
+  margin-left: 130px;
+  margin-right: auto;
+  width:400px;
+  background-position: -200px 4px;
+}
+
+#tags-list.spending .tag-bar-amount.current {
+  background: url(/images/spending-summary/spending-bar-small-trans.png) no-repeat;
+}
+
+#tags-list.earnings .tag-bar-amount.current {
+  background: url(/images/spending-summary/earnings-bar-small-trans.png) no-repeat;
+}
+
+#tags-list .tag-bar-amount.comparison {
+  background: url(/images/spending-summary/comparison-bar-small-trans.png) no-repeat;
+}
+
+#tags-list .tag-amount {
+  top: -1px;
+  font-size: 0.7em;
+  font-style: italic;
+}
+
+#tags-list .tag-bar-amount.current > .tag-amount {
+  font-weight: bold;
+  color: #fff;
+}
+
+#tags-list .tag-bar-amount.comparison > .tag-amount {
+  color: #333;
+}
+
+#tags-list.spending .tag-bar-amount.current > .tag-amount.outside {
+  color: #39ABDB;
+}
+
+#tags-list.earnings .tag-bar-amount.current > .tag-amount.outside {
+  color: #66C487;
+}
+
+#tags-list .tag-bar-amount.comparison > .tag-amount.outside {
+  color: #666;
+}
+
+/*#tags-list .tag .tag-amount {
+  float:right;
+  top: 2px;
+  font-weight: bold;
+  font-size: 0.8em;
+  font-style: italic;
+  width: 65px;
+}*/
+
+#tags-list .tag-amount.over {
+ color: #F27778;
+}
+
+
+#no-tags {
+  margin-top: 1em;
+  padding: 1em;
+  text-align: center;
+  font-style: italic;
+  color: #999;
+}
+
+.toggle-button.multi-button {
+  width: 73px;
+}
+
+.toggle-button.multi-button .edit {
+  margin-top: -27px;
+  margin-right: -12px;
+  height:18px;
+}
+
+.toggle-button.multi-button span {
+  padding-right: 15px;
+}
+
+.toggle-button.multi-button .divider {
+  display:inline;
+  color: #ccc;
+}
+
+.toggle-button.multi-button.on .divider {
+  display:inline;
+  color: #999;
+}
+
+#date-range-dialog {
+  position: absolute;
+  right: -13px;
+  top: 31px;
+}
+
+#date-range-dialog input {
+  width:180px;
+}
+
+#date-range-dialog .calendar {
+  position: absolute;
+  right: 15px;
+  margin-top: 2px;
+  border: none;
+}
+
+#ui-datepicker-div {
+  z-index: 1002;
+}

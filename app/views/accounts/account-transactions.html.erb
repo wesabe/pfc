@@ -1,0 +1,218 @@
+<% content_for :header do %>
+  <%= stylesheet_link_manifest :accounts %>
+<% end %>
+<!--[if IE 6]>
+    <%= stylesheet_link_tag "ie6" %>
+<![endif]-->
+<% content_for :footer do -%>
+  <%= javascript_include_manifest :accounts %>
+<% end -%>
+
+<div id="right">
+  <div class="two-column" id="account-transactions">
+    <div class="top"><div class="right"><div class="grip"></div></div></div>
+    <div class="middle"><div class="right">
+    <div class="content">
+      <div class="module-header">
+        <h4>&nbsp;<span>&nbsp;</span></h4>
+      </div>
+
+      <%= render :partial => "accounts/investment_header" %>
+      <%= render :partial => "accounts/transactions_chart" %>
+
+      <div class="two-col-list header edit-transaction add-transaction" id="transactions-header">
+        <div class="edit" style="visibility:hidden">
+          <a id="add-transaction-link" class="tab"><span>Add transaction</span></a>
+        </div>
+        <ul class="date-range-detail">
+          <li class="left-arrow"></li>
+          <li class="prev-date-range">Earlier</li>
+          <li class="current-date-range"></li>
+          <li class="next-date-range">Later</li>
+          <li class="right-arrow"></li>
+        </ul>
+      </div>
+      <ul class="two-col-list" id="transactions">
+        <li class="loading-indicator">
+          <img src="/images/maincontent/animated-gifs/loading-dots-animated.gif" />
+        </li>
+
+        <li id="no-transactions" class="transactions-notice" style="display:none">
+          No transactions yet
+        </li>
+
+        <li class="investment-transaction template">
+          <div class="trade-date"></div>
+          <div class="security-info">
+            <div class="account-name"><a class="text-content">&nbsp;</a></div>
+            <span class="security-name"></span>
+            <span class="security-ticker"></span>
+            <div class="memo"></div>
+          </div>
+          <div class="unit-info">
+            <span class="units"></span> @ <span class="unit-price"></span>
+          </div>
+          <div class="total"></div>
+          <div class="clear"></div>
+        </li>
+
+        <li class="transaction template">
+          <div class="edit">
+            <img src="/images/maincontent/animated-gifs/uploading-spinner.gif" alt="Loading&hellip;" class="uploading-spinner">
+          </div>
+          <div class="transaction-date"></div>
+          <div class="merchant-info">
+            <div class="account-name"><a class="text-content">&nbsp;</a></div>
+            <div class="merchant-name">
+              <a class="text-content"></a>
+              <span class="check-number"></span>
+            </div>
+            <div class="merchant-tags">
+              <span class="merchant-tag template">
+                <a class="tag-name"></a><span class="split-amount"></span>
+              </span>
+            </div>
+          </div>
+          <div class="merchant-icons attachments">
+            <div class="hover-box r-align">
+              <div class="top"><div class="right">
+                <div class="attachments-list"></div>
+              </div></div>
+              <div class="bottom"><div class="right"></div></div>
+            </div>
+          </div>
+          <div class="merchant-icons notes on notes-on">
+            <div class="hover-box r-align">
+              <div class="top"><div class="right">
+                <p class="text-content"></p>
+              </div></div>
+              <div class="bottom"><div class="right"></div></div>
+            </div>
+          </div>
+          <div class="merchant-icons transfer on transfer-on">
+            <div class="hover-box r-align">
+              <div class="top"><div class="right">
+                <p>
+                  <a class="this-account"></a>
+                </p>
+                <p>
+                  <em>transfered <span class="from">from</span><span class="to" style="display:none">to</span></em>
+                </p>
+                <p>
+                  <a class="other-account"></a>
+                </p>
+              </div></div>
+              <div class="bottom"><div class="right"></div></div>
+            </div>
+          </div>
+          <div class="amount"></div>
+          <div class="balance"></div>
+          <div class="clear"></div>
+        </li>
+        <li class="transaction-edit template" style="display:none">
+          <div class="edit-dialog" style="display:none">
+            <div class="top"><div class="right">
+              <%- form_tag('/transactions', :class => "field edit-transaction", :method => :post) do -%>
+                <div class="merchant-icons transfer"></div>
+                <div class="amount-edit">
+                  <input type="text" name="amount" tabindex="3" autocomplete="off">
+                  <div class="amount-types">
+                    <label class="field-title">
+                      <input type="radio" name="amount_type" value="spent" checked="true">
+                      Spent
+                    </label>
+                    <label class="field-title">
+                      <input type="radio" name="amount_type" value="earned">
+                      Earned
+                    </label>
+                  </div>
+                </div>
+                <p class="amount" style="display:none;"></p>
+                <input class="date-edit" type="text" name="date_posted" tabindex="1">
+                <input class="name-edit" name="merchant_name" type="text" name="merchant-name" tabindex="2">
+
+                <div class="clear"></div>
+
+                <div class="edit-dialog-inset">
+                  <a href="" class="edit-dialog-inset-tab first-child on edit-dialog-inset-tab-first-child-on">
+                    <div class="merchant-icons tags"></div>
+                    <span class="tags">Tags</span>
+                  </a>
+                  <a href="" class="edit-dialog-inset-tab">
+                    <div class="merchant-icons notes"></div>
+                    <span class="notes">Notes</span>
+                  </a>
+                  <a href="" class="edit-dialog-inset-tab">
+                    <div class="merchant-icons attachments"></div>
+                    <span class="attachments">Attachments</span>
+                  </a>
+                  <a href="" class="edit-dialog-inset-tab">
+                    <div class="merchant-icons transfer"></div>
+                    <span class="transfer-details">Transfer Details</span>
+                  </a>
+                  <div class="top"><div class="right">
+                    <div class="inset-tab-text tags on">
+                      <input type="text" name="tags" tabindex="4">
+                      <a class="autotags-edit-link" style="display:none">Change automatic tags</a>
+                      <div class="suggested-tags" style="display:none"></div>
+                    </div>
+                    <div class="inset-tab-text notes">
+                      <textarea name="note" class="transaction-notes-edit"></textarea>
+                    </div>
+                    <div class="inset-tab-text attachments">
+                      <input id="attachments" class="input" type="file" name="file_0" alt="browse">
+                      <div class="attachments-list"></div>
+                    </div>
+                    <div class="inset-tab-text transfer-details">
+                      <a class="help" href="https://www.wesabe.com/help/user-manual/transfers" target="_blank"></a>
+                      <input type="hidden" name="is_transfer" value="0">
+                      <label class="checkbox">
+                        <input type="checkbox" name="is_transfer" value="1">
+                        <strong>Transfer:</strong>
+                        This transaction will not be counted toward tag totals, and will not appear in the spending summary, earnings summary, and it will not be shown in any of the graphs.
+                      </label>
+                      <p class="transfer-select" style="display:none"></p>
+                    </div>
+                  </div></div>
+                  <div class="bottom"><div class="right"></div></div>
+                </div>
+                <p class="error-message">Sorry, something went wrong. Try again?.</p>
+                <div class="clear"></div>
+              <%- end # form -%>
+              <div class="tab-content autotags-edit" style="display:none;"></div>
+            </div></div>
+            <div class="bottom"><div class="right">
+              <div class="buttons">
+                <a class="button green submit save"><span>Save</span></a>
+                <a class="button gry cancel"><span>Cancel</span></a>
+                <a class="button delete conf">Delete Transaction</a>
+              </div>
+              <div class="autotag-buttons">
+                <a class="button green autotags-save"><span>Save Tags</span></a>
+                <a class="button gry autotags-cancel"><span>Cancel</span></a>
+              </div>
+            </div></div>
+          </div>
+        </li>
+      </ul>
+      <div class="two-col-list footer" id="transaction-list-footer">
+        <ul class="date-range-detail">
+          <li class="left-arrow"></li>
+          <li class="prev-date-range">Earlier</li>
+          <li class="current-date-range"></li>
+          <li class="next-date-range">Later</li>
+          <li class="right-arrow"></li>
+        </ul>
+      </div>
+      <%= render :partial => 'accounts/export' %>
+      <div class="clear"></div>
+    </div>
+    </div></div>
+    <div class="bottom"><div class="right"></div></div>
+  </div>
+</div>
+<div id="left">
+  <%= render :partial => 'accounts/widget' %>
+  <%= render :partial => 'spending_summary/trends_summary_widget' %>
+  <%= render :partial => 'tags/widget' %>
+</div>

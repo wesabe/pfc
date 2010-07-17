@@ -1,0 +1,20 @@
+<div id="footer" class="transparent">
+  <div class="top"><div class="right"><div class="grip"></div></div></div>
+  <div class="middle"><div class="right">
+    <div class="content">
+      <ul>
+        <li><%= link_to "Wesabe Blog", "http://blog.wesabe.com" %></li>
+        <li><%= link_to "About", what_url %></li>
+        <li><%= link_to "Contact Us", "/page/contact" %></li>
+      </ul>
+      <div class="copyright">&copy;2006-<%= Time.now.year %> Wesabe, Inc.
+      <%= link_to "Terms of Use", "/page/terms" %></div>
+    </div>
+  </div></div>
+  <div class="bottom"><div class="right"></div></div>
+</div>
+<% if current_user -%>
+<script type="text/javascript" charset="utf-8">
+$(function(){ SessionTimer.start(); });
+</script>
+<% end -%>

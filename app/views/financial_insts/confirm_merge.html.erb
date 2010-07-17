@@ -1,0 +1,37 @@
+<%- set_page_title "Confirm FI Merge" -%>
+
+<%- content_for :header do -%>
+  <style type="text/css">
+    p { margin-left: 1em }
+    h2 { margin-left: 1em; margin-top: 1em }
+    div#merged_fi {float: left; width: 45%; margin: 2em, 0, 2em, 2em }
+    div#merged_into_fi {float: right; width: 45%; margin: 2em, 2em, 2em, 0 }
+    div#merged_fi, div#merged_into_fi {border: 1px dotted grey; padding: 1em;}
+    div#submit {margin-top: 16em; margin-left: 2em}
+  </style>
+<%- end -%>
+
+<div id="merged_fi">
+  <h1>Merge this...</h1>
+  <h2><%=h @financial_inst.name %></h2>
+  <p>ID: <%=  @financial_inst.wesabe_id + " (" + @financial_inst.id.to_s + ")"  %></p>
+  <p>Homepage: <%= @financial_inst.homepage_url ? auto_link(@financial_inst.homepage_url, :all, :target => '_blank') : 'n/a' %></p>
+  <p>Login page: <%= @financial_inst.login_url ? auto_link(@financial_inst.login_url, :all, :target => '_blank') : 'n/a' %></p>
+  <p>Number of accounts: <%=h @financial_inst.accounts.count %></p>
+</div>
+
+<div id="merged_into_fi">
+  <h1>...into this.</h1>
+  <h2><%=h @target_fi.name %></h2>
+  <p>ID: <%=  @target_fi.wesabe_id + " (" + @target_fi.id.to_s + ")"  %></p>
+  <p>Homepage: <%= @target_fi.homepage_url ? auto_link(@target_fi.homepage_url, :all, :target => '_blank') : 'n/a' %></p>
+  <p>Login page: <%= @target_fi.login_url ? auto_link(@target_fi.login_url, :all, :target => '_blank') : 'n/a' %></p>
+  <p>Number of accounts: <%=h @target_fi.accounts.count %></p>
+</div>
+
+
+<div id="submit">
+  <%- form_tag(merge_financial_inst_url(:target_fi_id => @target_fi.id, :id => @financial_inst)) do -%>
+    <%= submit_tag("Confirm Merge") %>
+  <%- end -%>
+</div>

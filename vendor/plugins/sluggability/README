@@ -1,0 +1,41 @@
+Sluggability
+============
+
+A leaner, meaner version of Chris Farms' acts_as_friendly_param:
+ <http://chrisfarms.googlecode.com/svn/rails/plugins/acts_as_friendly_param/>
+
+Only without all the filters and exceptions and moving parts.
+
+Example
+=======
+
+In your models:
+
+  class Person < ActiveRecord::Base
+    slug :name
+  end
+  
+  class Picture < ActiveRecord::Base
+    slug :filename
+  end
+
+In your view:
+
+  <%= link_to :action => "show", :person_id => @person, :id => @picture %> # /people/1-john-q-public/pictures/2-lulz-cat
+
+In your controller:
+
+  # GET  /people/1/pictures/2
+  def show
+    @person = Person.find(params[:person_id])
+    @picture = @person.pictures.find(params[:id])
+    return if wrong_slug?(:person_id => @person, :id => @picture)
+    
+    respond_to do |format|
+      format.html # show.html.erb
+      format.xml  { render :xml => @picture }
+    end
+  end
+
+
+Copyright (c) 2007 Wesabe, Inc., released under the MIT license

@@ -1,0 +1,35 @@
+<% set_page_title h(@user.display_name.gsub('&', 'and'))  %>
+<% stylesheet "user-profile" %>
+
+<div id="right">
+  <div class="two-column flat" id="public-page">
+    <div class="top"><div class="right"><div class="grip"></div></div></div>
+    <div class="middle"><div class="right">
+    <div class="content">
+      <div class="user-profile-header">
+        <div class="left-side">
+          <%= link_to image_tag(@user.image_path(:profile), :class => 'user-photo'), image_path(@user.image_path(:original)) %>
+        </div>
+        <div class="right-side user-details">
+          <% if current_user && @user.id == current_user.id %>
+           <p style="float:right;"><%= link_to 'Edit Your Profile',  edit_profile_url %>&nbsp;</p>
+           <% end %>
+          <h1 class="user-name"><%=h @user.display_name %></h1>
+         <% if @profile && @profile.website -%>
+         <p class="user-website"><%= link_to(h(@profile.website), @profile.website) %></p>
+         <% end -%>
+          <!-- details -->
+         <ul class="details">
+         <li>Joined <%= time_ago_in_words(@user.created_at) %> ago.</li>
+         <!-- <%# content_tag(:li, message_link(@user, "Send #{h(@user.display_name)} a message")) if enabled?(:groups) %> -->
+         </ul>
+        </div>
+      </div>
+      <div class="clear">&nbsp;</div>
+    </div>
+    </div></div>
+    <div class="bottom"><div class="right"></div></div>
+  </div>
+</div>
+<div id="left">
+</div>

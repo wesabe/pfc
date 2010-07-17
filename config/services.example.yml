@@ -1,0 +1,20 @@
+production:
+  brcm:
+    uri: 'http://services:80/v2/accounts'
+    auth_scheme: 'Wesabe'
+  grendel:
+    uri: 'http://services:81'
+
+development:
+  brcm:
+    uri: 'http://localhost:8080/v2/accounts'
+    auth_scheme: 'Wesabe'
+  grendel:
+    uri: 'http://localhost:8081'
+
+test:
+  brcm:
+    uri: 'http://services.test:8080/v2/accounts'
+    auth_scheme: 'Wesabe'
+  grendel:
+    uri: 'http://services.test:8081'

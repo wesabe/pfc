@@ -1,0 +1,47 @@
+<% set_page_title "Help - Tags" %>
+
+<div id="right">
+  <div class="two-column" id="public-page">
+    <div class="top"><div class="right"><div class="grip"></div></div></div>
+    <div class="middle"><div class="right">
+    <div class="content">
+      <div class="module-header">
+        <h1>Tags</h1>
+        <h5 class="intro">This section of the manual contains information about creating and using Tags.</h5>
+      </div>
+
+      <div class="indent1">
+
+            <h3>About Tagging</h3>
+
+              <p>Tags are deliberately flexible, so they can be used in a lot of different ways. They're also not exclusive, so you can put as many tags on your transaction as you'd like. Tagging each transaction lets you see your spending patterns and helps you create a budget. Wesabe helps you tag by learning your tagging behavior. You just need to tag your transactions the way you want, and if you end up using the same tags frequently for a particular transaction, Wesabe will add those tags to the <em>Automatic tags</em> field, and they will be applied automatically after that.</p>
+              <p>If you have a tag you know you want to apply every time, you can enter it in the Automatic tags field manually. Or, conversely, if Wesabe adds a tag to the Automatic tags field that you don&rsquo;t want to have applied each time, you can remove the tag from the Automatic tags field and it won&rsquo;t get applied automatically.</p>
+              <p>For example, if you go to Starbucks a lot, and you tag each transaction as &lsquo;coffee&rsquo;, we&rsquo;ll start doing it for you. If, on a particular transaction, you add another tag (say &lsquo;pastry&rsquo;), it will apply to that transaction only. If you didn&rsquo;t buy coffee at all, you can delete the coffee tag from the regular tag field, and it won&rsquo;t disappear from all the other transactions. If you decide you want to have all your transactions at Starbucks also labeled &lsquo;snack&rsquo; you can add that to the Automatic tags field and it will get automatically added to all your Starbucks transactions in the future.</p>
+
+            <div class="indent1nfsc">
+
+            <h3>Split Tags</h3>
+
+            <p>You can divide one transaction into multiple tags by using a colon after the tag followed by the amount of the associated transaction. For example consider a grocery transaction of $150.00, where you spent $130.00 and got $20.00 back in cash:</p>
+
+            <p> <strong>Tags</strong>: groceries:130 food:130 cashback:20 berkeley</p>
+            <p>When you look at your &lsquo;groceries&rsquo; or &lsquo;food&rsquo; tag pages, this transaction will be represented as $130.00. When you look at your &lsquo;cashback&rsquo; tag page, it will be shown as $20.00. On the &lsquo;berkeley&rsquo; tag page it will show up as $150.00. The number after the colon shows the amount you want applied to that tag. The numbers don&rsquo;t have to add up to the value of the transaction &#8211; you can allocate them however you want.</p>
+
+              <h4>Split Tag Auto-Completion</h4>
+
+              <p>When you&rsquo;re using split tags, you can take advantage of split tag auto-completion. Here's how it works:</p>
+              <ul>
+                <li> Enter a one-time tag with a split amount (for example, on a $10 transaction, enter "coffee:4")</li>
+                <li> Enter the next one-time tag, and then type a colon (for example, "food:")</li>
+                <li> The amount of the transaction minus the already tagged amount appears after the colon. This works with multiple tags as long as you stay under the total transaction amount.</li>
+              </ul>
+
+          </div>
+          </div>
+        </div>
+        </div></div>
+        <div class="bottom"><div class="right"></div></div>
+      </div>
+    </div>
+    <%= render :partial => 'page/help_sidebar' %>
+  <div class="clear"></div>

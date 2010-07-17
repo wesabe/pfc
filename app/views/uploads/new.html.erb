@@ -1,0 +1,71 @@
+<% javascript "uploads" %>
+<% javascript 'wesabe/views/shared/form' %>
+
+<div id="three-col-center">
+  <div class="two-column flat" id="upload-account">
+    <div class="top"><div class="right"><div class="grip"></div></div></div>
+    <div class="middle"><div class="right">
+    <div class="content">
+      <div class="module-header">
+        <h4>Getting Started</h4>
+      </div>
+      <div id="upload-index">
+        <!-- BEGIN steps -->
+        <ul class="upload-steps">
+          <li class="on">1. Find your bank</li>
+          <li>2. Connect to your bank</li>
+          <li>3. Select your accounts</li>
+        </ul>
+        <!-- END steps -->
+        <div id="color_body">
+          <div id="help">
+              <h6>Keep track of your cash expenses&hellip;</h6>
+              <a id="create-cash-account-button" class="button orange"><span>Create a Cash Account</span></a>
+              <div class="clear">&nbsp;</div>
+              <%= render :partial => "cash_account_form" %>
+          </div>
+          <div id="form_body">
+            <div id="live_search">
+
+              <label class="search_title" for="fi_choice">Live Search</label>
+              <%= text_field_tag 'fi_name', params[:fi_name], :id => 'fi_choice', :class => "big_text_field",
+                :autocomplete => 'off' %>
+              <%= javascript_tag %{$(function() { fi.init_autocompleter('fi_choice', 'results_list'); });} %>
+
+             <div id="search_results">
+                <%= form_tag choose_uploads_path, :id => "fi_chooser" do -%>
+                <%= hidden_field_tag :upload_type, params[:upload_type] %>
+                <%= hidden_field_tag :fi_name %>
+                <div id="live_results" style="display:none">
+                  <%= link_to_function "See Popular Banks Again", "$('#fi_choice').val('');$('#live_results').hide();$('#featured_fis').show();" %>
+                  <div class="fi_list">
+                    <div class="todo">Select your bank from the list.</div>
+                    <div id="results_list"></div>
+                  </div>
+                  <%= link_to_function "Can&rsquo;t Find Your Bank? Click Here".html_safe, new_bank_js_link('fi_choice'), :title => "Click Here to Add Your Bank to Wesabe", :id =>'add_bank' %>
+                </div><!-- END live results -->
+
+                <div id="featured_fis">
+                  <div class="fi_list">
+                    <div class="todo">&hellip;or select a popular bank.</div>
+                    <ul id="featured_fi_list">
+                    <%- @featured_fis.each do |fi| -%>
+                      <li><%= link_to_function fi, "fi.choose(this)",
+                        :href => choose_uploads_url(:fi_name => fi.name) %></li>
+                    <%- end -%>
+                    </ul>
+                  </div>
+                </div><!-- END popular fis -->
+                <%- end -%>
+              </div><!-- END search results -->
+            </div><!-- END live_search -->
+            </div>   <!-- END form_body -->
+            <div class="clear">&nbsp;</div>
+        </div><!-- END color_body -->
+        <div style="clear">&nbsp;</div>
+      </div>
+    </div>
+  </div></div>
+  <div class="bottom"><div class="right"></div></div>
+  </div>
+</div>

@@ -1,0 +1,35 @@
+---
+- name: CREDIT
+  display_name: Generic credit
+- name: DEBIT
+  display_name: Generic debit
+- name: INT
+  display_name: Interest earned or paid
+- name: DIV
+  display_name: Dividend
+- name: FEE
+  display_name: Bank fee
+- name: SRVCHG
+  display_name: Service charge
+- name: DEP
+  display_name: Deposit
+- name: ATM
+  display_name: ATM debit or credit
+- name: POS
+  display_name: Point of sale debit or credit
+- name: XFER
+  display_name: Transfer
+- name: CHECK
+  display_name: Check
+- name: PAYMENT
+  display_name: Electronic payment
+- name: CASH
+  display_name: Cash withdrawal
+- name: DIRECTDEP
+  display_name: Direct deposit
+- name: DIRECTDEBIT
+  display_name: Merchant initiated debit
+- name: REPEATPMT
+  display_name: Repeating payment/standing order
+- name: OTHER
+  display_name: Other

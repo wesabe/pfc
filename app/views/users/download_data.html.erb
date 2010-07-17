@@ -1,0 +1,24 @@
+<% set_page_title 'Download My Data' %>
+
+<div id="right">
+  <div class="two-column" id="public-page">
+    <div class="top"><div class="right"><div class="grip"></div></div></div>
+    <div class="middle"><div class="right">
+      <div class="content">
+        <div class="module-header"><h1>Download My Data</h1></div>
+        <div class="form-info">
+          <p class="large">At Wesabe, you can always download all your data &mdash; your data belongs to you.<p>
+            <p class="large">Download your transactions as
+          <%= link_to "XML", formatted_accounts_with_txactions_url(:format => 'xml') %> or
+          <%= link_to "CSV", formatted_txactions_url(:format => "csv") %>
+          </p>
+      </div>
+    </div>
+    </div></div>
+    <div class="bottom"><div class="right"></div></div>
+  </div>
+</div>
+<div id="left">
+  <%= render :partial => "user/sidebar" %>
+  <%= render :partial => "connections/sidebar" %>
+</div>

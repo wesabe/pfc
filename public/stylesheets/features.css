@@ -1,0 +1,13 @@
+/* p { line-height: 1.5em; } */
+table { width: 100%; border-collapse: collapse;}
+table td { padding: 0.25em;}
+table tr.even { background-color: #f7f7ff;}
+table tr td:first-child { vertical-align:top;}
+
+div.footnote { font-size: small; }
+
+.feature-toggle { float:right; border:1px solid #95CBC6; margin:0 15px 30px; padding:15px; background-color: #D6EDEA; text-align: center; width:30%; }
+  .feature-toggle a { display: block; }
+  .feature-toggle a.signup { font-weight: bold; }
+  .feature-toggle a.cancel { font-size: smaller; color: #999; }
+ul#known-issues { margin: 1em 2em 2em; }

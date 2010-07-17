@@ -1,0 +1,36 @@
+<% set_page_title "Help - Duplicate Transactions or Duplicate Accounts" %>
+
+<div id="right">
+  <div class="two-column" id="public-page">
+    <div class="top"><div class="right"><div class="grip"></div></div></div>
+    <div class="middle">
+      <div class="right">
+        <div class="content">
+          <div class="module-header">
+            <h1>Duplicate Transactions or Duplicate Accounts</h1>
+            <h5 class="intro">This section of the manual contains troubleshooting ideas for dealing with duplicate accounts or transactions.</h5>
+          </div>
+          <div class="indent1">
+              <h3>Duplicate Accounts</h3>
+
+                <p>We identify each account using a combination of user id, bank name, and the last four digits of the account number. Any time an account number changes on an existing account, Wesabe identifies the account with the new number as a new account. For example, if your bank re-issues a lost or stolen credit card (which usually has a different number) Wesabe will show a new credit card account.</p>
+                <p>You might also see a duplicate account after switching uploaders. The Automatic uploader can, in certain circumstances, read the last four digits of your account number a little differently. </p>
+                <p>In most cases we can merge duplicate accounts. If you'd like us to merge the accounts for you, please go to <a href="https://www.wesabe.com/support_requests/new">Request Support</a> and click the <strong>Create Support Key</strong> button. That will generate a support key that you can send to us, and it will let see the accounts that need to be merged (our privacy wall makes that impossible otherwise).</p>
+
+              <h3>Duplicate Transactions</h3>
+
+              <p>We make every effort to avoid showing you duplicated transactions, but every once in a while it does happen. If you do ever see a duplicate transaction, you can simply delete it. To delete a transaction, do the following:</p>
+              <ol>
+                  <li>Click on the <strong>My Accounts</strong> tab to view your list of accounts.</li>
+                  <li>Click on the account that has the transaction you want to delete.</li>
+                  <li>In the Transaction panel, click the edit button (the pencil icon). You may need to hover over the transaction before the edit button appears. An edit panel will open.</li>
+                  <li>In the edit panel, click <strong>Delete Transaction</strong>.</li>
+              </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="bottom"><div class="right"></div></div>
+  </div>
+</div>
+<%= render :partial => 'page/help_sidebar' %>

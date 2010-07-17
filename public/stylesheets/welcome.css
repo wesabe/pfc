@@ -1,0 +1,39 @@
+#welcome .module-header {
+  padding-bottom:0;
+}
+
+#welcome .module-header h4 {
+  color:#C3C2BE;
+  margin-bottom:0;
+}
+
+#welcome-header {
+  background:transparent url(/images/welcome/welcome-banner.png) no-repeat scroll;
+  color:#999;
+  font-size:0.85em;
+  font-weight:normal;
+  font-family:georgia;
+  margin:0 10px;
+  padding:115px 70px 0;
+  text-align:center;
+}
+
+#welcome-start {
+  background:transparent url(/images/welcome/security-banner.png) no-repeat scroll;
+  padding:30px;
+}
+
+.start-button {
+  background:transparent url(/images/welcome/start-button-trans.png) no-repeat scroll;
+  width:183px;
+  height:36px;
+  margin:70px auto 0;
+}
+
+.start-button:hover {
+  background-position:0 -35px;
+}
+
+.start-button:active{
+  background-position:0 -71px;
+}

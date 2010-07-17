@@ -1,0 +1,5 @@
+<div id="second_error">
+  <h4class="error_title" style="color:#999;">Sorry, that didn&rsquo;t work either.</h4>
+  <%= link_to image_tag("banner-try_another.png", :alt => "Try to connect another way. We’ll tell you what to do on the next page."), manual_uploads_path(:id => @fi) %>
+  <%= link_to content_tag(:span, "Continue"), manual_upload_path(:id => @fi), :class => 'button green' %>
+</div>

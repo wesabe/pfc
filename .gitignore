@@ -1,0 +1,13 @@
+db/development_structure.sql
+db/production_structure.sql
+config/initializers/99_local_env.rb
+log
+tmp
+doc/app
+.DS_Store
+public/images/wesabeans_montage.jpg
+public/images/group_avatars
+public/images/user_photos
+config/initializers/99_local_env.rb
+db/development_structure.sql
+.bundle

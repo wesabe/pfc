@@ -1,0 +1,5 @@
+<%-
+response = {:error => @message + (job ? " That job is included for reference." : "")}
+response[:job] = @job.presenter if @job
+-%>
+<%= response.to_json %>

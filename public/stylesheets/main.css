@@ -1,0 +1,2399 @@
+/* typography  1em=16px at 100% font */
+body {
+  font-size: 16px;
+  color:#363630;
+  letter-spacing: 0.02em;
+  background: #afa194 url(/images/bg.gif) repeat-x;
+  margin: 0 auto 1em;
+}
+
+.template {
+  display: none;
+}
+
+a {
+  color: #49989C;
+  text-decoration: none;
+  cursor:pointer;
+  cursor:hand;
+  border:none;
+  outline:none;
+}
+a:hover {
+  color: #399;
+  text-decoration: underline;
+}
+a:active {
+  border:none;
+  outline:none;
+  color:#365655;
+}
+
+ul {
+  list-style-image:none;
+  list-style-position:outside;
+  list-style-type:none;
+  margin:0;
+  padding:0;
+}
+
+h1.xlarge, h1.large, h1, h2, h3, h4, h5, h6, p.large, p, p.small, p.xsmall {
+  display:block;
+  font-style:normal;
+  font-weight:normal;
+  text-transform:none;
+  line-height:1.5em;
+  margin-bottom:0.56em;
+  height:auto;
+}
+
+h1.xlarge, h1.large, h1, h2, h3, h4 {
+  font-family: Helvetica, Arial, sans-serif;
+  color:#807970;
+}
+
+h1.xlarge, h1.large  {
+  color:#9B9895;
+}
+
+h4, h5, h6 {
+  color:#363630;
+  font-weight:bold;
+}
+
+h1.large {
+  font-size: 2.75em;
+  letter-spacing:-0.04em;
+  line-height: 1.2em;
+  font-family:georgia;
+  color:#9B9895;
+}
+h1 {/*use this for headers of the perihpheral pages and help pages*/
+  font-size: 2.5em;
+  letter-spacing: -0.03em;
+  line-height: 1.5em;
+  margin-bottom:0.25em;
+  font-family:georgia;
+  color:#58B5B2;
+}
+h2 {
+font-size:1.75em;
+letter-spacing:-0.015em;
+}
+h3 {
+font-size:1.5em;
+letter-spacing:-0.01em;
+}
+h4 {
+font-size:1.125em;
+letter-spacing:0em;
+}
+h5 {
+font-size:1em;
+letter-spacing:0.015em;
+}
+h6 {
+font-size:0.875em;
+letter-spacing:0.02em;
+}
+p.large {
+font-size:0.875em;
+letter-spacing:0.025em;
+}
+p {
+font-size:0.75em;
+}
+p.small {
+font-size:0.687em;
+letter-spacing:0.035em;
+}
+p.xsmall {
+font-size:0.625em;
+letter-spacing:0.035em;
+}
+
+.intro {
+  color: #999;
+}
+
+/* print-only style - to be used for elements that will remain hidden until printed
+------------------------------------------*/
+
+.print-only {
+  display:none;
+}
+
+/** Header -----------------------------------------------------------------------------------------------------------------------------------------------**/
+.container {
+  width:1042px;
+  background:transparent url(/images/header/header-bg-trans.png) scroll no-repeat 0 0;
+}
+
+.container.two-col {
+  width:680px;
+  background:transparent url(/images/header/2col-header-bg-trans.png) scroll no-repeat top left;
+}
+
+#header {
+  margin: 0 auto;
+  padding: 1.2em 2.875em 0.9em;
+
+}
+
+#header-top {
+  margin: 0 2em;
+}
+
+#logo {
+  display: inline;
+  float: left;
+  width: 367px;
+  height: 36px;
+  background: url(/images/header/logo.png) no-repeat 0 0;
+  text-indent: -1000em;
+}
+
+#logo:hover {
+  background-position: 0px -36px;
+}
+#user-nav {
+  float: right;
+  font-size: 75%;
+  margin: 16px 0 0 0;
+}
+
+#user-nav a {
+  display: inline;
+}
+
+/** Global Navigation **/
+
+#global-nav {
+  background: transparent url(/images/header/global-nav-bg-trans.png) no-repeat 0 0;
+  margin: 1em auto 0;
+  height: 36px;
+}
+
+#global-nav ul {
+  margin: 0;
+  list-style: none;
+}
+
+#secondary-nav li {
+  position:relative;
+}
+
+#global-nav li {
+  float: left;
+  z-index:50;
+}
+
+#global-nav a {
+  display: block;
+}
+
+/* The top-level options like My Accounts */
+#global-nav ul li a.menu-header {
+  height: 36px;
+  background-image: url(/images/header/global-nav-trans.png);
+  background-repeat: no-repeat;
+  text-indent: -1000em;
+  position: relative;
+  z-index: 2;
+}
+
+#primary-nav {
+  float: left;
+}
+
+#nav-dashboard a.menu-header {
+  width: 40px;
+  background-position: 0px 0px;
+}
+#nav-dashboard.current-tab a.menu-header {
+  background-position: 0px -72px;
+}
+#nav-dashboard a.menu-header:hover, #nav-dashboard.current-tab a.menu-header:hover, #nav-dashboard a.menu-header.menu-on {
+  background-position: 0px -36px;
+}
+
+#nav-accounts a.menu-header {
+  width: 127px;
+  background-position:-40px 0;
+}
+#nav-accounts.current-tab a.menu-header {
+ background-position: -40px -72px;
+}
+#nav-accounts a.menu-header.menu-on,
+#nav-accounts.current-tab a.menu-header.menu-on {
+  background-position: -40px -36px;
+}
+
+/*temporary "more" tab to hold goals and tips for now --------------------------------*/
+#global-nav ul li#nav-more a.menu-header {
+  width: 100px;
+  background-image: url(/images/header/global-nav-more-trans.png);
+}
+
+#global-nav ul li#nav-more.current-tab a.menu-header {
+  background-position: 0 -72px;
+}
+
+#global-nav ul li#nav-more a.menu-header:hover, #global-nav ul li#nav-more a.menu-header.menu-on {
+  background-position: 0 -36px;
+}
+
+/*end of more tab styles ---------------------------*/
+
+#secondary-nav {
+  float: right;
+}
+
+#nav-help a.menu-header {
+  width:59px;background-position: -464px 0px;
+}
+#nav-help.current-tab a.menu-header {
+  background-position: -464px -72px;
+}
+#nav-help a.menu-header:hover, #nav-help.current-tab a.menu-header:hover, #nav-help a.menu-header.menu-on {
+  background-position: -464px -36px;
+}
+
+#nav-inbox a.menu-header {
+  width: 65px;background-position: -523px 0px;
+}
+#nav-inbox.current-tab a.menu-header {
+  background-position: -523px -72px;
+}
+#nav-inbox.new a.menu-header {
+  background-position: -523px -108px;
+}
+#nav-inbox a.menu-header:hover, #nav-inbox.current-tab a.menu-header:hover, #nav-inbox a.menu-header.menu-on {
+  background-position: -523px -36px;
+}
+
+/*styles for when theres new messages in your inbox -------------------------------*/
+#new-messages,
+.current-tab:hover #new-messages {
+  position:absolute;
+  right: 0;
+  font-weight:bold;
+  color:#fff;
+  margin:-7px 5px 0 0;
+  padding:0 7px 5px;
+  background:transparent url(/images/header/newmessages-globalnav-right-trans.png) no-repeat top right;
+  text-indent:0;
+  z-index:5;
+}
+
+#new-messages #message-count,
+.current-tab:hover #new-messages #message-count {
+ float:left;
+ background:transparent url(/images/header/newmessages-globalnav-left-trans.png) no-repeat top left;
+ padding:0 0 5px 7px;
+}
+
+#new-messages a,
+#new-messages a:hover,
+.current-tab:hover #new-messages a,
+.current-tab:hover #new-messages a:hover {
+  color:#fff;
+  text-decoration:none;
+}
+
+.current-tab #new-messages {
+  background:transparent url(/images/header/newmessages-on-globalnav-right-trans.png) no-repeat top right;
+}
+
+.current-tab #new-messages #message-count {
+  background:transparent url(/images/header/newmessages-on-globalnav-left-trans.png) no-repeat top left;
+}
+
+.current-tab #new-messages a,
+.current-tab #new-messages a:hover {
+  color:#2D8080;
+  text-decoration:none;
+}
+
+/*end of styles for new messages*/
+
+#nav-profile a.menu-header {
+  width: 96px;background-position: -588px 0px;
+}
+#nav-profile.current-tab a.menu-header {
+  background-position: -588px -72px;
+}
+#nav-profile a.menu-header:hover, #nav-profile.current-tab a.menu-header:hover, #nav-profile a.menu-header.menu-on {
+  background-position: -588px -36px;
+}
+
+#nav-trends a.menu-header {
+  width: 96px;background-position: -725px 0px;
+}
+#nav-trends.current-tab a.menu-header {
+  background-position: -725px -72px;
+}
+#nav-trends a.menu-header:hover, #nav-trends.current-tab a.menu-header:hover, #nav-trends a.menu-header.menu-on {
+  background-position: -725px -36px;
+}
+
+/* Apple-style Searchbox ---------------------------------------------------------------*/
+#nav-search {
+  padding: 0 10px;
+}
+#searchform {
+  background: transparent url(/images/header/global-nav-bg-trans.png) no-repeat middle right;
+}
+#searchform fieldset {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+#searchform label {
+  color: #999;
+  display: none;
+}
+#searchform input {
+  width: 130px;
+  color: #222;
+}
+/* only seen by Safari, since only it supports type "search" */
+#searchform input[type="search"] {
+  margin-top: 8px;
+}
+#searchform #submitquery {
+  display: none;
+}
+
+/* Submenus */
+
+#global-nav li ul {
+  position: absolute;
+  left: -999em;
+}
+#global-nav li ul.menu-on {
+  left: auto;
+}
+#global-nav li ul li {
+  float: none;
+  padding-left: 0.5em;
+}
+#global-nav li ul li a {
+  display: block;
+  width: 12em;
+  color: #999;
+  padding: 0.3em 0.2em;
+}
+#global-nav li ul li a:hover {
+  display: block;
+  text-decoration: none;
+  background: #5F9F9B;
+  color: #fff;
+}
+#global-nav li ul li a:active {
+  background: #426D6D;
+  color: #D7EEEB;
+}
+
+/* pretty sub menus */
+
+#global-nav li ul {
+  margin-left: -13px;
+  padding-left: 19px;
+  background: transparent url(/images/header/menu-bg-left-trans.png) no-repeat left bottom;
+  margin-top: 0px;
+  z-index:3;
+}
+#global-nav .menu-top {
+  width: 100%;
+  height: 19px;
+  margin-top: -14px;
+  background: transparent url(/images/header/menu-bg-top-trans.png) no-repeat right bottom;
+}
+#global-nav .menu-content {
+  font-size:0.74em;
+  line-height: 1.1em;
+  background: transparent url(/images/header/menu-bg-trans.png) no-repeat right bottom;
+  padding: 0 2.5em 2.5em 0.8em;
+}
+#global-nav .menu-column {
+  float: left;
+  margin-top: 0.7em;
+}
+#global-nav .menu-column.last {
+  margin-left: 0.7em;
+}
+#global-nav .menu-column.last li {
+  width: auto;
+}
+#global-nav li.menu-head {
+  font-size: 110%;
+  color: #807970;
+  letter-spacing: 0.03em;
+  padding: 1.2em 0.2em 0.2em;
+  font-weight: bold;
+}
+
+#global-nav li.menu-head > a {
+  color: #807970;
+}
+
+#global-nav .menu-head:first-child {
+  padding-top:0.5em;
+}
+#global-nav .menu-subhead {
+  color: #999;
+  font-style: italic;
+  font-weight: bold;
+  margin-top: 0.5em;
+}
+#global-nav .menu-subhead.first {
+  margin-top: 0;
+}
+#nav-help:hover ul,
+#nav-profile:hover ul,
+#nav-inbox:hover ul {
+  position:absolute;
+  right:-13px;
+}
+
+/** other shared navs **/
+
+#date-range-nav.date-range-detail {
+  width:100%;
+  white-space:nowrap;
+}
+
+#date-range-nav.date-range-detail li a {
+  color:#948c8c;
+  text-decoration:none;
+}
+
+#date-range-nav .dividers {
+  width:33%;
+  float:left;
+}
+
+/** Main body **/
+
+#maincontent {
+  padding:0 2.56em;
+}
+
+#left {
+  float:left;
+  position:relative;
+}
+#right {
+  float:right;
+  position:relative;
+  width:640px;
+}
+#center {
+  padding:0 20px;
+  margin:0 auto;
+}
+
+#three-col-center {
+  width:auto;
+  padding-left:17%;
+}
+
+/*form styles --------------------------------------------------------------------------------------------------- */
+
+fieldset {clear:both; border:none; padding:1.4em; margin:0;}
+legend {padding: 0 0 1.286em; font-size:0.8em; font-weight:bold; color:#C3C2BE;}
+fieldset fieldset legend {padding: 0; font-size: 0.75em;}
+* html legend {margin-left: -7px;} /* ie6 */
+*+html legend {margin-left: -7px;} /* ie7 */
+
+form .field, form .buttons {clear: both; margin: 0 0 0.3em;}
+form .field label {display: block;}
+form ul.fields {margin: 0 0 1.5em; padding: 0;}
+form ul.fields li {list-style-type: none; margin: 0;}
+form ul.inline li, form ul.inline label {display: inline;}
+form ul.inline li {padding: 0 .75em 0 0;}
+
+input.radio, input.checkbox {vertical-align:middle;}
+label.field-title, button, input.submit, input.image {color:#6D645C; font-size:12px; font-style:normal; font-weight:bold;}
+label.field-title span {color:#948c8c; font-weight:normal;font-style:italic;padding-left:10px;}
+* html input.radio, * html input.checkbox {vertical-align: middle;} /* ie6 */
+*+html input.radio, *+html input.checkbox {vertical-align: middle;} /* ie7 */
+
+textarea {
+  overflow: auto;
+  height: 108px;
+  width: 400px;
+}
+input[type=text], input[type=password], textarea, select {margin:0; font:0.9em; vertical-align: baseline; width:230px;}
+input[type=text], input[type=password], textarea {border:1px solid #CCC; padding:2px;}
+input[type=text].error,input[type=password].error {border:1px solid #F47878; color:#666; padding:2px;}
+
+*[disabled] { color: #ccc; font-style: italic;}
+
+.error-message {
+  color:#F47878;
+  font-size:0.687em;
+  letter-spacing:0.035em;
+  font-style:italic;
+  margin-bottom:0;
+  }
+
+.fieldWithErrors input,
+.fieldWithErrors select {
+  border: 1px solid #F47878;
+}
+
+.field-subtext {
+  font-size:0.687em;
+  letter-spacing:0.035em;
+  font-style:italic;
+}
+
+.two-col-centered h6,
+#public-page .two-col-centered h6 {
+  padding:0 15px;
+  font-size:14px;
+  margin-top:0;
+  font-style:italic;
+  color:#948C8C;
+}
+
+.two-col-centered h6.centered {
+  text-align:center;
+}
+
+.two-col-centered .field,
+.two-col-centered .header {
+  margin-left:170px;
+}
+
+.two-col-centered .button {
+  clear:both;
+  padding-left:170px;
+  margin-top:12px;
+}
+
+.fading-label .field {
+  position:relative;
+}
+
+.fading-label .field label {
+  color:#928B85;
+  position:absolute;
+  top:4px;
+  left:4px;
+  font-weight:normal;
+}
+
+.fading-label .field input {
+  background-color:transparent;
+}
+
+.tab-background {
+  background:transparent url(/images/homepage/tab-background-signup-trans.png) no-repeat scroll top left;
+  padding:6px 0;
+}
+
+
+.two-col-centered-message {
+  text-align:center;
+  color:#999;
+  clear:both;
+  padding:20px 0 10px 0;
+  margin:0;
+}
+
+.form-info {
+  color:#999;
+  padding:10px 20px;
+}
+
+/* fluid-width modules for maincontent - the max-width is 1600px -------------------------------------------------------------------------------------*/
+
+.one-column {
+  width:320px;
+}
+.two-column {
+  width:640px;
+}
+.three-column {
+ width:960px;
+}
+
+.close { /*this is the close icon found at the top right of a module to close it*/
+  margin: -10px;
+}
+
+/*default white modules --------------------------------------------------------------------------------------------------------*/
+
+.top {
+  background:transparent url(/images/maincontent/modules/tl-trans.png) no-repeat scroll left top;
+  clear:both;
+  padding:0;
+  margin:0;
+  width:100%;
+}
+.top .right {
+  background:transparent url(/images/maincontent/modules/tr-trans.png) no-repeat scroll right top;
+  height:15px;
+  margin-left:15px;
+}
+.middle {
+  background:transparent url(/images/maincontent/modules/ml-trans.png) repeat-y scroll left center;
+  clear:both;
+  width:100%;
+}
+.middle .right {
+  background:transparent url(/images/maincontent/modules/mr-trans.png) repeat-y scroll right center;
+  margin-left:15px;
+}
+.middle .right .content {
+  margin:0 5px 0 -10px;
+  padding:0;
+}
+.bottom {
+  background:transparent url(/images/maincontent/modules/bl-trans.png) no-repeat scroll left bottom;
+  clear:both;
+  padding:0;
+  width:100%;
+}
+.bottom .right {
+  background:transparent url(/images/maincontent/modules/br-trans.png) no-repeat scroll right bottom;
+  height:15px;
+  margin-left:15px;
+}
+
+/* added style to allow the grip to appear for movable modules -----*/
+
+.movable .grip {
+  background:transparent url(/images/maincontent/modules/grip-trans.png) no-repeat scroll left top;
+  clear:both;
+  margin:auto;
+  height:15px;
+  width:75px;
+  cursor: move;
+}
+
+/*this is the for the footer -------------------------------------------------------------------*/
+
+.transparent .top {
+  background:transparent url(/images/maincontent/modules/tl-transparent-trans.png) no-repeat scroll left top;
+  clear:both;
+  padding:0;
+  margin:0;
+  width:100%;
+}
+.transparent .top .right {
+  background:transparent url(/images/maincontent/modules/tr-transparent-trans.png) no-repeat scroll right top;
+  height:15px;
+  margin-left:15px;
+}
+.transparent .middle {
+  background:transparent url(/images/maincontent/modules/ml-transparent-trans.png) repeat-y scroll left center;
+  clear:both;
+  width:100%;
+}
+.transparent .middle .right {
+  background:transparent url(/images/maincontent/modules/mr-transparent-trans.png) repeat-y scroll right center;
+  margin-left:15px;
+}
+.transparent .middle .right .content {
+  margin:0 5px 0 -10px;
+  padding:0 1px;
+}
+.transparent .bottom {
+  background:transparent url(/images/maincontent/modules/bl-transparent-trans.png) no-repeat scroll left bottom;
+  clear:both;
+  padding:0;
+  width:100%;
+}
+.transparent .bottom .right {
+  background:transparent url(/images/maincontent/modules/br-transparent-trans.png) no-repeat scroll right bottom;
+  height:15px;
+  margin-left:15px;
+}
+
+/* edit dialog box styles ----------------------------------------------------------------------------*/
+
+.edit-dialog {
+  position:absolute;
+  font-family:'lucida grande', helvetica, sans-serif;
+}
+
+.edit-dialog .top {
+  background:transparent url(/images/maincontent/modules/tl-edit-dialog-trans.png) no-repeat scroll left top;
+  clear:both;
+  padding:0;
+  margin:0;
+  width:100%;
+}
+
+.edit-dialog .top .right {
+  background:transparent url(/images/maincontent/modules/tr-edit-dialog-trans.png) no-repeat scroll right top;
+  padding:15px 8px 0 0;
+  min-height:25px;
+  margin-left:28px;
+  padding-bottom:10px;
+  height:100%;
+  max-width:650px;
+  max-height:500px;
+  clear:both;
+}
+
+.edit-dialog .bottom {
+  background:transparent url(/images/maincontent/modules/bl-edit-dialog-trans.png) no-repeat scroll left bottom;
+  clear:both;
+  padding:0;
+  width:100%;
+}
+
+.edit-dialog .bottom .right {
+  background:transparent url(/images/maincontent/modules/br-edit-dialog-trans.png) no-repeat scroll right bottom;
+  height:56px;
+  padding-right:18px;
+  margin-left:28px;
+}
+
+
+/*bottom-ralign edit-dialog styles -----------------------------------------------------------------------------*/
+
+.bottom-ralign .top {
+  background:transparent url(/images/maincontent/modules/tl-edit-dialog-bottom-ralign-trans.png) no-repeat scroll -15px 0;
+  clear:both;
+  padding:0;
+  margin:0;
+  width:100%;
+}
+
+.bottom-ralign .top .right {
+  background:transparent url(/images/maincontent/modules/tr-edit-dialog-trans.png) no-repeat scroll right top;
+  padding:20px 13px 0 5px;
+  min-height:25px;
+  margin-left:13px;
+  padding-bottom:10px;
+  height:100%;
+  max-width:650px;
+  max-height:500px;
+  clear:both;
+}
+
+.bottom-ralign .bottom {
+  background:transparent url(/images/maincontent/modules/bl-edit-dialog-trans.png) no-repeat scroll -15px 0;
+  clear:both;
+  padding:0;
+  width:100%;
+}
+
+.bottom-ralign .bottom .right {
+  background:transparent url(/images/maincontent/modules/br-edit-dialog-bottom-ralign-trans.png) no-repeat scroll right bottom;
+  height:70px;
+  padding-right:18px;
+  margin-left:13px;
+}
+
+/* generic styles for the edit-dialog ------*/
+
+.edit-dialog a.button {
+  float:right;
+  margin-top:13px;
+}
+
+.edit-dialog a.button span {
+  min-width:80px;
+  text-align:center;
+}
+
+/*edit-dialog with a right-aligned pointer ----------------------------------------------------*/
+.edit-dialog.r-align .top {
+  background:transparent url(/images/maincontent/modules/tl-edit-dialog-ralign-trans.png) no-repeat scroll left top;
+  clear:both;
+  padding:0;
+  margin:0;
+  width:100%;
+}
+
+.edit-dialog.r-align .top .right {
+  background:transparent url(/images/maincontent/modules/tr-edit-dialog-ralign-trans.png) no-repeat scroll right top;
+  min-height:30px;
+  padding:15px 35px 0 5px;
+  margin-left:15px;
+  padding-bottom:10px;
+  height:100%;
+  max-width:950px;
+  max-height:950px;
+  clear:both;
+}
+
+.edit-dialog.r-align .bottom {
+  background-position:-16px 0;
+}
+
+.edit-dialog.r-align .bottom .right {
+  margin-right:15px;
+  margin-left:12px;
+}
+
+/*edit dialog with a bottom left aligned pointer ---------------------------------------------------------------*/
+
+.edit-dialog.left-b-align .top {
+  background:transparent url(/images/maincontent/modules/tl-edit-dialog-left-balign-trans.png) no-repeat scroll left top;
+}
+
+.edit-dialog.left-b-align .top .right {
+  padding-left:10px;
+}
+
+.edit-dialog.left-b-align .bottom {
+  background:transparent url(/images/maincontent/modules/bl-edit-dialog-left-balign-trans.png) no-repeat scroll bottom left;
+}
+
+/*edit dialog top right aligned pointer -----------------------------------------------------------------------*/
+
+.edit-dialog.top-r-align .top {
+  background:transparent url(/images/maincontent/modules/tl-edit-box-right-align-trans.png) no-repeat scroll left 12px;
+  clear:both;
+  padding:0;
+  margin:0;
+  width:100%;
+}
+
+.edit-dialog.top-r-align .top .right {
+  background:transparent url(/images/maincontent/modules/tr-edit-box-top-right-align-trans.png) no-repeat scroll top right;
+  min-height:30px;
+  padding:35px 22px 0 5px;
+  margin-left:15px;
+  padding-bottom:10px;
+  height:100%;
+  max-width:950px;
+  max-height:950px;
+  clear:both;
+}
+
+.edit-dialog.top-r-align .bottom {
+  background-position:-14px 0;
+}
+
+.edit-dialog.top-r-align .bottom .right {
+  margin-left:14px;
+  margin-right:2px;
+}
+
+/*edit dialog inset styles ------------------------------------------------------------------------------------*/
+
+  /*edit dialog inset tab styles -----------------------------------------------------------------------------*/
+
+  a.edit-dialog-inset-tab {
+    background:transparent;
+    color:#6D645C;
+    float:left;
+    font-size:11px;
+    height:29px;
+    margin:0 0 -5px 0;
+    padding:0 10px 0 0; /*sliding doors padding*/
+    text-decoration:none;
+  }
+
+  a.edit-dialog-inset-tab span {
+    background:transparent;
+    display:block;
+    line-height:12px;
+    padding:6px 0 8px 10px;
+  }
+
+
+.edit-dialog a.edit-dialog-inset-tab.on {
+    background:transparent url(/images/maincontent/buttons/edit-dialog-inset-tab-a.gif) no-repeat scroll right top;
+    color: #000000;
+  }
+
+.edit-dialog a.edit-dialog-inset-tab.on span {
+    background:transparent url(/images/maincontent/buttons/edit-dialog-inset-tab-span.gif) no-repeat scroll left top;
+  }
+
+.edit-dialog a.edit-dialog-inset-tab.first-child.on span {
+    background:transparent url(/images/maincontent/buttons/edit-dialog-inset-tab-first-child-span.gif) no-repeat scroll left top;
+  }
+
+/*end of edit dialog inset tabs -----------------------------------------------*/
+
+.edit-dialog .edit-dialog-inset {
+  margin:0 10px 0 5px;
+  clear:both;
+}
+
+.edit-dialog .edit-dialog-inset .top {
+  background:transparent url(/images/maincontent/modules/tl-edit-dialog-inset.gif) no-repeat scroll left top;
+  clear:both;
+  padding:0;
+  margin:0;
+  width:100%;
+}
+
+.edit-dialog .edit-dialog-inset .top .right {
+  background:transparent url(/images/maincontent/modules/tr-edit-dialog-inset.gif) no-repeat scroll right top;
+  padding:8px 5px 5px 5px;
+  min-height:10px;
+  margin-left:5px;
+  height:100%;
+  clear:both;
+}
+
+.edit-dialog .edit-dialog-inset .bottom {
+  background:transparent url(/images/maincontent/modules/bl-edit-dialog-inset.gif) no-repeat scroll left bottom;
+  clear:both;
+  padding:0;
+  width:100%;
+}
+
+.edit-dialog .edit-dialog-inset .bottom .right {
+  background:transparent url(/images/maincontent/modules/br-edit-dialog-inset.gif) no-repeat scroll right bottom;
+  height:5px;
+  min-height:5px;
+  margin-left:5px;
+  padding:0;
+}
+
+/*edit dialog generic form styles ---------------------------------------------------------------------*/
+
+.edit-dialog strong {
+  color:#363630;
+}
+
+.edit-dialog form.h-align {
+  clear:both;
+}
+
+.edit-dialog label {
+  margin-top:5px;
+  display:inline-block;
+  font-size:11px;
+  line-height:13px;
+  font-weight:bold;
+  color:#6D645C;
+}
+
+.edit-dialog label.checkbox,
+.edit-dialog label.radio {
+  color:#6D645C;
+  display:inline-block;
+  width:90%;
+  vertical-align:text-top;
+  font-size:10.5px;
+  font-weight:normal;
+  line-height:13px;
+  text-align:left;
+  margin-top:2px;
+}
+
+.edit-dialog label.checkbox {
+  margin-top: -1px;
+}
+
+.edit-dialog form.h-align label {
+  text-align:right;
+  display:block;
+  float:left;
+  padding-right:10px;
+}
+
+.edit-dialog form.h-align input {
+  margin:0;
+  padding:1px;
+  vertical-align: baseline;
+}
+
+.edit-dialog input[type="checkbox"],
+.edit-dialog input[type="radio"]{
+  vertical-align:text-top;
+  display:inline;
+  width:13px;
+  height:13px;
+  margin-right:0;
+}
+
+/*this is the edit light-box view of any line-item-such as uploading an account for manual uploaders and for inline help*/
+
+.edit-box .close {
+  position:relative;
+  top:-25px;
+  right:-16px;
+  margin:0;
+  padding-right:0;
+  padding-bottom:0;
+}
+
+.edit-box .help  {
+  position:relative;
+  margin:-4px 0 0 8px;
+}
+
+.edit-box input {
+  margin:0 5px 14px 0;
+}
+
+.edit-box p,
+.hover-box p {
+  color:#6D645C;
+}
+.edit-box p  a,
+.hover-box p  a {
+  display:inline;
+}
+.edit-box .note,
+.hover-box .note {
+  color:#8a8682;
+}
+
+.edit-box .top,
+.hover-box .top {
+  background:transparent url(/images/maincontent/modules/tl-edit-dialog-trans.png) no-repeat scroll left top;
+  clear:both;
+  padding:0;
+  margin:0;
+  width:100%;
+}
+
+.edit-box .top .right,
+.hover-box .top .right {
+  background:transparent url(/images/maincontent/modules/tr-edit-dialog-trans.png) no-repeat scroll right top;
+  padding:15px 15px 3px 5px;
+  min-height:25px;
+  margin-left:28px;
+  height:100%;
+  max-width:650px;
+  max-height:500px;
+  clear:both;
+}
+
+.edit-box .bottom,
+.hover-box .bottom {
+  background:transparent url(/images/maincontent/modules/bl-edit-box-trans.png) no-repeat scroll left bottom;
+  clear:both;
+  padding:0;
+  width:100%;
+}
+.edit-box .bottom .right,
+.hover-box .bottom .right {
+  background:transparent url(/images/maincontent/modules/br-edit-box-trans.png) no-repeat scroll right bottom;
+  height:14px;
+  margin-left:28px;
+}
+
+/* added styles for new hover boxes ------------------*/
+
+.edit-box, hover-box {
+  font-family:lucida grande, helvetica, arial, sans-serif;
+  font-size:16px;
+}
+
+.edit-box a.button,
+.hover-box a.button {
+  float:right;
+  margin-top:13px;
+}
+
+.edit-box a.button span,
+.hover-box a.button span {
+  min-width:80px;
+  text-align:center;
+}
+
+/*-----------------------------------*/
+.edit-box.r-align .top,
+.hover-box.r-align .top {
+  background:transparent url(/images/maincontent/modules/tl-edit-dialog-ralign-trans.png) no-repeat scroll left top;
+  clear:both;
+  padding:0;
+  margin:0;
+  width:100%;
+}
+.edit-box.r-align .top .right,
+.hover-box.r-align .top .right {
+  background:transparent url(/images/maincontent/modules/tr-edit-dialog-ralign-trans.png) no-repeat scroll right top;
+  min-height:30px;
+  padding:22px 35px 0 8px;
+  margin-left:17px;
+  padding-bottom:10px;
+  height:100%;
+  max-width:950px;
+  max-height:950px;
+  clear:both;
+}
+
+.edit-box.r-align .bottom,
+.hover-box.r-align .bottom {
+  background:transparent url(/images/maincontent/modules/bl-edit-box-trans.png) no-repeat scroll -16px 0;
+  clear:both;
+  padding:0;
+  width:100%;
+}
+.edit-box.r-align .bottom .right,
+.hover-box.r-align .bottom .right {
+  background:transparent url(/images/maincontent/modules/br-edit-box-trans.png) no-repeat scroll right bottom;
+  height:14px;
+  margin-right:15px;
+  margin-left:12px;
+}
+
+.edit-box.top-l-align .top,
+.hover-box.top-l-align .top {
+  background:transparent url(/images/maincontent/modules/tl-edit-box-top-left-align-trans.png) no-repeat scroll -1px top;
+  clear:both;
+  padding:0;
+  margin:0;
+  width:100%;
+}
+
+.edit-box.top-l-align .top .right,
+.hover-box.top-l-align .top .right {
+  background:transparent url(/images/maincontent/modules/tr-edit-box-trans.png) no-repeat scroll right 12px;
+  min-height:30px;
+  padding:35px 22px 0 0;
+  margin-left:45px;
+  padding-bottom:10px;
+  height:100%;
+  max-width:950px;
+  max-height:950px;
+  clear:both;
+}
+
+/* you need to include this for top-left/ bottom-left aligned dialogues or else all content will be pushed 20px to the right*/
+.edit-box.top-l-align .top .right .content,
+.hover-box.top-l-align .top .right .content  {
+  margin:0 0 0 -20px;
+  padding:0;
+}
+
+.edit-box.top-l-align .bottom,
+.hover-box.top-l-align .bottom {
+  background:transparent url(/images/maincontent/modules/bl-edit-box-right-align-trans.png) no-repeat scroll left bottom;
+  clear:both;
+  padding:0;
+  width:100%;
+}
+
+.edit-box.top-l-align .bottom .right,
+.hover-box.top-l-align .bottom .right {
+  background:transparent url(/images/maincontent/modules/br-edit-box-right-align-trans.png) no-repeat scroll right bottom;
+  height:14px;
+  margin-right:2px;
+  margin-left:14px;
+}
+
+.edit-box.left-b-align .top,
+.hover-box.left-b-align .top {
+  background:transparent url(/images/maincontent/modules/tl-edit-box-right-align-trans.png) no-repeat scroll 15px top;
+  clear:both;
+  padding:0;
+  margin:0;
+  width:100%;
+}
+
+.edit-box.left-b-align .top .right,
+.hover-box.left-b-align .top .right {
+  background:transparent url(/images/maincontent/modules/tr-edit-box-trans.png) no-repeat scroll right top;
+  padding:22px 20px 0 10px;
+  min-height:30px;
+  margin-left:30px;
+  padding-bottom:10px;
+  height:100%;
+  max-width:950px;
+  max-height:950px;
+  clear:both;
+}
+
+.edit-box.left-b-align .top .right form,
+.hover-box.left-b-align .top .right form {
+  position: relative;
+  z-index: 2;
+}
+
+.edit-box.left-b-align .bottom,
+.hover-box.left-b-align .bottom {
+  background:transparent url(/images/maincontent/modules/bl-edit-box-bottom-left-trans.png) no-repeat scroll left bottom;
+  clear:both;
+  padding:0;
+  width:100%;
+  position: relative;
+  top: -30px;
+  z-index: 1;
+}
+
+.edit-box.left-b-align .bottom .right,
+.hover-box.left-b-align .bottom .right {
+  background:transparent url(/images/maincontent/modules/br-edit-box-bottom-align-trans.png) no-repeat scroll right bottom;
+  height:45px;
+  margin-left:28px;
+}
+
+/* additional styles for hover-box dialogs */
+
+.hover-box.dialog {
+  z-index: 1001;
+}
+
+.hover-box.dialog {
+  z-index: 1001;
+}
+
+.hover-box.dialog  .button {
+  margin-top: 16px;
+}
+
+.hover-box.dialog  .top .right {
+  padding-bottom: 40px;
+}
+
+/*notification modules, for when there's an error loging in, or something is going to be down in the site ----------------*/
+
+.notification {
+  padding:0 10px;
+}
+
+.notification .top {
+  background:transparent url(/images/maincontent/modules/tl-notification-trans.png) no-repeat scroll top left;
+  clear:both;
+  padding:0;
+  margin:0;
+  width:100%;
+}
+.notification .top .right {
+  background:transparent url(/images/maincontent/modules/tr-notification-trans.png) no-repeat scroll top right;
+  padding: 10px 18px 0 0;
+  min-height:36px;
+  margin-left:36px;
+  height:100%;
+  max-width:950px;
+  max-height:450px;
+  clear:both;
+}
+.notification .bottom {
+  background:transparent url(/images/maincontent/modules/bl-notification-trans.png) no-repeat scroll bottom left;
+  clear:both;
+  padding:0;
+  width:100%;
+}
+.notification .bottom .right {
+  background:transparent url(/images/maincontent/modules/br-notification-trans.png) no-repeat scroll bottom right;
+  height:10px;
+  margin-left:36px;
+}
+.notification .title {
+  font-size:0.75em;
+  font-weight:bold;
+  color:#609E9A;
+  margin-bottom:0;
+  text-align:left;
+}
+.notification .message,
+.notification p.message {
+  color:#363630;
+  font-size:11px;
+  font-family:arial, helvetica, sans-serif;
+  letter-spacing:0.035em;
+  font-weight:normal;
+  text-align:left;
+  margin-bottom:0;
+}
+
+.notification.error .title {
+  color:#F47878;
+}
+.notification.error .top {
+  background:transparent url(/images/maincontent/modules/tl-error-trans.png) no-repeat scroll left top;
+}
+.notification.error .top .right {
+  background:transparent url(/images/maincontent/modules/tr-error-trans.png) no-repeat scroll right top;
+}
+.notification.error .bottom {
+  background:transparent url(/images/maincontent/modules/bl-error-trans.png) no-repeat scroll left bottom;
+}
+.notification.error .bottom .right {
+  background:transparent url(/images/maincontent/modules/br-error-trans.png) no-repeat scroll right bottom;
+}
+
+.notification.success .title {
+  color:#078F48;
+}
+.notification.success .top {
+  background:transparent url(/images/maincontent/modules/tl-success-trans.png) no-repeat scroll left top;
+}
+.notification.success .top .right {
+  background:transparent url(/images/maincontent/modules/tr-success-trans.png) no-repeat scroll right top;
+  padding-left:5px;
+}
+.notification.success .bottom {
+  background:transparent url(/images/maincontent/modules/bl-success-trans.png) no-repeat scroll left bottom;
+  clear:both;
+  padding:0;
+  width:100%;
+}
+.notification.success .bottom .right {
+  background:transparent url(/images/maincontent/modules/br-success-trans.png) no-repeat scroll right bottom;
+  height:10px;
+  margin-left:36px;
+}
+
+.notification.maintenance .title {
+  color:#F7931E;
+}
+.notification.maintenance .top {
+  background:transparent url(/images/maincontent/modules/tl-maintenance-trans.png) no-repeat scroll left top;
+}
+.notification.maintenance .top .right {
+  background:transparent url(/images/maincontent/modules/tr-maintenance-trans.png) no-repeat scroll right top;
+}
+.notification.maintenance .bottom {
+  background:transparent url(/images/maincontent/modules/bl-maintenance-trans.png) no-repeat scroll left bottom;
+}
+.notification.maintenance .bottom .right {
+  background:transparent url(/images/maincontent/modules/br-maintenance-trans.png) no-repeat scroll right bottom;
+}
+
+/*this is where all the buttons and module label are contained within the top of every module */
+
+.module-header {
+margin:0 10px;
+padding-bottom:9px;
+}
+
+.module-header h5 span,
+.module-header h4 span {
+font-weight:normal;
+padding:0 5px;
+}
+
+.module-header h5 a,
+.module-header h4 a,
+.module-header h5 a:hover,
+.module-header h4 a:hover {
+  color:#35352F;
+  text-decoration:none;
+}
+
+.module-header .half-left {
+  float:left;
+  width:48%;
+}
+.module-header .half-right {
+  float:right;
+  width:48%;
+}
+
+/*1-column module list styles ------------------------------------------------------------*/
+
+.one-col-list.group,
+.one-col-list.group ul li.on,
+.one-col-list.group ul li.on.last-child,
+.one-col-list.group ul li.on.first-child,
+.one-col-list.group ul li.on:hover {
+  background:transparent url(/images/maincontent/lists/1column-group-sprites-trans.png) no-repeat scroll 0 -1px;
+  min-height:36px;
+  margin:0;
+  padding:0;
+}
+
+.one-col-list.group:hover {
+  background-position:0 -36px;
+}
+.one-col-list.group:active {
+  background-position:0 -72px;
+}
+
+.one-col-list.group.on,
+.one-col-list li.on,
+.one-col-list li.even.on,
+.one-col-list li.on:hover,
+.one-col-list.group ul li.on,
+.one-col-list.group ul li.on.last-child,
+.one-col-list.group ul li.on.first-child,
+.one-col-list.group ul li.on:hover,
+.one-col-list.group ul li.even.on {
+  background:transparent url(/images/maincontent/lists/1column-group-sprites-trans.png) no-repeat scroll 0 -145px;
+  width:327px;
+  min-height:36px;
+  margin:0;
+  padding:0;
+}
+
+.one-col-list.group h6 {
+  display:inline;
+  line-height:36px;
+  max-height:36px;
+  margin:0;
+  overflow:hidden;
+  padding-left:10px;
+}
+
+.one-col-list.group h6 a {
+  color:#332C25;
+  text-decoration:none;
+}
+
+.one-col-list.group .view {
+  display:inline-block;
+  width:34px;
+  height:34px;
+  margin:0;
+  padding:0;
+}
+
+.one-col-list.group ul {
+  display:none;
+  background:#fff;
+  width:310px;
+  margin:0;
+  padding:0;
+}
+
+.one-col-list.group.open ul {
+  display:block;
+}
+
+.one-col-list li,
+.one-col-list.group li {
+  background:#F4F6F1 url(/images/maincontent/lists/1column-group-sublist-bg-sprites-trans.gif) no-repeat scroll 0 -10px;
+  font-size:0.75em;
+  padding:0;
+  margin:0;
+}
+
+.one-col-list.group li:hover {
+  background:#F4F6F1 url(/images/maincontent/lists/1column-group-sublist-bg-sprites-trans.gif) no-repeat scroll left bottom;
+}
+
+.one-col-list li {
+  background:#fff;
+}
+
+.one-col-list li.even {
+  background:#fff url(/images/maincontent/lists/1column-list-sprites-trans.png) scroll no-repeat top left;
+}
+.one-col-list li:hover {
+  background:transparent url(/images/maincontent/lists/1column-list-sprites-trans.png) scroll no-repeat top right;
+}
+
+.one-col-list li a,
+.one-col-list li.on a,
+.one-col-list.group li a,
+.one-col-list.group li.on a {
+  padding:9px 10px 0 20px;
+  min-height:28px;
+  margin:0;
+  display:block;
+}
+
+.one-col-list li.on a,
+.one-col-list.on h6 a,
+.one-col-list.group li.on a,
+.one-col-list.group.on h6 a {
+  color:#fff;
+  text-decoration:none;
+}
+
+.hover-box p a {
+  color: #49989C !important;
+}
+
+.one-col-list li a:hover,
+.one-col-list li.on a:hover,
+.one-col-list.group li a:hover,
+.one-col-list.group li.on a:hover {
+  text-decoration:none;
+}
+
+h6 .list-totals,
+.one-col-list.group li a .list-totals {
+  font-weight:normal;
+  font-size:inherit;
+  color:#8C8C8C;
+  display:inline;
+}
+
+.on h6 .list-totals,
+.one-col-list.group li.on a .list-totals {
+  color:#EDEEE7;
+}
+
+.one-col-list.header,
+.one-col-list.footer {
+  background:transparent url(/images/maincontent/lists/1column-header-footer-trans.png) no-repeat scroll top left;
+  clear:both;
+  height:36px;
+}
+.one-col-list.header {
+  background-position:top left;
+}
+.one-col-list.footer {
+  background-position: bottom left;
+}
+
+/*2-column module list styles ------------------------------------------------------------*/
+.two-col-list.header,
+.two-col-list.footer {
+ background:transparent url(/images/maincontent/lists/2column-header-footer-trans.png) scroll no-repeat top left;
+ clear:both;
+ height:36px;
+ margin:0;
+ padding:0;
+}
+
+.two-col-list.header  {
+  background-position:top left;
+}
+
+.two-col-list.footer  {
+  background-position:bottom left;
+}
+
+.two-col-list li.even { /*this is what creates the zebra stripped lists*/
+  background:transparent url(/images/maincontent/lists/2column-list-sprites-trans.png) scroll no-repeat top left;
+  clear:both;
+}
+
+.two-col-list li:hover {
+  background:transparent url(/images/maincontent/lists/2column-list-sprites-trans.png) scroll no-repeat top right;
+  clear:both;
+}
+
+
+/*list extras - such as pagination ------------------------------------------------------*/
+
+.pagination {
+  text-align: center;
+}
+
+.pagination .left-arrow .prev_page,
+.pagination .right-arrow .next_page {
+  padding: 3px 5px;
+  margin-left: -5px;
+}
+
+
+.footer ul,
+.header ul {
+  height:2em;
+  padding:0 10px;
+  margin:0 auto;
+  text-align:center;
+}
+.footer ul {
+  height:1em;}
+
+.footer li,
+.header li  {
+  float:none;
+  margin:2px;
+  padding:5px 2px;
+  font-size:0.687em;
+  color:#999999;
+  display:inline;
+}
+
+.footer .left-arrow,
+.footer .right-arrow,
+.header .left-arrow,
+.header .right-arrow {
+ padding:8px 5px;
+}
+
+.footer ul li:hover,
+.header ul li:hover {
+  color:#35352F;
+}
+.footer ul li:active ,
+.footer  ul  li.on,
+.header ul li:active,
+.header  ul  li.on {
+  font-weight:bold;
+  color:#35352F;
+}
+.footer  ul  li.on,
+.header ul  li.on{
+  background:transparent;
+}
+
+/*Styling for all buttons ------------------------------------------------------------------------------------------------------------------------*/
+
+a.button {
+  background:transparent;
+  color:#332C25;
+  float:left;
+  font-size:13px;
+  font-family:'lucida grande', arial, helvetica, sans-serif;
+  height:20px;
+  min-height:20px;
+  margin-left:4px;
+  margin-top:2px;
+  padding:0 12px 0 0; /*sliding doors padding*/
+  text-decoration:none;
+}
+
+a.button:hover {
+  text-decoration:none;
+}
+
+.module-header a.button {
+  float:right;
+}
+
+a.button span {
+  background:transparent;
+  display:block;
+  line-height:12px;
+  padding:4px 0 4px 12px;
+}
+a.button:active {
+  color:#353530;
+}
+a.button.orange, a.button.orange:hover,
+a.button.green, a.button.green:hover,
+a.button.red, a.button.red:hover,
+a.button.toggle-on, a.button.toggle-on:hover {
+  color:#fff;
+  font-weight:bold;
+}
+
+/*the grey and blue buttons are to be used as general settings buttons, such as "edit" or "add target" they will most likely live in the top right control panel of a module*/
+a.button.gry {
+  background:transparent url(/images/maincontent/buttons/button-gry-a-trans.png) no-repeat scroll top right;
+}
+a.button.gry span{
+  background:transparent url(/images/maincontent/buttons/button-gry-span-trans.png) no-repeat top left;
+}
+a.button.gry:active {
+  background:transparent url(/images/maincontent/buttons/button-gry-a-trans.png) no-repeat scroll bottom right;
+}
+a.button.gry span:active {
+  background:transparent url(/images/maincontent/buttons/button-gry-span-trans.png) no-repeat bottom left;
+}
+
+a.button.blue {
+  background:transparent url(/images/maincontent/buttons/button-blue-a-trans.png) no-repeat scroll top right;
+}
+a.button.blue span{
+  background:transparent url(/images/maincontent/buttons/button-blue-span-trans.png) no-repeat top left;
+}
+a.button.blue:active {
+  background:transparent url(/images/maincontent/buttons/button-blue-a-trans.png) no-repeat scroll bottom right;
+}
+a.button.blue span:active {
+  background:transparent url(/images/maincontent/buttons/button-blue-span-trans.png) no-repeat bottom left;
+}
+
+/*the orange button is used as a call to action button for actions such as "add and account" or "create a discussion" */
+
+a.button.orange {
+  background:transparent url(/images/maincontent/buttons/button-orange-a-trans.png) no-repeat scroll top right;
+}
+a.button.orange span{
+  background:transparent url(/images/maincontent/buttons/button-orange-span-trans.png) no-repeat top left;
+}
+a.button.orange:active {
+  background:transparent url(/images/maincontent/buttons/button-orange-a-trans.png) no-repeat scroll bottom right;
+}
+a.button.orange span:active {
+  background:transparent url(/images/maincontent/buttons/button-orange-span-trans.png) no-repeat bottom left;
+}
+
+/* the green button is used as a call to action for routine elements, such as "save" or sign-up" */
+
+a.button.green {
+  background:transparent url(/images/maincontent/buttons/button-green-a-trans.png) no-repeat scroll top right;
+}
+a.button.green span{
+  background:transparent url(/images/maincontent/buttons/button-green-span-trans.png) no-repeat top left;
+}
+a.button.green:active {
+  background:transparent url(/images/maincontent/buttons/button-green-a-trans.png) no-repeat scroll bottom right;
+}
+a.button.green span:active {
+  background:transparent url(/images/maincontent/buttons/button-green-span-trans.png) no-repeat bottom left;
+}
+
+/*the red button is only to be used for actions such as "delete my account" - we want the user to think about it before pressing the button */
+
+a.button.red {
+  background:transparent url(/images/maincontent/buttons/button-red-a-trans.png) no-repeat scroll top right;
+}
+a.button.red span {
+  background:transparent url(/images/maincontent/buttons/button-red-span-trans.png) no-repeat top left;
+}
+a.button.red:active {
+  background:transparent url(/images/maincontent/buttons/button-red-a-trans.png) no-repeat scroll bottom right;
+}
+a.button.red span:active {
+  background:transparent url(/images/maincontent/buttons/button-red-span-trans.png) no-repeat bottom left;
+}
+
+
+/*delete item link------------------------------------------------------------------------------------------- */
+
+a.delete.conf.button {
+  background:transparent url(/images/maincontent/buttons/delete-icon-trans.png) no-repeat scroll top left;
+  height:20px;
+  padding-left:25px;
+  font-size:10px;
+  line-height:22px;
+  float:left;
+}
+
+/*toggles ---------------------------------------------------------------------------------------------------*/
+
+a.toggle-button {
+  background:transparent;
+  color:#676759;
+  float:right;
+  height:20px;
+  margin:2px 1px 0 1px;
+  padding:0 8px 0 0; /*sliding doors padding*/
+  text-decoration:none;
+}
+
+a.toggle-button:active {
+  color:#35352F;
+}
+
+a.toggle-button span {
+  font-weight:bold;
+  font-size:0.687em;
+  background:transparent;
+  display:block;
+  line-height:12px;
+  padding:4px 0 4px 8px;
+}
+
+a.toggle-button .number {
+  background:transparent;
+  font-weight:normal;
+}
+
+a.toggle-button.on {
+  color:#fff;
+}
+a.toggle-button.on:active {
+  color:#EDEEE7;
+}
+
+a.toggle-button.on {
+  background:transparent url(/images/maincontent/buttons/button-toggle-on-a-trans.png) no-repeat scroll top right;
+}
+a.toggle-button.on span {
+  background:transparent url(/images/maincontent/buttons/button-toggle-on-span-trans.png) no-repeat top left;
+}
+a.toggle-button.on:active {
+  background:transparent url(/images/maincontent/buttons/button-toggle-on-a-trans.png) no-repeat scroll bottom right;
+}
+a.toggle-button.on span:active {
+  background:transparent url(/images/maincontent/buttons/button-toggle-on-span-trans.png) no-repeat bottom left;
+}
+
+a.toggle-button {
+  background:transparent url(/images/maincontent/buttons/button-toggle-off-a-trans.png) no-repeat scroll top right;
+}
+a.toggle-button span {
+  background:transparent url(/images/maincontent/buttons/button-toggle-off-span-trans.png) no-repeat top left;
+}
+a.toggle-button:active {
+  background:transparent url(/images/maincontent/buttons/button-toggle-off-a-trans.png) no-repeat scroll bottom right;
+}
+a.toggle-button span:active {
+  background:transparent url(/images/maincontent/buttons/button-toggle-off-span-trans.png) no-repeat bottom left;
+}
+
+
+a.toggle {
+  background: url(/images/maincontent/buttons/toggle-sprites-trans.png) no-repeat scroll 0 0;
+  width:33px;
+  height:19px;
+  float:right;
+  padding:0;
+  margin:2px 1px 0px;
+  display:block;
+}
+a.toggle.active {
+  outline:none;
+}
+
+a.toggle.divider {
+  background:transparent url(/images/maincontent/buttons/toggle-divider-trans.png) no-repeat scroll 0 0;
+  width:2px;
+  margin:2px 6px 0;
+}
+
+a.toggle.calendar.on {
+  background-position: -35px 0;
+}
+a.toggle.calendar.on:active {
+  background-position: -69px 0;
+}
+a.toggle.calendar {
+  background-position: -103px 0;
+}
+a.toggle.calendar:active {
+  background-position: -137px 0;
+}
+
+a.toggle.list.on {
+  background-position: -35px -20px;
+}
+a.toggle.list.on:active {
+  background-position: -69px -20px;
+}
+a.toggle.list {
+  background-position: -103px -20px;
+}
+a.toggle.list:active {
+  background-position: -137px -20px;
+}
+
+a.toggle.cloud.on {
+  background-position: -35px -40px;
+}
+a.toggle.cloud.on:active {
+  background-position: -69px -40px;
+}
+a.toggle.cloud {
+  background-position: -103px -40px;
+}
+a.toggle.cloud:active {
+  background-position: -137px -40px;
+}
+
+a.toggle.gauge.on {
+  background-position: -35px -60px;
+}
+a.toggle.gauge.on:active {
+  background-position: -69px -60px;
+}
+a.toggle.gauge {
+  background-position: -103px -60px;
+}
+a.toggle.gauge:active {
+  background-position: -137px -60px;
+}
+
+a.toggle.letter.on {
+  background-position: -35px -80px;
+}
+a.toggle.letter.on:active {
+  background-position: -69px -80px;
+}
+a.toggle.letter {
+  background-position: -103px -80px;
+}
+a.toggle.letter:active {
+  background-position: -137px -80px;
+}
+
+a.toggle.pie.on {
+  background-position: -35px -100px;
+}
+a.toggle.pie.on:active {
+  background-position: -69px -100px;
+}
+a.toggle.pie {
+  background-position: -103px -100px;
+}
+a.toggle.pie:active {
+  background-position: -137px -100px;
+}
+
+a.toggle.vbar.on {
+  background-position: -35px -120px;
+}
+a.toggle.vbar.on:active {
+  background-position: -69px -120px;
+}
+a.toggle.vbar {
+  background-position: -103px -120px;
+}
+a.toggle.vbar:active {
+  background-position: -137px -120px;
+}
+
+a.toggle.hbar.on {
+  background-position: -35px -140px;
+}
+a.toggle.hbar.on:active {
+  background-position: -69px -140px;
+}
+a.toggle.hbar {
+  background-position: -103px -140px;
+}
+a.toggle.hbar:active {
+  background-position: -137px -140px;
+}
+
+a.toggle.line.on {
+  background-position: -35px -160px;
+}
+a.toggle.line.on:active {
+  background-position: -69px -160px;
+}
+a.toggle.line {
+  background-position: -103px -160px;
+}
+a.toggle.line:active {
+  background-position: -137px -160px;
+}
+/*sliding doors tabs --------------------------------------------------------------------------------*/
+
+a.tab {
+  background:transparent;
+  color:#676759;
+  float:right;
+  height:20px;
+  margin:3px 1px 0 1px;
+  padding:0 12px 0 0; /*sliding doors padding*/
+  text-decoration:none;
+}
+
+a.tab > span {
+  font-size:0.687em;
+  background:transparent;
+  display:block;
+  line-height:12px;
+  padding:5px 0 3px 12px;
+}
+
+
+a.tab {
+  background:transparent url(/images/maincontent/buttons/tab-a-trans.png) no-repeat scroll top right;
+}
+a.tab span{
+  background:transparent url(/images/maincontent/buttons/tab-span-trans.png) no-repeat scroll top left;
+}
+
+a.tab.on,
+a.tab:active {
+  background:transparent url(/images/maincontent/buttons/tab-on-a-trans.png) no-repeat scroll top right;
+}
+
+a.tab.on span,
+a.tab span:active {
+  background:transparent url(/images/maincontent/buttons/tab-on-span-trans.png) no-repeat scroll top left;
+}
+
+
+.edit-view.tab {
+  float:left;
+  margin-top:16px;
+  padding-left:8px;
+}
+
+/*line item buttons ---------------------------------------------------------------------------------------------------*/
+
+.view, .add, .remove, .close, .help, .edit, .select, .left-arrow, .right-arrow, .calendar {
+  float:right;
+  background:transparent url(/images/maincontent/buttons/line-item-buttons-sprites-trans.png?1244156602874) no-repeat scroll -2px 0;
+  width:18px;
+  height:18px;
+  padding:8px;
+}
+
+.left-arrow {
+  float:left;
+}
+.calendar {
+  width:22px;
+  height:18px;
+  padding:8px 2px;
+}
+
+.on .view {
+  background-position:-2px -104px;
+}
+.view:hover,
+.on .view:hover {
+  background-position:-2px -52px;
+}
+.view:active,
+.on .view:active {
+  background-position:-2px -78px;
+}
+
+.open .view {
+  background-position:-28px 0;
+}
+.open-on .view {
+  background-position:-28px -104px;
+}
+.open .view:hover,
+.open-on .view:hover {
+  background-position:-28px -52px;
+}
+.open .view:active,
+.open-on .view:active {
+  background-position:-28px -78px;
+}
+
+.add {
+  background-position:-54px 0;
+}
+.add:hover,
+.on .add:hover  {
+  background-position:-54px -52px;
+}
+.add:active,
+.on .add:active  {
+  background-position:-54px -78px;
+}
+.on .add {
+  background-position:-54px -104px;
+}
+
+.remove {
+  background-position:-80px 0;
+}
+.remove:hover,
+.on .remove:hover  {
+  background-position:-80px -52px;
+}
+.remove:active,
+.on .remove:active  {
+  background-position:-80px -78px;
+}
+.on .remove {
+  background-position:-80px -104px;
+}
+
+.close {
+  background-position:-106px 0;
+}
+.close:hover,
+.on .close:hover  {
+  background-position:-106px -52px;
+}
+.close:active,
+.on .close:active  {
+  background-position:-106px -78px;
+}
+.on .close {
+  background-position:-106px -104px;
+}
+
+.help {
+  background-position:-132px 0;
+}
+.help:hover,
+.on .help:hover  {
+  background-position:-132px -52px;
+}
+.help:active,
+.on .help:active  {
+  background-position:-132px -78px;
+}
+.on .help {
+  background-position:-132px -104px;
+}
+
+.edit  {
+  background-position:-158px 0;
+}
+
+.edit:hover,
+.on .edit:hover  {
+  background-position:-158px -52px;
+}
+
+.edit.light:hover {
+   background-position:-158px -182px;
+}
+
+.edit:active,
+.on .edit:active  {
+  background-position:-158px -78px;
+}
+.on .edit {
+  background-position:-158px -104px;
+}
+
+.on .edit.light {
+  background-position:-158px -130px;
+}
+
+.on .edit.light:hover,
+.on .edit.light:active {
+  background-position:-158px -156px;
+}
+
+.select {
+  background-position:-184px 0;
+}
+.select:hover,
+.on .select:hover  {
+  background-position:-184px -52px;
+}
+.select:active,
+.on .select:active  {
+  background-position:-184px -78px;
+}
+.on .select {
+  background-position:-184px -104px;
+}
+
+.left-arrow {
+  background-position:-218px -2px;
+}
+.left-arrow:hover,
+.on .left-arrow:hover  {
+  background-position:-218px -54px;
+}
+.left-arrow:active,
+.on .left-arrow:active  {
+  background-position:-218px -80px;
+}
+.on .left-arrow {
+  background-position:-218px -106px;
+}
+
+.right-arrow {
+  background-position:-244px -2px;
+}
+.right-arrow:hover,
+.on .right-arrow:hover  {
+  background-position:-244px -54px;
+}
+.right-arrow:active,
+.on .right-arrow:active  {
+  background-position:-244px -80px;
+}
+.on .right-arrow  {
+  background-position:-244px -106px;
+}
+
+.calendar {
+  background-position:-270px -30px;
+}
+.calendar:hover,
+.on .calendar:hover  {
+  background-position:-270px -82px;
+}
+.calendar:active,
+.on .calendar:active  {
+  background-position:-270px -82px;
+}
+.on .calendar  {
+  background-position:-270px -108px;
+}
+
+/*indentations for large bodies of text ------- such as the help pages/public info pages ---------------------------------*/
+
+.indent0 {
+ padding-top:2px;
+ font-size:1.1em;
+ font-family:georgia;
+ clear:both;
+}
+
+.indent1 {
+ padding-left:30px;
+ padding-top:16px;
+ font-size:1.1em;
+ font-family:georgia;
+ clear:both;
+}
+
+.indent1nfsc {
+ padding-left:30px;
+ padding-top:16px;
+ font-family:georgia;
+ clear:both;
+}
+
+.indent2 {
+ padding-left:90px;
+ clear:both;
+}
+
+.indent3 {
+ padding-left:150px;
+ clear:both;
+}
+
+.indent4 {
+ padding-left:210px;
+ font-size:0.95em;
+ margin-top:16px;
+ clear:both;
+}
+
+img.right {
+  float:right;
+  margin-left:1em;
+  margin-bottom:.5em;
+}
+
+img.left {
+  float:left;
+  margin-right:1em;
+  margin-bottom:.5em;
+}
+
+img.center {
+/*  float:center; */ /* this is not valid css */
+}
+
+ol {
+  list-style-type:decimal;
+  margin:1.5em 4em;
+  font-size:0.75em;
+  color:#676759;
+}
+
+ol li {
+  margin-bottom:1em;
+}
+
+pre {
+  background:#F4F4F4;
+  padding:2px 9px;
+}
+
+.quote {
+  font-family:georgia, sans-serif;
+  font-style:italic;
+  text-align:right;
+  color:#676759;
+  clear:both;
+  padding:10px 0;
+  margin:0;
+  position:relative;
+}
+
+.quote span {
+  color:#999;
+}
+
+.quote img {
+  position:absolute;
+  top:25px;
+  left:0;
+  width:224px;
+  height:80px;
+}
+
+.quote p {
+  display:inline-block;
+  text-align:center;
+  margin:0;
+  padding:0;
+  width:300px;
+}
+
+
+.one-col-list.tour li,
+.one-col-list.tour li:hover {
+  padding:10px;
+  text-align:center;
+
+}
+
+.one-col-list.tour li .sign-up {
+  float:none;
+  margin:0 auto;
+}
+
+.one-col-list.tour li.on h5 a {
+  color:#fff;
+  padding-right:17px;
+}
+.one-col-list.tour li.on #user-nav.sign-up {
+   margin-right:27px;
+}
+
+/** Footer -------------------------------------------------------------------------------------------------------------------------------*/
+
+#footer {
+  clear:both;
+  margin:1em auto;
+  padding:0;
+  font-size:0.75em;
+  width: 960px;
+}
+#footer ul {
+  margin-left:10px;
+}
+
+#footer ul li {
+  float:left;
+  display:block;
+  text-decoration:none;
+  margin-right:15px;
+  color:#807970;
+}
+
+#footer a {
+  color:#635A50;
+}
+#footer a:hover {
+  color:#49989C;
+  text-decoration:none;
+}
+
+#footer .copyright {
+  text-align:right;
+  margin-right:10px;
+  color:#9F9993;
+}
+
+/** Modal mask **/
+#modal-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: #000;
+  display: none;
+  z-index: 1000;
+  opacity: 0;
+}
+
+/***
+----YUI Autocompete styles ---
+***/
+
+/* styles for entire widget */
+.yui-ac { position:relative; }
+
+/* styles for input field */
+.yui-ac-input { width:100%; }
+
+
+/* styles for results container */
+.yui-ac-container { font-size: 0.8em;position:absolute; top:33px;width:100%; left:8px; z-index:9999;}
+
+/* styles for header/body/footer wrapper within container */
+.yui-ac-content { position:absolute;width:100%;border:1px solid #c3c2be;background:#fff;overflow:hidden;z-index:2.9; }
+
+/* styles for container shadow */
+.yui-ac-shadow { position:absolute;margin:.3em;width:100%;background:#000;-moz-opacity: 0.10;opacity:.10;filter:alpha(opacity=10);z-index:2.8;}
+
+/* styles for container iframe */
+.yui-ac iframe { opacity:0;filter: alpha(opacity=0); padding-right:.3em; padding-bottom:.3em; /* Bug 2026798: extend iframe to shim the shadow */ }
+
+/* styles for results list */
+.yui-ac-content ul{ margin:0;padding:0;width:100%; }
+
+/* styles for result item */
+.yui-ac-content li { display:block;
+text-align:left;font-size:1em;
+color:#333;float:left;width:100%;margin:0;padding:0px 5px;cursor:default;white-space:nowrap;list-style:none; zoom:1; /* For IE to trigger mouse events on LI */ }
+
+/* styles for prehighlighted result item */
+.yui-ac-content li.yui-ac-prehighlight { background:#B3D4FF; }
+
+/* styles for highlighted result item */
+.yui-ac-content li.yui-ac-highlight { background:#d6edea;}
+
+.yui-ac-tip { float:left;color: #807970; font-size: 10px; border-top: 1px solid #ecede6; margin-top: 5px; padding: 3px; width: 100%; }
+
+/*  from http://dominiek.com/108-ajax-snippet-blank-out-a-div-with-a-spinner */
+.spin_div {
+  background: #fff url(/images/large-spinner.gif) no-repeat center center;
+  opacity: 0.75;
+  filter:alpha(opacity: 75);
+  -moz-opacity: 0.75;
+  -khtml-opacity: 0.75;
+}

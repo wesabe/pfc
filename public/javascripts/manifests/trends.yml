@@ -1,0 +1,17 @@
+# Trends page javascript files
+---
+- jquery.history.js
+- wesabe/data/credentials/CredentialDataSource.js
+- wesabe/views/pages/trends.js
+- wesabe/views/widgets/MoneyLabel.js
+- wesabe/views/widgets/accounts/AccountWidget.js
+- wesabe/views/widgets/accounts/AccountGroupList.js
+- wesabe/views/widgets/accounts/AccountGroup.js
+- wesabe/views/widgets/accounts/Account.js
+- wesabe/views/widgets/accounts/Merchant.js
+- wesabe/views/widgets/accounts/AutomaticUploaderErrorDialog.js
+- wesabe/views/widgets/accounts/ManualUploadDialog.js
+- wesabe/views/widgets/spending-summary.js
+- wesabe/views/widgets/tags/*.js
+- wesabe/views/widgets/tags.js
+- wesabe/date-range-picker.js

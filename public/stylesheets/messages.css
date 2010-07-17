@@ -1,0 +1,46 @@
+
+#messages-table { width: 100%; margin-bottom: 0;}
+#messages-table th { color:#635A50; font-size:0.8em; border-bottom: 1px solid #DDD8CA; background:transparent url(/images/maincontent/lists/2column-header-footer-trans.png) no-repeat scroll left top; }
+#messages-table td, #messages-table th { padding-left: 0em; padding-top: 0.6em; }
+#messages-table td {color:#635A50; font-size:0.73em;}
+#messages-table tbody td {border-bottom:1px solid #F1F0E9;}
+#messages-table tbody tr {cursor:pointer;cursor:hand;}
+#messages-table tbody tr.unread { color:#332C25; background:#EAF6F3; }
+#messages-table tbody tr.unread td { font-weight: bold; }
+#messages-table tbody tr.hover { background:#D8EEEB; }
+#messages-table tbody .status { width:30px; text-align: center;}
+#messages-table tbody .sender { font-size:0.75em;}
+#messages-table tbody .date { color:#99928C;font-size:0.65em;}
+#messages-table .actions { text-align: center; font-weight:normal; width: 6em; }
+#messages-table .actions .button { font-size:1em; font-style:normal; }
+
+#no-messages {
+  text-align: center;
+  width: 60%;
+  margin: 0 auto;
+  padding:0 0 20px;
+}
+
+#message { padding-bottom:10px;; width: 75%; margin:0 auto; }
+#message .header {font-weight: bold; margin-bottom:0.5em; color:#635A50; }
+#message .header span { width: 5em; display: inline-block; font-weight:normal;color:#99928C;}
+#message .header img { vertical-align: middle; }
+#message .body { margin-left: 5.25em; margin-top: 1em; margin-bottom: 1em; }
+#message .body .previous-message {color:#99928C; border-bottom:1px solid #F1F0E9; padding-bottom:0.5em; margin-bottom:1.5em;}
+#message .actions { margin-left: 5.25em; }
+
+#message-new { padding-bottom:10px;; width: 50%; margin:0 auto; }
+#message-new #message_recipients,
+#message-new #message_subject,
+#message-new #message_body { width: 100%; }
+#message-new div.field { padding-top: 1em; }
+#message-new .actions { padding-top: 1em; }
+#message-new .yui-ac-container { left: 0; top: 62px; }
+#message-new .ysearchresult { width: 100%;}
+#message-new .yui-ac-content li { padding-top:2px; height:34px}
+#message-new .ysearchresult .name { margin-left: 5px; float: left; margin-top: 6px;}
+#message-new .ysearchresult .name-query { font-weight: bold; }
+#message-new .ysearchresult img { float: left; vertical-align: middle; width:30px; height:30px;}
+#message-new .ysearchresult img.default-profile { filter:alpha(opacity=50); opacity: 0.5;}
+
+#messages .footer { padding-bottom: 1em;}

@@ -1,0 +1,36 @@
+<div id="control-panel" style="display:none">
+  <div id="activity">
+    <p class="small">Transaction Activity:</p>
+    <a class="toggle-button on" id="all-transactions-button" title="Show all transactions"><span>All</span></a>
+    <a class="toggle-button" id="unedited-transactions-button" title="Show unedited and untagged transactions"><span>Unedited</span></a>
+  </div>
+  <div id="date-range" style="margin-left: 121px;">
+    <p class="small">View:</p>
+    <a class="toggle-button time-0"><span>1m</span></a>
+    <a class="toggle-button time-1"><span>3m</span></a>
+    <a class="toggle-button time-2"><span>6m</span></a>
+    <a class="toggle-button time-3"><span>1y</span></a>
+  </div>
+  <div id="graphs">
+    <p class="small">Graph by:</p>
+    <a class="toggle line"></a>
+    <a class="toggle vbar"></a>
+  </div>
+  <div class="clear"></div>
+</div>
+<div id="charts">
+  <%= render :partial => "charts/txn" %>
+</div>
+<div id="transaction-totals" class="graph-footer" style="display:none">
+  <ul>
+    <li class="transaction-totals spending">
+      <span><div class="spending-dot">&bull;</div>Total Spending<span class="amount">$23.00</span></span></li>
+  </ul>
+  <ul class="center">
+    <li class="transaction-totals earnings"><span><div class="earnings-dot">&bull;</div>Total Earnings<span class="amount">$5.00</span></span></li>
+  </ul>
+  <ul class="r-align">
+    <li class="transaction-totals net-balance"><span><div class="net-balance-dot">&bull;</div>Difference<span class="amount">-$18.00</span></span></li>
+  </ul>
+  <div class="clear"></div>
+</div>

@@ -1,0 +1,46 @@
+<% set_page_title "Wesabe Mobile" %>
+<div id="right">
+  <div class="two-column" id="public-page">
+    <div class="top"><div class="right"><div class="grip"></div></div></div>
+    <div class="middle">
+      <div class="right">
+        <div class="content">
+          <div class="module-header"><h1>Wesabe Mobile</h1></div>
+          <!-- BEGIN about -->
+          <div class="indent0">
+            <ol>
+              <li> To use the Wesabe Mobile site, go to <strong><%= link_to "i.wesabe.com", "/iphone/" %></strong> on your iPhone or <strong><%= link_to "m.wesabe.com", "/m/" %></strong> on your mobile browser.
+                <div class="clear"></div>
+                <%= image_tag '/images/mobile-signin.jpg', :class => "margintop", :style=>"border:0;float:right;" %>
+                <%= image_tag '/images/iphone-signin.png', :class=>"margintop", :style=>"border:0;" %>
+              </li>
+              <li><strong>Enter your Wesabe email address and password</strong>, and you'll see a list of your accounts, their balances. On an iPhone, you will be able to see all of your transactions. On a mobile phone, you will see the last ten transactions in all your accounts.
+                  <div class="clear"></div>
+                  <%= image_tag '/images/mobile-home.jpg', :class=>"margintop", :style=>"border:0;float:right;" %>
+                  <%= image_tag '/images/iphone-home.png', :class=>"margintop", :style=>"border:0;" %>
+                </li>
+                <li>You can enter a new transaction for a cash account by <strong>clicking "Add Transaction"</strong>.
+                  <div class="clear"></div>
+                  <%= image_tag '/images/mobile-add.jpg', :class=>"margintop", :style=>"border:0;float:right;" %>
+                  <%= image_tag '/images/iphone-add.png', :class=>"margintop", :style=>"border:0;" %>
+                </li>
+                <li>You'll be prompted for merchant name, the amount spent, the amount spent, and any tags for the transaction. <strong>Don't worry about entering the data perfectly.</strong> Once you're back home, you can edit the merchant name, enter all your tags, and so on.
+                  <div class="clear"></div>
+                  <%= image_tag '/images/mobile-new.jpg', :class=>"margintop", :style=>"border:0;float:right;" %>
+                  <%= image_tag '/images/iphone-new.png', :class=>"margintop", :style=>"border:0;" %>
+                </li>
+                <li>Wesabe for iPhone is designed just for iPhones, but Wesabe Mobile will work with any mobile phone that supports HTTP and XHTML. <strong>Wesabe Mobile works best with <%= link_to "Opera Mini", "http://www.operamini.com", :target=>"_new" %></strong>. If you have a Treo or Blackberry, we recommend you go to <%= link_to "operamini.com", "http://www.operamini.com", :target=>"_new" %> to install Opera Mini. It's free!
+                  <div class="clear"></div>
+                  <%= image_tag "opera-mini.jpg", :class => "margintop", :style => "border:0;float:right;" %>
+                  <%= image_tag "iphone-account.png", :class => "margintop", :style => "border:0;" %>
+                </li>
+              </ol>
+            </div>
+          <!-- END about -->
+        </div>
+      </div>
+    </div>
+    <div class="bottom"><div class="right"></div></div>
+  </div>
+</div>
+<%= render :partial => 'page/sidebar'%>

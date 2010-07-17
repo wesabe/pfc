@@ -1,0 +1,44 @@
+<div id="export">
+   <a id="export-link" class="select"></a>
+   <a class="export-text">Export transactions:</a>
+   <div id="export-dialog" class="edit-dialog bottom-ralign" style="display:none">
+     <div class="top"><div class="right">
+       <p class="export-details">Export transactions from <strong><span id="export-source">All Accounts</span></strong></p>
+       <label>Date Range:</label>
+       <select id="date-range-select" name="date-range-select">
+         <option value="all">All</option>
+         <option value="tax">Tax Year <%= Time.now.year - 1 %></option>
+         <option value="ytd">Year-to-date</option>
+         <option value="custom">Custom</option>
+       </select>
+       <div id="custom-date-range" style="display:none">
+         <div class="notification error" style="display:none">
+           <div class="top"><div class="right">
+             <p class="message small start-date-error" style="display:none"></p>
+             <p class="message small end-date-error" style="display:none"></p>
+           </div></div>
+           <div class="bottom"><div class="right"></div></div>
+         </div>
+         <div class="date-range">
+           <label>Starting:</label>
+           <input type="text" id="start-date" name="start-date"/>
+         </div>
+         <div class="date-range">
+           <label>Ending:</label>
+           <input type="text" id="end-date" name="end-date"/>
+         </div>
+       </div>
+       <label>Format:</label>
+       <select id="export-format" name="export-format">
+         <option value="csv">CSV</option>
+         <option value="xls">Excel</option>
+         <option value="json">JSON</option>
+         <option value="xml">XML</option>
+       </select>
+     </div></div>
+     <div class="bottom"><div class="right">
+       <a class="button green confirm save"><span>Export</span></a>
+       <a class="button gry cancel"><span>Cancel</span></a>
+     </div></div>
+   </div>
+</div>

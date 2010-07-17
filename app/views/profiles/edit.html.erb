@@ -1,0 +1,86 @@
+<% set_page_title "Profile Settings" %>
+
+<% javascript 'wesabe/views/shared/form' %>
+<% javascript 'wesabe/views/edit-profile' %>
+
+<div id="right">
+  <div class="two-column" id="public-page">
+    <div class="top"><div class="right"><div class="grip"></div></div></div>
+    <div class="middle"><div class="right">
+    <div class="content">
+      <div class="module-header"><h1>Profile Settings</h1></div>
+        <% form_tag("/profile", :multipart=>true, :class => 'user_profile', :method => :put) do %>
+          <%= render :partial => 'shared/notification' %>
+
+          <fieldset>
+            <div class="two-col-centered">
+              <h6>What other Wesabeans will see&hellip;</h6>
+              <div class="field">
+                <label class="field-title" for="photo">Your Photo</label>
+                <%= image_tag @user.image_path(:profile) %>
+                <span style="font-style:oblique;font-size:70%; color:#999">Upload a new photo:<br/>
+                <%= file_field("photo", "photo", :class => 'input', :accept => "image/gif,image/jpeg,image/png") %>
+              </div>
+              <div class="field">
+                <label class="field-title" for="user_name">Username<span>your public name</span></label>
+                <%= text_field 'user', 'name', :size => 32, :maxlength => 32 %>
+                <%= error_message_on "user", "name",
+                    :prepend_text => "The screen name ", :append_text => '.', :css_class => 'error-message' %>
+              </div>
+              <div class="field">
+                <label class="field-title" for="profile_website">Your Website</label>
+                <div class="input"><%= text_field :profile, :website %></div>
+              </div>
+            </div>
+          </fieldset>
+          <fieldset>
+            <div class="two-col-centered tab-background">
+              <h6>Basic Info</h6>
+              <div class="field">
+                <div id="email-view">
+                  <label class="field-title" id="email-label">Email</label>
+                  <span><%= h(@user.email) %></span>
+                  <a id="start-email-edit">Click here to change&hellip;</a>
+                </div>
+                <div id="email-edit" style="display:none">
+                  <label class="field-title">Email</label>
+                  <%= text_field 'email_change', 'email', :size => 30 %>
+                  <%= error_message_on "email_change", "email", :css_class => "error" %><br>
+
+                  <label class="field-title">Password</label>
+                  <%= password_field 'email_change', 'password', :size => 30 %>
+                  <%= error_message_on 'email_change', 'password', :css_class => "error" %><br>
+                  <p class="field-subtext">Your password is required to change <br/>your email address.</p>
+                  <a class="button gry" id="stop-email-edit"><span>Cancel</span></a>
+                  <div class="clear"></div>
+                </div>
+              </div>
+              <div class="field">
+                <label class="field-title" for="postal_code">ZIP/Postal Code</label>
+                <%= text_field 'user', 'postal_code', :size => 10 %>
+              </div>
+              <div class="field">
+                <label class="field-title" for="country">Country</label>
+                <%= select('user', 'country_id', Country.find(:all).collect {|c| [ c.name, c.id ] }, {:include_blank => true}) %>
+              </div>
+              <div class="field">
+                <label class="field-title" for="time_zone">Time Zone</label>
+                <%= time_zone_select 'user', 'time_zone', default_time_zone_options(@user) %>
+              </div>
+              <div class="field">
+                <label class="field-title" for="currency">Default Currency</label>
+                <%= select('user','default_currency', currency_full_options_for_select, :selected => @user.default_currency.to_s) %>
+              </div>
+              <a class="button submit green"><span>Save</span></a>
+            </div>
+          </fieldset>
+        <% end %>
+      </div>
+    </div></div>
+    <div class="bottom"><div class="right"></div></div>
+  </div>
+</div>
+<div id="left">
+  <%= render :partial => "user/sidebar" %>
+</div>
+

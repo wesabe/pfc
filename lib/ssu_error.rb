@@ -1,0 +1,2 @@
+class SsuError < RuntimeError
+end

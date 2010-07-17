@@ -1,0 +1,65 @@
+<% set_page_title "Help - Downloading from Your Bank" %>
+
+<div id="right">
+  <div class="two-column" id="public-page">
+    <div class="top"><div class="right"><div class="grip"></div></div></div>
+    <div class="middle">
+      <div class="right">
+        <div class="content">
+          <div class="module-header">
+        <h1>Downloading from Your Bank</h1>
+        <h5 class="intro">This section of the manual contains information how to download information from your bank.</h5>
+          </div>
+          <div class="indent1">
+
+              <h3>General Downloading Information</h3>
+
+                <p>Every bank has a slightly different way of allowing users to download their account information, so it&rsquo;s often difficult to give specific, step-by-step directions for downloading from a specific bank. Wesabe recognizes the same file type as Microsoft Money and Quicken, so the best bet is often to check how your bank enable downloads for Quicken (they&rsquo;re unlikely to have heard much about Wesabe yet).</p>
+                <p>The files that you want to download will have a filename that ends in one of these extensions:</p>
+                  <ul>
+                    <li class='tight'><code>.ofx</code></li>
+                    <li class='tight'><code>.qfx</code></li>
+                    <li class='tight'><code>.qif</code></li>
+                    <li class='tight'><code>.ofc</code></li>
+                  </ul>
+                <p>If you have the option to download more than one of those, the <code>.ofx</code> file is the usually the easiest and most reliable choice.</p>
+
+
+              <h3>When downloads go directly to another financial program</h3>
+
+                <p>If you are using Firefox, try going to <strong>Tools</strong> and then <strong>Options</strong> (if you&rsquo;re using a PC) or to <strong>Preferences</strong> (if you&rsquo;re using a Mac). Then choose <strong>Content &gt; File Types &gt; Manage</strong>. You can choose to either delete the qif extension action (so it will ask you what to do next time) or change the action to &ldquo;save to computer&rdquo;.</p>
+                <p>If you are using IE, try the instructions <a href="http://www.mydigitallife.info/2007/06/15/disable-automatic-opening-or-saving-of-downloads-re-enable-always-ask-before-check-box/">here</a>.</p>
+
+              <h3>Adding historical data to an account</h3>
+
+                <p>Every bank and every credit card seem to have different policies regarding how much information they allow you to download at one time. Sometimes it&rsquo;s information going back seven years, and other times it&rsquo;s limited to the information in your current statement.</p>
+                <p>If you can download historical information, you can upload it to an existing account, no matter how you're uploading your current account information. To add historical data to an account, download the data from your bank to your computer, and then do the following:</p>
+                <ol>
+                  <li>Click on the <strong>My Accounts</strong> tab to view your list of accounts.</li>
+                  <li>Click the orange <strong>Add an account</strong> button at the bottom of the My Accounts panel. </li>
+                  <li>Select your bank from the list as if you're creating a new account.</li>
+                  <li>In the <em>Connect to your bank</em> screen, click the <strong>Manual Uploads</strong> button on the right.</li>
+                  <li>Click the <strong>Browse...</strong> button and navigate to the saved historical data.</li>
+                  <li>Click the <strong>Upload File</strong> button. Wesabe should recognize the transactions and update the existing account.
+                </ol>
+              <h3>Exporting from other financial programs</h3>
+
+                <p>We don&rsquo;t provide direct support for any other financial programs, but many customers have had success moving their Quicken or Microsoft Money accounts into Wesabe. To do that, you need to export your accounts in a format that ends in one of the extensions we support:</p>
+                <ul>
+                  <li class='tight'><code>.ofx</code></li>
+                  <li class='tight'><code>.qfx</code></li>
+                  <li class='tight'><code>.qif</code></li>
+                  <li class='tight'><code>.ofc</code></li>
+                </ul>
+                <p>If you have the option to export more than one of those, the .ofx file is the usually the easiest and most reliable choice. If you can only export in a .qif format, then you should use &ldquo;strict&rdquo; encoding. Generally, exporting each account separately works better than exporting all of the accounts together in a single file.</p>
+                <p>If you go to the My Accounts panel and hover over any account, you should see the upload icon to the right of the account balance. Click the upload icon, and you&rsquo;ll be prompted to upload a file manually - you can then upload the file that you exported from your financial program.</p>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="bottom"><div class="right"></div></div>
+  </div>
+</div>
+<%= render :partial => 'page/help_sidebar' %>
+<div class="clear"></div>

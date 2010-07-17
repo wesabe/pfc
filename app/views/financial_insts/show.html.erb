@@ -1,0 +1,454 @@
+<% set_page_title "Admin", @financial_inst.name %>
+
+<%= javascript_include_tag 'jquery.flot.js' %>
+<%= javascript_include_tag 'clippy.js' %>
+
+<style type="text/css">
+  table#fi-info {
+    font-size: 90%;
+  }
+
+  table#fi-info > tbody > tr > td {
+    vertical-align: top;
+  }
+
+  table#fi-info th {
+    text-align: left;
+  }
+
+  table#fi-info > tbody > tr > td > table {
+    padding: 5px;
+  }
+
+  table#fi-info table.labels tr th {
+    padding-right: 5px;
+  }
+
+  table#fi-info .mono {
+    font-family: Monaco, Courier;
+  }
+
+  table.ssu-jobs td {
+    padding: 10px;
+    margin: 0px;
+  }
+
+  table.ssu-jobs tr.failed {
+    background-color: #fdd;
+  }
+
+  table.ssu-jobs tr.successful {
+    background-color: #dfd;
+  }
+
+  table.ssu-jobs tr.status-401, table.ssu-jobs tr.status-403 {
+    background-color: #def;
+  }
+</style>
+<script type="text/javascript">
+
+$(function($) {
+  <% if @fi_stats_30d %>
+
+  // helper for returning the weekends in a period
+  function weekendAreas(plotarea) {
+      var areas = [];
+      var d = new Date(plotarea.xmin);
+      // go to the first Saturday
+      d.setDate(d.getDate() - ((d.getDay() + 1) % 7))
+      d.setSeconds(0);
+      d.setMinutes(0);
+      d.setHours(0);
+      var i = d.getTime();
+      do {
+          // when we don't set y1 and y2 the rectangle
+          // automatically extends to infinity in those directions
+          areas.push({ x1: i, x2: i + 2 * 24 * 60 * 60 * 1000 });
+          i += 7 * 24 * 60 * 60 * 1000;
+      } while (i < plotarea.xmax);
+
+      return areas;
+  }
+
+  var now = new Date().getTime(), DAY = 24*60*60*1000, WEEK = 7*DAY;
+  var barWidth = 0.75*DAY;
+
+  var okay = <%= @fi_okay.to_json %>;
+  var fail = <%= @fi_fail.to_json %>;
+  var auth = <%= @fi_auth.to_json %>;
+  var pend = <%= @fi_pend.to_json %>;
+  var all  = <%= @fi_all.to_json  %>;
+
+  var o = [{
+    color: '#33cc33',
+    bars: { show: true, barWidth: barWidth },
+    data: okay,
+  },{
+    color: '#cc3333',
+    bars: { show: true, barWidth: barWidth },
+    data: fail,
+  },{
+    color: '#cc33cc',
+    bars: { show: true, barWidth: barWidth },
+    data: pend,
+  },{
+    color: '#3333cc',
+    bars: { show: true, barWidth: barWidth },
+    data: auth,
+  },{
+    color: '#ccc',
+    points: { show: true },
+    data: all,
+  }];
+
+  var q = {
+    shadowSize:0,
+    grid: {coloredAreas: weekendAreas},
+    yaxis: {
+      min  :  0,
+      ticks:  5
+    },
+    xaxis: {
+      mode : 'time',
+      max  : <%= @fi_okay[-1][0] -%> + 1*DAY,
+      min  : <%= @fi_okay[ 0][0] -%>,
+      tickSize  : [2, 'day'],
+      timeformat: "%m/%d"
+    }
+  };
+
+  $.plot($("#graph1"), o, q);
+
+  <% end %>
+
+  // prepare the clipboardy stuff
+  $('table#fi-info td.data a').each(function() {
+    var data = $(this).attr('data') || $(this).attr('href');
+    $(this).clippy(data);
+  });
+});
+
+</script>
+
+<div class="top">
+  <div class="right"></div>
+</div>
+<div class="middle">
+  <div class="right">
+
+    <h2><%= h(@financial_inst.name) -%> <%= link_to image_tag('button_edit.gif'), edit_financial_inst_url(@financial_inst) %></h2>
+
+    <table id="fi-info" width="100%">
+      <tr>
+        <td width="40%">
+          <h4>Wesabe Info</h4>
+          <table id="basics" class="labels">
+            <tr>
+              <th>ID</th>
+              <td><%=h @financial_inst.wesabe_id %> (<%=h @financial_inst.id %>)</td>
+            </tr>
+            <tr>
+              <th>Status</th>
+              <td><%=h FinancialInst::Status[@financial_inst.status].humanize %></td>
+            </tr>
+            <tr>
+              <th>Featured</th>
+              <td><%=h @financial_inst.featured ? 'Yes' : 'No' %></td>
+            </tr>
+            <tr>
+              <th>&nbsp;</th>
+              <td>&nbsp;</td>
+            </tr>
+            <tr>
+              <th>Good Txid</th>
+              <td><%=h @financial_inst.good_txid ? 'Yes' : 'No' %></td>
+            </tr>
+            <tr>
+              <th>Bad Balance</th>
+              <td><%=h @financial_inst.bad_balance ? 'Yes' : 'No' %></td>
+            </tr>
+            <tr>
+              <th>Date Format</th>
+              <td><%= @financial_inst.date_format || '<em>(default)</em>' %></td>
+            </tr>
+            <tr>
+              <th>Country</th>
+              <td><%=h @financial_inst.country.name %></td>
+            </tr>
+            <tr>
+              <th>Account Number Regex</th>
+              <td><%=h @financial_inst.account_number_regex %></td>
+            </tr>
+            <tr>
+              <th>&nbsp;</th>
+              <td>&nbsp;</td>
+            </tr>
+            <tr>
+              <th>Created</th>
+              <td>
+                <%= short_friendly_date(@financial_inst.created_at) %>
+                <% if @financial_inst.creating_user %>
+                by <%= link_to(h(@financial_inst.creating_user.display_name), user_url(@financial_inst.creating_user)) %>
+                <% end %>
+              </td>
+            </tr>
+            <tr>
+              <th>Updated</th>
+              <td><%= short_friendly_date(@financial_inst.updated_at) %></td>
+            </tr>
+            <tr>
+              <th>&nbsp;</th>
+              <td>&nbsp;</td>
+            </tr>
+            <tr>
+              <th>Total accounts</th>
+              <td><%=h @financial_inst.accounts.count %></td>
+            </tr>
+            <tr>
+              <th>Total users</th>
+              <td><%=h @financial_inst.accounts.count(:select => 'DISTINCT account_key') %></td>
+            </tr>
+            <tr>
+              <th>Total credentials</th>
+              <td><%=h @financial_inst.account_creds.count %></td>
+            </tr>
+            <% if @financial_inst.mapped_to %>
+            <tr>
+              <th>&nbsp;</th>
+              <td>&nbsp;</td>
+            </tr>
+            <tr>
+              <th>Mapped to</th>
+              <td><%= link_to @financial_inst.mapped_to.wesabe_id, financial_inst_url(@financial_inst.mapped_to) %></td>
+            </tr>
+            <% end %>
+            <tr>
+              <th>&nbsp;</th>
+              <td>&nbsp;</td>
+            </tr>
+            <% if @financial_inst.notes.blank? %>
+            <tr>
+              <th>Notes</th>
+              <td><em>(none)</em></td>
+            </tr>
+            <% else %>
+            <tr>
+              <th>Notes</th>
+              <td>&nbsp;</td>
+            </tr>
+            <tr>
+              <td colspan="2"><%= h(@financial_inst.notes) %></td>
+            </tr>
+            <% end %>
+          </table>
+
+          <h4>Help</h4>
+          <% help = @financial_inst.help_text_hash %>
+          <table class="labels">
+            <tr>
+              <th>Default help text</th>
+              <% if help[:default] %>
+              <td class="mono"><%=truncate h(help[:default]) %></td>
+              <% else %>
+              <td><em>(none)</em></td>
+              <% end %>
+            </tr>
+            <% [["Automatic", :ssu]].each do |name, key| %>
+            <tr>
+              <th><%= name %> Uploader</th>
+              <% if help[key] %>
+              <td class="mono"><%=truncate h(help[key]) %></td>
+              <% elsif help[:default] %>
+              <td><em>(default)</em></td>
+              <% else %>
+              <td><em>(none)</em></td>
+              <% end %>
+            </tr>
+            <% end %>
+          </table>
+       </td>
+        <td width="60%">
+          <h4>Connection</h4>
+          <table id="connection" class="labels">
+            <tr>
+              <th>Automatic Uploader</th>
+              <td><%=h FinancialInst::SSUSupport[@financial_inst.ssu_support].titlecase %></td>
+            </tr>
+            <tr>
+              <th>&nbsp;</th>
+              <td>&nbsp;</td>
+            </tr>
+            <tr>
+              <th>OFX URL</th>
+              <td class="data">
+                <% if !@financial_inst.ofx_url.blank? %>
+                <%= auto_link(@financial_inst.ofx_url, :all, :target => '_blank') %>
+
+                <% else %>
+                <em>(none)</em>
+                <% end %>
+              </td>
+            </tr>
+            <tr>
+              <th>OFX FID</th>
+              <td>
+                <% if !@financial_inst.ofx_fid.blank? %>
+                <%= @financial_inst.ofx_fid %>
+                <% else %>
+                <em>(none)</em>
+                <% end %>
+              </td>
+            </tr>
+            <tr>
+              <th>OFX ORG</th>
+              <td>
+                <% if !@financial_inst.ofx_org.blank? %>
+                <%= @financial_inst.ofx_org %>
+                <% else %>
+                <em>(none)</em>
+                <% end %>
+              </td>
+            </tr>
+            <tr>
+              <th>OFX BROKERID</th>
+              <td>
+                <% if !@financial_inst.ofx_broker.blank? %>
+                <%= @financial_inst.ofx_broker %>
+                <% else %>
+                <em>(none)</em>
+                <% end %>
+              </td>
+            </tr>
+          </table>
+
+          <h4>Financial Institution Info</h4>
+          <table class="labels">
+            <tr>
+              <th>Name</th>
+              <td><%=h @financial_inst.name %></td>
+            </tr>
+            <tr>
+              <th>&nbsp;</th>
+              <td>&nbsp;</td>
+            </tr>
+            <tr>
+              <th>Home Page</th>
+              <td class="data"><%= @financial_inst.homepage_url ? auto_link(@financial_inst.homepage_url, :all, :target => '_blank') : 'n/a' %></td>
+            </tr>
+            <tr>
+              <th>Login Page</th>
+              <td class="data"><%= @financial_inst.login_url ? auto_link(@financial_inst.login_url, :all, :target => '_blank') : 'n/a' %></td>
+            </tr>
+            <tr>
+              <th>&nbsp;</th>
+              <td>&nbsp;</td>
+            </tr>
+            <tr>
+              <th>Username label</th>
+              <td><%=h @financial_inst.username_label %></td>
+            </tr>
+            <tr>
+              <th>Password label</th>
+              <td><%=h @financial_inst.password_label %></td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+      <% if @fi_stats_30d %>
+      <tr>
+        <td colspan="2">
+          <h4>Automatic Uploader</h4>
+          <table>
+            <tr>
+              <td>
+                <table id="stats" class="data">
+                  <tr><td>30d</td> <td><b>Sum</b></td><td><b>Pct</b></td></tr>
+                  <tr><td><b>Jobs</b></td> <td><%= @fi_stats_30d.sum_jobs -%></td><td>--</td></tr>
+                  <tr><td><b>Okay</b></td> <td><%= @fi_stats_30d.sum_okay -%></td><td><%= sprintf("%0.2f", @fi_stats_30d.pct_okay) -%>% </td></tr>
+                  <tr><td><b>Fail</b></td> <td><%= @fi_stats_30d.sum_fail -%></td><td><%= sprintf("%0.2f", @fi_stats_30d.pct_fail) -%>% </td></tr>
+                  <tr><td><b>Auth</b></td> <td><%= @fi_stats_30d.sum_auth -%></td><td><%= sprintf("%0.2f", @fi_stats_30d.pct_auth) -%>% </td></tr>
+                  <tr><td><b>Pend</b></td> <td><%= @fi_stats_30d.sum_pending -%></td><td><%= sprintf("%0.2f", @fi_stats_30d.pct_pending) -%>% </td></tr>
+                </table><br/>
+                <% if @fi_stats_07d %>
+                <table id="stats" class="data">
+                  <tr><td>07d</td> <td><b>Sum</b></td><td><b>Pct</b></td></tr>
+                  <tr><td><b>Jobs</b></td> <td><%= @fi_stats_07d.sum_jobs -%></td><td>--</td></tr>
+                  <tr><td><b>Okay</b></td> <td><%= @fi_stats_07d.sum_okay -%></td><td><%= sprintf("%0.2f", @fi_stats_07d.pct_okay) -%>% </td></tr>
+                  <tr><td><b>Fail</b></td> <td><%= @fi_stats_07d.sum_fail -%></td><td><%= sprintf("%0.2f", @fi_stats_07d.pct_fail) -%>% </td></tr>
+                  <tr><td><b>Auth</b></td> <td><%= @fi_stats_07d.sum_auth -%></td><td><%= sprintf("%0.2f", @fi_stats_07d.pct_auth) -%>% </td></tr>
+                  <tr><td><b>Pend</b></td> <td><%= @fi_stats_07d.sum_pending -%></td><td><%= sprintf("%0.2f", @fi_stats_07d.pct_pending) -%>% </td></tr>
+                </table>
+                <% end %>
+              </td>
+              <td valign="top">
+                <div id="graph1" style="width:650px;height:125px"></div>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2">
+          <h4>Recent Jobs</h4>
+          <table class="ssu-jobs" width="100%">
+            <thead>
+              <tr>
+                <th>Job ID</th>
+                <th>Created</th>
+                <th>Status</th>
+                <th>Result</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @recent_jobs.each do |jobp| %>
+              <tr class="status-<%= jobp.job.status %> <%= jobp.status %>">
+                <td class="data">
+                  <a class="mono" data="<%= jobp.jobid %>" href="#"><%= jobp.jobid %></a>
+                </td>
+                <td>
+                  <span class="relatize">
+                    <%= jobp.job.created_at.utc%>
+                  </span>
+                </td>
+                <td><%= jobp.status %></td>
+                <td><%= jobp.result %></td>
+              </tr>
+              <% end %>
+            </tbody>
+          </table>
+          <h4>Recent Signups</h4>
+          <table class="ssu-jobs" width="100%">
+            <thead>
+              <tr>
+                <th>Job ID</th>
+                <th>Created</th>
+                <th>Status</th>
+                <th>Result</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @recent_signups.each do |jobp| %>
+              <tr class="status-<%= jobp.job.status %> <%= jobp.status %>">
+                <td class="data">
+                  <a class="mono" data="<%= jobp.jobid %>" href="#"><%= jobp.jobid %></a>
+                </td>
+                <td>
+                  <span class="relatize">
+                    <%= jobp.job.created_at.utc%>
+                  </span>
+                </td>
+                <td><%= jobp.status %></td>
+                <td><%= jobp.result %></td>
+              </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+      <% end %>
+    </table>
+  </div>
+</div>
+<div class="bottom">
+  <div class="right"></div>
+</div>

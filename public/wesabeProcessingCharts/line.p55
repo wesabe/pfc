@@ -1,0 +1,745 @@
+/*
+ * Configuration
+ */
+
+// Data and 'global' setup
+var lines = wesCharts.getChartData(curElement.parentNode.id);
+var options = wesCharts.getChartOptions(curElement.parentNode.id);
+var logger = wesabe.loggerFor('SvE');
+
+var preferences = wesabe.data.preferences;
+
+var margin = options.margin || {top: 0, bottom: 25, left: 60, right: 60};
+var hotSpots = [];
+var accounts = [];
+var currency = {};
+var filterTags = [];
+
+var DAY = "Day";
+var WEEK = "Week";
+var MONTH = "Month";
+
+// NOTE: BRCM uses Monday as the first day of the week, so we follow suit.
+var FIRST_DAY_OF_WEEK = 1;
+
+// accounts for a parsing bug with processing.js
+function echo(o) { return o };
+
+var _loading = false, _loadingTimeout, LOADING_MESSAGE_DELAY = 500;
+var loading = function(message) {
+  if (!message) {
+    clearTimeout(_loadingTimeout);
+    _loadingTimeout = null;
+    _loading = false;
+    return;
+  }
+
+  if (_loading) {
+    // already showing a message, just change the text
+    // logger.debug("immediately showing loading message: ", message);
+    setLoadingMessage(message);
+  } else if (!_loadingTimeout) {
+    // wait half a second before showing the loading message
+    // logger.debug("waiting before showing loading message: ", message);
+    _loadingTimeout = setTimeout(function() {
+      _loading = true;
+      setLoadingMessage(message);
+    }, LOADING_MESSAGE_DELAY);
+  }
+};
+
+var setLoadingMessage = function(message) {
+  var x = (width-margin.left-margin.right)/2+margin.left;
+  var y = (height-margin.top-margin.bottom)/2+margin.top;
+  wesCharts.text(curElement, message, 0, 0, { notification: true, x: x, y: y });
+};
+
+var chartData = echo({
+  performCaching: true,
+  requests: {},
+  hasPreloaded: false,
+
+  isCurrencyLoaded: function() {
+    return !!currency.name;
+  },
+
+  preloadAllIntervals: function() {
+    if (chartData.hasPreloaded || !chartData.performCaching) return;
+
+    intervals.each(function(interval) {
+      if (!interval.unique) return;
+      chartData.asyncLoadDataForInterval(interval);
+    });
+
+    chartData.hasPreloaded = true;
+  },
+
+  asyncLoadDataForInterval: function(interval, callback) {
+    var range = chartData.getDateRangeForInterval(interval);
+    chartData.asyncLoadDataForIntervalInRange(interval, range, callback);
+  },
+
+  asyncLoadDataForIntervalInRange: function(interval, range, callback) {
+    if (chartData.performCaching) {
+      var data = chartData.getCachedDataForIntervalInRange(interval, range);
+      if (data) {
+        if (jQuery.isFunction(callback)) callback(interval, range, data);
+        return;
+      }
+    }
+
+    if (jQuery.isFunction(callback)) {
+      jQuery(chartData).one('load-'+interval.key, function(event, interval, range, data) {
+        callback(interval, range, data);
+      });
+    }
+
+    chartData.loadDataForIntervalInRange(interval, range);
+  },
+
+  clearCachedData: function() {
+    intervals.each(function(interval) {
+      jQuery(chartData).data(interval.key, null);
+    });
+  },
+
+  getCachedDataForIntervalInRange: function(interval, range) {
+    var l = wesabe.loggerFor(logger.getPrefix()+" @ chartData.getCachedDataForIntervalInRange: ");
+    var mappedData = jQuery(chartData).data(interval.unit);
+
+    // l.debug("RETRIEVE: getting mapped data: ", mappedData);
+
+    if (!mappedData) {
+      return null;
+    } else {
+      var data = [], needsUpdate = false;
+
+      var s, e;
+
+      if (interval.unit === WEEK) {
+        // startOfWeek takes a parameter, so handle it separately
+        s = wesabe.lang.date.startOfWeek(range.start, FIRST_DAY_OF_WEEK);
+      } else {
+        s = wesabe.lang.date.doWithUnit("startOf", interval.unit, range.start);
+      }
+
+      s = wesabe.lang.date.startOfDay(s); // set time to midnight
+      e = range.end;
+
+      do {
+        // l.debug("checking cache for date: ", s, "(", s.getTime(), ")");
+        var datum = mappedData[s.getTime()];
+        if (!datum) {
+          needsUpdate = true;
+        } else {
+          data.push(datum);
+        }
+
+        s = wesabe.lang.date.doWithUnit("add", interval.unit, s, 1);
+      } while (!wesabe.lang.date.after(s, e));
+
+      // l.debug("interval: ", interval, ", range: ", range);
+      if (!needsUpdate) {
+        // l.debug("HIT: using cached data: ", data);
+        return data;
+      } else {
+        if (data.length) {
+          // l.debug("PARTIAL MISS: have partial data: ", data);
+        } else {
+          // l.debug("MISS: no cache data");
+        }
+      }
+    }
+  },
+
+  setCachedDataForIntervalInRange: function(interval, range, data) {
+    var l = wesabe.loggerFor(logger.getPrefix()+" @ chartData.setCachedDataForIntervalInRange: ");
+    var mappedData = jQuery(chartData).data(interval.unit) || {};
+
+    jQuery.each(data, function() {
+      mappedData[this.interval.start.getTime()] = this;
+    });
+
+    // l.debug("interval: ", interval, ", range: ", range);
+    // l.debug("STORE: saving mapped data: ", mappedData);
+
+    jQuery(chartData).data(interval.unit, mappedData);
+  },
+
+  loadDataForIntervalInRange: function(interval, range) {
+    var l = wesabe.loggerFor(logger.getPrefix()+' @ chartData.loadDataForIntervalInRange: ');
+
+    // l.debug("interval: ", interval);
+    // l.debug("range: ", range);
+
+    if (!chartData.isCurrencyLoaded()) {
+      var msBeforeTryingAgain = 20;
+      // l.warn("postponing loading data because the currency isn't available yet");
+      // l.warn("trying again in ", msBeforeTryingAgain, "ms");
+
+      setTimeout(function() {
+        chartData.loadDataForIntervalInRange(interval, range);
+      }, msBeforeTryingAgain);
+
+      return;
+    }
+
+    var dataURL = chartData.getAPIEndpoint(interval, range, currency, filterTags);
+    // l.debug("dataURL: ", dataURL);
+
+    var request = chartData.requests[dataURL];
+    switch (request) {
+      case 'pending':
+        // l.debug("already making a request for this URL");
+        return;
+      case 'successful':
+        if (chartData.performCaching) {
+          l.error("BUG: how the hell did we get here if we're caching?");
+        }
+        break;
+      case 'error':
+        l.warn("already failed to get this URL, but trying again");
+        break;
+      default:
+        // l.debug("first load of this URL");
+        break;
+    }
+
+    jQuery.ajax({
+      url: dataURL,
+      dataType: 'json',
+      beforeSend: function() {
+        chartData.requests[dataURL] = 'pending';
+      },
+      error: function(request) {
+        chartData.requests[dataURL] = 'error';
+        chartData.handleError(interval, range, request);
+      },
+      success: function(data) {
+        chartData.requests[dataURL] = 'success';
+        chartData.handleSuccess(interval, range, data);
+      }
+    });
+  },
+
+  handleError: function(interval, range, request) {
+    logger.error(" @ chartData.handleError: Unable to retrieve data! Got response: ", request.status, " ", request.statusText);
+    loading(false);
+    wesCharts.text(curElement,
+      'Unable to load the Spending vs. Earnings chart!',
+      0, 0,
+      { notification: true, loading: false, x: (width/2), y: (height/2) }
+    );
+  },
+
+  handleSuccess: function(interval, range, data) {
+    // logger.debug(" @ chartData.handleSuccess: interval: ", interval, ", range: ", range, ", data: ", data);
+
+    var summaries = data.summaries;
+
+    jQuery.each(summaries, function() {
+      this.interval = echo({
+        start: wesabe.lang.date.parse(this.interval.start),
+        end: wesabe.lang.date.parse(this.interval.end)
+      });
+    });
+
+    if (chartData.performCaching) {
+      chartData.setCachedDataForIntervalInRange(interval, range, summaries);
+    }
+    jQuery(chartData).trigger('load-'+interval.key, [interval, range, summaries]);
+  },
+
+  getDateRangeForInterval: function(interval) {
+    var start    = wesabe.lang.date.startOfYear(new Date()),
+        end      = wesabe.lang.date.addDays(new Date(), 1);
+
+    if (interval && interval.timeAgoInDays) {
+      if (interval.unit === DAY || interval.unit === MONTH) {
+        // back up a bit to get some padding
+        start = wesabe.lang.date.addMonths(end, -interval.timeAgoInDays);
+      } else if (interval.unit === WEEK) {
+        // back up a bit to get some padding
+        start = wesabe.lang.date.addWeeks(end, -interval.timeAgoInDays);
+        // go to the beginning of the week
+        start = wesabe.lang.date.startOfWeek(start, FIRST_DAY_OF_WEEK);
+      } else {
+        logger.warn(" @ chartData.getDateRangeForInterval: got bad interval (", interval, "), using default");
+      }
+    }
+
+    return {start: start, end: end};
+  },
+
+  getAPIEndpoint: function(interval, range, currency, filterTags) {
+    var url = '/data/analytics/summaries/'
+
+    url += [interval.brcmSummary, wesabe.lang.date.toParam(range.start), wesabe.lang.date.toParam(range.end), currency.name].join('/');
+    if (filterTags && filterTags.length) {
+      url += '?' + jQuery.map(filterTags, function(tag){ return 'ignore-tag='+tag }).join('&');
+    }
+
+    return url;
+  }
+});
+
+
+var chartView = echo({
+  drawSelectedInterval: function() {
+    chartView.drawInterval(intervals.selected);
+  },
+
+  drawInterval: function(interval) {
+    chartData.asyncLoadDataForInterval(interval, chartView.drawIntervalWithData);
+  },
+
+  drawIntervalWithData: function(interval, range, data) {
+    loading(false);
+
+    var spending = [];
+    var earnings = [];
+    var totalSpending = 0;
+    var totalEarnings = 0;
+    var period   = [];
+    var endDate  = data[data.length-1].interval.end;
+
+    jQuery.each(data, function() {
+      var s, e;
+
+      period.push(this.interval.start);
+      // FIXME: Change these to use the "display" property, not "value".
+      s = wesabe.lang.number.parse(this.spending.value);
+      e = wesabe.lang.number.parse(this.earnings.value);
+      spending.push(s);
+      earnings.push(e);
+      totalSpending += s;
+      totalEarnings += e;
+    });
+
+    lines = echo({
+      xAxis   : period,
+      yAxis   : [spending, earnings],
+      colors  : ["rgb(24,164,213)", "rgb(119,204,153)"],
+      labels  : ["Spending", "Earnings"],
+      amounts : [totalSpending, totalEarnings],
+      interval: interval.unit,
+      endDate : endDate
+    });
+
+    // logger.debug(" @ chartView.drawIntervalWithData: redrawing with lines: ", lines);
+
+    redraw();
+  }
+});
+
+// Data functions
+var getProfile = function() {
+  try {
+    loading("Loading ...");
+    wesData.getProfile(parseProfile);
+  }
+  catch (ex) { alert(ex.message); }
+};
+
+var parseProfile = function(profileXml) {
+  var l = wesabe.loggerFor(logger.getPrefix()+'#parseProfile: ');
+
+  try {
+    var el = jQuery(profileXml).find('default-currency');
+    currency = echo({
+                'name': el.text(),
+                'unit': el.attr('symbol'),
+           'precision': el.attr('decimal_places'),
+           'separator': el.attr('separator'),
+           'delimiter': el.attr('delimiter')
+              });
+    // l.debug("got currency: ", currency);
+  }
+  catch (ex) {
+    currency = wesabe.lang.money.CURRENCIES.USD;
+    l.error("error parsing <default-currency> element: ", ex.message);
+  }
+
+  try {
+    var el = jQuery(profileXml).find('filtered-tags > tag > name')
+    filterTags = el.map(function(i, name){ return jQuery(name).text() }).get();
+    // l.debug("got filterTags: ", filterTags);
+  } catch (ex) {
+    l.error("error parsing <filtered-tags> element: ", ex.message);
+  }
+
+  chartView.drawSelectedInterval();
+};
+
+/*
+ * Processing
+ */
+void setup() {
+  size(options.width, options.height);
+  // For single pixel line drawing... setting size() above
+  // tweaks the translate in processing.js's init.
+  curContext.translate(0.5, 0.5);
+  noLoop();
+}
+
+void draw() {
+  noStroke();
+  wesCharts.clearLabels(curElement);
+
+  if (!lines)
+    getProfile();
+  else {
+    background(255);
+    drawGrid();
+    drawLines();
+    drawTimeSelect();
+    drawViewSelect();
+  }
+}
+
+// 'scale'r for the y axis data - used in drawing the lines (or bars)
+var yPointTransform = 1;
+
+void drawGrid() {
+  var xAxis = lines.xAxis;
+  var yAxis = lines.yAxis;
+  strokeWeight(1.0);
+
+  stroke(229);
+  line(0, margin.top, width, margin.top);
+  stroke(229);
+  line(0, height-margin.bottom, width, height-margin.bottom);
+
+
+  var xTickDelta = (width-(margin.left+margin.right))/(xAxis.length-1);
+  var yMax = 0.01;
+  var yMin = 0.01;
+  stroke(229);
+  var lastUsed;
+  for (var xt=0;xt < xAxis.length; xt++) {
+    var xTick = margin.left+(xTickDelta*xt);
+    if (view == wesCharts.LINE) line(xTick, margin.top, xTick, height-margin.bottom-1);
+    var xAxisLabel, xAxisLabelFormat;
+
+    if (lines.interval == DAY) {
+      var month = xAxis[xt].getMonth();
+
+      xAxisLabelFormat = "d" /* 4 */;
+      // append the short month if the month changes or if we're on the last one
+      if (month !== lastUsed || xt === xAxis.length - 1 /* last */) {
+        lastUsed = month;
+        xAxisLabelFormat += "\nNNN" /* Jan */;
+      }
+    } else if (lines.interval === WEEK) {
+      xAxisLabelFormat = 'NNN d' /* Jan 4 */;
+      // append the year if we're on the first or last ones
+      if (xt === 0 /* first */ || xt === xAxis.length - 1 /* last */)
+        xAxisLabelFormat += "\nyyyy" /* 2009 */;
+    } else if (lines.interval === MONTH) {
+      xAxisLabelFormat = 'NNN' /* Jan */;
+      // append the year if we're on the first or last ones
+      if (xt === 0 /* first */ || xt === xAxis.length - 1 /* last */)
+        xAxisLabelFormat += "\nyyyy" /* 2009 */;
+    }
+
+    xAxisLabel = wesabe.lang.date.format(xAxis[xt], xAxisLabelFormat).replace(/\n/g, '<br>');
+
+    var tm = wesCharts.textMetrics(curElement, xAxisLabel);
+    wesCharts.text(curElement, xAxisLabel, xTick-(tm.width/2), height-margin.bottom+7, { fontSize: '10' });
+    for (var ya=0;ya < yAxis.length;ya++) {
+      if (yMax < yAxis[ya][xt]) yMax = yAxis[ya][xt];
+      if (yMin > yAxis[ya][xt]) yMin = yAxis[ya][xt];
+    }
+  }
+  // scaler for the y axis data - used in drawing the lines (or bars)
+  yPointTransform = (height-(margin.top+margin.bottom))/(yMax-yMin); // yeah?
+
+  var yTickDivs = options.yTickDivs ? options.yTickDivs : 5;
+  var yTickDelta = (height-(margin.top+margin.bottom))/yTickDivs;
+  var yTickValueDelta = (yMax-yMin)/yTickDivs;
+  stroke(243);
+  // yAxes lines and labels
+  for (var yt=0;yt <= yTickDivs; yt++) {
+    var yTick = (height-(margin.top+margin.bottom))-(yTickDelta*yt);
+    if (yt !== 0)  line(0, yTick, width, yTick);
+    var yTickValue = wesabe.lang.money.format(Math.round(yMin+(yTickValueDelta*yt)), currency);
+    var tm = wesCharts.textMetrics(curElement, yTickValue);
+    if (yt != 0) {
+      wesCharts.text(curElement, yTickValue, margin.left-tm.width-2, yTick+2);
+      wesCharts.text(curElement, yTickValue, width-margin.right+4,  yTick+2);
+    }
+  }
+
+}
+
+void drawLines() {
+
+  var transformedDataArrays = new Array(lines.yAxis.length);
+  var totalsForDataArrays = new Array(lines.yAxis.length);
+  hotSpots = [];
+  var xTickDelta = (width-(margin.left+margin.right))/(lines.xAxis.length-1);
+  for (var xt=0;xt < lines.xAxis.length; xt++) {
+
+    var x = margin.left+(xTickDelta*xt);
+    var hotSpotsYs = []
+
+    for (var ya=0;ya < lines.yAxis.length;ya++) {
+      var y0 = height-margin.bottom-(lines.yAxis[ya][xt]*yPointTransform);
+      if (!transformedDataArrays[ya]) transformedDataArrays[ya] = new Array();
+      transformedDataArrays[ya].push( { x: x, y: y0 } );
+      hotSpotsYs.push(y0);
+      if (!totalsForDataArrays[ya]) totalsForDataArrays[ya] = 0;
+      totalsForDataArrays[ya] += lines.yAxis[ya][xt];
+    }
+
+    var today = new Date();
+    var lastSOW = wesabe.lang.date.startOfWeek(today, FIRST_DAY_OF_WEEK);
+
+    // Find last sunday for x axis date
+    var nwbDate = wesabe.lang.date.startOfWeek(lines.xAxis[xt], FIRST_DAY_OF_WEEK);
+
+    // gosh, just do millis math!
+    var nwb = 0;
+    while (nwbDate < lastSOW) {
+      nwb++;
+      nwbDate = wesabe.lang.date.addWeeks(nwbDate, 1);
+    }
+
+    hotSpots.push( { x: x, y: hotSpotsYs, xValue: lines.xAxis[xt], numWeeksBack: nwb } );
+  }
+
+  // Is this month complete?
+  var incomplete = false;
+  if (lines.interval === MONTH) {
+    // incomplete = true means we're not on the last day of the month
+    if (today.getDate() < wesabe.lang.date.endOfMonth(today).getDate()) incomplete = true;
+  }
+
+  // Finally draw lines with stroked dots for data
+  // FIXME: WTF? This section needs to communicate its intent.
+  fill(255);
+  strokeWeight(2.0);
+  for (var tda=0;tda < transformedDataArrays.length;tda++) {
+    if (view == wesCharts.LINE) {
+      stroke(lines.colors[tda]);
+      if (incomplete) {
+        var tdaLength =  transformedDataArrays[tda].length;
+        multiLine(transformedDataArrays[tda].slice(0, tdaLength-1));
+        var tdaColor = lines.colors[tda].split(",");
+        stroke(tdaColor[0].replace('rgb','rgba') + "," + tdaColor[1] + "," + tdaColor[2].replace(')','') + ",0.5)");
+        multiLine(transformedDataArrays[tda].slice(tdaLength-2, tdaLength));
+        stroke(lines.colors[tda]);
+      }
+      else
+        multiLine(transformedDataArrays[tda]);
+      for (var xt=0;xt < lines.xAxis.length-1; xt++)
+        ellipse(transformedDataArrays[tda][xt].x, transformedDataArrays[tda][xt].y, 6, 6);
+      if (incomplete) {
+        var tdaColor = lines.colors[tda].split(",");
+        stroke(tdaColor[0].replace('rgb','rgba') + "," + tdaColor[1] + "," + tdaColor[2].replace(')','') + ",0.5)");
+        ellipse(transformedDataArrays[tda][xt].x, transformedDataArrays[tda][xt].y, 6, 6);
+      }
+      else
+        ellipse(transformedDataArrays[tda][xt].x, transformedDataArrays[tda][xt].y, 6, 6);
+    }
+    else {
+      noStroke();
+      var tdaColor = lines.colors[tda].split(",");
+      fill(tdaColor[0].replace('rgb','rgba') + "," + tdaColor[1] + "," + tdaColor[2].replace(')','') + ",0.5)");
+      var xOffset = (lines.interval == DAY ? 6 : 10);
+      if (lines.amounts[0] != 0 && lines.amounts[1] != 0) xOffset = (tda == 0 ? (xOffset+(xOffset/2)) : xOffset/2);
+      for (var xt=0;xt < lines.xAxis.length; xt++) {
+        rect(transformedDataArrays[tda][xt].x-xOffset, transformedDataArrays[tda][xt].y, (lines.interval == DAY ? 6 : 10)*2,
+          height - margin.bottom - transformedDataArrays[tda][xt].y);
+      }
+    }
+  }
+}
+
+void drawLegend() {
+  var x0 = width-3;
+  var y0 = margin.top/2;
+  for (var l=0;l < lines.labels.length;l++) {
+    var tm = wesCharts.textMetrics(curElement, lines.labels[l]);
+    x0 -= tm.width;
+    wesCharts.text(curElement, lines.labels[l], x0, y0-tm.height/2+1, { color: "#666" });
+    x0 -= 11;
+    strokeWeight(3.0);
+    fill(255);
+    stroke(lines.colors[l]);
+    ellipse(x0, y0, 8, 8);
+    x0 -= 11;
+  }
+}
+
+var intervals = [
+  {key: "0", shortLabel: '1m', label: 'past month', timeAgoInDays: 1, unit: DAY, brcmSummary: 'daily', unique: true},
+  {key: "1", shortLabel: '3m', label: 'past 3 months', timeAgoInDays: 12, unit: WEEK, brcmSummary: 'weekly', unique: true},
+  {key: "2", shortLabel: '6m', label: 'past 6 months', timeAgoInDays: 6, unit: MONTH, brcmSummary: 'monthly', unique: false},
+  {key: "3", shortLabel: '1y', label: 'past 12 months', timeAgoInDays: 12, unit: MONTH, brcmSummary: 'monthly', unique: true}
+];
+
+intervals.selected = either(intervals[parseInt(either(preferences.get('charts.line.range'), 1))], intervals[1]);
+
+// logger.debug("selected interval=", intervals.selected);
+
+intervals.each = function(callback) {
+  for (var i = 0; i < intervals.length; i++) {
+    callback(intervals[i], i, intervals[i] === intervals.selected);
+  }
+};
+
+void drawTimeSelect() {
+  intervals.each(function(interval, i, selected) {
+    var button = $('#chart-sve .toggle-button.time-'+interval.key);
+    if (button.hasClass('on') != selected) {
+      button.toggleClass('on');
+    }
+    button
+      .unbind('click')
+      .click(function(){ setTimeRange(interval) });
+  });
+}
+
+void setTimeRange(interval) {
+  intervals.selected = interval;
+  redraw();
+  preferences.update('charts.line.range', interval.key);
+
+  loading("Loading " + intervals.selected.label + " ...");
+
+  chartView.drawSelectedInterval();
+}
+
+var viewChoices = [wesCharts.BAR, wesCharts.LINE];
+var viewSelected = parseInt(either(preferences.get('charts.line.view'), 0));
+var view = viewChoices[viewSelected];
+
+void drawViewSelect() {
+  var x0 = 461;
+  for (var vc=0;vc < viewChoices.length; vc++) {
+    var button = $('#chart-sve .toggle.'+viewChoices[vc]);
+    var selected = vc === viewSelected;
+    if (selected != button.hasClass('on')) {
+      button.toggleClass('on');
+    }
+    button
+      .unbind('click')
+      .click(function(){ setView(this) });
+  }
+}
+
+void setView(el) {
+  var element = $(el);
+  for (var vc=0;vc < viewChoices.length; vc++)
+    if (element.hasClass(viewChoices[vc])) break;
+  viewSelected = vc;
+  view = viewChoices[vc];
+  redraw();
+  preferences.update('charts.line.view', vc);
+}
+
+var dirty = false;
+void mouseMoved() {
+  curElement.parentNode.style.cursor = "auto";
+  wesCharts.tooltip(curElement);
+
+  chartData.preloadAllIntervals();
+
+  if (dirty) {
+    redraw();
+    dirty = false;
+  }
+  if (lines) {
+    var xOffset = 5;
+    if (view == wesCharts.BAR) {
+      xOffset = (lines.interval == DAY ? 6 : 10);
+      if (lines.amounts[0] != 0 && lines.amounts[1] != 0) xOffset += xOffset/2;
+    }
+    for (var hs = 0;hs < hotSpots.length;hs++) {
+      if ( mouseX <= hotSpots[hs].x+xOffset && mouseX >= hotSpots[hs].x-xOffset && mouseY <= height-margin.bottom+0 && mouseY >= margin.top-0 ) {
+
+        p.pushMatrix();
+        if (view == wesCharts.LINE) {
+          stroke(127);
+          line(hotSpots[hs].x, margin.top, hotSpots[hs].x, height-margin.bottom);
+          strokeWeight(3.0);
+          fill(255);
+          stroke(lines.colors[0]);
+          ellipse(hotSpots[hs].x, hotSpots[hs].y[0], 9, 9);
+          strokeWeight(3.0);
+          fill(255);
+          stroke(lines.colors[1]);
+          ellipse(hotSpots[hs].x, hotSpots[hs].y[1], 9, 9);
+        }
+        else {
+          stroke(219);
+          line(hotSpots[hs].x-xOffset, margin.top, hotSpots[hs].x-xOffset, height-margin.bottom-1);
+          line(hotSpots[hs].x+xOffset, margin.top, hotSpots[hs].x+xOffset, height-margin.bottom-1);
+        }
+        p.popMatrix();
+
+        var spending = lines.yAxis[0][hs],
+            earnings = lines.yAxis[1][hs];
+
+        var str = '<div style="width: 100%;color: ' + lines.colors[0] + ';margin: 1px;"><nobr><strong style="font-weight: normal;">Spending</strong> ' + wesabe.lang.money.format(spending, currency) + "</nobr></div>";
+        str += '<div style="width: 100%;color: ' + lines.colors[1] + ';margin: 1px;"><nobr><strong style="font-weight: normal;">Earnings</strong> ' + wesabe.lang.money.format(earnings, currency) + "</nobr></div>";
+
+        if (spending !== earnings) {
+          str += '<div style="width: 100%;color: rgb(255, 163, 51);margin: 1px;"><nobr><strong style="font-weight: normal;">Difference</strong> ';
+          str += wesabe.lang.money.format(earnings - spending, jQuery.extend({positivePrefix: '+'}, currency));
+          str += '</nobr></div>';
+        }
+
+        curElement.parentNode.style.cursor = "pointer";
+        var xAxisLabel, xAxisLabelFormat = "NNN d" /* Jan 4 */;
+        if (lines.interval === MONTH) xAxisLabelFormat = "NNN" /* Jan */;
+        xAxisLabelFormat += " yyyy" /* 2009 */;
+        xAxisLabel = "<strong style='font-weight: normal;'>" +
+                        lines.interval +
+                  " of</strong> " + wesabe.lang.date.format(lines.xAxis[hs], xAxisLabelFormat);
+        var flipper = 0;
+        if (hs >= hotSpots.length-3) {
+          var popupWidth = wesCharts.textMetrics(curElement, '<div style="margin: 1px;border-bottom: 1px solid #999;"><nobr>' + xAxisLabel + '</nobr></div>' + str).width;
+          if (mouseX+9+popupWidth >= width) flipper = popupWidth + 39;
+        }
+        wesCharts.htmlTooltip(curElement,  '<div style="margin: 1px;border-bottom: 1px solid #999;"><nobr>' + xAxisLabel + '</nobr></div>' + str,
+          mouseX+3-flipper, mouseY);
+        dirty = true;
+        break;
+      }
+    }
+  }
+}
+
+void mousePressed() {
+  wesCharts.tooltip(curElement);
+
+  // TODO: make these clickable and linkable again
+  return;
+  var xOffset = 5;
+  if (view == wesCharts.BAR) {
+    xOffset = (lines.interval == DAY ? 6 : 10);
+    if (lines.amounts[0] != 0 && lines.amounts[1] != 0) xOffset += xOffset/2;
+  }
+  for (var hs = 0;hs < hotSpots.length;hs++) {
+    if ( mouseX <= hotSpots[hs].x+xOffset && mouseX >= hotSpots[hs].x-xOffset && mouseY <= height-margin.bottom+xOffset && mouseY >= margin.top-xOffset) {
+      if (lines.interval === MONTH || lines.interval === WEEK) {
+        window.open("/accounts/all?start_date=" + wesabe.lang.date.toParam(hotSpots[hs].xValue) +
+          "&end_date=" + wesabe.lang.date.toParam((hs === hotSpots.length-1) ? lines.endDate : hotSpots[hs+1].xValue));
+      }
+      else {
+        var startDate = hotSpots[hs].xValue;
+        var endDate = wesabe.lang.date.addDays(startDate, 1);
+        window.open("/accounts/all?start_date=" + wesabe.lang.date.toParam(startDate) +
+          "&end_date=" + wesabe.lang.date.toParam(endDate));
+      }
+    }
+  }
+}
+
+
+wesabe.provide('charts.sve', {
+  chartData: chartData,
+  chartView: chartView
+});

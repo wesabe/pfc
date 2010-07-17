@@ -1,0 +1,22 @@
+<%= stylesheet_link_manifest "dashboard" -%>
+<% content_for :footer do -%>
+  <%# requires javascript 'wesabe/views/shared/form' %>
+  <%# requires javascript 'wesabe/views/dashboard' %>
+  <%= javascript_include_manifest :dashboard %>
+  <!--[if IE]><%= javascript_include_tag "excanvas" %><![endif]-->
+<% end -%>
+
+<div id="right">
+  <%= dashboard_charts %>
+</div>
+
+<div id="left">
+  <%= render :partial => "accounts/widget" %>
+</div>
+
+<script type="text/javascript">
+  jQuery(function(){ page = new wesabe.views.pages.dashboard() });
+</script>
+
+
+<% preload_accounts; preload_credentials; preload_tags %>

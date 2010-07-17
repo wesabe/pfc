@@ -1,0 +1,33 @@
+<% set_page_title "Help - Data Format Problems" %>
+
+<div id="right">
+  <div class="two-column" id="public-page">
+    <div class="top"><div class="right"><div class="grip"></div></div></div>
+    <div class="middle">
+      <div class="right">
+        <div class="content">
+          <div class="module-header">
+        <h1>Data Format Problems</h1>
+        <h5 class="intro">This section of the manual contains troubleshooting information regarding various data formats.</h5>
+          </div>
+          <div class="indent1">
+
+              <h3>Data Format Problems</h3>
+
+                <p>The only requirement for using any of our uploaders to import data into Wesabe is that the bank or credit card site needs to provide an &ldquo;export&rdquo; or &ldquo;download your accounts&rdquo; option in OFX, QFX, OFC, or QIF format.</p>
+                <p>We don&rsquo;t support CSV (Excel) import. CSV doesn&rsquo;t specify what information is included, how it&rsquo;s structured, or even how things like numbers are handled, so it&rsquo;s a challenge to get a broad enough interpreter working.</p>
+                <p>We also don&rsquo;t support .pdf files. This is something we&rsquo;d ideally like to have, but it may be difficult to achieve since many banks add formatting and design elements that make the .pdf hard to parse.</p>
+
+              <h3>Wesabe Lists a Bank that Doesn&rsquo;t Provide the Right Formats</h3>
+
+                <p>We add banks to our list as requested, and sometimes we&rsquo;re unable to verify whether the bank can provide the right formats. Often there&rsquo;s no way to find the information, either because of language issues (in the case of international banks), or because only bank patrons can get that information, and we don&rsquo;t have any accounts with the bank in question. We work on the assumption that the people who have requested or added the bank have read the information on our site and are confirming that the banks have one of the right formats, but we know this isn&rsquo;t always true.</p>
+                <p>In some cases, adding banks this way creates the false positives - it looks like we have the bank, but then it turns out there&rsquo;s no way to access it.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="bottom"><div class="right"></div></div>
+  </div>
+</div>
+<%= render :partial => 'page/help_sidebar' %>
+<div class="clear"></div>

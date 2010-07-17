@@ -1,0 +1,18 @@
+xml.response(:status => "processed", :apiversion => Api::Constants::CURRENT_API_VERSION) do
+  xml.config() do
+    xml.accounts() do
+      @accounts.each do |account|
+        attribs = {:id => account.id_for_user,
+                   :name => account.name,
+                   :account_type => account.account_type.raw_name,
+                   :currency => account.currency.name}
+        attribs.update(:wesabe_id => account.financial_inst.wesabe_id,
+                       :acctidhash => account.account_number_hash,
+                       :last4 => account.account_number) unless account.manual_account?
+        attribs.update(:lastupload => account.last_upload.created_at.strftime("%Y-%m-%d %H:%M:%S"),
+                       :balance => account.balance) if account.last_upload
+        xml.account(attribs)
+      end
+    end
+  end
+end

@@ -1,0 +1,28 @@
+/* this stylesheet is NOT included by Safari */
+#searchform {
+  margin-top: 10px;
+	background: transparent url(/images/searchbox/search-left.png) 0 0 no-repeat;
+	padding-left: 19px;
+}
+#searchform .sbox_r {
+	background: transparent url(/images/searchbox/search-right.png) 0 0 no-repeat;
+	float: left;
+	width: 19px;
+	height: 19px;
+}
+#searchform .sbox_r_f2 {
+	background: transparent url(/images/searchbox/search-right.png) 0 -19px no-repeat;
+	float: left;
+	width: 19px;
+	height: 19px;
+}
+#searchform input {
+	background: transparent url(/images/searchbox/search-bg.png) 0 0 repeat-x;
+	float: left;
+	border: 0;
+	height: 16px;
+	width: 92px;
+	padding: 3px 3px 0 3px;
+	font: 11px/13px "Lucida Grande", helvetica, arial, sans-serif;
+	color: #000;
+}

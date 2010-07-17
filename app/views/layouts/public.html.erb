@@ -1,0 +1,27 @@
+<%= render :partial => "layouts/header" %>
+<body class="showgrid-off">
+<div class="container two-col">
+  <div id="header">
+    <div id="header-top">
+      <%= logo %>
+      <%= yield :header_action_button %>
+      <div class="clear"></div>
+    </div>
+  </div>
+  <div id="center">
+    <div class="two-column flat">
+      <div class="top"><div class="right"><div class="grip"></div></div></div>
+      <div class="middle"><div class="right">
+        <div class="content">
+          <%= yield :layout %>
+        </div>
+      </div></div>
+      <div class="bottom"><div class="right"></div></div>
+    </div>
+  </div>
+  <div class="clear"></div>
+  <%= render :partial => "layouts/footer_nav" %>
+</div>
+<%= javascript_include_tag 'wesabe/views/shared/form', "wesabe/views/shared/entry-point" %>
+</body>
+</html>

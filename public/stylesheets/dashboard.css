@@ -1,0 +1,31 @@
+#recent-transactions .module-header {
+  height:18px;
+  padding-bottom:0;
+}
+
+/*start of charts ----------------------------------------------------------------------------*/
+
+/* spending vs earnings chart */
+#chart-sve .spending {
+  color:#1DA4D5;
+}
+#chart-sve .earnings {
+  color:#7BC798;
+}
+#chart-sve .canvas-container {
+  height:175px;
+}
+
+/* pie charts */
+#chart-pie #spending-pie {
+  float:left;
+}
+
+#chart-pie #earnings-pie {
+  float:right;
+}
+
+#chart-pie .canvas-container {
+  width: 630px;
+  height: 260px;
+}

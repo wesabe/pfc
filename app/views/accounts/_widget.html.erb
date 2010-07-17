@@ -1,0 +1,165 @@
+<%# requires stylesheet "pages/accounts" %>
+<!--[if IE 6]>
+    <%= stylesheet_link_tag "ie6" %>
+<![endif]-->
+<%# requires javascript "views/widgets/accounts" %>
+
+<%# wesabe.views.widgets.accounts.AccountWidget %>
+<div class="one-column" id="accounts">
+  <div class="top"><div class="right"><div class="grip"></div></div></div>
+  <div class="middle"><div class="right">
+    <div class="content">
+      <div class="module-header">
+        <a class="edit-button button gry"><span>Edit</span></a>
+        <a class="done-button button green" style="display:none"><span>Done</span></a>
+        <div class="update-button button">
+          <%= image_tag 'maincontent/animated-gifs/ssu-animated-gif-button.gif', :alt => 'updating', :class => 'updating-spinner' %>
+        </div>
+        <h5><%= link_to 'My Accounts', accounts_path %></h5>
+      </div>
+      <%= image_tag 'maincontent/animated-gifs/loading-dots-animated.gif', :class => 'loading-indicator' %>
+      <%# wesabe.views.widgets.accounts.AccountGroupList %>
+      <ul class="account-groups">
+        <%# wesabe.views.widgets.accounts.AccountGroup %>
+        <li class="one-col-list group template">
+          <span class="view"></span>
+          <h6>
+            <a>
+              <%# wesabe.views.widgets.MoneyLabel %>
+              <span class="total"><!-- $6,782.45 --></span>
+              <span class="text-content"><!-- Group Name --></span>
+            </a>
+          </h6>
+          <div class="clear"></div>
+          <ul>
+            <%# wesabe.views.widgets.accounts.Account %>
+            <li class="account template">
+              <!-- for cash accounts -->
+              <div class="account-status cash"></div>
+
+              <!-- for SSU accounts -->
+              <div class="account-status update">
+                <%= image_tag 'maincontent/animated-gifs/ssu-animated-gif-button.gif', :alt => 'updating', :class => 'updating-spinner' %>
+              </div>
+
+              <div class="account-status update error">
+                <div class="hover-box" style="display:none">
+                  <div class="top"><div class="right">
+                    <div class="contents">
+                      <div class="header">Automatic Uploader Error</div>
+                      <p>Your bank has reported an error. To reset your bank credentials, click <a class="reset-creds">here</a>.
+                    </div>
+                  </div></div>
+                  <div class="bottom"><div class="right"></div></div>
+                </div>
+              </div>
+
+              <!-- for manual upload accounts -->
+              <div class="account-status upload">
+                <div class="hover-box" style="display:none">
+                  <div class="top"><div class="right">
+                    <div class="header">Manual Update</div>
+                    <p>To update your account information, go to <a class="fi-link" target="_blank">your financial institution</a>, and download your statement. Then upload it to Wesabe.<p>
+                    <p><strong>Formats supported:</strong> OFX (preferred), QIF, QFX, and OFC</p>
+                    <%= form_tag uploads_path, :class => 'account_upload', :multipart => true do %>
+                      <input id="statement" type="file" size="20" name="statement" alt="browse"/>
+                      <input name="account_uri" type="hidden" value="" />
+                      <div class="buttons">
+                        <a class="button confirm green"><span>Upload</span></a>
+                        <a class="button cancel gry"><span>Cancel</span></a>
+                      </div>
+                    <% end %>
+                    <div class="clear"></div>
+                  </div></div>
+                  <div class="bottom"><div class="right"></div></div>
+                </div>
+              </div>
+              <!-- for editing an account-->
+              <div class="edit-account">
+                <div class="edit" style="display:none"></div>
+              </div>
+              <span class="account-name">
+                <span class="balance"><!-- $200.00 --></span>
+                <a class="text-content"><!-- My Cash Account --></a>
+              </span>
+            </li>
+          </ul>
+        </li>
+      </ul>
+      <div class="accounts-total">
+          <h6><span class="total"><!-- $167,890.00 --></span>Total</h6>
+      </div>
+      <a href="/uploads/new" class="add-account-button button orange"><span>Add an Account</span></a>
+    </div>
+  </div></div>
+  <div class="bottom"><div class="right"></div></div>
+  <%# wesabe.views.widgets.accounts.AccountEditDialog %>
+  <div class="edit-dialog">
+    <div class="top"><div class="right">
+      <div class="edit-details">
+        <input type="text" name="account-name">
+        <%= select_tag 'account-currency', options_for_select(currency_full_options_for_select) %>
+        <div class="current-balance">
+          <label>Current Balance:</label>
+          <input type="text" name="current-balance">
+        </div>
+        <div class="edit-dialog-inset">
+          <a class="edit-dialog-inset-tab"><span class="ssu">Manage Uploader</span></a>
+          <a class="edit-dialog-inset-tab"><span class="track-balance">Track Balance</span></a>
+          <a class="edit-dialog-inset-tab on"><span class="archive-account">Archive Details</span></a>
+          <div class="top"><div class="right">
+            <div class="inset-tab-text ssu">
+              <div class="header">You are using the Automatic Uploader</div>
+              If the login credentials you use to connect to your bank have changed,
+              click <a class="reset-creds">here</a> to reset them.<br/>
+              To delete your bank credentials and deactivate the Automatic Uploader, click <a class="delete-creds">here</a>.
+            </div>
+            <div class="inset-tab-text ssu-error">
+              <div class="header">Automatic Uploader Error</div>
+              Your bank has reported an error. To reset your bank credentials, click <a class="reset-creds">here</a>.
+            </div>
+            <div class="inset-tab-text track-balance">
+              <input type="checkbox" name="track-balance" id="track-balance">
+              <label class="checkbox" for="track-balance">
+                <strong>Track Balance:</strong>
+                Cash accounts can track their current balance like a checking account would. A balance can be useful if you want to reconcile the cash in your wallet with your recorded transactions.
+              </label>
+            </div>
+            <div class="inset-tab-text archive-account on">
+              <input type="checkbox" name="archive-account" id="archive-account">
+              <label class="checkbox" for="archive-account">
+                <strong>Archive Account:</strong>
+                Archived accounts let you keep information from expired or terminated accounts. An archived account preserves your transaction information, but doesn't get included in your account totals.
+              </label>
+            </div>
+          </div></div>
+          <div class="bottom"><div class="right"></div></div>
+        </div>
+      </div>
+
+      <div class="confirmation delete-details">
+        <div class="header">Are you sure you want to permanently delete all
+          the information in <strong>&lsquo;<span class="account-name-text">
+          Account Name</span>&rsquo;</strong>? This cannot be undone.
+        </div>
+        <p class="error-message"></p>
+        <label class="clear">Enter your Wesabe password to delete the account:</label>
+        <input name="delete-account-password" type="password">
+      </div>
+
+      <p class="error-message">Sorry, there was an error saving your changes.</p>
+    </div></div>
+    <div class="bottom"><div class="right">
+      <img class="spinner" src="/images/activity-indicator.gif">
+      <div class="edit-details">
+        <a class="button green confirm"><span>Save</span></a>
+        <a class="button gry cancel"><span>Cancel</span></a>
+        <a class="button delete conf">Delete Account&hellip;</a>
+      </div>
+      <div class="delete-details">
+        <a class="button red delete confirm"><span>Delete</span></a>
+        <a class="button gry cancel"><span>Cancel</span></a>
+      </div>
+    </div></div>
+  </div>
+</div>

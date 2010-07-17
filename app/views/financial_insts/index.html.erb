@@ -1,0 +1,74 @@
+<h1>Financial Institutions</h1>
+
+<style type="text/css">
+table {
+	border-collapse: collapse;
+}
+
+td, th {
+	padding: 0.5em;
+	border: 1px solid #CCC;
+}
+
+thead, tfoot {
+	background-color: #DDD;
+}
+
+tr.rowodd {
+	background-color: #FFF;
+}
+
+tr.roweven {
+	background-color: #F2F2F2;
+}
+
+.sortcol {
+	cursor: pointer;
+	padding-right: 20px;
+	background-repeat: no-repeat;
+	background-position: right center;
+}
+.sortasc {
+	background-color: #DDFFAC;
+	background-image: url(/images/up.gif);
+}
+.sortdesc {
+	background-color: #B9DDFF;
+	background-image: url(/images/down.gif);
+}
+.nosort {
+	cursor: default;
+}
+</style>
+
+<table class="sortable">
+  <thead>
+    <tr>
+      <th id="fi-table-id">ID</th>
+      <th class="sortfirstdesc" id="fi-table-name">Name</th>
+      <th id="fi-table-wesabe_id">Wesabe ID</th>
+      <th id="fi-table-url">URL</th>
+    </tr>
+  </thead>
+  <tfoot>
+    <tr>
+      <td>ID</td>
+      <td>Name</td>
+      <td>Wesabe ID</td>
+      <td>URL</td>
+    </tr>
+  </tfoot>
+  <tbody>
+    <% for financial_inst in @financial_insts %>
+    <tr>
+      <td><%= financial_inst.id %></td>
+      <td><%= link_to(h(financial_inst.name), financial_inst_url(financial_inst)) %></td>
+      <td><%= financial_inst.wesabe_id %></td>
+      <td>
+        <%= link_to_url financial_inst.url %>
+      </td>
+      <td><%= link_to "Edit", edit_financial_inst_url(financial_inst) %></td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>

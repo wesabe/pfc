@@ -1,0 +1,72 @@
+<% content_for :header do -%>
+<style type="text/css">
+table#uploads { font-size: 90% }
+table#uploads th,
+table#uploads td { padding: 0 0.5em }
+table#uploads td {border-bottom: 1px dashed #999}
+h1 a:link, h1 a:visited { color:#2645BF !important; }
+</style>
+<% end -%>
+
+<h1>Uploads for <%= @account ? link_to(h(@account.name), account_url(@account)) : 'All Accounts' %></h1>
+
+<% if @uploads.empty? -%>
+  <em>There are no uploads with transactions in this account.</em>
+<% else -%>
+<table id="uploads">
+  <tr>
+    <th>Date</th><th>Client</th><th>Transactions</th>
+  </tr>
+<% for upload in @uploads -%>
+  <tr class="row">
+    <td><%= short_friendly_date(upload.created_at) %></td>
+    <td><%= h upload.client_name %> <%= h upload.client_version %></td>
+    <td>
+      <%= link_to "#{upload.txaction_count_for_account(@account)} (<small>#{txaction_date_range(upload)}</small>)",
+            url_for(:controller => 'accounts', :action => 'show', :id => @account, :upload_id => upload.guid) %>
+    </td>
+    <td>
+      <a class="delete button" onclick="confirmDelete.show(this, '<%= upload_path(:id => upload.guid, :account_id => @account) %>');">delete</a>
+    </td>
+  </tr>
+<% end -%>
+</table>
+<% end -%>
+
+<% content_for :footer do -%>
+<script type="text/javascript">
+// delete upload confirmation dialog
+var confirmDelete = {
+  dialog: null,
+  init: function() {
+    this.dialog = new YAHOO.widget.SimpleDialog("confirm_delete",
+     { width: "400px",
+       fixedcenter: true,
+       visible: false,
+       modal: !$.browser.msie, // modal in IE sucks
+       draggable: false,
+       close: false,
+       constraintoviewport: true,
+       text: '<b>Permanently</b> delete this upload and associated transactions?',
+       buttons: [ { text: 'Yes, <b>delete this upload</b>',
+                    handler: function(){ confirmDelete.okHandler() } },
+                  { text: 'Cancel',
+                    handler: function(){ confirmDelete.cancelHandler() } } ]
+     });
+     this.dialog.render("container");
+  },
+  okHandler: function() {
+    this.dialog.hide();
+    $(this.deleteButton).parents("tr").fadeOut("slow");
+    $.post(this.url,{_method:'delete'}); // this is how Rails fakes a DELETE
+  },
+  cancelHandler: function() { this.dialog.hide(); },
+  show: function(element, url) {
+    this.deleteButton = element;
+    this.url = url;
+    this.dialog.show();
+  }
+};
+$(function(){confirmDelete.init();});
+</script>
+<% end -%>

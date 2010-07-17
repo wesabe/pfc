@@ -1,0 +1,6 @@
+<div id="first_error" style="color:#999;">
+  <h4 class="error_title" style="color:#999;">We&rsquo;re sorry, we aren&rsquo;t able to connect to your bank right now.</h4>
+  <%= link_to image_tag("banner-try_again.png", :alt => "Try again. Double-check your username and password. Also, make sure you have an online account with this bank."), destroy_account_cred_url(@ac, :second_try => true), :method => :delete %>
+  <%= link_to content_tag(:span, "Continue"), destroy_account_cred_url(@ac, :second_try => true), :method => :delete, :class => 'button green' %>
+      <p class="large"><br/><br/><em>You can always try <%=h @fi.name %> again later.</em></p>
+</div>

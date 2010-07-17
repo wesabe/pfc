@@ -1,0 +1,8 @@
+--- 
+format: 1
+handler: 
+  commit: b1b63192b59374210c799e432b7ac838eaec29d6
+  branch: master
+lock: false
+repository_url: git://github.com/indirect/simple_presenter.git
+repository_class: Piston::Git::Repository

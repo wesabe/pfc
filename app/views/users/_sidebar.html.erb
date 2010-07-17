@@ -1,0 +1,20 @@
+<div class="one-column">
+  <div class="top"><div class="right"><div class="grip"></div></div></div>
+  <div class="middle"><div class="right">
+      <div class="content">
+        <div class="module-header">
+          <h5>My Profile</h5>
+        </div>
+        <ul class="one-col-list">
+          <li><%= link_to 'Profile Settings', edit_profile_url %></li>
+          <li class="even"><%= link_to 'Change My Password', change_password_user_url %></li>
+          <li class=""><%= link_to 'Download My Data', download_data_user_url %></li>
+          <li class="even"><%= link_to 'Delete My Membership', delete_membership_user_url %></li>
+        </ul>
+      </div>
+    </div></div>
+  <div class="bottom"><div class="right"></div></div>
+</div>
+<script type="text/javascript">
+  $(function(){ wesabe.views.shared.setCurrentTab('profile') });
+</script>

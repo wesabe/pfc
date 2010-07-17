@@ -1,0 +1,36 @@
+<% stylesheet "user-profile" %>
+<% stylesheet "groups" %>
+
+<%= render :partial => "layouts/header" %>
+<body class="showgrid-off">
+<div class="container">
+  <%= render :partial => "layouts/masthead" %>
+  <div id="maincontent">
+    <% content_for 'left_side' do -%>
+      <h3>Your Membership</h3>
+      <ul class="sidebar">
+        <li<%= ' class="selected"' if page_title.include?('Your Profile') -%>>
+          <%= link_to 'Your Profile', edit_profile_url %>
+        </li>
+        <li<%= ' class="selected"' if page_title.include?('Change My Password') -%>>
+          <%= link_to 'Change My Password', change_password_url %>
+        </li>
+        <li<%= ' class="selected"' if page_title.include?('Download My Data') -%>>
+          <%= link_to 'Download My Data', download_data_url %>
+        </li>
+        <li<%= ' class="selected"' if page_title.include?('Request Support') -%>>
+          <%= link_to 'Request Support', new_support_request_url %>
+        </li>
+        <li<%= ' class="selected"' if page_title.include?('Delete My Membership') -%>>
+          <%= link_to 'Delete My Membership', delete_membership_url %>
+        </li>
+      </ul>
+    <% end -%>
+    <%= yield :layout %>
+    <div class="clear"></div>
+  </div>
+  <%= render :partial => "layouts/footer_nav" %>
+</div>
+<%= yield :footer %>
+</body>
+</html>

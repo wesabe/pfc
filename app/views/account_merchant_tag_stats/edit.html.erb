@@ -1,0 +1,11 @@
+<%= form_tag(account_merchant_tag_stat_url(@merchant.id), :method => "put") do -%>
+  <h6>Automatic tags</h6>
+  <p>You can change the tags Wesabe will add to new <b><%=h @merchant.name %></b> transactions here.</p>
+  <div class="autotags-edit-field">
+    <%= text_field_tag :autotags, @autotags, :id => "autotags_#{@merchant.id}" %>
+  </div>
+  <div class="clear"></div>
+  <p class="update-all"><%= check_box_tag :update_all, 1, false %><label for="update_all" style="font-weight:normal">Update all existing <b><%= h @merchant.name %></b> transactions with my changes</label></p>
+  <%= hidden_field_tag :old_tags, @autotags %>
+  <%= hidden_field_tag :sign, @sign.to_s %>
+<%- end -%>

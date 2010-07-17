@@ -1,0 +1,398 @@
+/* general styles for the uploading process.......*/
+
+#upload-account .module-header h4 {
+  color:#C3C2BE;
+  margin-bottom:0;
+}
+
+#upload-index {
+  padding:0 10px;
+}
+
+.upload-steps {
+  background:transparent url(/images/upload-accounts/top-gradient-trans.png) scroll no-repeat top left;
+  padding:18px 0;
+  height:35px;
+}
+
+.upload-steps li {
+  font-weight:normal;
+  font-size:0.9em;
+  width:33%;
+  float:left;
+  text-align:center;
+  color:#ccc;
+}
+
+.upload-steps li.on {
+  color:#35352F;
+  font-weight:bold;
+  background:transparent;
+}
+
+.upload-steps li a {
+  color:#E1E2D5;
+}
+.upload-steps li a:hover {
+  color:#35352F;
+}
+
+#color_body {
+  margin:0 15px;
+  height:auto;
+
+}
+
+*html #color_body {
+  margin:0 0 0 8px;
+}
+
+#form_body {
+  padding-top:1.5em;
+  padding-right:182px;
+}
+
+#help {
+  background:transparent url(/images/upload-accounts/help-background-trans.png) scroll no-repeat top left;
+  width:165px;
+  padding:32px 0 0 10px;
+  float:right;
+  margin-bottom:15px;
+}
+
+#help h6 {
+  color:#C3C2BE;
+  padding-top:2.2em;
+  margin-left:10px;
+}
+
+*html #help h6 {
+  margin-left:30px;
+}
+
+#create-cash-account-button {
+  width:155px;
+}
+
+*html #create-cash-account-button {
+  width:145px;
+  margin-right:10px;
+}
+
+
+/*styles for step 1 - find your bank and add a cash account -------------------------------------------*/
+
+#create-cash-account-form.edit-dialog {
+  padding:0;
+  margin:0 0 0 5px;
+  display:inline-block;
+  font-size:1.1em;
+  width:160px;
+}
+
+#create-cash-account-form label {
+  margin:0;
+  padding:0;
+  font-size:0.7em;
+}
+
+*html #create-cash-account-form label {
+  margin-left:25px;
+}
+
+#create-cash-account-form input#name,
+#create-cash-account-form select#currency {
+  width:150px;
+}
+
+#create-cash-account-form.edit-dialog a.button span {
+  min-width:45px;
+  width:45px;
+}
+
+.search_title {
+  color:#999;
+  font-weight:normal;
+  font-size:0.8em;
+  display:block;
+  padding:0 5px;
+}
+
+#search_results {
+  height: 264px;
+  width:380px;
+  font-size:0.8em;
+}
+
+
+#live_search input {
+  width:370px;
+  padding:5px;
+  color:#5F9E9A;
+  font-weight:bold;
+}
+
+#featured_fis .fi_list {
+  padding-top: 25px;
+  width:380px;
+  position:relative;
+}
+
+.todo {
+  color:#5F9E9A;
+  font-weight:bold;
+  text-align:right;
+  padding-bottom:0.5em;
+}
+
+*html .todo {
+  text-align:left;
+}
+
+#featured_fi_list,
+#results_list .yui-ac-bd {
+  font-size:0.8em;
+  background:#F9F9F9;
+  height: 205px;
+  width:380px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+
+#featured_fi_list {
+  border: 1px solid #c3c2be;
+  margin:0;
+  padding-left:0;
+}
+
+#featured_fi_list li a,
+#results_list .yui-ac-bd li a {
+  color:#666658;
+  display:block;
+  width:100%;
+  font-size:1.2em;
+}
+
+#featured_fi_list li:hover a,
+#results_list .yui-ac-bd li:hover a  {
+  color:#35352F;
+  text-decoration:none;
+}
+
+#featured_fi_list li,
+#results_list .yui-ac-bd li {
+  padding:0 0 0 5px;
+  width:375px;
+}
+
+#featured_fi_list li:hover,
+#results_list .yui-ac-bd li:hover {
+ background:#D6EDEA;
+}
+
+#results_list {
+  font-size: 1em;
+  left: 0;
+}
+
+.search_title {
+  font-style:italic;
+}
+
+#add_bank {
+  display: block;
+  margin-top: 205px;
+  padding: 10px 0;
+}
+
+/*styles for step 2 - connect to your bank - SSU ----------------------------------------------------------*/
+
+#help ul li {
+  height:32px;
+  padding-left:36px;
+  margin:5px 0 7px 6px;
+}
+
+#help ul li.firefox {
+  background:transparent url(/images/upload-accounts/firefox-trans.png) scroll no-repeat top left;
+}
+#help ul li.firefox:hover {
+  background-position:top right;
+}
+
+#help ul li.manual{
+  background:transparent url(/images/upload-accounts/manual-trans.png) scroll no-repeat top left;
+}
+#help ul li.manual:hover {
+  background-position:top right;
+}
+
+#help ul li a {
+  line-height:2.7em;
+  font-size:0.8em;
+  color:#6D645C;
+}
+#help ul li:hover a {
+  text-decoration:none;
+  color:#35352F;
+}
+
+#form_body h3 {
+  font-family:georgia;
+  line-height:1em;
+  color:#9E9892;
+}
+
+#form_body h3 a {
+  font-size:0.53em;
+  display:block;
+}
+
+#form_body .note,
+#form_body .note_wide,
+li.existing_account_label  {
+  color:#9E9892;
+  font-size:0.7em;
+  padding-right:4em;
+  font-style:italic;
+}
+
+#fi_account_credentials label {
+  padding-top:0.5em;
+  display:block;
+}
+
+#fi_account_credentials input {
+  width:375px;
+  padding:5px;
+  color:#5F9E9A;
+  font-weight:bold;
+}
+
+#fi_form {
+  float: left;
+  width:380px;
+}
+#fi_form a.button {
+  float:right;
+  padding-left:0;
+}
+
+#fi_form a.button span {
+ min-width:80px;
+ width:80px;
+ text-align:center;
+}
+.fi_forms_box {
+  float: left;
+  padding-bottom:10px;
+}
+
+/*uploading animation style --------------------------------*/
+
+#animation {
+  width:90%;
+  padding:15px 0;
+  margin:0 auto;
+  font-size:1.1em;
+}
+
+#animation img {
+  width:30%;
+  padding:0 35%;
+}
+
+#animation p {
+  color:#9E9892;
+  text-align:center;
+  font-weight:normal;
+  font-style:italic;
+}
+
+
+#curtain h1 {
+  color:#9E9892;
+  text-align:center;
+  font-weight:normal;
+  font-style:italic;
+  margin-bottom:0;
+}
+
+#cancel {
+  text-align:center;
+}
+
+/*uploading error styles------------------------------------------*/
+
+#iframe_error {
+  margin:0;
+  padding:10px 10px 0 20px;
+  color:#6D645C;
+  width:300px;
+}
+
+#iframe_error h4 {
+  color:#666658;
+}
+
+/*ssu-select bank styles ------------------------------------------------------*/
+
+#bank_accounts {
+  padding:10px 0;
+}
+
+#bank_accounts input.account_name {
+  width:210px;
+  padding:5px;
+  color:#5F9E9A;
+  font-weight:bold;
+}
+
+#bank_accounts input.balance {
+  text-align:right;
+  width:80px;
+  background:#fff;
+  border:none;
+  color:#363630;
+}
+
+/*other uploaders page ---------------------------------------------------------*/
+
+.textBox h6 {
+  color:#999;
+  padding:20px 0 0 20px;
+
+}
+
+.textBox ol {
+  margin-top:0;
+}
+
+#help .sidebar_list {
+  color:#6D645C;
+  padding:0;
+  margin:0 0 0 15px;
+  font-size:0.7em;
+}
+
+ul.nested_bullets {
+  padding:5px 0;
+}
+
+#help ul.nested_bullets li {
+  font-style:italic;
+  padding:0;
+  margin:0;
+  font-size:0.9em;
+  height:1.5em;
+  line-height:1em;
+}
+
+#help .other  {
+  padding-top:5px;
+}
+
+#create-cash-account-button span {
+  font-size:90%;
+}
