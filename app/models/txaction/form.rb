@@ -132,7 +132,6 @@ class Txaction::Form
   # @raise [Txaction::Form::UpdateValidationFailed]
   #   Raised if the date cannot be parsed or is blank.
   def update_date(txaction)
-    debugger
     if date_given?
       validate_date
 
