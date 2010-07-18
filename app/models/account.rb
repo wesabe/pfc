@@ -159,6 +159,10 @@ class Account < ActiveRecord::Base
     financial_inst.name if financial_inst
   end
 
+  def wesabe_id
+    financial_inst.wesabe_id if financial_inst
+  end
+
   def new_txaction
     Txaction.new(:account => self, :status => Constants::Status::ACTIVE)
   end
