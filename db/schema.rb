@@ -323,6 +323,20 @@ ActiveRecord::Schema.define(:version => 0) do
   add_index "investment_txactions", ["upload_id"], :name => "index_investment_txactions_on_upload_id"
   add_index "investment_txactions", ["wesabe_txid", "status"], :name => "index_investment_txactions_on_wesabe_txid_and_status", :unique => true
 
+  create_table "merchant_bank_names", :force => true do |t|
+    t.string   "filtered_name"
+    t.integer  "merchant_id",     :default => 0,  :null => false
+    t.integer  "txactions_count"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "sign",            :default => -1, :null => false
+  end
+
+  add_index "merchant_bank_names", ["created_at"], :name => "merchant_bank_names_created_at_index"
+  add_index "merchant_bank_names", ["filtered_name", "sign"], :name => "merchant_bank_names_filtered_name_sign_index"
+  add_index "merchant_bank_names", ["txactions_count"], :name => "merchant_bank_names_txactions_count_index"
+  add_index "merchant_bank_names", ["updated_at"], :name => "merchant_bank_names_updated_at_index"
+
   create_table "merchants", :force => true do |t|
     t.string   "name",                  :default => "",    :null => false
     t.datetime "created_at"

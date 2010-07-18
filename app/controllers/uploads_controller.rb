@@ -95,16 +95,8 @@ class UploadsController < ApplicationController
   end
 
   def create
-    return unless financial_inst
-
     @need_more_info = false
     referer = internal_referer || {}
-
-    @account = nil
-    if params[:account_uri]
-      @account = current_user.account(params[:account_uri])
-      params.delete(:account_uri)
-    end
 
     if params[:statement]
       unless file_provided?(params[:statement])
@@ -121,7 +113,7 @@ class UploadsController < ApplicationController
         :client_version => WEB_UPLOADER_CLIENT_VERSION,
         :client_platform_id => ClientPlatform.find_or_create_by_name(request.user_agent).id
       }
-      upload_params.update(:account => @account) if @account
+      upload_params.update(:account => account) if account
       upload_params.update(:financial_inst_id => financial_inst.id, :account_name => financial_inst.name) if financial_inst
 
       begin
@@ -216,9 +208,16 @@ class UploadsController < ApplicationController
 private
 
   def financial_inst
-    @financial_inst ||= FinancialInst.find_for_user(params[:fi_name] || params[:fi], current_user).tap do |fi|
-      redirect_to new_upload_path if fi.nil?
+    @financial_inst ||= begin
+      account && account.financial_inst ||
+        FinancialInst.find_for_user(params[:fi_name] || params[:fi], current_user).tap do |fi|
+          redirect_to new_upload_path if fi.nil?
+        end
     end
+  end
+
+  def account
+    @account ||= current_user.accounts.find_by_uri(params.delete(:account_uri))
   end
 
   def require_ac
