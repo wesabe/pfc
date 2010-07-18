@@ -1557,6 +1557,10 @@ h6 .list-totals,
   clear:both;
 }
 
+.two-col-list.footer li:hover, .two-col-list.header li:hover {
+  background:none;
+}
+
 
 /*list extras - such as pagination ------------------------------------------------------*/
 
