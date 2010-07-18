@@ -418,7 +418,8 @@ class Importer
         when false, nil
           # nothing to do
         else
-          if transfer = txactions[datum['transfer']['id']][0]
+          transfer, = txactions[datum['transfer']['id']]
+          if transfer
             txaction.set_transfer_buddy!(transfer)
           else
             Rails.logger.warn "Unable to locate transfer for transaction (#{txaction.inspect}), marking it as unpaired"
