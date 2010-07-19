@@ -32,7 +32,7 @@ describe UploadsHelper, "help_text_for" do
 
     it "creates links from urls" do
       set_help_text "Hi there! Go to www.chase.com"
-      helper.help_text_for(@fi).should == %{<strong>Hi there!</strong> Go to <a href="http://www.chase.com" target="_blank">www.chase.com</a>}
+      helper.help_text_for(@fi).should == %{<strong>Hi there!</strong> Go to<a href="http://www.chase.com" target="_blank"> www.chase.com</a>}
     end
   end
 end

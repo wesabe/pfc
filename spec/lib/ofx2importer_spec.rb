@@ -4,7 +4,7 @@ describe OFX2Importer do
   before do
     @fi = FinancialInst.make(:name => "TD Canada Trust")
     @upload = Upload.make(:financial_inst => @fi)
-    @user = User.make(:account_key => "dingo")
+    @user = User.make
     @upload.user_id = @user.id
     @upload.account_key = @user.account_key
   end

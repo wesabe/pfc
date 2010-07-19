@@ -186,33 +186,6 @@ describe FinancialInst, "destroying" do
   end
 end
 
-describe FinancialInst, "rendering as XML" do
-  before do
-    @fi = FinancialInst.new
-  end
-
-  def run
-    @xml = Hash.from_xml(@fi.to_xml)["financial_inst"]
-  end
-
-  it "should always render the wesabe_id, name, connection_type, homepage_url, login_url, updated_at, and option_list" do
-    run
-    @xml.keys.sort.should == ["connection_type", "homepage_url", "login_url", "name", "option_list", "updated_at", "wesabe_id"]
-  end
-
-  it "should render the username_label, password_label, ofx_url, ofx_org, ofx_fid if the FI is automated" do
-    @fi.connection_type = "Automatic"
-    run
-    @xml.keys.sort.should == ["connection_type", "homepage_url", "login_url", "name", "ofx_broker", "ofx_fid", "ofx_org", "ofx_url", "option_list", "password_label", "updated_at", "username_label", "wesabe_id"]
-  end
-
-  it "should render a whole bunch of other stuff if the FI is mechanized" do
-    @fi.connection_type = "Mechanized"
-    run
-    @xml.keys.sort.should == ["connection_type", "date_format", "download_script", "homepage_url", "login_script", "login_url", "logout_script", "mfa_challenge_script", "mfa_login_script", "name", "option_list", "password_label", "statement_days", "updated_at", "username_label", "wesabe_id"]
-  end
-end
-
 describe FinancialInst, "finding a financial institution for a user" do
   before do
     @user = User.make

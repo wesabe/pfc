@@ -67,12 +67,12 @@ private
 
   def notify_success(title, message=nil)
     title, message = "Profile Updated", title if message.nil?
-    flash.now[:notification] = {:type => 'success', :title => title, :message => message}
+    super(title, message)
   end
 
   def notify_error(title, message=nil)
     title, message = "Error Updating Profile", title if message.nil?
-    flash.now[:notification] = {:type => 'error', :title => title, :message => message}
+    super(title, message)
   end
 
   # form for changing email address in user/edit/profile

@@ -1,6 +1,5 @@
 class UsersController < ApplicationController
   before_filter :check_authentication, :except => [:new, :create, :signup, :show, :userbar]
-  before_filter :check_for_admin, :only => [:become, :admin_edit]
   before_filter :only_allow_html, :except => [:show]
 
   # this is no longer used...replaced by accounts/index
@@ -133,7 +132,7 @@ class UsersController < ApplicationController
       else
         @user.change_password!(@password_change.password)
         set_current_user(@user)
-        notify_success "Your password has been changed."
+        notify_success "Change Password", "Your password has been changed."
       end
     end
 

@@ -32,11 +32,11 @@ module DataPreloading
   def _preload_data(data, setter)
     content_for :footer do
       <<-HTML
-      <script type="text/javascript">
-        wesabe.ready("#{setter}", function() {
-          #{setter}(#{ActiveSupport::JSON.encode(data)});
-        });
-      </script>
+<script type="text/javascript">
+  wesabe.ready("#{setter}", function() {
+    #{setter}(#{ActiveSupport::JSON.encode(data)});
+  });
+</script>
       HTML
     end
   end

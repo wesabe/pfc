@@ -374,7 +374,7 @@ describe DataSource::Txaction do
   describe "loading transactions without constraints" do
     it "should select all transactions in a user's accounts" do
       Txaction.should_receive(:find).with(:all, hash_including(:conditions =>
-        ["(txactions.account_id IN (?)) AND (txactions.status IN (?))", [20, 30], [0, 6]])
+        ["(txactions.account_id IN (?)) AND (txactions.status IN (?))", [20, 30], [0]])
       ).and_return([@txaction])
 
       @ds.load!
@@ -422,7 +422,7 @@ describe DataSource::Txaction do
 
     it "should select all transactions in the specified account(s)" do
       Txaction.should_receive(:find).with(:all, hash_including(:conditions =>
-        ["(txactions.account_id IN (?)) AND (txactions.status IN (?))", [20], [0, 6]]
+        ["(txactions.account_id IN (?)) AND (txactions.status IN (?))", [20], [0]]
       )).and_return([@txaction])
 
       @ds.load!
@@ -437,7 +437,7 @@ describe DataSource::Txaction do
 
     it "should select all transactions for the specified merchant" do
       Txaction.should_receive(:find).with(:all, hash_including(:conditions =>
-        ["(txactions.account_id IN (?)) AND (txactions.merchant_id IN (?)) AND (txactions.status IN (?))", [20, 30], [500], [0, 6]]
+        ["(txactions.account_id IN (?)) AND (txactions.merchant_id IN (?)) AND (txactions.status IN (?))", [20, 30], [500], [0]]
       )).and_return([@txaction])
 
       @ds.load!
@@ -453,7 +453,7 @@ describe DataSource::Txaction do
     it "should select all transactions for the specified tag" do
       Txaction.should_receive(:find).with(:all, hash_including(
         :joins => "JOIN txaction_taggings AS included_taggings ON included_taggings.txaction_id = txactions.id",
-        :conditions => ["(txactions.account_id IN (?)) AND (txactions.status IN (?)) AND (included_taggings.tag_id IN (?))", [20, 30], [0, 6], [6000]]
+        :conditions => ["(txactions.account_id IN (?)) AND (txactions.status IN (?)) AND (included_taggings.tag_id IN (?))", [20, 30], [0], [6000]]
       )).and_return([@txaction])
 
       @ds.load!
@@ -468,7 +468,7 @@ describe DataSource::Txaction do
 
     it "should select all transactions posted after the starting date" do
       Txaction.should_receive(:find).with(:all, hash_including(:conditions =>
-        ["(txactions.account_id IN (?)) AND (txactions.status IN (?)) AND (txactions.date_posted >= ?)", [20, 30], [0, 6], Time.mktime(2006, 1, 13)]
+        ["(txactions.account_id IN (?)) AND (txactions.status IN (?)) AND (txactions.date_posted >= ?)", [20, 30], [0], Time.mktime(2006, 1, 13)]
       )).and_return([@txaction])
 
       @ds.load!
@@ -483,7 +483,7 @@ describe DataSource::Txaction do
 
     it "should select all transactions posted before the ending date" do
       Txaction.should_receive(:find).with(:all, hash_including(:conditions =>
-        ["(txactions.account_id IN (?)) AND (txactions.status IN (?)) AND (txactions.date_posted <= ?)", [20, 30], [0, 6], Time.mktime(2006, 1, 13).end_of_day]
+        ["(txactions.account_id IN (?)) AND (txactions.status IN (?)) AND (txactions.date_posted <= ?)", [20, 30], [0], Time.mktime(2006, 1, 13).end_of_day]
       )).and_return([@txaction])
 
       @ds.load!
@@ -498,7 +498,7 @@ describe DataSource::Txaction do
 
     it "should select all transactions posted before the ending time" do
       Txaction.should_receive(:find).with(:all, hash_including(:conditions =>
-        ["(txactions.account_id IN (?)) AND (txactions.status IN (?)) AND (txactions.date_posted <= ?)", [20, 30], [0, 6], Time.mktime(2006, 1, 13, 03, 45, 00)]
+        ["(txactions.account_id IN (?)) AND (txactions.status IN (?)) AND (txactions.date_posted <= ?)", [20, 30], [0], Time.mktime(2006, 1, 13, 03, 45, 00)]
       )).and_return([@txaction])
 
       @ds.load!
@@ -514,7 +514,7 @@ describe DataSource::Txaction do
 
     it "should select all transactions posted before the starting date and after the ending date" do
       Txaction.should_receive(:find).with(:all, hash_including(:conditions =>
-        ["(txactions.account_id IN (?)) AND (txactions.status IN (?)) AND (txactions.date_posted >= ?) AND (txactions.date_posted <= ?)", [20, 30], [0, 6], Time.mktime(2006, 1, 1), Time.mktime(2006, 1, 13).end_of_day]
+        ["(txactions.account_id IN (?)) AND (txactions.status IN (?)) AND (txactions.date_posted >= ?) AND (txactions.date_posted <= ?)", [20, 30], [0], Time.mktime(2006, 1, 1), Time.mktime(2006, 1, 13).end_of_day]
       )).and_return([@txaction])
 
       @ds.load!
@@ -542,7 +542,7 @@ describe DataSource::Txaction do
       paginator = stub(:paginator, :limit => 30, :offset => 60, :conditions => { :blue => true })
 
       Txaction.should_receive(:find).with(:all, hash_including(
-        :conditions => ["(blue = ?) AND (txactions.account_id IN (?)) AND (txactions.status IN (?))", true, [20], [0, 6]],
+        :conditions => ["(blue = ?) AND (txactions.account_id IN (?)) AND (txactions.status IN (?))", true, [20], [0]],
         :limit => 30,
         :offset => 60
       )).and_return([@txaction])
@@ -563,7 +563,7 @@ describe DataSource::Txaction do
     it "should not select transactions tagged with filtered tags but not tagged with splits" do
       Txaction.should_receive(:find).with(:all, hash_including(
         :joins => "LEFT OUTER JOIN txaction_taggings AS filtered_taggings ON ( filtered_taggings.txaction_id = txactions.id AND filtered_taggings.tag_id IN (6000,7000) ) LEFT OUTER JOIN txaction_taggings AS split_taggings ON ( split_taggings.txaction_id = txactions.id AND split_taggings.split_amount IS NOT NULL )",
-        :conditions => ["(txactions.account_id IN (?)) AND (txactions.status IN (?)) AND ((filtered_taggings.txaction_id IS NOT NULL AND split_taggings.split_amount IS NOT NULL) OR (filtered_taggings.txaction_id IS NULL))", [20, 30], [0, 6]]
+        :conditions => ["(txactions.account_id IN (?)) AND (txactions.status IN (?)) AND ((filtered_taggings.txaction_id IS NOT NULL AND split_taggings.split_amount IS NOT NULL) OR (filtered_taggings.txaction_id IS NULL))", [20, 30], [0]]
       )).and_return([@txaction])
 
       @ds.load!
@@ -579,7 +579,7 @@ describe DataSource::Txaction do
     it "should select all transactions tagged with all of the required tags" do
       Txaction.should_receive(:find).with(:all, hash_including(
         :joins => "LEFT OUTER JOIN ( SELECT txaction_id, COUNT(*) AS times_tagged FROM txaction_taggings WHERE tag_id IN (6000,7000) GROUP BY txaction_id ) AS required_taggings ON required_taggings.txaction_id = txactions.id",
-        :conditions => ["(txactions.account_id IN (?)) AND (txactions.status IN (?)) AND (required_taggings.times_tagged = ?)", [20, 30], [0, 6], 2]
+        :conditions => ["(txactions.account_id IN (?)) AND (txactions.status IN (?)) AND (required_taggings.times_tagged = ?)", [20, 30], [0], 2]
       )).and_return([@txaction])
 
       @ds.load!
@@ -594,7 +594,7 @@ describe DataSource::Txaction do
 
     it "should exclude transactions with a transfer_txaction_id" do
       Txaction.should_receive(:find).with(:all, hash_including(:conditions =>
-        ["(txactions.account_id IN (?)) AND (txactions.status IN (?)) AND (txactions.transfer_txaction_id IS NULL)", [20, 30], [0, 6]]
+        ["(txactions.account_id IN (?)) AND (txactions.status IN (?)) AND (txactions.transfer_txaction_id IS NULL)", [20, 30], [0]]
       )).and_return([@txaction])
 
       @ds.load!
@@ -603,13 +603,13 @@ describe DataSource::Txaction do
   end
 
   describe "loading transactions with an unedited constraint" do
-    before(:each) do
+    before do
       @ds.unedited = true
     end
 
     it "should only include transactions with null merchant_id" do
       Txaction.should_receive(:find).with(:all, hash_including(:conditions =>
-        ["(txactions.account_id IN (?)) AND (txactions.status IN (?)) AND (txactions.merchant_id IS NULL)", [20, 30], [0, 6]]
+        ["(txactions.account_id IN (?)) AND (txactions.status IN (?)) AND (txactions.merchant_id IS NULL)", [20, 30], [0]]
       )).and_return([@txaction])
 
       @ds.load!
@@ -624,7 +624,7 @@ describe DataSource::Txaction do
 
     it "should only include transactions with tagged set to zero and with a NULL transfer_txaction_id" do
       Txaction.should_receive(:find).with(:all, hash_including(:conditions =>
-        ["(txactions.account_id IN (?)) AND (txactions.status IN (?)) AND (txactions.tagged = 0) AND (txactions.transfer_txaction_id IS NULL)", [20, 30], [0, 6]]
+        ["(txactions.account_id IN (?)) AND (txactions.status IN (?)) AND (txactions.tagged = 0) AND (txactions.transfer_txaction_id IS NULL)", [20, 30], [0]]
       )).and_return([@txaction])
 
       @ds.load!
@@ -637,7 +637,7 @@ describe DataSource::Txaction do
     it "should select all transactions with a positive amount" do
       @ds.amount = "positive"
       Txaction.should_receive(:find).with(:all, hash_including(:conditions =>
-        ["(txactions.account_id IN (?)) AND (txactions.status IN (?)) AND (txactions.amount > 0)", [20, 30], [0, 6]]
+        ["(txactions.account_id IN (?)) AND (txactions.status IN (?)) AND (txactions.amount > 0)", [20, 30], [0]]
       )).and_return([@txaction])
 
       @ds.load!
@@ -647,7 +647,7 @@ describe DataSource::Txaction do
     it "should select all transactions with a negative amount" do
       @ds.amount = "negative"
       Txaction.should_receive(:find).with(:all, hash_including(
-        :conditions => ["(txactions.account_id IN (?)) AND (txactions.status IN (?)) AND (txactions.amount < 0)", [20, 30], [0, 6]]
+        :conditions => ["(txactions.account_id IN (?)) AND (txactions.status IN (?)) AND (txactions.amount < 0)", [20, 30], [0]]
       )).and_return([@txaction])
 
       @ds.load!

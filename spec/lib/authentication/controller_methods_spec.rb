@@ -106,12 +106,12 @@ end
 describe TestController, :type => :controller do
   describe Authentication::ControllerMethods, "included" do
 
-    before(:each) do
+    before do
       @user = User.make
-      request.session[:user] = @user.id
+      session[:user] = @user.id
     end
 
-    after(:each) do
+    after do
       @user.destroy
     end
 
@@ -160,6 +160,5 @@ describe TestController, :type => :controller do
         response.should redirect_to(login_url)
       end
     end
-
   end
 end

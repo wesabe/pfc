@@ -36,7 +36,7 @@ describe TargetsController do
     it_should_behave_like "it has a logged-in user"
 
     before do
-      @account = Account.generate_for_user!(current_user)
+      @account = Account.make(:user => current_user)
       @txaction = Txaction.make(:account => @account)
       @txaction.add_tags('food')
     end
@@ -71,7 +71,7 @@ describe TargetsController do
     it_should_behave_like "it has a logged-in user"
 
     before do
-      @account = Account.generate_for_user!(current_user)
+      @account = Account.make(:user => current_user)
       @txaction = Txaction.make(:account => @account)
       @txaction.add_tags('food')
       @target = Target.create(:tag => Tag.find_by_name('food'), :tag_name => 'food', :amount_per_month => 10, :user => current_user)
@@ -89,7 +89,7 @@ describe TargetsController do
     it_should_behave_like "it has a logged-in user"
 
     before do
-      @account = Account.generate_for_user!(current_user)
+      @account = Account.make(:user => current_user)
       @txaction = Txaction.make(:account => @account)
       @txaction.add_tags('food')
     end
@@ -119,7 +119,7 @@ describe TargetsController do
     it_should_behave_like "it has a logged-in user"
 
     before do
-      @account = Account.generate_for_user!(current_user)
+      @account = Account.make(:user => current_user)
       @txaction = Txaction.make(:account => @account)
       @txaction.add_tags('food')
       @target = Target.create(:tag => Tag.find_by_name('food'), :tag_name => 'food', :amount_per_month => 10, :user => current_user)
@@ -136,7 +136,7 @@ describe TargetsController do
     it_should_behave_like "it has a logged-in user"
 
     before do
-      @account = Account.generate_for_user!(current_user)
+      @account = Account.make(:user => current_user)
       @txaction = Txaction.make(:account => @account)
       @txaction.add_tags('food')
       @target = Target.create(:tag => Tag.find_by_name('food'), :tag_name => 'food', :amount_per_month => 10, :user => current_user)

@@ -4,7 +4,7 @@ describe User, "merchants method" do
   it_should_behave_like "it has a logged-in user"
 
   before do
-    @account = Account.generate_for_user(@current_user)
+    @account = Account.make(:user => @current_user)
     @merchants = [
       Merchant.make,
       Merchant.make

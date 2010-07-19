@@ -2,6 +2,10 @@ require 'spec_helper'
 
 
 describe Merchant do
+  before do
+    Merchant.delete_all
+  end
+
   describe "mapped to a canonical merchant" do
     before do
       @merchant = Merchant.new(:canonical_merchant_id => 300)

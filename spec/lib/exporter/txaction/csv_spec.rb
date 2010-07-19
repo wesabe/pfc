@@ -7,8 +7,8 @@ describe Exporter::Txaction::Csv do
     @data = ActiveSupport::JSON.decode(File.read(File.dirname(__FILE__) + '/../../../fixtures/transactions.json'))
     @exporter = Exporter::Txaction::Csv.new(@user, @data)
     @accounts = [
-      Account.generate_for_user!(@user, :name => "My Checking", :account_type_id => AccountType::CHECKING),
-      Account.generate_for_user!(@user, :name => "My Savings", :account_type_id => AccountType::SAVINGS)]
+      Account.make(:checking, :user => @user, :name => "My Checking"),
+      Account.make(:savings, user => @user, :name => "My Savings")]
   end
 
   it "should convert an array of tag hashes to a comma-separated string" do

@@ -88,4 +88,12 @@ protected
       response.body = "/*-secure- #{response.body} */"
     end
   end
+
+  def notify_success(title, message)
+    flash.now[:notification] = {:type => 'success', :title => title, :message => message}
+  end
+
+  def notify_error(title, message)
+    flash.now[:notification] = {:type => 'error', :title => title, :message => message}
+  end
 end
