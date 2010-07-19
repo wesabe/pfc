@@ -69,7 +69,7 @@ class AccountsController < ApplicationController
     end
 
     @account.safe_delete
-    @account.send_later(:destroy)
+    @account.delay.destroy
     render :nothing => true
   end
 

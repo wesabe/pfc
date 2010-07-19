@@ -245,9 +245,9 @@ module SetReferrer
   end
 end
 
-# redefine DJ's send_later method so that we can test
+# redefine DJ's delay method so that we can test
 class Object
-  def send_later(method, *args)
-    self.send(method, *args)
+  def delay
+    self
   end
 end

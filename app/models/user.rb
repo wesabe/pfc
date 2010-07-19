@@ -171,7 +171,7 @@ class User < ActiveRecord::Base
   # recommendations and goals are preserved.
   def destroy
     # delete accounts, txactions, account_balances, accounts_uploads
-    accounts.each {|a| a.send_later(:destroy)}
+    accounts.each {|a| a.delay.destroy }
 
     # destroy all associations that should be destroyed
     self.class.reflect_on_all_associations.each do |a|
