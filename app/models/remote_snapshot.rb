@@ -37,13 +37,18 @@ class RemoteSnapshot
 
   def ensure_ready
     if not ready?
-      build
+      build unless building?
       sleep 1 until ready?
     end
   end
 
   def build
     post
+  end
+
+  def building?
+    return false if ready?
+    value_at('snapshot') != nil
   end
 
   def ready?
