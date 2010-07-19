@@ -115,42 +115,28 @@ class UsersController < ApplicationController
 
   # display the change password page
   # FIXME: this should probably be in a separate controller and broken up into edit/update
-  def change_password
-    _initialize_change_password_form
+  def edit_password
+    @password_change = password_change
+    render :template => "users/change_password"
+  end
 
-    if request.post?
-      # check current password
-      unless @user.valid_password?(@password_change.current_password)
-        @password_change.errors.add(:current_password, 'Password is incorrect.')
-      end
-      if @password_change.errors.any?
-        return render(:template => 'user/change_password')
-      end
-
-      if @password_change.password.blank? # just change the password
-        @password_change.errors.add(:password, "Please enter a new password")
-      else
-        @user.change_password!(@password_change.password)
-        set_current_user(@user)
-        notify_success "Change Password", "Your password has been changed."
-      end
+  def update_password
+    if password_change.valid?
+      current_user.change_password!(password_change.password)
+      set_current_user(current_user)
+      notify_success "Change Password", "Your password has been changed."
+      password_change.clear
     end
 
-    if flash[:notice]
-      # clear forms
-      params[:password_change] = nil
-      _initialize_change_password_form
-    end
-
-    return render(:template => "user/change_password")
+    render :template => "users/change_password"
   end
 
   def download_data
-    return render(:template => "user/download_data")
+    render :template => "users/download_data"
   end
 
   def delete_membership
-    return render(:template => "user/delete_membership")
+    render :template => "users/delete_membership"
   end
 
   # this action is called right after a user logs in after their password has been reset. They are forced
@@ -177,18 +163,38 @@ class UsersController < ApplicationController
 private
   include ActionView::Helpers::NumberHelper
 
-  def _initialize_change_password_form
+  def password_change
     @user = current_user
-    @password_change = PasswordChangeForm.new(params[:password_change])
+    @password_change ||= PasswordChangeForm.new(current_user, params[:password_change])
   end
 end
 
 # form for changing password in user/edit/account
 class PasswordChangeForm < ActiveForm
-  attr_accessor :current_password, :password, :password_confirmation
+  attr_accessor :user, :current_password, :password, :password_confirmation
+
+  def initialize(user, params={})
+    self.user = user
+    super(params)
+  end
 
   def validate
-    errors.add(:current_password, "Please enter your current password.") if current_password.blank?
-    errors.add(:password_confirmation, "The password and confirmation do not match.") if password != password_confirmation
+    if current_password.blank?
+      errors.add(:current_password, "Please enter your current password.")
+    elsif not user.valid_password?(current_password)
+      errors.add(:current_password, "Password is incorrect.")
+    end
+
+    if password.blank?
+      errors.add(:password, "Please enter a new password.")
+    elsif password != password_confirmation
+      errors.add(:password_confirmation, "The password and confirmation do not match.")
+    end
+  end
+
+  def clear
+    self.current_password      = nil
+    self.password              = nil
+    self.password_confirmation = nil
   end
 end

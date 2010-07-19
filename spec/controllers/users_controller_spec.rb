@@ -113,18 +113,18 @@ describe UsersController do
     end
   end
 
-  describe "POST /change_password" do
+  describe "PUT /password" do
     it_should_behave_like "it has a logged-in user"
 
     it "changes the password if the current password is correct" do
-      post :change_password, :password_change => {
+      put :update_password, :password_change => {
         :current_password => 'abcdefg', :password => 'newpass', :password_confirmation => 'newpass'}
 
       User.authenticate(current_user.email, 'newpass').should == current_user
     end
 
     it "does not change the password if the current password is wrong" do
-      post :change_password, :password_change => {
+      put :update_password, :password_change => {
         :current_password => '8888888', :password => 'newpass', :password_confirmation => 'newpass'}
 
       User.authenticate(current_user.email, 'newpass').should be_nil

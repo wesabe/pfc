@@ -50,7 +50,7 @@
               <li class="menu-head">My Profile</li>
               <li><%= user_profile_link current_user, :include_photo => false, :link_text => 'View My Profile' %></li>
               <li><%= link_to 'Profile Settings', edit_profile_url %></li>
-              <li><%= link_to 'Change My Password', change_password_user_url %></li>
+              <li><%= link_to 'Change My Password', password_user_url %></li>
               <li><%= link_to 'Download My Data', download_data_user_url %></li>
               <li><%= link_to 'Delete My Membership', delete_membership_user_url %></li>
             </div>
