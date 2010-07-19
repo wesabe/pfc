@@ -3,14 +3,22 @@ class SnapshotsController < ApplicationController
 
   def create
     Snapshot.async_build_snapshot_for_user(current_user)
-    render :nothing => true, :status => :created
+    render :nothing => true, :status => :created, :location => snapshot_url
   end
 
   def show
     respond_to do |format|
-      format.html
-      format.zip            { download(:zip) }
-      format.wesabeSnapshot { download(:wesabeSnapshot) }
+      format.html do
+        @snapshot = snapshot
+        render :partial => 'snapshot' if request.xhr?
+      end
+      format.zip  do
+        download(:zip)
+      end
+      format.json do
+        render :json => snapshot ? {:snapshot => {:uid => snapshot.uid, :ready => snapshot.built?}} :
+                                   {:error => "No snapshot available. Please POST #{snapshot_url} to create it."}
+      end
     end
   end
 
@@ -28,6 +36,6 @@ class SnapshotsController < ApplicationController
   end
 
   def snapshot
-    @snapshot ||= Snapshot.find_by_uid(params[:id])
+    @snapshot ||= current_user.snapshot
   end
 end

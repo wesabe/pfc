@@ -21,7 +21,7 @@ class Importer
     end
 
     def import(archive)
-      self.bundle = Pathname(Dir.tmpdir) + Pathname(archive).basename('.*')
+      self.bundle = TempfilePath.generate
       bundle.mkpath
 
       begin

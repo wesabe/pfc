@@ -4,7 +4,7 @@
 # from the +Tempfile+ instance when you close it. Use it like so:
 #
 #     temppath = TempfilePath.generate
-#     File.open(temppath, 'w') {|f| f << data}
+#     temppath.open('w') {|f| f << data}
 #     # do something with temppath
 #
 class TempfilePath
@@ -24,6 +24,6 @@ class TempfilePath
   end
 
   def self.generate(basename=nil, tmpdir=nil)
-    new(basename, tmpdir).to_s
+    Pathname(new(basename, tmpdir).to_s)
   end
 end

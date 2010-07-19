@@ -1,17 +1,22 @@
+<% stylesheet 'snapshots' %>
+<% javascript 'wesabe/views/pages/snapshots' %>
+
 <div id="left">
   <div class="three-column">
     <div class="top"><div class="right"><div class="grip"></div></div></div>
     <div class="middle"><div class="right">
     <div class="content">
       <div class="module-header">
-        <h4>Download Snapshot</h4>
+        <!-- <h4>Download Snapshot</h4> -->
       </div>
 
-      <div class="center">
-        <%= link_to image_tag('icon-wesabe-format.png'), snapshot_path(:format => 'wesabeSnapshot') %>
-        <%= link_to image_tag('icon-zip-format.png'), snapshot_path(:format => 'zip') %>
-      </div>
+      <%= render :partial => 'snapshot' %>
 
+      <% if @snapshot.nil? %>
+      <script type="text/javascript" charset="utf-8">
+        $(function(){ buildSnapshot() });
+      </script>
+      <% end %>
     </div>
     </div></div>
   </div>

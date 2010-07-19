@@ -1,0 +1,43 @@
+<div class="snapshot">
+  <% if @snapshot && @snapshot.built? %>
+
+  <%# Snapshot is built and ready for download %>
+  <h5 class="header">
+    <%= link_to '<div>snapshot.zip</div>', snapshot_url(:format => 'zip'), :class => 'download' %>
+  </h5>
+  <span class="date">
+    Built <%= time_ago_in_words @snapshot.built_at || @snapshot.created_at %> ago
+    (<%= link_to_function 'rebuild', 'buildSnapshot()' %>)
+  </span>
+
+  <% elsif @snapshot && @snapshot.error? %>
+
+  <%# Snapshot was trying to build but failed %>
+
+  <h5 class="header">Oops! Couldn't finish building</h5>
+
+  <p>
+    Please see groups for help or you can try <%= link_to_function 'rebuilding', 'buildSnapshot()' %>.
+  </p>
+
+  <% else %>
+
+  <%# Snapshot hasn't been built yet %>
+  <h5 class="header">Building snapshot.zip <%= image_tag 'activity-indicator.gif' %></h5>
+
+  <p>
+    This page will refresh when the snapshot is done building.
+    If you like you can leave and come back at any time.
+  </p>
+
+  <%   if @snapshot %>
+
+  <%# Snapshot has started building, but isn't done %>
+  <script type="text/javascript" charset="utf-8">
+    setTimeout(function(){ updateSnapshotDisplay() }, 1000);
+  </script>
+
+  <%   end %>
+
+  <% end %>
+</div>
