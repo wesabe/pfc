@@ -88,7 +88,7 @@ protected
     end
 
     # save intended_uri, except for login pages, and xhr or .xml requests
-    if request.get? && !request.xhr? && request.fullpath !~ /(\/user\/(login|logout|timeout|ping))|(\.xml)/
+    if request.get? && !request.xhr? && request.fullpath !~ /(\/user\/(login|logout|timeout))|(\.xml)/
       logger.debug("setting the intended URI: #{request.fullpath}")
       session[:intended_uri] = request.fullpath
     end

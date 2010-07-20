@@ -7,10 +7,6 @@ class UsersController < ApplicationController
     redirect_to :controller => 'accounts', :action => 'index'
   end
 
-  def ping
-    render :nothing => true, :status => :ok
-  end
-
   def destroy
     # require a password to delete the user
     unless current_user.valid_password?(params[:password])

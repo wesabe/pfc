@@ -75,12 +75,6 @@ describe TestController, :type => :controller do
           get :authenticated_action
           controller.session[:intended_uri].should be_nil
         end
-
-        it "should not record the intended url for /user/ping" do
-          request.stub!(:fullpath).and_return("/user/ping")
-          get :authenticated_action
-          controller.session[:intended_uri].should be_nil
-        end
       end
 
       context "without a member cookie" do
