@@ -7,7 +7,7 @@ PFC originally stood for Personal Finance Community and is the main part of the 
 2. Tags & Spending Targets: edit your transactions and add tags so you can set spending limits on certain categories
 3. Spending Trends: get analysis on your spending over time
 
-PFC is one of the projects required for running the Wesabe website. For more information on setting it up on your own computer, see http://github.com/wesabe/wesabe.
+PFC is one of the projects required for running the Wesabe website. For more information on setting it up on your own computer, see http://wiki.github.com/wesabe/mesabe.
 
 Issues
 ------
@@ -16,6 +16,6 @@ Issues
 
 * Currency exchange rates are not provided in this initial release. Wesabe used a commercial exchange rate provider (xe.com) for this data, and we can't use that service here or redistribute their data. If anyone would like to add exchange rate support for a particular provider, here's how you would add an exchange rate to the database:
 
-        # exchange rates are stored in units of USD. If a rate is not present in the database for a given 
+        # exchange rates are stored in units of USD. If a rate is not present in the database for a given
         # date, the nearest existing rate will be used
         CurrencyExchangeRate.create(:currency => "EUR", :rate => 0.7873, :date => Date.parse("2010-07-13"))
