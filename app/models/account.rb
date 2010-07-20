@@ -75,7 +75,7 @@ class Account < ActiveRecord::Base
   end
 
   def self.find_by_uri(uri)
-    find_by_id_for_user(uri[%r{^/accounts/([^/]+)$}, 1])
+    find_by_id_for_user(uri[%r{^/accounts/([^/]+)$}, 1]) if uri
   end
 
   # Return last 4 word characters of account number.
