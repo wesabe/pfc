@@ -33,14 +33,8 @@ class Merchant < ActiveRecord::Base
   # exists will result in two selects--one for the uniqueness validation, and another for the find_by_name.
   def self.find_or_create_by_name(name, params = {})
     find_by_name(name) || create!(params.update(:name => name))
-  rescue ActiveRecord::RecordInvalid, ActiveRecord::StatementInvalid => e
-    # FIXME: this is probably not compatible with non-MySQL databases, should we ever decide to switch.
-    # I don't see a database-independent way to test for a duplicate entry error, though.
-    if e.message =~ /(Name has already been taken)|(Duplicate entry)/
-      find_by_name(name)
-    else
-      raise
-    end
+  rescue ActiveRecord::RecordNotUnique
+    find_by_name(name)
   end
 
   # find merchant(s) by id(s) that is (are) visible to the given user (or publicly visible if user is nil)
