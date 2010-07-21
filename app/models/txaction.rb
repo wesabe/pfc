@@ -13,7 +13,7 @@ class Txaction < ActiveRecord::Base
   scope :for_user, lambda{|user| with_account_key(user.account_key) }
   scope :with_account_key, lambda {|account_key| { :include => :account,
     :conditions => {"accounts.account_key" => account_key} } }
-  scope :with_sign, lambda {|sign| {:conditions => ["SIGN(amount) = ?", sign.to_i]}}
+  scope :with_sign, lambda {|sign| {:conditions => {-1 => 'amount < 0', 1 => 'amount > 0', 0 => 'amount = 0'}[sign.to_i]} }
 
   scope :active, :conditions => {:status => Status::ACTIVE}
   scope :posted_between, lambda {|range|
@@ -306,6 +306,10 @@ class Txaction < ActiveRecord::Base
 
   def usd_money_amount(args = {})
     Money.new(usd_amount(args), Currency.usd)
+  end
+
+  def sign
+    read_attribute(:sign) || ((amount < 0) ? -1 : (amount > 0) ? 1 : 0)
   end
 
   # calculate the balance for this transaction by summing up the amounts of all previous

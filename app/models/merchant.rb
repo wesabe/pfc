@@ -277,14 +277,14 @@ class Merchant < ActiveRecord::Base
 
   def destroy
     # null out any Txaction.merchant_ids that point to it
-    Txaction.update_all("merchant_id = NULL", ["merchant_id = ?", id])
+    Txaction.where(:merchant_id => id).update_all(:merchant_id => nil)
     super
   end
 
   # FIXME: count users with this merchant ourself, since the has_many :through association doesn't count distinct users,
   # and seems to ignore counter_sql
   def uncached_users_count
-    connection.select_one(["SELECT COUNT(DISTINCT user_id) as 'count_all' FROM merchants_users WHERE merchant_id = ?", id])['count_all'].to_i
+    MerchantUser.select('DISTINCT user_id').where(:merchant_id => id).count
   end
 
   # given a user, return boolean for existance of default tags for this
@@ -328,6 +328,7 @@ class Merchant < ActiveRecord::Base
   def tags_for_user(user)
     account_ids = user.accounts.visible.map(&:id)
     return [] if account_ids.empty?
+
     Tag.find(:all, :select => 'tags.*, taggings.name as user_name',
       :joins => "JOIN taggings ON taggings.tag_id = tags.id \
                  JOIN txactions ON taggings.taggable_id = txactions.id AND taggings.taggable_type = 'Txaction'",
@@ -358,7 +359,7 @@ private
 
   def self.all_publicly_visible_names
     Rails.cache.fetch('all_publicly_visible_names', :expires_in => 1.week) do
-      connection.select_values(["SELECT name FROM merchants WHERE publicly_visible = ? AND unedited = ? ORDER BY users_count DESC, name ASC", true, false])
+      select(:name).where(:publicly_visible => true, :unedited => false).order('users_count DESC, name ASC').map(&:name)
     end
   end
 end

@@ -33,10 +33,10 @@ class Txaction
     account_ids = user.accounts.visible.map(&:id)
     return [] if account_ids.empty?
     # return list of updated txactions
-    Txaction.find(:all, :conditions => [
-      "merchant_id = ? AND account_id in (?) AND status = ? AND SIGN(amount) = ?",
-      merchant.id, user.accounts.map(&:id), Constants::Status::ACTIVE, amount.sign],
-      :order => "date_posted desc, sequence asc")
+    Txaction.
+      active.with_sign(amount.sign).
+      where(:merchant_id => merchant.id, :account_id => account_ids).
+      order('date_posted DESC, sequence ASC')
   end
 
   # Look up and then cache the MerchantUser object for this txaction's merchant
@@ -90,10 +90,9 @@ class Txaction
     cc.add("account_id in (?)", User.current.accounts.map(&:id))
     cc.add("status = ?", Constants::Status::ACTIVE)
     cc.add("filtered_name = ?", filtered_name)
-    cc.add("SIGN(amount) = ?", amount.sign)
     cc.add("(txactions.merchant_id IS NOT NULL AND merchants.unedited = ?) OR txactions.merchant_id IS NULL", true)
 
-    ids = Txaction.select('txactions.id').where(cc.conditions).
+    ids = Txaction.select('txactions.id').where(cc.conditions).with_sign(amount.sign).
             joins("LEFT OUTER JOIN merchants ON merchants.id = txactions.merchant_id")
 
     if ids.any?

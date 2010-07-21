@@ -37,8 +37,7 @@ class AccountMerchantTagStat < ActiveRecord::Base
 
     @retried = 0
     begin
-      record = self.find(:first, :conditions => id_hash, :include => [:merchant, :tag],
-        :select => "SQL_NO_CACHE *")
+      record = self.find(:first, :conditions => id_hash, :include => [:merchant, :tag])
 
       if record
         logger.info("*** [AMTS.find_or_create] found! record: #{record.inspect}")
@@ -190,7 +189,7 @@ class AccountMerchantTagStat < ActiveRecord::Base
 
   # fix the tag entries and counts for this account_key, and optionally, a set of tags
   def self.fix!(account_key, *tags)
-    raise "No account key!" unless account_key
+    raise ArgumentError, "No account key!" unless account_key
 
     tag_ids = tags.map(&:id) if tags
 
@@ -201,7 +200,7 @@ class AccountMerchantTagStat < ActiveRecord::Base
     cc.add("txaction_taggings.tag_id in (?)", tag_ids) if tag_ids.any?
     txactions = Txaction.
                       select(
-                     %{ txactions.merchant_id, SIGN(txactions.amount) AS sign,
+                     %{ txactions.merchant_id, txactions.amount,
                         txaction_taggings.tag_id AS tag_id,
                         txaction_taggings.name AS name,
                         COUNT(*) AS count}).

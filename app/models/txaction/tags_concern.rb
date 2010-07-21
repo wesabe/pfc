@@ -127,9 +127,9 @@ class Txaction
   end
 
   def self.find_by_user_and_merchant_and_sign(user, merchant, sign)
-    Txaction.find(:all, :conditions => [
-      "account_id in (?) and txactions.status in (?) and merchant_id = ? and SIGN(amount) = ?",
-      user.accounts.map(&:id), VISIBLE_STATUSES, merchant.id, sign])
+    Txaction.
+      for_user(user).active.with_sign(sign)
+      where(:merchant_id => merchant.id)
   end
 
   # add the tags on all the user's txactions with the given merchant and sign
