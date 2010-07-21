@@ -49,14 +49,20 @@ class RemoteSnapshot
   def building?
     return false if ready?
     value_at('snapshot') != nil
+  rescue RestClient::ResourceNotFound
+    false
   end
 
   def ready?
     value_at('snapshot/ready') == true
+  rescue RestClient::ResourceNotFound
+    false
   end
 
   def uid
     value_at('snapshot/uid')
+  rescue RestClient::ResourceNotFound
+    nil
   end
 
   def download
