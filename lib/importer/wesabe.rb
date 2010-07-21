@@ -371,7 +371,11 @@ class Importer
           tagging.split_amount     = datum['split_amount']
           tagging.usd_split_amount = datum['usd_split_amount']
 
-          tagging.save(:validate => false)
+          begin
+            tagging.save(:validate => false)
+          rescue => e
+            Rails.logger.error "unable to create tagging: #{e}"
+          end
         end
       end
     end
