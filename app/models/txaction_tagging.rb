@@ -102,23 +102,4 @@ private
     txaction.update_attribute(:tagged, false) if txaction.tagged && txaction.tags.count.zero?
   end
 
-
-  # fix the name fields for splits the given user's txaction_taggings
-  # we had a bug that was causing the name field to lose the split
-  # using account_key here since DelayedJob trieds to reload the user record if we pass a user
-  def self.fix_tag_names!(account_key)
-    accounts = Account.where(:account_key => account_key).visible
-    if accounts.any?
-      # using raw sql because AR can't do an update with a join
-      connection.execute(
-        [%{ UPDATE txaction_taggings, txactions
-            SET txaction_taggings.name = CONCAT(txaction_taggings.name,':',ABS(split_amount))
-            WHERE txaction_taggings.split_amount IS NOT NULL
-            AND txaction_taggings.name NOT LIKE '%:%'
-            AND txaction_taggings.txaction_id = txactions.id
-            AND txactions.account_id in (?) },
-        accounts.map(&:id)])
-    end
-  end
-
 end

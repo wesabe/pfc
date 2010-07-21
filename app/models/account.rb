@@ -1,5 +1,4 @@
 class Account < ActiveRecord::Base
-  concerned_with :maintenance
   concerned_with :uploads
   concerned_with :sample
   concerned_with :status

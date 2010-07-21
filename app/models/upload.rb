@@ -318,20 +318,4 @@ class Upload < ActiveRecord::Base
       self.guid = UID.generate(8)
     end while self.class.find_by_guid(guid)
   end
-
-  def self.last_ten_uploads_with_txactions_for_account(account)
-    Upload.find_by_sql("SELECT uploads.*, COUNT(upload_id) AS num_txactions
-    FROM txactions
-    JOIN uploads ON txactions.upload_id = uploads.id
-    WHERE upload_id IN (
-      SELECT id FROM uploads
-      JOIN accounts_uploads ON accounts_uploads.upload_id = uploads.id
-      WHERE accounts_uploads.account_id = #{account.id} AND uploads.status = 0
-    )
-    GROUP BY upload_id
-    HAVING num_txactions > 0
-    ORDER BY created_at DESC
-    LIMIT 10")
-  end
-
 end

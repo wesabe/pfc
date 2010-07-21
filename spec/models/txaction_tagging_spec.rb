@@ -36,26 +36,4 @@ describe TxactionTagging do
       @txaction.should_not be_tagged
     end
   end
-
-  describe "fix_tag_names! method" do
-    it_should_behave_like "it has a logged-in user"
-
-    before do
-      @account = Account.make(:user => current_user)
-      @txaction = Txaction.make(:account => @account)
-      @split_txaction_tagging = TxactionTagging.create(
-        :txaction => @txaction,
-        :tag => Tag.make,
-        :name => "foo",
-        :split_amount => "-12.34",
-        :usd_split_amount => "-23.45")
-    end
-
-    it "should recreate splits in the name field" do
-      lambda {
-        TxactionTagging.fix_tag_names!(current_user.account_key)
-      }.should change { @split_txaction_tagging.reload.name }.from("foo").to("foo:12.34")
-    end
-  end
-
 end

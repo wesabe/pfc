@@ -375,14 +375,6 @@ class User < ActiveRecord::Base
     Upload.uploads_for_user(self)
   end
 
-  def target_tags
-    Tag.find_by_sql %{
-      SELECT tags.*, targets.tag_name as user_name
-      FROM tags, targets
-      WHERE targets.tag_id = tags.id AND targets.user_id = #{id};
-    }
-  end
-
   # get all tags (actually, taggings) used by the user
   # if all is specified, don't group tags by normalized name (see Tag.tags_for_user)
   def tags(all = nil)
