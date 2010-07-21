@@ -30,11 +30,9 @@ class CurrencyExchangeRate < ActiveRecord::Base
 
     rate = Rails.cache.fetch("CXR-#{currency}-#{date}") do
       # try to get exact match; if that fails, do a more expensive query to get the closest date for which we have a rate
-      cxr = where(:currency => currency, :date => date).first ||
-              select("currency, date, rate, ABS(DATEDIFF(date,#{quote_value(date)})) AS datedist").
-              where(:currency => currency).
-              order('datedist').
-              first
+      cxr = where(:currency => currency, :date => date).first || begin
+        where(:currency => currency).map {|rate| [(rate.date - date).abs, rate]}.min.try(:at, 1)
+      end
       cxr ? cxr.rate : 0
     end
 
