@@ -4,7 +4,8 @@ class TargetsController < ApplicationController
 
   # show all targets for this user
   def index
-    @targets = current_user.targets
+    # get all the targets and order them by tag_name 
+    @targets = current_user.targets.find(:all, :order=> "tag_name")
     # allow a period to be specified with start_date & end_date
     @period = nil
     if params[:start_date] && params[:end_date]
