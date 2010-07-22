@@ -91,7 +91,7 @@ class Service
 
     def get_without_error_handling
       RestClient::Resource.new(uri.to_s,
-        :timeout => timeout,
+        :timeout => timeout.to_i,
         :headers => headers_for_rest_client
       ).get
     end
