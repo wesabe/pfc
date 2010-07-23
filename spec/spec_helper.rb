@@ -182,17 +182,10 @@ class Test::Unit::TestCase
     return FakeFileUpload.new(fixture, data.size, "image/#{File.extname(fixture).downcase}", data)
   end
 
-  def users_with_account_key(user)
-    user = users(user) unless user.is_a?(User)
-    # test user passwords must be the same as the username
-    return user.authenticated_by(user.username)
-  end
-
   def login(user = :first)
-    @user = users_with_account_key(user)
+    @user = user
     @request.session[:user] = @user.id
     @request.session[:expires_at] = 20.minutes.from_now
-    @request.session[:account_key] = @user.account_key
   end
 
   def self.should_bounce_to_login(options)

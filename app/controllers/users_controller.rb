@@ -68,7 +68,6 @@ class UsersController < ApplicationController
   def create
     @user = User.new(params[:user])
     if @user.save
-      @user = @user.authenticated_by(params[:user][:password])
       set_current_user(@user, :update_login_timestamp => true) # sign the user in
       return redirect_to(dashboard_url)
     end

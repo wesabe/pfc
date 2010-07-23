@@ -80,12 +80,6 @@ class User < ActiveRecord::Base
     end
   end
 
-  def authenticated_by(password)
-    self.account_key = generate_account_key(password)
-    self.save! if changes.include?(:account_key)
-    return self
-  end
-
   #---------------------------------------------------------------------------
   # constants
   #
@@ -533,7 +527,6 @@ class User < ActiveRecord::Base
         if user.valid_password?(password)
           logger.info("authentication succeeded for #{username_or_email}  (#{user.id})")
           throttle.successful_login!
-          user = user.authenticated_by(password)
           return user
         else
           logger.info("authentication failed for #{username_or_email} (#{user.id}) -- bad password")

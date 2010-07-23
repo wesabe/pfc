@@ -18,7 +18,6 @@ module Authentication::ControllerMethods
       return nil
     else
       @current_user = User.find(session[:user]) unless @current_user && @current_user.id == session[:user]
-      @current_user.account_key = session[:account_key]
       @current_user.timezone_offset = session[:timezone_offset]
       User.current = @current_user
       return @current_user
@@ -44,7 +43,6 @@ protected
     if session
       # store the user in the session
       session[:user] = user.id
-      session[:account_key] = user.account_key
       session[:timezone_offset] = -params[:tz_offset].to_i if params[:tz_offset] # need to negate because JS's Date#getTimezoneOffset() returns UTC - local time (in min)
       reset_session_timeout(true)
     end
