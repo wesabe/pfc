@@ -95,7 +95,7 @@ class Importer
         user.default_currency = data['default_currency']
 
         user.save!
-      end.change_password!(options[:password])
+      end
     end
 
     def import_preferences(data)
