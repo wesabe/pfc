@@ -23,7 +23,6 @@ describe AccountsController do
       current_user.stub!(:account_creds_in_limbo).and_return([])
       current_user.default_currency = "USD"
       current_user.stub!(:account_key).and_return('abcde')
-      current_user.stub!(:txactions_updated_at).and_return(1.hour.ago)
     end
 
     it "should be successful" do

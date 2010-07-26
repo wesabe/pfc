@@ -223,7 +223,7 @@ describe User, "change_password! method" do
     @newpass = 'monkeys!'
 
     @old_account_key = @user.account_key
-    @new_account_key = @user.generate_account_key(@newpass)
+    @new_account_key = User.generate_account_key(@user.uid, @newpass)
 
     @sourcedir = Upload.statement_dir(@old_account_key)
     @targetdir = Upload.statement_dir(@new_account_key)
@@ -248,11 +248,6 @@ describe User, "change_password! method" do
       should change(@user, :password_confirmation).to(@newpass)
   end
 
-  it "sets the new account key by generating it based on the username and password" do
-    described_class.should_receive(:generate_account_key).with(@user.uid, @newpass).and_return('oiraboof')
-    @user.change_password!(@newpass)
-  end
-
   it "updates the old accounts with the new account key" do
     described_class.stub!(:generate_account_key).and_return(@new_account_key)
     lambda { @user.change_password!(@newpass) }.
@@ -263,19 +258,6 @@ describe User, "change_password! method" do
     described_class.stub!(:generate_account_key).and_return(@new_account_key)
     lambda { @user.change_password!(@newpass) }.
       should_not change { @user.reload.account_creds }
-  end
-
-  it "does not change any files if the new and old account keys are the same" do
-    described_class.stub!(:generate_account_key).and_return(@user.account_key)
-    lambda { @user.change_password!(@newpass) }.
-      should_not change { [@source_tracker.exist?, @target_tracker.exist?] }
-  end
-
-  it "moves the files from the existing directory into the destination directory" do
-    lambda { @user.change_password!(@newpass) }.
-      should change { [@source_tracker.exist?, @target_tracker.exist?] }.
-              from(   [             true,             false]).
-              to(     [            false,              true])
   end
 end
 

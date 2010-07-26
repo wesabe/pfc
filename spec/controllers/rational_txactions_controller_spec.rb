@@ -15,7 +15,6 @@ describe RationalTxactionsController do
     current_user.stub!(:filter_tags).and_return([mock_model(Tag, :name => "qux")])
     current_user.stub!(:accounts).and_return([mock_model(Account, :id => 1)])
     current_user.stub!(:account_key).and_return(123)
-    current_user.stub!(:txactions_updated_at).and_return(Time.parse("2008-08-06"))
 
     @ds = DataSource::Txaction.new(current_user)
     @ds.stub!(:rationalize!)

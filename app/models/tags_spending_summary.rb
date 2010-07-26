@@ -49,7 +49,7 @@ class TagsSpendingSummary
     return [] if accounts.empty?
 
     options[:tags] = [options[:tags]] if options[:type] == :txaction
-    tags = ( options[:tags] || (user.tags - user.filter_tags) )
+    tags = ( options[:tags] || (Tag.tags_for_user(user, all) - user.filter_tags) )
     return [] if tags.empty?
 
     txactions = DataSource::Txaction.new(user) do |ds|

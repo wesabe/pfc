@@ -7,14 +7,12 @@ class User < ActiveRecord::Base
   concerned_with :messages
   concerned_with :merchants
 
-  has_many :accounts,          :foreign_key => 'account_key', :primary_key => 'account_key'
   has_many :account_creds,     :foreign_key => 'account_key', :primary_key => 'account_key'
   has_many :attachments,       :foreign_key => 'account_key', :primary_key => 'account_key'
   has_many :inbox_attachments, :foreign_key => 'account_key', :primary_key => 'account_key'
 
   has_many :merchant_users, :dependent => :destroy
   has_many :account_merchant_tag_stats, :dependent => :destroy, :foreign_key => :account_key, :primary_key => :account_key
-  belongs_to :country
   has_many :targets
 
   has_one :user_preferences, :class_name => 'UserPreferences', :dependent => :destroy
@@ -27,37 +25,23 @@ class User < ActiveRecord::Base
   has_one :snapshot, :dependent => :destroy
 
   attr_protected :role, :admin
-  attr_accessor :new_password
-  attr_accessor :allow_import
-  attr_accessor :password, :password_confirmation
 
-  before_create :set_default_currency, :update_last_web_login
   before_validation :generate_keys, :on => :create
   before_validation :generate_uid, :set_username
   after_validation :generate_anonymous_name_if_necessary, :on => :create
   before_validation :generate_normalized_name
-  after_validation :hash_password
   before_save :update_username
-  after_save '@new_password = @changed_password = @allow_import = false'
 
   validates_presence_of :email, :username, :uid, :message => "can't be blank"
   validates_uniqueness_of :username, :if => :new_record?
   validates_uniqueness_of :uid, :if => :new_record?
   validates_uniqueness_of :email, :message => "already in use"
-  validates_presence_of :password, :if => :validate_password?
-  validates_confirmation_of :password, :if => :validate_password?, :message => "doesn't match confirmation"
   validates_format_of :name, :with => /[a-z0-9]/i,
     :message => 'must contain at least one alphanumeric character',
     :if => Proc.new {|user| !user.name.blank?}
-  validates_inclusion_of :status, :in => [
-    Constants::Status::ACTIVE,
-    Constants::Status::DELETED,
-    Constants::Status::PENDING  # used when user's password is reset by admin and they need to change it on next login
-  ]
   validates_email_veracity_of :email, :domain_check => false
 
   validate :check_normalized_name
-  validate :check_default_currency
 
   def check_normalized_name
     # validate uniqueness of normalized name, but error goes to the name field
@@ -71,46 +55,32 @@ class User < ActiveRecord::Base
     end
   end
 
-  def check_default_currency
-    # validate default currency
-    if currency = read_attribute(:default_currency)
-      unless Currency.known?(currency)
-        errors.add('default_currency', 'is not a valid currency')
-      end
-    end
-  end
-
-  #---------------------------------------------------------------------------
-  # constants
-  #
-  #
-
-  # length of salt used to hash with password
-  SALT_LENGTH = 16
-
-  WESABE_USER_ID = 0 # user id to use to represent Wesabe-generated content (e.g. MerchantComparisons)
-
   # make sure the user's role is set to USER by default
   def initialize(params = {})
     super
     self.role ||= Role::USER
   end
 
-  #---------------------------------------------------------------------------
-  # public instance methods
+  #----------------------------------------------------------------------------
+  # Accounts / Account Key
   #
 
+  has_many :accounts, :foreign_key => 'account_key', :primary_key => 'account_key', :dependent => :destroy
+
+  before_create :set_account_key
+
   # convenience method for generating an account key
-  def generate_account_key(password)
-    self.class.generate_account_key(uid, password)
+  def set_account_key
+    if @password
+      self.account_key = self.class.generate_account_key(uid, @password)
+    else
+      errors.add :password, 'cannot be blank'
+    end
   end
 
-  def after_login(controller)
-    # record that the user has logged in
-    UserLogin.create(:user => self)
-    # trigger automatic updates if necessary
-    User::AccountUpdateManager.login!(self, controller, :force => true)
-  end
+  #----------------------------------------------------------------------------
+  # Other representations (e.g. URL, JSON, XML)
+  #
 
   # convert the name to a slug, unless that doesn't exist (e.g., the user has been deleted and my fixes to that code
   # don't work, mysterious data integrity problems, flying cows did it) in which case just use the ID like usual to
@@ -122,6 +92,44 @@ class User < ActiveRecord::Base
       id.to_s
     end
   end
+
+  def to_s
+    display_name
+  end
+
+  def to_xml(options = {})
+    options[:indent] ||= 2
+    xml = options[:builder] ||= ::Builder::XmlMarkup.new(:indent => options[:indent])
+    xml.instruct! unless options[:skip_instruct]
+    xml.dasherize!
+    xml.user do
+      xml.name(display_name)
+      xml.profile_path(profile_path)
+    end
+  end
+
+  def to_json(options = {})
+    super(options.merge(:only => [:name], :methods => [:profile_path]))
+  end
+
+  def display_name
+    return 'Anonymous' if anonymous?
+
+    name
+  end
+
+  def anonymous?
+    name.blank? || name =~ /^Anonymous( [0-9a-f]{5})?$/i
+  end
+
+  #----------------------------------------------------------------------------
+  # Currency & Country
+  #
+
+  belongs_to :country
+
+  before_create :set_default_currency
+  validate :check_default_currency
 
   # override AR method so we can return a currency object
   def default_currency
@@ -135,98 +143,162 @@ class User < ActiveRecord::Base
     write_attribute(:default_currency, cur.to_s)
   end
 
-  def default_currency_set?
-    not read_attribute(:default_currency).nil?
+  def has_default_currency?
+    read_attribute(:default_currency).present?
   end
 
   # set the default currency based on the country before create
   def set_default_currency
-    self.default_currency = country.currency.name if country && !default_currency_set?
+    self.default_currency = country.currency.name if country unless has_default_currency?
   end
 
-  def cached_country
-    Country.find(country_id)
+  def check_default_currency
+    # validate default currency
+    if currency = read_attribute(:default_currency)
+      unless Currency.known?(currency)
+        errors.add('default_currency', 'is not a valid currency')
+      end
+    end
   end
 
-  # change the user's password
+  #----------------------------------------------------------------------------
+  # Password
+  #
+
+  public
+
+  attr_accessor :password, :password_confirmation
+
   def change_password!(newpass)
     User.transaction do
       logger.debug("changing password for user #{uid}")
+      clear_password
       self.password = newpass
       self.password_confirmation = newpass
-      @new_password = true
-      @changed_password = true
       save!
     end
   end
 
-  # delete a user; sets the user's status to deleted, but actually deletes
-  # all of the user's accounts, txactions and photos. Public data such as
-  # recommendations and goals are preserved.
-  def destroy
-    # delete accounts, txactions, account_balances, accounts_uploads
-    accounts.each {|a| a.delay.destroy }
+  # Returns +true+ if +candidate+ is the user's password, +false+ otherwise.
+  def valid_password?(candidate)
+    return self.class.generate_password_hash(salt, candidate) == password_hash
+  end
 
-    # destroy all associations that should be destroyed
-    self.class.reflect_on_all_associations.each do |a|
-      # I'm not bothering with :delete_all or :nullify because I'm not using them; if we make this
-      # more generic down the road we should add those
-      if (a.options[:dependent] == :destroy)
-        to_delete = send(a.name)
-        to_delete = [to_delete] unless to_delete.is_a?(Array)
-        to_delete.each{|obj| obj.destroy if obj }
+  # Given a username or email and password, finds the user and checks the password's
+  # validity. Returns a +User+ instance with an +account_key+ if the credentials
+  # are valid, returns +nil+ if the user was not found or the password was
+  # invalid, and raises +Authentication::LoginThrottle::UserThrottleError+ if
+  # that user account is throttled.
+  def self.authenticate(username_or_email, password)
+    if user = find_by_username_or_email(username_or_email) # uid for backwards compatibility with usernames
+
+      throttle = Authentication::LoginThrottle.new(user)
+      if throttle.allow_login?
+        if user.valid_password?(password)
+          logger.info("authentication succeeded for #{username_or_email}  (#{user.id})")
+          throttle.successful_login!
+          return user
+        else
+          logger.info("authentication failed for #{username_or_email} (#{user.id}) -- bad password")
+          throttle.failed_login!
+          return nil # same as no user found
+        end
+      else
+        logger.info("authentication failed for #{username_or_email} (#{user.id}) -- user is throttled")
+        throttle.failed_login!
+        throttle.raise_throttle_error
       end
+    else
+      return nil
     end
+  end
 
-    # delete raw upload data; make sure that the account_key isn't empty or something like "../../../"
-    # the statement files themselves are probably deleted already, since destroying accounts will destroy
-    # the upload data. We still need to get rid of the statement_dir itself, though, so it doesn't
-    # hurt to rm-rf it
+  private
+
+  validates_presence_of :password, :if => :validate_password?
+  validates_confirmation_of :password, :if => :validate_password?, :message => "doesn't match confirmation"
+
+  def validate_password?
+    new_password?
+  end
+
+  def new_password?
+    self.password_hash.blank?
+  end
+
+  def clear_password
+    self.password_hash = nil
+  end
+
+  after_validation :hash_password, :if => :new_password?
+
+  def hash_password
+    salt = self.class.generate_salt
+    write_attribute(:salt, salt)
+    write_attribute(:password_hash, self.class.generate_password_hash(salt, @password))
+  end
+
+  SALT_LENGTH = 16
+  def self.generate_salt
+    [Array.new(SALT_LENGTH){rand(256).chr}.join].pack("m").chomp[0..SALT_LENGTH-1]
+  end
+
+  # generate password hash from password and salt
+  def self.generate_password_hash(salt, password)
+    password ||= ""
+    salt ||= ""
+    Digest::SHA256.hexdigest(salt + password)
+  end
+
+  #----------------------------------------------------------------------------
+  # Logging in
+  #
+
+  public
+
+  def after_login(controller)
+    # record that the user has logged in
+    UserLogin.create(:user => self)
+    # trigger automatic updates if necessary
+    User::AccountUpdateManager.login!(self, controller, :force => true)
+  end
+
+  private
+
+  before_create :update_last_web_login
+
+  def update_last_web_login
+    self.last_web_login ||= Time.now
+  end
+
+  #----------------------------------------------------------------------------
+  # Destroying
+  #
+
+  private
+
+  after_destroy :remove_uploads_directory
+
+  def remove_uploads_directory
     if account_key && account_key =~ /[0-9a-f]{64}/
       statement_dir = Upload.statement_dir(account_key)
       FileUtils.rm_r(statement_dir, :force => true) if File.exists?(statement_dir)
     end
+  end
 
-    # delete user photos
+  after_destroy :remove_user_photos
+
+  def remove_user_photos
     if photo_key && photo_key =~ /\w+/
       FileUtils.rm(Dir.glob(full_image_path('*', '*')), :force => true)
     end
-
-    # Come up with an anonymous name so comment links will still work.
-    self.name = nil
-    generate_anonymous_name
-
-    # clear out any private information from the user record. we don't actually delete the user record
-    # because the user may have comments/discussions
-    deleted_username = "deleted_user_#{id}"
-    while User.find_by_username(deleted_username)
-      deleted_username += ('a'..'z').to_a.random
-    end
-
-    # clear out data from user record
-    self.attributes = {
-      :username => deleted_username,
-      :name => name,
-      :status => Constants::Status::DELETED,
-      :salt => nil, :password_hash => nil, :postal_code => nil, :country_id => nil,
-      :photo_key => nil, :feed_key => nil, :goals_key => nil, :email => nil,
-      :encrypted_account_key => nil
-    }
-    save(:validate => false)
   end
 
-  # user name to display; basically, just show "Anonymous" if the name has not been set
-  def display_name
-    self.name.blank? ? 'Anonymous' : self.name
-  end
+  #----------------------------------------------------------------------------
+  # TODO: Break this up / move it into sections
+  #
 
-  def to_s
-    display_name
-  end
-
-  def anonymous?
-    name.blank? || name =~ /^Anonymous( [0-9a-f]{5})?$/i
-  end
+  public
 
   # return the active, enabled account with the given id_for_user
   def active_account_by_id_for_user(id_for_user)
@@ -295,86 +367,6 @@ class User < ActiveRecord::Base
     SsuJob.find_all_by_account_key(account_key, :conditions => ["expires_at < ?", Time.now])
   end
 
-  def pending_ssu_accounts
-    active_accounts.select {|a| a.account_cred && a.account_cred.pending?}
-  end
-
-  # transactions for this user, optionally constrained by the given conditions
-  # recognized options: :start_date, :end_date, :limit, :rationalize
-  def txactions(options = {})
-    acct_ids = account_ids
-    if acct_ids.any?
-      conditions = ["txactions.account_id in (?) and txactions.status = ?", acct_ids, Constants::Status::ACTIVE]
-      if options[:start_date]
-        conditions[0] << " and date_posted >= ?"
-        conditions << options[:start_date]
-      end
-      if options[:end_date]
-        conditions[0] << " and date_posted <= ?"
-        conditions << options[:end_date]
-      end
-      if options[:year] && options[:month]
-        conditions[0] << " and YEAR(date_posted) = ? and MONTH(date_posted) = ?"
-        conditions << options[:year] << options[:month]
-      end
-      transactions = Txaction.find(:all,
-        :include => [:merchant, :taggings, :txaction_type, :account],
-        :conditions => conditions,
-        :order => 'txactions.date_posted desc, txactions.sequence',
-        :limit => options[:limit])
-      if options[:rationalize] == "true"
-        Txaction.rationalize!(self, transactions)
-      end
-      transactions
-    else
-      []
-    end
-  end
-
-  def untagged_txaction_stats(start_date, end_date, type = nil)
-    cc = ConditionsConstructor.new("account_id IN (?)", account_ids)
-    cc.add("status = ?", Constants::Status::ACTIVE)
-    cc.add("tagged = ?", false)
-    cc.add("transfer_txaction_id IS NULL")
-    cc.add("date_posted >= ?", start_date)
-    cc.add("date_posted <= ?", end_date)
-    cc.add( (type == :earnings) ? "amount > 0" : "amount < 0" )
-    conditions = self.class.send(:sanitize_sql_for_conditions, cc.conditions)
-
-    number = Txaction.count_by_sql("SELECT COUNT(*) FROM txactions WHERE #{conditions}")
-    if number.zero?
-      return nil
-    else
-      amount = Txaction.count_by_sql("SELECT ABS(SUM(amount)) FROM txactions WHERE #{conditions}")
-      return { :number => number, :amount => amount }
-    end
-  end
-
-  # return an array of account ids for this user. This is a bit faster than using #accounts to get
-  # the account list and mapping out the ids, as it only selects the id column
-  def account_ids(include_hidden = false)
-    accounts(include_hidden).map(&:id)
-  end
-
-  def all_account_ids
-    account_ids(true)
-  end
-
-  def invalidate_account_ids_cache
-    @account_ids = @all_account_ids = nil
-  end
-
-  # get all uploads for this user
-  def uploads
-    Upload.uploads_for_user(self)
-  end
-
-  # get all tags (actually, taggings) used by the user
-  # if all is specified, don't group tags by normalized name (see Tag.tags_for_user)
-  def tags(all = nil)
-    Tag.tags_for_user(self, all)
-  end
-
   def filter_tags
     Tag.filter_tags_for_user(self)
   end
@@ -397,25 +389,6 @@ class User < ActiveRecord::Base
                                       :tag => tag)
     end
     self.reload
-  end
-
-  def update_last_web_login
-    self.last_web_login ||= Time.now
-  end
-
-  # return true if the user is in a PENDING state (their password has been reset
-  # and they need to change it on next login)
-  def pending?
-    status == Constants::Status::PENDING
-  end
-
-  def active?
-    status == Constants::Status::ACTIVE
-  end
-
-  # set a user's PENDING status (true => PENDING, false => ACTIVE)
-  def pending!(state)
-    update_attribute(:status, state ? Constants::Status::PENDING : Constants::Status::ACTIVE )
   end
 
   has_image :column => :photo_key, :default => 'default_user_icon.jpg', :processor => ImageProcessing::Thumbnailer.new(:thumb => 48, :profile => 96)
@@ -492,57 +465,6 @@ class User < ActiveRecord::Base
     end
   end
 
-  # return the most recent txactions_updated_at time from the user's accounts
-  def txactions_updated_at
-    updated_at = Account.where(["account_key = ? AND status = ?", account_key, Constants::Status::ACTIVE]).
-                  maximum(:txactions_updated_at)
-    return updated_at || Time.now # if no accounts, updated at time is now
-  end
-
-  def account_data_cache_key
-    {:at => txactions_updated_at.to_i, :user => id}
-  end
-
-
-  # Returns +true+ if +candidate+ is the user's password, +false+ otherwise.
-  def valid_password?(candidate)
-    return self.class.generate_password_hash(salt, candidate) == password_hash
-  end
-
-  #---------------------------------------------------------------------------
-  # public class methods
-  #
-
-
-  # Given a username or email and password, finds the user and checks the password's
-  # validity. Returns a +User+ instance with an +account_key+ if the credentials
-  # are valid, returns +nil+ if the user was not found or the password was
-  # invalid, and raises +Authentication::LoginThrottle::UserThrottleError+ if
-  # that user account is throttled.
-  def self.authenticate(username_or_email, password)
-    if user = find_by_username_or_email(username_or_email) # uid for backwards compatibility with usernames
-
-      throttle = Authentication::LoginThrottle.new(user)
-      if throttle.allow_login?
-        if user.valid_password?(password)
-          logger.info("authentication succeeded for #{username_or_email}  (#{user.id})")
-          throttle.successful_login!
-          return user
-        else
-          logger.info("authentication failed for #{username_or_email} (#{user.id}) -- bad password")
-          throttle.failed_login!
-          return nil # same as no user found
-        end
-      else
-        logger.info("authentication failed for #{username_or_email} (#{user.id}) -- user is throttled")
-        throttle.failed_login!
-        throttle.raise_throttle_error
-      end
-    else
-      return nil
-    end
-  end
-
   # find a user by name, normalizing it in the process
   def self.find_with_normalized_name(name)
     if name.blank? || name.strip.blank?
@@ -559,22 +481,6 @@ class User < ActiveRecord::Base
     return users.sort_by(&:last_web_login).last
   end
 
-  # Absolutely nothing from the database gets shared here.
-  def to_xml(options = {})
-    options[:indent] ||= 2
-    xml = options[:builder] ||= ::Builder::XmlMarkup.new(:indent => options[:indent])
-    xml.instruct! unless options[:skip_instruct]
-    xml.dasherize!
-    xml.user do
-      xml.name(display_name)
-      xml.profile_path(profile_path)
-    end
-  end
-
-  def to_json(options = {})
-    super(options.merge(:only => [:name], :methods => [:profile_path]))
-  end
-
   #---------------------------------------------------------------------------
   # private instance methods
   #
@@ -583,27 +489,6 @@ private
 
   def profile_path
     '/profile/' + to_param
-  end
-
-  # return true if we are generating a new password
-  def new_password?
-    @new_password || (!self.password_hash? && !@allow_import)
-  end
-
-  # only validate password if we have a new one or are changing it
-  # and don't validate if we're importing (so we can set null password_hash)
-  def validate_password?
-    new_password? && !@allow_import
-  end
-
-  # write the password_hash attribute only if we are
-  # generating a new password (new user or change password)
-  def hash_password
-    if new_password?
-      salt = self.class.generate_salt
-      write_attribute("salt", salt)
-      write_attribute("password_hash", self.class.generate_password_hash(salt, @password))
-    end
   end
 
   def generate_uid
@@ -636,18 +521,6 @@ private
   #
 
 private_class_method
-
-  # generate password hash from password and salt
-  def self.generate_password_hash(salt, password)
-    password ||= ""
-    salt ||= ""
-    Digest::SHA256.hexdigest(salt + password)
-  end
-
-  # generate a salt to has the password with
-  def self.generate_salt
-    [Array.new(SALT_LENGTH){rand(256).chr}.join].pack("m").chomp[0..SALT_LENGTH-1]
-  end
 
   # generate the account_key with the uid and password
   def self.generate_account_key(uid, password)
