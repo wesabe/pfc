@@ -14,10 +14,10 @@ class UsersController < ApplicationController
       return render(:action => "delete_membership")
     end
 
-    current_user.destroy
+    current_user.delay.destroy
     clear_current_user
 
-    return redirect_to(root_url)
+    redirect_to root_url
   end
 
   def show

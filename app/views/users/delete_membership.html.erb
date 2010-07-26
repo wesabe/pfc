@@ -29,7 +29,7 @@
           <fieldset>
             <div class="two-col-centered">
             <h6>Are you sure you want to <b>delete your member account?</b></h6>
-            <% form_tag destroy_user_path, :method => "delete" do -%>
+            <% form_tag user_path, :method => :delete do -%>
               <div class="form-info">All private information associated with your membership, including all bank data,
                  will be permanently deleted. This cannot be reversed.</div>
                  <div class="field">
