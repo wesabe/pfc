@@ -1,11 +1,12 @@
-require File.join(File.dirname(__FILE__), '..', '..', 'config', 'environment')
-
 class Snapshot < Thor
   desc 'import (PATH|HOST)', 'import Wesabe snapshot from a file or from a host (requires email/password)'
-  method_options %w(verbose -v)  => :boolean
+  method_options %w(quiet -q)    => false
   method_options %w(email -u)    => :string
   method_options %w(password -p) => :string
   def import(path_or_host)
+    require File.join(File.dirname(__FILE__), '..', '..', 'config', 'environment')
+    options[:verbose] = !options[:quiet]
+
     if File.exist?(path_or_host)
       user = Importer::Wesabe.import(path_or_host, options)
     else
@@ -23,8 +24,6 @@ class Snapshot < Thor
       end
     end
 
-    if user && options[:verbose]
-      puts "You can now log in as #{user.email} with this Wesabe installation."
-    end
+    puts "You can now log in as #{user.email} with this Wesabe installation." if user unless options[:quiet]
   end
 end
