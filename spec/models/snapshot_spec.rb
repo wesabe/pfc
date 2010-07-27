@@ -26,94 +26,95 @@ describe Snapshot do
       InvestmentSecurity.delete_all
       Attachment.destroy_all
       InboxAttachment.destroy_all
+      Merchant.delete_all
       intermediate_snapshot_file.rename(@snapshot.archive)
       yield if block_given?
 
       @snapshot.import
     end
 
-    def imported_amts
-      AccountMerchantTagStat.first(:conditions => {:account_key => imported_user.account_key})
+    def imported_amts(&block)
+      AccountMerchantTagStat.first(:conditions => {:account_key => imported_user(&block).account_key})
     end
 
-    def imported_merchant_user
-      MerchantUser.first(:conditions => {:user_id => imported_user.id})
+    def imported_merchant_user(&block)
+      MerchantUser.first(:conditions => {:user_id => imported_user(&block).id})
     end
 
-    def imported_taggings
-      imported_txaction.taggings
+    def imported_taggings(&block)
+      imported_txaction(&block).taggings
     end
 
-    def imported_txaction
-      imported_txactions.first
+    def imported_txaction(&block)
+      imported_txactions(&block).first
     end
 
-    def imported_txactions
-      imported_account.txactions
+    def imported_txactions(&block)
+      imported_account(&block).txactions
     end
 
-    def imported_position
-      imported_positions.first
+    def imported_position(&block)
+      imported_positions(&block).first
     end
 
-    def imported_positions
-      imported_account.all_positions
+    def imported_positions(&block)
+      imported_account(&block).all_positions
     end
 
-    def imported_financial_institution
-      imported_account.financial_inst
+    def imported_financial_institution(&block)
+      imported_account(&block).financial_inst
     end
 
-    def imported_other_balance
-      imported_other_balances.first
+    def imported_other_balance(&block)
+      imported_other_balances(&block).first
     end
 
-    def imported_other_balances
-      imported_balance.other_balances
+    def imported_other_balances(&block)
+      imported_balance(&block).other_balances
     end
 
-    def imported_balance
-      imported_balances.first
+    def imported_balance(&block)
+      imported_balances(&block).first
     end
 
-    def imported_balances
-      imported_account.balances
+    def imported_balances(&block)
+      imported_account(&block).balances
     end
 
-    def imported_account_balances
-      imported_account.account_balances.find(:all, :order => 'balance_date ASC')
+    def imported_account_balances(&block)
+      imported_account(&block).account_balances.find(:all, :order => 'balance_date ASC')
     end
 
-    def imported_attachments
-      imported_txaction.attachments
+    def imported_attachments(&block)
+      imported_txaction(&block).attachments
     end
 
-    def imported_attachment
-      imported_attachments.first
+    def imported_attachment(&block)
+      imported_attachments(&block).first
     end
 
-    def imported_inbox_attachment
-      imported_inbox_attachments.first
+    def imported_inbox_attachment(&block)
+      imported_inbox_attachments(&block).first
     end
 
-    def imported_inbox_attachments
-      InboxAttachment.all(:conditions => {:account_key => imported_user.account_key})
+    def imported_inbox_attachments(&block)
+      InboxAttachment.all(:conditions => {:account_key => imported_user(&block).account_key})
     end
 
-    def imported_account
-      imported_accounts.first
+    def imported_account(&block)
+      imported_accounts(&block).first
     end
 
-    def imported_accounts
-      imported_user.accounts
+    def imported_accounts(&block)
+      imported_user(&block).accounts
     end
 
-    def imported_targets
-      imported_user.targets
+    def imported_targets(&block)
+      imported_user(&block).targets
     end
 
-    def imported_target
-      imported_user.targets.first
+    def imported_target(&block)
+      imported_user(&block).targets.first
     end
 
     def imported_user(&block)
@@ -510,7 +511,15 @@ describe Snapshot do
         it 'preserves the merchant' do
           @txaction.merchant = Merchant.find_or_create_by_name('Starbucks')
           @txaction.save!
-          imported_txaction.merchant.should == @txaction.merchant
+          imported_txaction.merchant.name.should == @txaction.merchant.name
+        end
+
+        it 'omits the merchant if the merchant name is blank' do
+          merchant = Merchant.new(:name => '')
+          merchant.save(:validate => false)
+          @txaction.merchant = merchant
+          @txaction.save!
+          imported_txaction.merchant.should be_nil
         end
 
         it 'preserves the memo' do

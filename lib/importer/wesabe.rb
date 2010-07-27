@@ -206,7 +206,7 @@ class Importer
           txaction.filtered_name  = datum['filtered_name']
           txaction.cleaned_name   = datum['cleaned_name']
           txaction.txid           = datum['txid']
-          txaction.merchant       = datum['merchant'] && Merchant.find_or_create_by_name(datum['merchant'])
+          txaction.merchant       = Merchant.find_or_create_by_name(datum['merchant']) if datum['merchant'].present?
           txaction.memo           = datum['memo']
           txaction.amount         = datum['amount']
           txaction.usd_amount     = datum['usd_amount']
@@ -354,6 +354,8 @@ class Importer
 
     def import_merchants(data)
       data.map do |datum|
+        next if datum['merchant'].blank?
+
         returning MerchantUser.new do |mu|
           mu.user              = user
           mu.merchant          = Merchant.find_or_create_by_name(datum['merchant'])
