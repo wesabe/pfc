@@ -29,6 +29,9 @@ class Importer
         system '/usr/bin/unzip', '-qq', archive, '-d', bundle
         return nil unless $?.success?
 
+        # the snapshot may have been unzipped + rezipped, so there may be intermediate folders
+        self.bundle = self.bundle.children.first while self.bundle.directory? && self.bundle.children.size == 1
+
         say "importing user..."
         self.user = import_user(ActiveSupport::JSON.decode((bundle + 'user.json').read))
         User.current = self.user

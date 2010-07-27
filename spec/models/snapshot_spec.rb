@@ -27,6 +27,7 @@ describe Snapshot do
       Attachment.destroy_all
       InboxAttachment.destroy_all
       intermediate_snapshot_file.rename(@snapshot.archive)
+      yield if block_given?
 
       @snapshot.import
     end
@@ -115,8 +116,8 @@ describe Snapshot do
       imported_user.targets.first
     end
 
-    def imported_user
-      @imported_user ||= export_and_delete_user_and_reimport
+    def imported_user(&block)
+      @imported_user ||= export_and_delete_user_and_reimport(&block)
     end
 
     it 'creates a new user' do
@@ -1039,6 +1040,37 @@ describe Snapshot do
 
       it 'preserves the amount' do
         imported_target.amount_per_month.should == @target.amount_per_month
+      end
+    end
+
+    context 'when the snapshot file has been re-zipped to include a top-level folder' do
+      # this case only happens when browsers/file explorers try to be smart, witness
+      # Safari + Finder unzipping to "user-name" and discarding the original zip file,
+      # leaving the user to re-zip it, but now it includes a folder. Before:
+      #
+      #   brian-donovan.zip
+      #   `- user.json
+      #   `- accounts/
+      #   ...
+      #
+      # After:
+      #
+      #   brian-donovan.zip
+      #   `- brian-donovan/
+      #      `- user.json
+      #      `- accounts/
+      #      ...
+      it 'still manages to import the user' do
+        imported_user do
+          # this is run between import and export, so we use this to simulate
+          # the folder nesting situation described above
+          destination = TempfilePath.generate + 'user-name'
+          destination.mkpath
+
+          system '/usr/bin/unzip', '-qq', @snapshot.archive, '-d', destination
+          @snapshot.archive.unlink
+          system '/usr/bin/zip', '-rq', @snapshot.archive, destination
+        end.should_not be_nil
       end
     end
   end
