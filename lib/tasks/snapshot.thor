@@ -5,10 +5,9 @@ class Snapshot < Thor
   method_options %w(password -p) => :string
   def import(path_or_host)
     require File.join(File.dirname(__FILE__), '..', '..', 'config', 'environment')
-    options[:verbose] = !options[:quiet]
 
     if File.exist?(path_or_host)
-      user = Importer::Wesabe.import(path_or_host, options)
+      user = Importer::Wesabe.import(path_or_host, options.merge(:verbose => !options[:quiet]))
     else
       host = path_or_host
       host = 'www.wesabe.com' if host == 'wesabe.com'
