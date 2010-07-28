@@ -5,7 +5,7 @@ xml.profile do
   if @user == current_user
     xml.username(@user.username)
     xml.postal_code(@user.postal_code)
-    xml.country(@user.cached_country.name, :id => @user.country_id) if @user.country_id
+    xml.country(@user.country.name, :id => @user.country_id) if @user.country_id
     xml.email(@user.email)
     xml.default_currency(@user.default_currency.name,
         :separator => @user.default_currency.separator,
