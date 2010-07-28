@@ -22,11 +22,11 @@ module DataPreloading
   def _preload_url_into(url, setter)
     res = Service.get(:brcm).get(url) do |req|
       req.user = current_user
-      req.timeout = 2.seconds
+      req.timeout = 5.seconds
       req.headers['Accept'] = 'application/json'
     end
 
-    _preload_data(ActiveSupport::JSON.decode(res.body), setter) if res.code == 200
+    _preload_data(ActiveSupport::JSON.decode(res.body), setter) if res && res.code == 200
   end
 
   def _preload_data(data, setter)
