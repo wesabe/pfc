@@ -80,6 +80,7 @@ Pfc::Application.routes.draw do
   resource :profile
   resource :preferences, :controller => 'user_preferences'
   resource :user do
+    post :edit_filter_tags, :to => 'users#edit_filter_tags'
     get :password, :to => 'users#edit_password'
     put :password, :to => 'users#update_password'
     get :download_data
