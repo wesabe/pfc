@@ -18,7 +18,7 @@ class ApplicationController < ActionController::Base
   after_filter  :add_xss_blocker_to_js
 
   def ssu_enabled?
-    !File.exist?("/var/wesabe/ssu-down")
+    !File.exist?(File.join(ApiEnv::FILE_PATH, 'ssu-down'))
   end
   helper_method :ssu_enabled?
   hide_action :ssu_enabled?

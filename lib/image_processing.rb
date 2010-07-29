@@ -1,6 +1,6 @@
 module ImageProcessing
   def self.image_directory
-    "/var/wesabe/images"
+    File.join(ApiEnv::FILE_PATH, 'images')
   end
 
   MAX_SIZE = 2.megabytes

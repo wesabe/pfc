@@ -9,7 +9,7 @@ class Attachment < ActiveRecord::Base
   # delete the attached file when we delete the attachment
   after_destroy :unlink
 
-  BASE_DIR = Pathname('/var/wesabe/attachments')
+  BASE_DIR = Pathname(File.join(ApiEnv::FILE_PATH, 'attachments'))
   MAX_SIZE = 2.megabytes
 
   class MaxSizeExceeded < Exception; end

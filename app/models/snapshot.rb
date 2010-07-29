@@ -22,7 +22,7 @@ class Snapshot < ActiveRecord::Base
   end
 
   def archive
-    Pathname.new("/var/wesabe/snapshots/#{uid}.zip")
+    Pathname.new(File.join(ApiEnv::FILE_PATH, 'snapshots', uid, '.zip'))
   end
 
   def built?
