@@ -1,8 +1,10 @@
-class JsModelGenerator < Rails::Generator::NamedBase
+class JsModelGenerator < Rails::Generators::NamedBase
+  source_root File.expand_path('../templates', __FILE__)
+
   def manifest
-    record do |m|
-      m.directory File.join('public/javascripts', package_path)
-      m.template 'model.js', File.join('public/javascripts', file_path)
+    inside "public/javascripts" do
+      empty_directory package_path
+      template 'model.js', file_path
     end
   end
 
