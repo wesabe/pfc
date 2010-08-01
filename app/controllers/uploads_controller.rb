@@ -141,6 +141,7 @@ class UploadsController < ApplicationController
         end
       else # QIF upload...need to get more info
         # store the upload data in a temp file and go get more info
+        FileUtils.mkdir_p(ApiEnv::PATH[:upload_temp_dir])
         tempfile = File.open(TempfilePath.generate('upload', ApiEnv::PATH[:upload_temp_dir]), "w")
         Marshal.dump(upload, tempfile)
         tempfile.close
