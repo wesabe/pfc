@@ -18,6 +18,8 @@ gem 'libxml-ruby',     '=1.1.3',  :require => 'xml/libxml'
 gem 'daemons'
 gem 'rdoc'
 gem 'delayed_job',     '2.1.0.pre'
+gem 'thor' # for imports
+gem 'mongrel' # faster development server
 
 group :development do
   gem 'mysql'           # in production: apt-get install libmysql-ruby
