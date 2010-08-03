@@ -333,7 +333,7 @@ void setup() {
   size(options.width, options.height);
   view = options.view ? options.view : "Spending";
   logger = wesabe.loggerFor('PIE('+view+')');
-  intervals.selected = either(intervals[parseInt(either(preferences.get('charts.pie.'+view.toLowerCase()+'.range'), 1))], intervals[1]);
+  bindIntervalButtons();
   drawHeight = options.height - 30;
   curContext.translate(0.5, 0.5);
   frameRate(29);
@@ -359,12 +359,6 @@ void draw() {
     fill(255);
     stroke(255);
     rect(0, 0, width, height);
-
-    // wesCharts.text(curElement, pieCharts[current].title, 9, 0, { fontSize: '16', fontWeight: 'bold' });
-    drawTimeSelect();
-
-    // stroke(219);
-    // line(5, 32, width-5, 32);
 
     int diameter = ((drawHeight < width) ? drawHeight : width)/2;
     drawPie(width/2, drawHeight/2-10+y0, diameter, true, current);
@@ -415,24 +409,34 @@ var intervals = [
   {key: "3", shortLabel: '1y', label: 'past 12 months', timeAgoInDays: 12, unit: MONTH}
 ];
 
+function bindIntervalButtons() {
+  intervals.selected = either(intervals[parseInt(either(preferences.get('charts.pie.'+view.toLowerCase()+'.range'), 1))], intervals[1]);
+
+  var intervalButtons = [];
+  var intervalButtonGroup;
+
+  intervals.each(function(interval, i, selected) {
+    var button = new wesabe.views.widgets.Button($('#chart-pie .'+view.toLowerCase()+' .toggle-button.time-'+interval.key));
+    button.interval = interval;
+    button.setSelected(selected);
+    intervalButtons.push(button);
+  });
+
+  intervalButtonGroup = new wesabe.views.widgets.ButtonGroup(intervalButtons, {
+    onSelectionChange: function(sender, button) {
+      setTimeRange(button.interval);
+    }
+  });
+}
+
 intervals.each = function(callback) {
   for (var i = 0; i < intervals.length; i++) {
     callback(intervals[i], i, intervals[i] === intervals.selected);
   }
 };
 
+
 var changingTime = false;
-void drawTimeSelect() {
-  intervals.each(function(interval, i, selected) {
-    var button = $('#chart-pie .'+view.toLowerCase()+' .toggle-button.time-'+interval.key);
-    if (button.hasClass('on') != selected) {
-      button.toggleClass('on');
-    }
-    button
-      .unbind('click')
-      .click(function(){ setTimeRange(interval) });
-  });
-}
 
 void setTimeRange(interval) {
   intervals.selected = interval;

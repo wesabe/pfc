@@ -7,6 +7,7 @@ wesabe.$class('wesabe.views.widgets.Button', wesabe.views.widgets.BaseWidget, fu
 
   /** @const */ $class.COLORS = ['red', 'green', 'orange', 'blue'];
   /** @const */ $class.DISABLED_COLOR = 'gry';
+  /** @const */ $class.SELECTED_CLASS = 'on';
 
   $.extend($class.prototype, {
     _enabled: true,
@@ -78,6 +79,25 @@ wesabe.$class('wesabe.views.widgets.Button', wesabe.views.widgets.BaseWidget, fu
           .addClass(enabled ? this._color : $class.DISABLED_COLOR)
           .removeClass(enabled ? $class.DISABLED_COLOR : this._color);
       }
+    },
+
+    /**
+     * Returns true if this button is selected.
+     *
+     * @return {boolean}
+     */
+    isSelected: function() {
+      return this.getElement().hasClass($class.SELECTED_CLASS);
+    },
+
+    /**
+     * Sets whether or not this button is selected.
+     *
+     * @param {!boolean} selected
+     */
+    setSelected: function(selected) {
+      if (this.isSelected() !== selected)
+        this.getElement().toggleClass($class.SELECTED_CLASS);
     },
 
     /**

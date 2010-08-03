@@ -260,7 +260,6 @@ void draw() {
     drawGrid();
     drawLines();
     drawTimeSelect();
-    drawViewSelect();
     drawAnalytics();
   }
 }
@@ -461,15 +460,16 @@ intervals.each = function(callback) {
   }
 };
 
+var dateRangeButtonGroup = new wesabe.views.widgets.ButtonGroup($.map(intervals, function(interval) {
+  var button = new wesabe.views.widgets.Button($('#date-range .toggle-button.time-'+interval.key));
+  button.interval = interval;
+  return button;
+}), {onSelectionChange: function(sender, button){ setTimeRange(button.interval) }});
+
 void drawTimeSelect() {
   intervals.each(function(interval, i, selected) {
-    var button = $('#date-range .toggle-button.time-'+interval.key);
-    if (button.hasClass('on') != selected) {
-      button.toggleClass('on');
-    }
-    button
-      .unbind('click')
-      .click(function(){ setTimeRange(interval) });
+    var button = dateRangeButtonGroup.getButton(i);
+    button.setSelected(selected);
   });
 }
 
@@ -486,19 +486,21 @@ var viewChoices = [wesCharts.BAR, wesCharts.LINE];
 var viewSelected = parseInt(either(preferences.get('charts.line.view'), 0));
 var view = viewChoices[viewSelected];
 
-void drawViewSelect() {
-  var x0 = 461;
-  for (var vc=0;vc < viewChoices.length; vc++) {
-    var button = $('#graphs .toggle.'+viewChoices[vc]);
-    var selected = vc === viewSelected;
-    if (selected != button.hasClass('on')) {
-      button.toggleClass('on');
-    }
-    button
-      .unbind('click')
-      .click(function(){ setView(this) });
-  }
+var viewChoiceButtons = [];
+var viewChoiceButtonGroup;
+
+for (var i = 0; i < viewChoices.length; i++) {
+  var button = new wesabe.views.widgets.Button($('#graphs .toggle.'+viewChoices[i]));
+  button.setSelected(i === viewSelected);
+  button.view = viewChoices[i];
+  viewChoiceButtons.push(button);
 }
+
+viewChoiceButtonGroup = new wesabe.views.widgets.ButtonGroup(viewChoiceButtons, {
+  onSelectionChange: function(sender, button) {
+    setView(button.view);
+  }
+});
 
 void drawAnalytics() {
   var containerNode = $('#transaction-totals'),
@@ -522,14 +524,13 @@ void drawAnalytics() {
   containerNode.show();
 }
 
-void setView(el) {
-  var element = $(el);
-  for (var vc=0;vc < viewChoices.length; vc++)
-    if (element.hasClass(viewChoices[vc])) break;
-  viewSelected = vc;
-  view = viewChoices[vc];
+void setView(aView) {
+  view = aView;
   redraw();
-  preferences.update('charts.line.view', vc);
+
+  for (var i = 0; i < viewChoices.length; i++)
+    if (viewChoices[i] == aView)
+      preferences.update('charts.line.view', i);
 }
 
 var dirty = false;

@@ -280,7 +280,7 @@ jQuery(function($) {
     // FIXME: extract this functionality to a generic ControlPanel class that can be reused elsewhere
     controlPanel: (function() {
       var buttonGroups = {
-        tagScope:  ["tag-scope-top-button","tag-scope-all-button"],
+        tagScope:  ["tag-scope-all-button","tag-scope-top-button"],
         compare:   ["compare-none-button","compare-previous-button","compare-average-button"],
         dateRange: ["date-range-month-button","date-range-quarter-button","date-range-year-button","date-range-custom-button"]
       };
@@ -291,19 +291,22 @@ jQuery(function($) {
 
           // set up click handler so that clicking one button in a group will turn the others off
           for (var key in buttonGroups) {
-            var tuple = buttonGroups[key];
-            $.each(tuple, function(_, button) {
-              var group = key;
-              var otherButtons = wesabe.lang.array.minus(tuple, [button]);
-              self.fn("button", button).click(function() {
-                if (!$(this).hasClass("on")) {
-                  $(this).addClass("on");
-                  $.each(otherButtons, function(_, b) { self.fn("button", b).removeClass("on"); });
-                  self.fn("fireUpdatedEvent", group, button);
-                }
-              });
+            var buttonIds = buttonGroups[key],
+                buttons = [],
+                buttonGroup;
+
+            for (var i = 0; i < buttonIds.length; i++)
+              buttons.push(new wesabe.views.widgets.Button($('#'+buttonIds[i])));
+
+            buttonGroup = new wesabe.views.widgets.ButtonGroup(buttons, {
+              onSelectionChange: function(sender, button) {
+                self.fn("fireUpdatedEvent", sender.key, button);
+              }
             });
-          };
+
+            buttonGroup.key = key;
+            buttonGroup.selectButton(buttons[0]);
+          }
 
           $("#custom-edit", self).dateRangePicker({
             onShow: function() {

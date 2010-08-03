@@ -33,6 +33,7 @@
 - wesabe/views/shared.js
 - wesabe/views/widgets/BaseWidget.js
 - wesabe/views/widgets/Button.js
+- wesabe/views/widgets/ButtonGroup.js
 - wesabe/views/widgets/Label.js
 - wesabe/views/widgets/BaseListWidget.js
 - wesabe/views/widgets/Dialog.js

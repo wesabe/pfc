@@ -25,24 +25,15 @@ jQuery(function($) {
           }
         });
 
-        self.fn('allTransactionsButton')
-          .click(function() {
-            self.kvo('unedited', false);
-            return false;
-          });
+        self.data('activity-buttons', new wesabe.views.widgets.ButtonGroup(
+          [self.fn('allTransactionsButton'), self.fn('uneditedTransactionsButton')], {
+            onSelectionChange: function(sender, selectedButton) {
+              self.kvo('unedited', selectedButton.getId() == 'unedited-transactions-button');
+            }
+        }));
 
-        self.fn('uneditedTransactionsButton')
-          .click(function() {
-            self.kvo('unedited', true);
-            return false;
-          });
-
-        self.kvobserve('unedited', function(_, value) {
-          var all = self.fn('allTransactionsButton'),
-              unedited = self.fn('uneditedTransactionsButton');
-
-          if (value == all.hasClass('on')) all.toggleClass('on');
-          if (value != unedited.hasClass('on')) unedited.toggleClass('on');
+        self.kvobserve('unedited', function(_, unedited) {
+          self.data('activity-buttons').selectButton(self.fn(unedited ? 'uneditedTransactionsButton' : 'allTransactionsButton'));
         });
 
         var header = root.find('.module-header :header');
@@ -78,33 +69,29 @@ jQuery(function($) {
         }
       }),
 
-      allTransactionsButton: $.getset({
-        get: function() { return $(this).find("#all-transactions-button"); },
-        set: function(state) {
-          if (state == 'on') {
-            $(this).fn('allTransactionsButton').addClass('on');
-            $(this).fn('uneditedTransactionsButton', 'off');
-          }
-          else {
-            $(this).fn('allTransactionsButton').removeClass('on');
-          }
-        }
-      }),
+      allTransactionsButton: function() {
+        var self = $(this),
+            button = self.data('allTransactionsButton');
 
-      uneditedTransactionsButton: $.getset({
-        get: function() { return $(this).find("#unedited-transactions-button"); },
-        set: function(state) {
-          if (state == 'on') {
-            $(this).fn('uneditedTransactionsButton').addClass('on');
-            $(this).fn('allTransactionsButton', 'off');
-            $(this).fn('unedited', true);
-          }
-          else {
-            $(this).fn('uneditedTransactionsButton').removeClass('on');
-            $(this).fn('unedited', false);
-          }
+        if (!button) {
+          button = new wesabe.views.widgets.Button(self.find("#all-transactions-button"));
+          self.data('allTransactionsButton', button);
         }
-      }),
+
+        return button;
+      },
+
+      uneditedTransactionsButton: function() {
+        var self = $(this),
+            button = self.data('uneditedTransactionsButton');
+
+        if (!button) {
+          button = new wesabe.views.widgets.Button(self.find("#unedited-transactions-button"));
+          self.data('uneditedTransactionsButton', button);
+        }
+
+        return button;
+      },
 
       unedited: $.getsetdata('unedited')
     },

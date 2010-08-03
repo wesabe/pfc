@@ -11,11 +11,14 @@ wesabe.$class('wesabe.views.widgets.BaseWidget', function($class, $super, $packa
 
     init: function(element) {
       this._element = element;
-      this._childWidgets = [];
     },
 
     getElement: function() {
       return this._element;
+    },
+
+    getId: function() {
+      return this.getElement().attr('id');
     },
 
     isVisible: function() {
@@ -57,6 +60,7 @@ wesabe.$class('wesabe.views.widgets.BaseWidget', function($class, $super, $packa
      * @param {!BaseWidget} child
      */
     registerChildWidget: function(child) {
+      if (!this._childWidgets) this._childWidgets = [];
       this._childWidgets.push(child);
     },
 
@@ -67,6 +71,7 @@ wesabe.$class('wesabe.views.widgets.BaseWidget', function($class, $super, $packa
      * @param {...BaseWidget} var_args
      */
     registerChildWidgets: function() {
+      if (!this._childWidgets) this._childWidgets = [];
       this._childWidgets = this._childWidgets.concat($.makeArray(arguments));
     },
 
