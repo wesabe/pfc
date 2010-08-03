@@ -14,9 +14,9 @@ class ImageProcessing::Thumbnailer
   def process_image(infile)
     for flavor, size in @options
       outfile = File.change_extname(infile.sub(".original", ""), ".#{flavor}.png")
-      RAILS_DEFAULT_LOGGER.debug "Saving a #{flavor} version of #{infile} to #{outfile}..."
+      Rails.logger.debug "Saving a #{flavor} version of #{infile} to #{outfile}..."
       system "./script/images/thumbnail", "--size=#{size}", infile, outfile
-      RAILS_DEFAULT_LOGGER.debug "... #{$?.success? ? 'OK' : "FAIL ($?=#{$?.exitstatus})"}"
+      Rails.logger.debug "... #{$?.success? ? 'OK' : "FAIL ($?=#{$?.exitstatus})"}"
     end
   end
 end

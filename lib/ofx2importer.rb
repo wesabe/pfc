@@ -85,7 +85,7 @@ class OFX2Importer
   #
 
   def self.logger
-    ApplicationController.logger
+    Rails.logger
   end
 
   # import OFX 2.0 data
