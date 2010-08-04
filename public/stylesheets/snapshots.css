@@ -1,0 +1,35 @@
+.snapshot {
+  position: relative;
+  margin-left: 275px;
+}
+
+.snapshot p {
+  margin-bottom: 0;
+}
+
+.snapshot .download {
+  display: block;
+  background-image: url(/images/icon-zip-format.png);
+  background-repeat: no-repeat;
+  height: 142px;
+}
+
+.snapshot .download div {
+  display: block;
+  top: 30px;
+  left: 130px;
+  position: absolute;
+}
+
+.snapshot .header {
+  font-size: 30px;
+  margin: 0;
+}
+
+.snapshot .date {
+  font-size: .8em;
+  color: #666;
+  position: absolute;
+  top: 65px;
+  left: 130px;
+}
