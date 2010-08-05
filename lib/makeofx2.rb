@@ -1,3 +1,5 @@
+require 'child_labor'
+
 # makeofx2.0.py return codes and exceptions
 class MakeOFX2
   SUCCESS = 0
@@ -41,13 +43,20 @@ class MakeOFX2
       (options[:currency] ? " --curdef #{options[:currency]}" : '') +
      (options[:financial_inst].date_format_ddmmyyyy? ? ' --dayfirst' : '')
 
-    # using systemu so we can not only separate stdout and stderr, but also get the exitstatus (Open3 won't
-    # give us the exitstatus)
-    status = systemu(command, :stdin => statement, :stdout => (stdout=''), :stderr => (stderr=''))
-    return stdout if status.exitstatus == SUCCESS
+    # using ChildLabor so we can not only separate stdout and stderr,
+    # but also get the exit status (Open3 won't give us the exit status)
+    stdout, stderr = nil
+
+    task = ChildLabor.subprocess(command) do |t|
+      t.write statement
+      t.close_write
+      stdout, stderr = t.read, t.read_stderr
+    end
 
     # handle exceptions
-    case status.exitstatus
+    case task.exit_status
+    when SUCCESS
+      return stdout
     when FatalError::RETURN_CODE
       exception = FatalError.new
     when NoInputError::RETURN_CODE

@@ -8,7 +8,7 @@ gem 'chronic',         '0.2.3'
 gem 'rails',           '3.0.0.beta4'
 gem 'oniguruma' # sudo port install oniguruma5; sudo gem install indirect-oniguruma -s http://gems.github.com -- --with-onig-dir=/opt/local
 gem 'fastercsv'
-gem 'systemu'
+gem 'childlabor'
 gem 'riddle'
 gem 'memcache-client',            :require => 'memcache'
 gem 'mime-types',                 :require => 'mime/types'
