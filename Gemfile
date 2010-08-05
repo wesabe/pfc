@@ -20,7 +20,7 @@ gem 'rdoc'
 gem 'delayed_job',     '2.1.0.pre'
 gem 'thor' # for imports
 gem 'mongrel' # faster development server
-gem 'charguess'
+gem 'rchardet'
 
 group :development do
   gem 'mysql'           # in production: apt-get install libmysql-ruby

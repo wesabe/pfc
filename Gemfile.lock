@@ -16,6 +16,10 @@ dependencies:
     group: 
     - :default
     version: ">= 0"
+  rchardet: 
+    group: 
+    - :default
+    version: ">= 0"
   mongrel: 
     group: 
     - :default
@@ -41,10 +45,6 @@ dependencies:
     require: 
     - memcache
   thor: 
-    group: 
-    - :default
-    version: ">= 0"
-  charguess: 
     group: 
     - :default
     version: ">= 0"
@@ -153,8 +153,6 @@ specs:
     version: 0.9.26
 - cgi_multipart_eof_fix: 
     version: 2.5.0
-- charguess: 
-    version: "1.3"
 - childlabor: 
     version: 0.0.2
 - json_pure: 
@@ -205,6 +203,8 @@ specs:
     version: 3.0.0.beta4
 - rails: 
     version: 3.0.0.beta4
+- rchardet: 
+    version: "1.3"
 - rdoc: 
     version: 2.5.9
 - rest-client: 
@@ -231,7 +231,7 @@ specs:
     version: 0.9.4
 - webmock: 
     version: 1.3.3
-hash: 1b6092ec3e0ca5cdf279f61dcdea4856f4e8401e
+hash: c86805bfa810d458d4fff49c3450d2df57e20f91
 sources: 
 - Rubygems: 
     uri: http://gemcutter.org

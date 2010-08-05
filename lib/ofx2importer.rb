@@ -1,3 +1,6 @@
+require "rchardet"
+require "xml/libxml" # libxml-ruby
+
 # class to parse and import OFX 2.0 files
 # used by upload_controller and [formerly] scripts/importofx2.rb
 
@@ -97,9 +100,13 @@ class OFX2Importer
     # parse the source
     logger.debug("parsing xml document...")
     # we can't trust the encoding in the statement
-    # and CharGuess doesn't always get it right, so try UTF-8 and latin1 if it fails
-    encodings = ([CharGuess::guess(source)] + %w{UTF-8 ISO-8859-1}).compact
-    for encoding in encodings do
+    # and rchardet doesn't always get it right, so try UTF-8 and latin1 if it fails
+    encodings = %w[utf-8 iso-8859-1]
+    CharDet.detect(source).tap do |cd|
+      encodings << cd['encoding'].downcase if cd
+    end
+
+    for encoding in encodings.uniq
       if source.sub!(/encoding="(.*?)"\?>/,"encoding=\"#{encoding}\"?>")
         logger.debug("converted xml encoding from #{$1} to #{encoding}")
       end
