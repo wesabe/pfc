@@ -416,15 +416,17 @@ function bindIntervalButtons() {
   var intervalButtonGroup;
 
   intervals.each(function(interval, i, selected) {
-    var button = new wesabe.views.widgets.Button($('#chart-pie .'+view.toLowerCase()+' .toggle-button.time-'+interval.key));
-    button.interval = interval;
+    var button = new wesabe.views.widgets.Button(
+      $('#chart-pie .'+view.toLowerCase()+' .toggle-button.time-'+interval.key),
+      interval
+    );
     button.setSelected(selected);
     intervalButtons.push(button);
   });
 
   intervalButtonGroup = new wesabe.views.widgets.ButtonGroup(intervalButtons, {
     onSelectionChange: function(sender, button) {
-      setTimeRange(button.interval);
+      setTimeRange(button.getValue());
     }
   });
 }

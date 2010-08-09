@@ -25,15 +25,16 @@ jQuery(function($) {
           }
         });
 
-        self.data('activity-buttons', new wesabe.views.widgets.ButtonGroup(
-          [self.fn('allTransactionsButton'), self.fn('uneditedTransactionsButton')], {
+        self.data('activity-buttons', new wesabe.views.widgets.ButtonGroup([
+          new wesabe.views.widgets.Button(self.find("#all-transactions-button"), /* unedited = */ false),
+          new wesabe.views.widgets.Button(self.find("#unedited-transactions-button"), /* unedited = */ true)], {
             onSelectionChange: function(sender, selectedButton) {
-              self.kvo('unedited', selectedButton.getId() == 'unedited-transactions-button');
+              self.kvo('unedited', selectedButton.getValue());
             }
         }));
 
         self.kvobserve('unedited', function(_, unedited) {
-          self.data('activity-buttons').selectButton(self.fn(unedited ? 'uneditedTransactionsButton' : 'allTransactionsButton'));
+          self.data('activity-buttons').selectButtonByValue(unedited);
         });
 
         var header = root.find('.module-header :header');
@@ -68,30 +69,6 @@ jQuery(function($) {
           getset.get().fn('update', data);
         }
       }),
-
-      allTransactionsButton: function() {
-        var self = $(this),
-            button = self.data('allTransactionsButton');
-
-        if (!button) {
-          button = new wesabe.views.widgets.Button(self.find("#all-transactions-button"));
-          self.data('allTransactionsButton', button);
-        }
-
-        return button;
-      },
-
-      uneditedTransactionsButton: function() {
-        var self = $(this),
-            button = self.data('uneditedTransactionsButton');
-
-        if (!button) {
-          button = new wesabe.views.widgets.Button(self.find("#unedited-transactions-button"));
-          self.data('uneditedTransactionsButton', button);
-        }
-
-        return button;
-      },
 
       unedited: $.getsetdata('unedited')
     },

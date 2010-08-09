@@ -14,8 +14,9 @@ wesabe.$class('wesabe.views.widgets.Button', wesabe.views.widgets.BaseWidget, fu
     _color: null,
     _text: null,
     _textElement: null,
+    _value: null,
 
-    init: function(element) {
+    init: function(element, value) {
       var me = this;
 
       $super.init.call(me, element);
@@ -23,6 +24,9 @@ wesabe.$class('wesabe.views.widgets.Button', wesabe.views.widgets.BaseWidget, fu
       // read the existing text
       me._textElement = element.children('span');
       me._text = me._textElement.text();
+
+      // set the value
+      me._value = value;
 
       // figure out what color it should be
       for (var i = $class.COLORS.length; i--;) {
@@ -120,6 +124,21 @@ wesabe.$class('wesabe.views.widgets.Button', wesabe.views.widgets.BaseWidget, fu
 
       this._text = text;
       this._textElement.text(text);
+    },
+
+    /**
+     * Gets the value of the button. Used with {ButtonGroup}s to allow
+     * referring to specific buttons by value rather than by reference.
+     */
+    getValue: function() {
+      return this._value;
+    },
+
+    /**
+     * Sets the value of the button.
+     */
+    setValue: function(value) {
+      this._value = value;
     }
   });
 });

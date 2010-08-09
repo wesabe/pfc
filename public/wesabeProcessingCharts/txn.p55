@@ -461,10 +461,8 @@ intervals.each = function(callback) {
 };
 
 var dateRangeButtonGroup = new wesabe.views.widgets.ButtonGroup($.map(intervals, function(interval) {
-  var button = new wesabe.views.widgets.Button($('#date-range .toggle-button.time-'+interval.key));
-  button.interval = interval;
-  return button;
-}), {onSelectionChange: function(sender, button){ setTimeRange(button.interval) }});
+  return new wesabe.views.widgets.Button($('#date-range .toggle-button.time-'+interval.key), interval);
+}), {onSelectionChange: function(sender, button){ setTimeRange(button.getValue()) }});
 
 void drawTimeSelect() {
   intervals.each(function(interval, i, selected) {
@@ -490,15 +488,14 @@ var viewChoiceButtons = [];
 var viewChoiceButtonGroup;
 
 for (var i = 0; i < viewChoices.length; i++) {
-  var button = new wesabe.views.widgets.Button($('#graphs .toggle.'+viewChoices[i]));
+  var button = new wesabe.views.widgets.Button($('#graphs .toggle.'+viewChoices[i]), viewChoices[i]);
   button.setSelected(i === viewSelected);
-  button.view = viewChoices[i];
   viewChoiceButtons.push(button);
 }
 
 viewChoiceButtonGroup = new wesabe.views.widgets.ButtonGroup(viewChoiceButtons, {
   onSelectionChange: function(sender, button) {
-    setView(button.view);
+    setView(button.getValue());
   }
 });
 

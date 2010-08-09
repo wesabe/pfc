@@ -49,6 +49,15 @@ wesabe.$class('wesabe.views.widgets.ButtonGroup', wesabe.views.widgets.BaseWidge
         var b = this._buttons[i];
         b.setSelected(b === button);
       }
+    },
+
+    selectButtonByValue: function(value) {
+      for (var i = this._buttons.length; i--; ) {
+        if (this._buttons[i].getValue() === value) {
+          this.selectButton(this._buttons[i]);
+          break;
+        }
+      }
     }
   });
 });
