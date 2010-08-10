@@ -34,7 +34,7 @@ class Tagging < ActiveRecord::Base
   end
 
   def self.tagged_class(taggable)
-    ActiveRecord::Base.send(:class_name_of_active_record_descendant, taggable.class).to_s
+    taggable.class.base_class.name
   end
 
   def self.find_taggable(tagged_class, tagged_id)

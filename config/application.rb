@@ -12,7 +12,7 @@ module Pfc
     # -- all .rb files in that directory are automatically loaded.
 
     # Add additional load paths for your own custom dirs
-    # config.load_paths += %W( #{config.root}/extras )
+    config.autoload_paths += %W( #{config.root}/lib )
 
     # Only load the plugins named here, in the order given (default is alphabetical).
     # :all can be used as a placeholder for all plugins not explicitly named
@@ -47,5 +47,7 @@ module Pfc
                              :raw_post_data, :question_1, :question_2, :answer_1,
                              :answer_2, :upload, :visible_txaction_ids, :answers,
                              :data, :cookies]
+
+    config.active_support.deprecation = :log
   end
 end

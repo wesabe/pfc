@@ -5,7 +5,7 @@ source :gemcutter
 gem 'chronic',         '0.2.3'
 
 # Regular gems
-gem 'rails',           '3.0.0.beta4'
+gem 'rails',           '3.0.0.rc'
 
 platforms :mri_18 do
   gem "oniguruma", :require => 'oniguruma'

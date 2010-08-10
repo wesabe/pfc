@@ -154,7 +154,7 @@ module ApplicationHelper
       name << "<br/>" << image_tag("wesabe-tiny.gif", :alt => "Works at Wesabe", :title => "Works at Wesabe", :class => "badge")
     end
 
-    link_to(name, user_url(user), {:class => 'author', :alt => link_text || h(user.display_name)})
+    link_to(name, user_path, {:class => 'author', :alt => link_text || h(user.display_name)})
   end
 
   # return true if the result of a file upload is really a file

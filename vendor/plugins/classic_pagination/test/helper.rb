@@ -26,7 +26,7 @@ unless defined?(ActiveRecord)
 
   %w(action_pack active_record action_controller active_record/fixtures action_controller/test_process).each {|f| require f}
 
-  Dependencies.load_paths.unshift "#{plugin_root}/lib"
+  Dependencies.autoload_paths.unshift "#{plugin_root}/lib"
 end
 
 # Define the connector
