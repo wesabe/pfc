@@ -8,6 +8,8 @@ class Normalizer
       JRubyNormalizer.new(regexp, flags, replacement)
     elsif oniguruma?
       OnigurumaNormalizer.new(regexp, flags, replacement)
+    elsif rubinius?
+      RubiniusNormalizer.new(regexp, flags, replacement)
     else
       CompatibleNormalizer.new(regexp, flags, replacement)
     end
@@ -33,6 +35,10 @@ class Normalizer
     end
 
     oniguruma?
+  end
+
+  def self.rubinius?
+    defined?(RUBY_ENGINE) && RUBY_ENGINE == 'rbx'
   end
 
   class BaseNormalizer
@@ -67,11 +73,16 @@ class Normalizer
     end
   end
 
-  class JRubyNormalizer < BaseNormalizer
+  class NativeOnigurumaNormalizer < BaseNormalizer
     def initialize(regexp, flags, replacement)
       super(Regexp.new(regexp, flags), replacement)
     end
+  end
 
+  class RubiniusNormalizer < NativeOnigurumaNormalizer
+  end
+
+  class JRubyNormalizer < NativeOnigurumaNormalizer
     def replace(string)
       java.lang.String.new(string.gsub(regexp, replacement))
     end
