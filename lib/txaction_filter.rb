@@ -33,7 +33,7 @@ class TxactionFilter
     [/\b\d{1,2}[\/-]\d{1,2}([\/-]\d{1,4})?\b/i, ''], # strip dates (dd-mm-yy[yy] or dd/mm/yy[yy], 025STAR ONE ATM WITHDRWL 02-15) (1-digit year catches cut-off years)
     [/(\b|\D)\d{1,2}[\/-]\d{1,2}(\D|\b)?/i, ''], # strip dates (025STAR ONE ATM WITHDRWL 02-15 #)
     [/\b([^#\s-])\s+(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])\b/i, '\1'], # strip 4-digit numbers that may be dates
-    [Oniguruma::ORegexp.new('(?<!#)\s*(0[1-9]|[12]\d|3[01])(0[1-9]|1[0-2])$'), ''], # strip 4-digit number that may be dates(DD/MM) at the end
+    [Normalizer.filter('(?<!#)\s*(0[1-9]|[12]\d|3[01])(0[1-9]|1[0-2])$'), ''], # strip 4-digit number that may be dates(DD/MM) at the end
     [/(JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP)\s*\//i, ''], # strip months, sometimes they have lots of spaces.
     [/[#]?(?:[\d\.-]\s?){6,}(\D|\b)/i, '\1'], # strip transaction-like numbers (000204512 CHEVRON 0204 WEST LINN)
     [/\w\d \w\d \w\d$/i, ''], # strip A1 B2 C3 transaction numbers
@@ -75,11 +75,10 @@ class TxactionFilter
   def self.filter(orig_str)
     return nil unless orig_str
     str = orig_str.dup
-    FILTERS.each do |filter,replacement|
-      case filter
-      when Regexp
+    FILTERS.each do |filter, replacement|
+      if filter.is_a?(Regexp)
         str.gsub!(filter,replacement)
-      when Oniguruma::ORegexp
+      elsif filter.respond_to?(:gsub)
         str = filter.gsub(str, replacement)
       end
       # puts "filter: #{filter}\nstr: #{str}" # debug

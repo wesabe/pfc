@@ -432,7 +432,7 @@ class User < ActiveRecord::Base
   # e.g., "Bjørn Øgler 88 & Friends" #=> "bjørnøgler88andfriends"
   # REVIEW: I think we want [^\p{Alnum}] here instead. Might need to run a migration if we change this, though.
   def self.normalize_name(name)
-    Oniguruma::ORegexp.new('[[:^alnum:]]', "i", "utf8").gsub(name.gsub(/&/,'and'), "").mb_chars.strip.downcase.to_s
+    Normalizer.alnum.normalize(name.gsub(/&/, 'and'))
   end
 
   # called by before_validate to generate a normalized name for this user

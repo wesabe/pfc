@@ -6,7 +6,11 @@ gem 'chronic',         '0.2.3'
 
 # Regular gems
 gem 'rails',           '3.0.0.beta4'
-gem 'oniguruma' # sudo port install oniguruma5; sudo gem install indirect-oniguruma -s http://gems.github.com -- --with-onig-dir=/opt/local
+
+platforms :mri_18 do
+  gem "oniguruma", :require => 'oniguruma'
+end
+
 gem 'fastercsv'
 gem 'childlabor'
 gem 'riddle'

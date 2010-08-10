@@ -108,8 +108,7 @@ class Tag < ActiveRecord::Base
   # normalize a tag
   def self.normalize(str)
     if str && !str.blank?
-      punct_and_space = Oniguruma::ORegexp.new('[\p{Punct}\p{Space}]', "i", "utf8")
-      normalized = punct_and_space.gsub(str.singularize, '').downcase
+      normalized = Normalizer.filter('[\p{Punct}\p{Space}]', 'i').normalize(str.singularize)
       # if the tag is only 's' or only punctuation, return it instead of ''
       normalized.blank? ? str.downcase.gsub(/ /, '') : normalized
     end

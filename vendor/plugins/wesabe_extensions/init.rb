@@ -34,7 +34,6 @@ require "string/dom_id"
 require "string/titleize_fix"
 require "string/to_gz"
 require "string/version_to_i"
-require "string/dumbify"
 require "string/better_pluralize"
 
 require "time/ambiguous_date"
