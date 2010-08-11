@@ -276,12 +276,9 @@ jQuery(function($) {
     transaction: {
       id:             $.getsetdata('id'),
       uri:            $.getsetdata('uri'),
-      date:           $.getsetdata('date'),
       amount:         $.getsetdata('amount'),
-      displayAmount:  $.getsetdata('display-amount'),
       balance:        $.getsetdata('balance'),
       account:        $.getsetdata('account'),
-      notes:          $.getsetdata('notes'),
       'check-number': $.getsetdata('check-number'),
 
       merchant: $.getset({
@@ -301,24 +298,16 @@ jQuery(function($) {
 
       init: function() {
         var self = $(this);
+
+        self.data('widget', new wesabe.views.widgets.transactions.Transaction(self));
         self.include(behaviors.transactionEdit);
         self.children('.edit').click(function(){
           self.fn('startEdit'); });
 
-        // bind note text and show icon if note is present
-        $('.notes .text-content', self)
-          .kvobind(self, 'notes', {property: 'text'});
-        $('.notes', self)
-          .kvobind(self, 'notes', {hasClass: 'on notes-on', when: 'present'});
-
-        // bind the text to formatted balance
-        $('.balance', self)
-          .kvobind(self, 'balance', {property: 'text', transform: function(b){ return b && b.display }});
-
         // bind the amount to formatted amount and bind the "credit" class to positive amount
-        $('.amount', self)
-          .kvobind(self, 'display-amount', {property: 'text', transform: function(a){ return a && a.display.replace(/[-\(\)]/g, '') }})
-          .kvobind(self, 'display-amount', {hasClass: 'credit', when: function(a){ return a && a.value > 0 }});
+        // $('.amount', self)
+        //   .kvobind(self, 'display-amount', {property: 'text', transform: function(a){ return a && a.display.replace(/[-\(\)]/g, '') }})
+        //   .kvobind(self, 'display-amount', {hasClass: 'credit', when: function(a){ return a && a.value > 0 }});
 
         // bind merchant text to merchant display name
         $('.merchant-name .text-content', self)
@@ -342,35 +331,9 @@ jQuery(function($) {
         $('.check-number', self)
           .kvobind(self, 'check-number', {property: 'text', transform: function(c){ return c ? (' — Check #'+c) : '' }});
 
-        // bind date text to formatted date (e.g. "Apr 28th")
-        $('.transaction-date', self)
-          .kvobind(self, 'date', {property: 'text', transform: function(date) {
-            if (date) {
-              return wesabe.lang.date.format(date, 'NNN') + ' ' + number.ordinalize(date.getDate()) +
-                (date.getFullYear() != new Date().getFullYear() ? ' ' + date.getFullYear() : '');
-            }
-          }});
-
         // show the transfer icon when there is a transfer
         $('.transfer', self)
           .kvobind(self, 'transfer', {hasClass: 'on transfer-on', when: 'present'});
-
-        var selection = root.fn('selection').get();
-        self.kvobserve('account', function(_, a) {
-          if (a.uri) {
-            var accounts = wesabe.data.accounts.sharedDataSource.getData().accounts;
-            for (var i = accounts.length; i--;) {
-              if (accounts[i].uri === a.uri) {
-                a = accounts[i];
-                break;
-              }
-            }
-          }
-
-          if (selection.length != 1 || selection[0].getClass() != wesabe.views.widgets.accounts.Account) {
-            $('.account-name .text-content', self).text(a ? a.name : '');
-          }
-        });
 
         $('.account-name', self)
           .click(function(event) {
@@ -383,7 +346,8 @@ jQuery(function($) {
 
       update: function(data) {
         var self = $(this);
-        var selection = root.fn('selection');
+        var selection = root.fn('selection'),
+            selectingSingleAccount = (selection.get().length == 1) && selection.get()[0].isInstanceOf(wesabe.views.widgets.accounts.Account);
         data['amount'].value = number.parse(data['amount'].value);
         var merchant = data['merchant'] || {};
         var uneditedName = merchant.uneditedName = data['unedited-name'] || '';
@@ -425,23 +389,30 @@ jQuery(function($) {
         self
           .fn('id', data['id'])
           .fn('uri', data['uri'])
-          .fn('date', data['date'] && wesabe.lang.date.parse(data['date']))
           .fn('amount', data['amount'])
-          .fn('displayAmount', data['display-amount'] || data['amount'])
           .fn('merchant', merchant)
           .fn('check-number', data['check-number'] || null)
           .fn('account', data['account'])
-          .fn('notes', data['note'])
           .fn('tags', data['tags'])
           .fn('transfer', data['transfer'] || null)
           .fn('attachments', data['attachments'] || []);
 
+        var widget = self.data('widget');
+        widget.setNote(data['note']);
+
+        widget.setDate(data['date'] && wesabe.lang.date.parse(data['date']));
+
         var balance = data['balance'];
-        // Cash accounts shouldn't have balances (compensating for #358)
+        // Cash accounts shouldn't have balances (TODO: move this into wvwt.Transaction)
         if (data['account'].type == "Cash") {
-          balance = {display: (selection.length == 1 && selection[0].getClass() == wesabe.views.widgets.accounts.Account) ? '' : 'n/a'};
+          balance = {display: selectingSingleAccount ? '' : 'n/a'};
         }
-        self.fn('balance', balance || {display: 'n/a'});
+        widget.setBalance(balance);
+
+        widget.setAmount(data['display-amount'] || data['amount']);
+
+        // TODO: move account show/hide to wvwt.Transaction
+        widget.setAccount(selectingSingleAccount ? null : data['account']);
 
         var toEdit = !(merchant && merchant.name && data['tags'] && (data['tags'].length > 0));
         self.toggleClass('to-edit', toEdit);
@@ -727,7 +698,8 @@ jQuery(function($) {
       startEdit: function() {
         var self = $(this),
             edit_button = self.children('.edit'),
-            isAddTransaction = self.hasClass('add-transaction');
+            isAddTransaction = self.hasClass('add-transaction'),
+            widget = self.data('widget');
 
         // whoa there son, only one edit box at a time
         if ($('.edit-dialog:visible', self).length) return false;
@@ -764,7 +736,7 @@ jQuery(function($) {
 
         // bind the date picker
         $('.date-edit', edit_box).datepicker()
-          .val(wesabe.lang.date.format(self.fn('date'), 'yyyy-MM-dd'));
+          .val(wesabe.lang.date.format(widget.getDate(), 'yyyy-MM-dd'));
 
         // bind the merchant autocompleter
         self.fn('startMerchantAutocomplete');
@@ -772,7 +744,7 @@ jQuery(function($) {
         // toggle the merchant icons
         self.find('form div.merchant-icons').removeClass('on');
         if (self.fn('tags').length > 0) self.find('form div.merchant-icons.tags').addClass('on tags-on');
-        if (self.fn('notes') && self.fn('notes').length > 0) self.find('form div.merchant-icons.notes').addClass('on notes-on');
+        if (widget.getNote() && widget.getNote().length > 0) self.find('form div.merchant-icons.notes').addClass('on notes-on');
         if (self.fn('attachments').length > 0) self.find('form div.merchant-icons.attachments').addClass('on attachments-on');
         if (self.fn('transfer')) self.find('form div.merchant-icons.transfer').addClass('on transfer-on');
 
@@ -847,8 +819,9 @@ jQuery(function($) {
        },
 
       populateEdit: function() {
-        var self = $(this);
-        var edit_box = $('.edit-dialog', self);
+        var self = $(this),
+            edit_box = $('.edit-dialog', self),
+            widget = self.data('widget');
 
         // REVIEW: kvobind the template fields to the txaction object?
         $('.name-edit', edit_box).val(
@@ -879,8 +852,7 @@ jQuery(function($) {
         $('.delete.button', self).show()
           .click(function(){self.fn('destroy');});
 
-        if (self.fn('notes'))
-          $('textarea[name=note]', edit_box).val(self.fn('notes'));
+        $('textarea[name=note]', edit_box).val(widget.getNote() || '');
 
         var attachmentList = $('.inset-tab-text div.attachments-list', self);
         attachmentList.empty().append(self.fn('attachmentListItems', true));

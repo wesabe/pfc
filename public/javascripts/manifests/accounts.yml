@@ -10,6 +10,7 @@
 - wesabe/views/widgets/accounts/Merchant.js
 - wesabe/views/widgets/accounts/AutomaticUploaderErrorDialog.js
 - wesabe/views/widgets/accounts/ManualUploadDialog.js
+- wesabe/views/widgets/transactions/Transaction.js
 - wesabe/views/widgets/trends-summary.js
 - wesabe/views/widgets/tags/*.js
 - wesabe/views/widgets/tags.js

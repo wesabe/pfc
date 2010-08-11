@@ -22,6 +22,15 @@ wesabe.$class('wesabe.views.widgets.MoneyLabel', wesabe.views.widgets.BaseWidget
     },
 
     /**
+     * Gets the value of the label as a structured object.
+     *
+     * @return {object}
+     */
+    getMoney: function() {
+      return this._money;
+    },
+
+    /**
      * Sets the new value of the label, overriding any previous
      * calls to {#setCurrency} and instead using {money.display}.
      */
