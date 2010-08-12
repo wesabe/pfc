@@ -24,6 +24,8 @@ wesabe.$class('wesabe.views.widgets.transactions.Transaction', wesabe.views.widg
     _merchantLink: null,
     _merchantInfoElement: null,
 
+    _accountLink: null,
+
     init: function(element) {
       $super.init.call(this, element);
 
@@ -47,7 +49,7 @@ wesabe.$class('wesabe.views.widgets.transactions.Transaction', wesabe.views.widg
       });
       this.registerChildWidget(this._dateLabel);
 
-      this._accountLabel = new wesabe.views.widgets.Label(element.find('.account-name .text-content'), {
+      this._accountLabel = new wesabe.views.widgets.HistoryLink(element.find('.account-name'), null, {
         format: function(account) {
           return account && account.name;
         }
@@ -170,6 +172,7 @@ wesabe.$class('wesabe.views.widgets.transactions.Transaction', wesabe.views.widg
       }
 
       this._accountLabel.setValue(account);
+      this._accountLabel.setURI(account && account.uri);
     },
 
     /**

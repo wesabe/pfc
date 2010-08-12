@@ -8,11 +8,14 @@ wesabe.$class('wesabe.views.widgets.Label', wesabe.views.widgets.BaseWidget, fun
   $.extend($class.prototype, {
     _value: null,
     _formatter: null,
+    _textElement: null,
 
     init: function(element, formatter) {
       $super.init.call(this, element);
       this._value = element.text();
       this._formatter = formatter;
+      this._textElement = element.find('.text-content');
+      if (!this._textElement.length) this._textElement = element;
     },
 
     getValue: function() {
@@ -37,7 +40,7 @@ wesabe.$class('wesabe.views.widgets.Label', wesabe.views.widgets.BaseWidget, fun
     },
 
     _redraw: function() {
-      this.getElement().text(this._formatter ?
+      this._textElement.text(this._formatter ?
         this._formatter.format(this._value) : this._value);
     }
   });

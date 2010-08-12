@@ -397,16 +397,6 @@ jQuery(function($) {
         return self;
       },
 
-      tags: $.getset({
-        get: function() {
-          return $(this).data('widget').getTags();
-        },
-
-        set: function(data, getset) {
-          $(this).data('widget').setTags(data);
-        }
-      }),
-
       tagsString: function() {
         return $('.merchant-tag:not(.template)', this)
           .map(function(){

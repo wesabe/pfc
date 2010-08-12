@@ -1,7 +1,7 @@
 /**
  * Wraps an anchor to add a history entry using the jQuery history plugin.
  */
-wesabe.$class('wesabe.views.widgets.HistoryLink', wesabe.views.widgets.BaseWidget, function($class, $super, $package) {
+wesabe.$class('wesabe.views.widgets.HistoryLink', wesabe.views.widgets.Label, function($class, $super, $package) {
   // import jQuery as $
   var $ = jQuery;
 
@@ -9,8 +9,8 @@ wesabe.$class('wesabe.views.widgets.HistoryLink', wesabe.views.widgets.BaseWidge
     _uri: null,
     _text: null,
 
-    init: function(element, uri) {
-      $super.init.call(this, element);
+    init: function(element, uri, formatter) {
+      $super.init.call(this, element, formatter);
 
       var me = this;
 
@@ -62,26 +62,21 @@ wesabe.$class('wesabe.views.widgets.HistoryLink', wesabe.views.widgets.BaseWidge
     },
 
     /**
-     * Gets the text content of this link.
+     * Alias for {#getValue}
      *
-     * @return {string}
+     * @return {object}
      */
     getText: function() {
-      return this._text;
+      return this.getValue();
     },
 
     /**
-     * Sets the text content of this link. To use something other than text
-     * you can access the element directly with {#getElement}.
+     * Alias for {#setValue}.
      *
-     * @param {!string} text The text string for this link.
+     * @param {!object} text
      */
     setText: function(text) {
-      if (this._text === text)
-        return;
-
-      this._text = text;
-      this.getElement().text(text);
+      this.setValue(text);
     }
   });
 });
