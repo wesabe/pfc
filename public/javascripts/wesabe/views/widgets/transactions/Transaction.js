@@ -16,6 +16,14 @@ wesabe.$class('wesabe.views.widgets.transactions.Transaction', wesabe.views.widg
     _dateLabel: null,
     _accountLabel: null,
 
+    _tags: null,
+    _tagLinkList: null,
+
+    _unedited: null,
+    _merchant: null,
+    _merchantLink: null,
+    _merchantInfoElement: null,
+
     init: function(element) {
       $super.init.call(this, element);
 
@@ -44,6 +52,13 @@ wesabe.$class('wesabe.views.widgets.transactions.Transaction', wesabe.views.widg
           return account && account.name;
         }
       });
+      this.registerChildWidget(this._accountLabel);
+
+      this._tagLinkList = new wesabe.views.widgets.transactions.TagLinkList(element.find('.merchant-tags'));
+      this.registerChildWidget(this._tagLinkList);
+
+      this._merchantLink = new wesabe.views.widgets.HistoryLink(element.find('.merchant-name .text-content'));
+      this._merchantInfoElement = element.find('.merchant-info');
     },
 
     /**
@@ -70,6 +85,48 @@ wesabe.$class('wesabe.views.widgets.transactions.Transaction', wesabe.views.widg
     },
 
     /**
+     * Gets the list of tags shown under the merchant.
+     *
+     * @return {array}
+     */
+    getTags: function() {
+      return this._tags || [];
+    },
+
+    /**
+     * Sets the list of tags to show under the merchant.
+     *
+     * @param {array} tags
+     */
+    setTags: function(tags) {
+      this._tags = tags;
+      this._tagLinkList.setTags(tags);
+    },
+
+    /**
+     * Gets the merchant data for this transaction.
+     *
+     * @return {object}
+     */
+    getMerchant: function() {
+      return this._merchant;
+    },
+
+    /**
+     * Sets the merchant data for this transaction.
+     *
+     * @param {object} merchant
+     */
+    setMerchant: function(merchant) {
+      var unedited = !merchant.name;
+
+      this._merchant = merchant;
+      this._merchantLink.setURI(unedited ? null : wesabe.views.shared.historyHash('/merchants/'+merchant.name));
+      this._merchantLink.setText(merchant.name || merchant.uneditedName);
+      this.setUnedited(unedited);
+    },
+
+    /**
      * Gets the value of the date label.
      *
      * @return {date}
@@ -84,7 +141,7 @@ wesabe.$class('wesabe.views.widgets.transactions.Transaction', wesabe.views.widg
      * @param {date}
      */
     setDate: function(date) {
-      this._dateLabel.setValue(date);
+      this._dateLabel.setValue(date && wesabe.lang.date.parse(date));
     },
 
     /**
@@ -149,6 +206,31 @@ wesabe.$class('wesabe.views.widgets.transactions.Transaction', wesabe.views.widg
      */
     setAmount: function(amount) {
       this._amountLabel.setMoney(amount);
+    },
+
+    /**
+     * Returns whether this transaction is considered unedited.
+     *
+     * @return {boolean}
+     */
+    isUnedited: function() {
+      return this._unedited;
+    },
+
+    /**
+     * Sets whether this transaction is considered unedited.
+     *
+     * @param {boolean} unedited
+     */
+    setUnedited: function(unedited) {
+      if (unedited === this._unedited) return;
+
+      this._unedited = unedited;
+      if (this._unedited) {
+        this._merchantInfoElement.addClass('unedited');
+      } else {
+        this._merchantInfoElement.removeClass('unedited');
+      }
     }
   });
 });

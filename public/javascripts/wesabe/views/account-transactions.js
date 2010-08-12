@@ -277,19 +277,20 @@ jQuery(function($) {
       id:             $.getsetdata('id'),
       uri:            $.getsetdata('uri'),
       amount:         $.getsetdata('amount'),
-      balance:        $.getsetdata('balance'),
       account:        $.getsetdata('account'),
       'check-number': $.getsetdata('check-number'),
 
       merchant: $.getset({
-        get: function() { return $(this).kvo('merchant'); },
+        get: function() { return $(this).data('widget').getMerchant(); },
         set: function(data, getset) {
-          var self = $(this);
-          self.kvo('merchant', data);
+          var self = $(this),
+              widget = self.data('widget');
+
+          widget.setMerchant(data);
           $('.merchant-info', self)
             .unbind('click')
             .click(function() {
-              if ($(this).is('.unedited')) {
+              if (widget.isUnedited()) {
                 self.fn('startEdit');
               }
           });
@@ -304,30 +305,6 @@ jQuery(function($) {
         self.children('.edit').click(function(){
           self.fn('startEdit'); });
 
-        // bind the amount to formatted amount and bind the "credit" class to positive amount
-        // $('.amount', self)
-        //   .kvobind(self, 'display-amount', {property: 'text', transform: function(a){ return a && a.display.replace(/[-\(\)]/g, '') }})
-        //   .kvobind(self, 'display-amount', {hasClass: 'credit', when: function(a){ return a && a.value > 0 }});
-
-        // bind merchant text to merchant display name
-        $('.merchant-name .text-content', self)
-          .kvobind(self, 'merchant', {property: 'text', transform: function(m){ return m && (m.name || m.uneditedName) }})
-          .kvobind(self, 'merchant', {attr: 'href', transform: function(m){ return m && ('#'+shared.historyHash('/merchants/'+m.name)) }})
-          // merchant selection
-          .click(function(event) {
-            var name = self.fn('merchant').name;
-            if (name) {
-              if (event.metaKey || event.ctrlKey) {
-                // if they're trying to open it in a new window, just leave the event alone
-                return;
-              }
-              $.historyLoad($(this).attr('href'));
-            }
-
-            event.preventDefault();
-          });
-        $('.merchant-info', self)
-          .kvobind(self, 'merchant', {hasClass: 'unedited', when: function(m){ return m && !m.name }});
         $('.check-number', self)
           .kvobind(self, 'check-number', {property: 'text', transform: function(c){ return c ? (' — Check #'+c) : '' }});
 
@@ -393,28 +370,28 @@ jQuery(function($) {
           .fn('merchant', merchant)
           .fn('check-number', data['check-number'] || null)
           .fn('account', data['account'])
-          .fn('tags', data['tags'])
           .fn('transfer', data['transfer'] || null)
           .fn('attachments', data['attachments'] || []);
 
         var widget = self.data('widget');
-        widget.setNote(data['note']);
 
-        widget.setDate(data['date'] && wesabe.lang.date.parse(data['date']));
+        widget.setNote(data['note']);
+        widget.setDate(data['date']);
 
         var balance = data['balance'];
         // Cash accounts shouldn't have balances (TODO: move this into wvwt.Transaction)
         if (data['account'].type == "Cash") {
           balance = {display: selectingSingleAccount ? '' : 'n/a'};
         }
-        widget.setBalance(balance);
-
-        widget.setAmount(data['display-amount'] || data['amount']);
 
         // TODO: move account show/hide to wvwt.Transaction
         widget.setAccount(selectingSingleAccount ? null : data['account']);
+        widget.setBalance(balance);
+        widget.setAmount(data['display-amount'] || data['amount']);
+        widget.setTags(data['tags']);
+        // widget.setMerchant(data['merchant']);
 
-        var toEdit = !(merchant && merchant.name && data['tags'] && (data['tags'].length > 0));
+        var toEdit = !(merchant && merchant.name && widget.getTags().length > 0);
         self.toggleClass('to-edit', toEdit);
 
         return self;
@@ -422,17 +399,11 @@ jQuery(function($) {
 
       tags: $.getset({
         get: function() {
-          return $(this).data('tags');
+          return $(this).data('widget').getTags();
         },
 
         set: function(data, getset) {
-          $(this).data('tags', data);
-          var list = $(this).data('TagLinkList');
-          if (!list) {
-            list = new wesabe.views.widgets.transactions.TagLinkList($('.merchant-tags', this));
-            $(this).data('TagLinkList', list);
-          }
-          list.setTags(data);
+          $(this).data('widget').setTags(data);
         }
       }),
 
@@ -743,7 +714,7 @@ jQuery(function($) {
 
         // toggle the merchant icons
         self.find('form div.merchant-icons').removeClass('on');
-        if (self.fn('tags').length > 0) self.find('form div.merchant-icons.tags').addClass('on tags-on');
+        if (widget.getTags().length > 0) self.find('form div.merchant-icons.tags').addClass('on tags-on');
         if (widget.getNote() && widget.getNote().length > 0) self.find('form div.merchant-icons.notes').addClass('on notes-on');
         if (self.fn('attachments').length > 0) self.find('form div.merchant-icons.attachments').addClass('on attachments-on');
         if (self.fn('transfer')) self.find('form div.merchant-icons.transfer').addClass('on transfer-on');
