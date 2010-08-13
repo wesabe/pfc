@@ -1,5 +1,3 @@
-require 'child_labor'
-
 # makeofx2.0.py return codes and exceptions
 class MakeOFX2
   SUCCESS = 0
@@ -47,14 +45,14 @@ class MakeOFX2
     # removes the ability to look at stderr (until Ruby 1.9, but the
     # stderr messages should still come through in the logs).
     stdout, stderr = nil
-    
+
     IO.popen(command, "w+") do |pipe|
       pipe.write statement
       pipe.close_write
       stdout = pipe.read
     end
     exit_status = $?
-    
+
     # handle exceptions
     case exit_status
     when SUCCESS
