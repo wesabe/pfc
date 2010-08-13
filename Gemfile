@@ -12,7 +12,6 @@ platforms :mri_18 do
 end
 
 gem 'fastercsv'
-gem 'childlabor'
 gem 'riddle'
 gem 'memcache-client',            :require => 'memcache'
 gem 'mime-types',                 :require => 'mime/types'

@@ -33,7 +33,6 @@ GEM
       activesupport (>= 3.0.0.beta)
     builder (2.1.2)
     cgi_multipart_eof_fix (2.5.0)
-    childlabor (0.0.2)
     chronic (0.2.3)
       hoe (>= 1.2.1)
     columnize (0.3.1)
@@ -130,7 +129,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  childlabor
   chronic (= 0.2.3)
   daemons
   delayed_job (= 2.1.0.pre)
