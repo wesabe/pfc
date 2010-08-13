@@ -89,7 +89,7 @@ class Importer
     end
 
     def import_user(data)
-      returning User.new do |user|
+      User.new.tap do |user|
         user.email            = data['email']
         user.password         = options[:password]
         user.name             = data['name']
@@ -102,7 +102,7 @@ class Importer
     end
 
     def import_preferences(data)
-      returning UserPreferences.new do |prefs|
+      UserPreferences.new.tap do |prefs|
         prefs.user        = user
         prefs.preferences = data.symbolize_keys
 
@@ -112,7 +112,7 @@ class Importer
 
     def import_inbox_attachments(data)
       data.map do |datum|
-        returning InboxAttachment.new do |inbox_attachment|
+        InboxAttachment.new.tap do |inbox_attachment|
           inbox_attachment.account_key = user.account_key
           inbox_attachment.attachment  = import_attachment(datum)
 
@@ -123,7 +123,7 @@ class Importer
 
     def import_financial_institution(data)
       FinancialInst.find_by_name(data['name']) || begin
-        returning FinancialInst.new do |fi|
+        FinancialInst.new.tap do |fi|
           fi.name                 = data['name']
           fi.wesabe_id            = data['wesabe_id']
           fi.homepage_url         = data['homepage_url']
@@ -148,7 +148,7 @@ class Importer
 
     def import_investment_security(data)
       InvestmentSecurity.find_by_unique_id(data['unique_id']) || begin
-        returning InvestmentSecurity.new do |security|
+        InvestmentSecurity.new.tap do |security|
           security.name           = data['name']
           security.ticker         = data['ticker']
           security.unique_id      = data['unique_id']
@@ -163,7 +163,7 @@ class Importer
     end
 
     def import_account(data)
-      returning Account.new do |account|
+      Account.new.tap do |account|
         account.name                = data['name']
         account.currency            = data['currency']
         account.account_type        = AccountType.find_by_raw_name(data['account_type'])
@@ -198,7 +198,7 @@ class Importer
 
     def import_txactions(account, data)
       data.map do |datum|
-        returning Txaction.new do |txaction|
+        Txaction.new.tap do |txaction|
           txaction.account        = account
           txaction.date_posted    = datum['date_posted']
           txaction.fi_date_posted = datum['fi_date_posted']
@@ -241,7 +241,7 @@ class Importer
 
     def import_investment_txactions(account, data)
       data.map do |datum|
-        returning InvestmentTxaction.new do |txaction|
+        InvestmentTxaction.new.tap do |txaction|
           txaction.upload_id            = 0 # the schema enforces a non-null value
           txaction.account              = account
           txaction.txid                 = datum['txid']
@@ -272,7 +272,7 @@ class Importer
 
     def import_investment_positions(account, data)
       data.map do |datum|
-        returning InvestmentPosition.new do |position|
+        InvestmentPosition.new.tap do |position|
           position.upload_id              = 0 # the schema enforces a non-null value
           position.account                = account
           position.sub_account_type       = datum['sub_account_type']
@@ -293,7 +293,7 @@ class Importer
 
     def import_balances(account, data)
       data.map do |datum|
-        returning account.account_balances.new do |account_balance|
+        account.account_balances.new.tap do |account_balance|
           account_balance.balance      = datum['balance']
           account_balance.balance_date = datum['balance_date']
           account_balance.status       = Constants::Status::ACTIVE
@@ -305,7 +305,7 @@ class Importer
 
     def import_investment_balances(account, data)
       data.map do |datum|
-        returning InvestmentBalance.new do |balance|
+        InvestmentBalance.new.tap do |balance|
           balance.upload_id      = 0 # the schema enforces a non-null value
           balance.account        = account
           balance.avail_cash     = datum['avail_cash']
@@ -317,7 +317,7 @@ class Importer
           balance.save(:validate => false)
 
           (datum['other_balances'] || []).map do |other_balance_datum|
-            returning InvestmentOtherBalance.new do |other_balance|
+            InvestmentOtherBalance.new.tap do |other_balance|
               other_balance.investment_balance = balance
               other_balance.name               = other_balance_datum['name']
               other_balance.description        = other_balance_datum['description']
@@ -334,7 +334,7 @@ class Importer
 
     def import_account_merchant_tag_stats(data)
       data.map do |datum|
-        returning AccountMerchantTagStat.new do |amts|
+        AccountMerchantTagStat.new.tap do |amts|
           amts.account_key = user.account_key
           amts.name        = datum['name']
           amts.merchant    = Merchant.find_or_create_by_name(datum['merchant'])
@@ -356,7 +356,7 @@ class Importer
       data.map do |datum|
         next if datum['merchant'].blank?
 
-        returning MerchantUser.new do |mu|
+        MerchantUser.new.tap do |mu|
           mu.user              = user
           mu.merchant          = Merchant.find_or_create_by_name(datum['merchant'])
           mu.sign              = datum['sign']
@@ -370,7 +370,7 @@ class Importer
     def import_taggings(txaction, data)
       data.map do |datum|
         tag = Tag.find_or_create_by_name(datum['tag'])
-        returning txaction.taggings.build do |tagging|
+        txaction.taggings.build.tap do |tagging|
           tagging.name             = tag.name
           tagging.tag              = tag
           tagging.split_amount     = datum['split_amount']
@@ -392,7 +392,7 @@ class Importer
     end
 
     def import_attachment(data)
-      returning Attachment.new do |attachment|
+      Attachment.new.tap do |attachment|
         attachment.account_key  = user.account_key
         attachment.guid         = data['guid']
         attachment.filename     = data['filename']
@@ -406,7 +406,7 @@ class Importer
 
     def import_target(data)
       tag = Tag.find_or_create_by_name(data['tag'])
-      returning Target.new do |target|
+      Target.new.tap do |target|
         target.user             = user
         target.tag              = tag
         target.tag_name         = data['tag_name']

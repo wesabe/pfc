@@ -55,7 +55,7 @@ class ConditionsConstructor
   end
 
   def dup
-    returning ConditionsConstructor.new do |cc|
+    ConditionsConstructor.new.tap do |cc|
       cc.instance_variable_set("@conditions_args", conditions_args.dup)
       cc.instance_variable_set("@conditions_strs", conditions_strs.dup)
     end
