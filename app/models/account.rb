@@ -305,7 +305,7 @@ class Account < ActiveRecord::Base
   end
 
   def to_param
-    id_for_user
+    id_for_user.to_s
   end
 
 private
