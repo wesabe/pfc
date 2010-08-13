@@ -373,15 +373,12 @@ jQuery(function($) {
         widget.setNote(data['note']);
         widget.setDate(data['date']);
 
-        var balance = data['balance'];
-        // Cash accounts shouldn't have balances (TODO: move this into wvwt.Transaction)
-        if (data['account'].type == "Cash") {
-          balance = {display: selectingSingleAccount ? '' : 'n/a'};
-        }
-
         widget.setAccount(data['account']);
         widget.setAccountVisible(!selectingSingleAccount);
-        widget.setBalance(balance);
+        widget.setBalance(data['balance']);
+        // Cash accounts shouldn't have balances
+        if (data['account'].type == "Cash")
+          widget.setBalanceText(selectingSingleAccount ? '' : 'n/a');
         widget.setAmount(data['display-amount'] || data['amount']);
         widget.setTags(data['tags']);
         widget.setTransfer(data['transfer'] || null);

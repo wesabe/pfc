@@ -220,6 +220,15 @@ wesabe.$class('wesabe.views.widgets.transactions.Transaction', wesabe.views.widg
     },
 
     /**
+     * Sets the balance text to an arbitrary string.
+     *
+     * @param {string} text
+     */
+    setBalanceText: function(text) {
+      this.setBalance({display: text});
+    },
+
+    /**
      * Gets the structured value of the amount label.
      *
      * @return {object}
