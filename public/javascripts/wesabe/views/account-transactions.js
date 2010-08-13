@@ -308,10 +308,6 @@ jQuery(function($) {
         $('.check-number', self)
           .kvobind(self, 'check-number', {property: 'text', transform: function(c){ return c ? (' — Check #'+c) : '' }});
 
-        // show the transfer icon when there is a transfer
-        $('.transfer', self)
-          .kvobind(self, 'transfer', {hasClass: 'on transfer-on', when: 'present'});
-
         $('.account-name', self)
           .click(function(event) {
             $.historyLoad(self.fn('account').uri);
@@ -370,7 +366,6 @@ jQuery(function($) {
           .fn('merchant', merchant)
           .fn('check-number', data['check-number'] || null)
           .fn('account', data['account'])
-          .fn('transfer', data['transfer'] || null)
           .fn('attachments', data['attachments'] || []);
 
         var widget = self.data('widget');
@@ -384,11 +379,12 @@ jQuery(function($) {
           balance = {display: selectingSingleAccount ? '' : 'n/a'};
         }
 
-        // TODO: move account show/hide to wvwt.Transaction
-        widget.setAccount(selectingSingleAccount ? null : data['account']);
+        widget.setAccount(data['account']);
+        widget.setAccountVisible(!selectingSingleAccount);
         widget.setBalance(balance);
         widget.setAmount(data['display-amount'] || data['amount']);
         widget.setTags(data['tags']);
+        widget.setTransfer(data['transfer'] || null);
         // widget.setMerchant(data['merchant']);
 
         var toEdit = !(merchant && merchant.name && widget.getTags().length > 0);
@@ -465,65 +461,6 @@ jQuery(function($) {
             $('.merchant-icons div.attachments-list', self).empty().append(self.fn('attachmentListItems'));
             $('.merchant-icons.attachments', self).addClass("on attachments-on");
           }
-        }
-      }),
-
-      transfer: $.getset({
-        get: function() {
-          return $(this).kvo('transfer');
-        },
-
-        set: function(transfer, getset) {
-          $(this).kvo('transfer', transfer);
-
-          var hasTransferBuddy = transfer && (transfer !== true);
-          if (!hasTransferBuddy) {
-            // only show the hover box if there is additional information to display
-            getset.hoverBox().hide();
-            // don't highlight the icon on hover if there is no hoverbox
-            getset.container().addClass('solo');
-          } else {
-            var thisURI = $(this).fn('account').uri;
-            var otherURI = transfer.account.uri;
-            var thisAccount = wesabe.data.accounts.sharedDataSource.getAccountDataByURI(thisURI);
-            var otherAccount = wesabe.data.accounts.sharedDataSource.getAccountDataByURI(otherURI);
-
-            if (!thisAccount || !otherAccount) {
-              // one or both of the accounts is not available anymore
-              getset.hoverBox().hide();
-            } else {
-              getset.thisAccountLink()
-                .text(thisAccount.name)
-                .click(function(){ $.historyLoad(thisURI) });
-              getset.otherAccountLink()
-                .text(otherAccount.name)
-                .click(function(){ $.historyLoad(otherURI) });
-
-              if (number.parse(transfer.amount.value) < 0) {
-                $('.from', getset.container()).show();
-                $('.to', getset.container()).hide();
-              } else {
-                $('.from', getset.container()).hide();
-                $('.to', getset.container()).show();
-              }
-            }
-          }
-        },
-
-        thisAccountLink: function(getset) {
-          return $('.this-account', getset.container());
-        },
-
-        otherAccountLink: function(getset) {
-          return $('.other-account', getset.container());
-        },
-
-        container: function() {
-          return $('.transfer', this);
-        },
-
-        hoverBox: function(getset) {
-          return $('.hover-box', getset.container());
         }
       }),
 
@@ -707,7 +644,7 @@ jQuery(function($) {
         if (widget.getTags().length > 0) self.find('form div.merchant-icons.tags').addClass('on tags-on');
         if (widget.getNote() && widget.getNote().length > 0) self.find('form div.merchant-icons.notes').addClass('on notes-on');
         if (self.fn('attachments').length > 0) self.find('form div.merchant-icons.attachments').addClass('on attachments-on');
-        if (self.fn('transfer')) self.find('form div.merchant-icons.transfer').addClass('on transfer-on');
+        if (widget.isTransfer()) self.find('form div.merchant-icons.transfer').addClass('on transfer-on');
 
         // bind the tabs to show the content divs when clicked
         $('a.edit-dialog-inset-tab', edit_box).click(function(){
@@ -820,7 +757,7 @@ jQuery(function($) {
 
         $('.transfer-details input[type=checkbox]', edit_box)
           .attr('id', 'is_transfer_' + self.fn('id'))
-          .attr('checked', !!self.fn('transfer'))
+          .attr('checked', widget.isTransfer())
           .click(function(){
             if ($(this).attr('checked')) {
               self.fn('loadTransferData')
@@ -829,7 +766,7 @@ jQuery(function($) {
             }
           });
 
-        if (self.fn('transfer'))
+        if (widget.isTransfer())
           setTimeout(function(){ self.fn('loadTransferData') }, 150);
       },
 

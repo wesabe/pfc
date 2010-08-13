@@ -16,15 +16,24 @@ wesabe.$class('wesabe.views.widgets.transactions.Transaction', wesabe.views.widg
     _dateLabel: null,
     _accountLabel: null,
 
-    _tags: null,
+    _tags: undefined,
     _tagLinkList: null,
 
-    _unedited: null,
-    _merchant: null,
+    _unedited: undefined,
+    _merchant: undefined,
     _merchantLink: null,
     _merchantInfoElement: null,
 
+    _account: undefined,
     _accountLink: null,
+
+    _transfer: undefined,
+    _transferContainerElement: null,
+    _transferHoverBoxElement: null,
+    _transferThisAccountLink: null,
+    _transferOtherAccountLink: null,
+    _transferFromOtherConjunctionLabel: null,
+    _transferToOtherConjunctionLabel: null,
 
     init: function(element) {
       $super.init.call(this, element);
@@ -61,6 +70,13 @@ wesabe.$class('wesabe.views.widgets.transactions.Transaction', wesabe.views.widg
 
       this._merchantLink = new wesabe.views.widgets.HistoryLink(element.find('.merchant-name .text-content'));
       this._merchantInfoElement = element.find('.merchant-info');
+
+      this._transferContainerElement = element.find('.transfer');
+      this._transferHoverBoxElement = this._transferContainerElement.find('.hover-box');
+      this._transferThisAccountLink = new wesabe.views.widgets.HistoryLink(this._transferContainerElement.find('.this-account'));
+      this._transferOtherAccountLink = new wesabe.views.widgets.HistoryLink(this._transferContainerElement.find('.other-account'));
+      this._transferFromOtherConjunctionLabel = new wesabe.views.widgets.Label(this._transferContainerElement.find('.from'));
+      this._transferToOtherConjunctionLabel = new wesabe.views.widgets.Label(this._transferContainerElement.find('.to'));
     },
 
     /**
@@ -161,18 +177,28 @@ wesabe.$class('wesabe.views.widgets.transactions.Transaction', wesabe.views.widg
      * @param {object} account
      */
     setAccount: function(account) {
-      if (account && !account.name) {
-        var accounts = wesabe.data.accounts.sharedDataSource.getData().accounts;
-        for (var i = accounts.length; i--;) {
-          if (accounts[i].uri === account.uri) {
-            account = accounts[i];
-            break;
-          }
-        }
-      }
-
+      account = account && this._getAccountDataByURI(account.uri);
+      this._account = account;
       this._accountLabel.setValue(account);
       this._accountLabel.setURI(account && account.uri);
+    },
+
+    /**
+     * Returns whether or not the account label is shown.
+     *
+     * @return {boolean}
+     */
+    isAccountVisible: function() {
+      return this._accountLabel.isVisible();
+    },
+
+    /**
+     * Sets whether or not to show the account link.
+     *
+     * @param {!boolean} visible
+     */
+    setAccountVisible: function(visible) {
+      this._accountLabel.setVisible(visible);
     },
 
     /**
@@ -233,6 +259,94 @@ wesabe.$class('wesabe.views.widgets.transactions.Transaction', wesabe.views.widg
         this._merchantInfoElement.addClass('unedited');
       } else {
         this._merchantInfoElement.removeClass('unedited');
+      }
+    },
+
+    /**
+     * Gets the transfer data for this transaction.
+     *
+     * @return {boolean|object}
+     */
+    getTransfer: function() {
+      return this._transfer;
+    },
+
+    /**
+     * Sets the transfer data for this transaction.
+     *
+     * @param {boolean|object}
+     */
+    setTransfer: function(transfer) {
+      if (this._transfer === transfer) return;
+
+      // TODO: move this to some sort of data wrapper for transactions
+      if (transfer && transfer.amount)
+        transfer.amount.value = number.parse(transfer.amount.value);
+
+      this._transfer = transfer;
+
+      if (!this.isTransfer()) {
+        this._setTransferInfoVisible(false);
+        this._transferContainerElement.removeClass('on transfer-on');
+      } else if (!this.isPairedTransfer()) {
+        this._setTransferInfoVisible(false);
+        this._transferContainerElement.addClass('on transfer-on');
+      } else {
+        this._transferContainerElement.addClass('on transfer-on');
+
+        var thisAccount = this.getAccount(),
+            otherAccount = transfer.account;
+
+        thisAccount = thisAccount && this._getAccountDataByURI(thisAccount.uri);
+        otherAccount = otherAccount && this._getAccountDataByURI(otherAccount.uri);
+
+        if (!thisAccount || !otherAccount) {
+          // one or both accounts are unavailable for some reason
+          this._setTransferInfoVisible(false);
+        } else {
+          this._transferThisAccountLink.setText(thisAccount.name);
+          this._transferThisAccountLink.setURI(thisAccount.uri);
+          this._transferOtherAccountLink.setText(otherAccount.name);
+          this._transferOtherAccountLink.setURI(otherAccount.uri);
+
+          var isFromOther = transfer.amount.value < 0;
+          this._transferFromOtherConjunctionLabel.setVisible(isFromOther);
+          this._transferToOtherConjunctionLabel.setVisible(!isFromOther);
+
+          this._setTransferInfoVisible(true);
+        }
+      }
+    },
+
+    /**
+     * Returns whether or not this transaction is a transfer.
+     *
+     * @return {boolean}
+     */
+    isTransfer: function() {
+      return !!this._transfer;
+    },
+
+    /**
+     * Returns whether or not this transaction is a paired transfer.
+     *
+     * @return {boolean}
+     */
+    isPairedTransfer: function() {
+      return this._transfer && (this._transfer !== true);
+    },
+
+    _getAccountDataByURI: function(uri) {
+      return wesabe.data.accounts.sharedDataSource.getAccountDataByURI(uri);
+    },
+
+    _setTransferInfoVisible: function(visible) {
+      if (visible) {
+        this._transferHoverBoxElement.show();
+        this._transferContainerElement.removeClass('solo');
+      } else {
+        this._transferHoverBoxElement.hide();
+        this._transferContainerElement.addClass('solo');
       }
     }
   });
