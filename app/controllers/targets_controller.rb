@@ -4,7 +4,7 @@ class TargetsController < ApplicationController
 
   # show all targets for this user
   def index
-    # get all the targets and order them by tag_name 
+    # get all the targets and order them by tag_name
     @targets = current_user.targets.find(:all, :order=> "tag_name")
     # allow a period to be specified with start_date & end_date
     @period = nil
@@ -21,8 +21,8 @@ class TargetsController < ApplicationController
 
   # show the target for a single tag
   def show
-    if @target = Target.for_tag(params[:tag], current_user)
-      @target.calculate!(current_user)
+    if target
+      target.calculate!(current_user)
     end
 
     respond_to do |format|
@@ -47,25 +47,31 @@ class TargetsController < ApplicationController
   end
 
   def update
-    tag = Tag.find_by_name(params[:tag])
-    @target = Target.for_tag(tag, current_user) || raise(ActiveRecord::RecordNotFound)
-
     if amount = Currency.normalize(params[:amount])
-      @target.amount_per_month = amount
-      @target.save
+      target.amount_per_month = amount
+      target.save
     end
 
     respond_to do |format|
-      format.json { render :json => present(@target) }
+      format.json { render :json => present(target) }
     end
   end
 
   def destroy
-    target = Target.for_tag(params[:tag], current_user) || raise(ActiveRecord::RecordNotFound)
     target.destroy
 
     respond_to do |format|
       format.json { render :json => "TIIIIIMMM!!!" }
     end
+  end
+
+  private
+
+  def target
+    @target ||= Target.for_tag(tag, current_user) || raise(ActiveRecord::RecordNotFound)
+  end
+
+  def tag
+    @tag ||= Tag.find_by_name(params[:id] || params[:tag])
   end
 end
