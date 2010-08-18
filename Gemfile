@@ -22,7 +22,7 @@ gem 'daemons'
 gem 'rdoc'
 gem 'delayed_job',     '2.1.0.pre'
 gem 'thor' # for imports
-gem 'mongrel' # faster development server
+gem 'unicorn' # faster development server
 gem 'rchardet'
 
 group :development do

@@ -32,7 +32,6 @@ GEM
     arel (0.4.0)
       activesupport (>= 3.0.0.beta)
     builder (2.1.2)
-    cgi_multipart_eof_fix (2.5.0)
     chronic (0.2.3)
       hoe (>= 1.2.1)
     columnize (0.3.1)
@@ -45,8 +44,6 @@ GEM
       abstract (>= 1.0.0)
     faker (0.3.1)
     fastercsv (1.5.3)
-    fastthread (1.0.7)
-    gem_plugin (0.2.3)
     hoe (2.6.1)
       rake (>= 0.8.7)
       rubyforge (>= 2.0.4)
@@ -61,11 +58,6 @@ GEM
       treetop (>= 1.4.5)
     memcache-client (1.8.5)
     mime-types (1.16)
-    mongrel (1.1.5)
-      cgi_multipart_eof_fix (>= 2.4)
-      daemons (>= 1.0.3)
-      fastthread (>= 1.0.1)
-      gem_plugin (>= 0.2.3)
     mysql (2.8.1)
     nokogiri (1.4.3.1)
     oniguruma (1.1.0)
@@ -117,6 +109,8 @@ GEM
     treetop (1.4.8)
       polyglot (>= 0.3.1)
     tzinfo (0.3.22)
+    unicorn (1.1.2)
+      rack
     webmock (1.3.3)
       addressable (>= 2.1.1)
       crack (>= 0.1.7)
@@ -138,7 +132,6 @@ DEPENDENCIES
   machinist
   memcache-client
   mime-types
-  mongrel
   mysql
   oniguruma
   rails (= 3.0.0.rc)
@@ -151,4 +144,5 @@ DEPENDENCIES
   ruby-debug
   rubyzip
   thor
+  unicorn
   webmock
