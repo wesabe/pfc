@@ -56,6 +56,9 @@ Pfc::Application.routes.draw do
     end
   end
 
+  # TODO: use resource routing for this
+  post '/targets/delete' => 'targets#destroy'
+
   resources :merchants do
     collection do
       get :my,     :to => 'merchants#user_index'
