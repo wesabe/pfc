@@ -56,11 +56,14 @@ wesabe.$class('wesabe.views.widgets.tags.TagAutocompleterField', wesabe.views.wi
      * Called when the tag data has changed.
      */
     onTagsChanged: function() {
-      this.setCompletions(this._tagDataSource.getTagNames());
+      this._refreshCompletions();
     },
 
     onKeyUp: function() {
       $super.onKeyUp.apply(this, arguments);
+
+      // parse the tags entered already and remove them from the completions
+      this._refreshCompletions();
 
       if (this._lastKeyPressKeyCode != 58 /* : (colon) */)
         return;
@@ -95,6 +98,23 @@ wesabe.$class('wesabe.views.widgets.tags.TagAutocompleterField', wesabe.views.wi
       this.setValue(before+remainder+after);
       this.getElement().caret(before.length, before.length+remainder.length);
       this._lastKeyPressKeyCode = null;
+    },
+
+    /**
+     * Refresh the list of available completions.
+     *
+     * @private
+     */
+    _refreshCompletions: function() {
+      var allTagNames = this._tagDataSource.getTagNames();
+      var enteredTags = wesabe.data.tags.parseTagString(this.getValue());
+      var enteredTagNames = [];
+
+      for (var i = enteredTags.length; i--; ) {
+        enteredTagNames.push(enteredTags[i].name);
+      }
+
+      this.setCompletions(wesabe.lang.array.minus(allTagNames, enteredTagNames));
     }
   });
 });
