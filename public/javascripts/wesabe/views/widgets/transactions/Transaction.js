@@ -351,10 +351,12 @@ wesabe.$class('wesabe.views.widgets.transactions.Transaction', wesabe.views.widg
 
     _setTransferInfoVisible: function(visible) {
       if (visible) {
-        this._transferHoverBoxElement.show();
+        // visible means "allow hover to make it display:block"
+        this._transferHoverBoxElement.css('display', '');
         this._transferContainerElement.removeClass('solo');
       } else {
-        this._transferHoverBoxElement.hide();
+        // hidden means "set it to display:none so it won't show on hover"
+        this._transferHoverBoxElement.css('display', 'none');
         this._transferContainerElement.addClass('solo');
       }
     }
