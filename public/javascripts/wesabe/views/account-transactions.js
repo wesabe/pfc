@@ -274,7 +274,6 @@ jQuery(function($) {
     })(),
 
     transaction: {
-      id:             $.getsetdata('id'),
       uri:            $.getsetdata('uri'),
       amount:         $.getsetdata('amount'),
       account:        $.getsetdata('account'),
@@ -360,7 +359,6 @@ jQuery(function($) {
         }
 
         self
-          .fn('id', data['id'])
           .fn('uri', data['uri'])
           .fn('amount', data['amount'])
           .fn('merchant', merchant)
@@ -370,6 +368,7 @@ jQuery(function($) {
 
         var widget = self.data('widget');
 
+        widget.setId(data['id']);
         widget.setNote(data['note']);
         widget.setDate(data['date']);
 
@@ -753,7 +752,7 @@ jQuery(function($) {
         attachmentList.empty().append(self.fn('attachmentListItems', true));
 
         $('.transfer-details input[type=checkbox]', edit_box)
-          .attr('id', 'is_transfer_' + self.fn('id'))
+          .attr('id', 'is_transfer_' + widget.getId())
           .attr('checked', widget.isTransfer())
           .click(function(){
             if ($(this).attr('checked')) {
@@ -930,9 +929,10 @@ jQuery(function($) {
       },
 
       saveEdit: function() {
-        var self = $(this);
+        var self = $(this),
+            widget = self.data('widget');
 
-        var editing = !!self.fn('id');
+        var editing = !!widget.getId();
         var form = $('form:first', self);
         if (editing) {
           form.append('<input type="hidden" name="_method" value="PUT">');

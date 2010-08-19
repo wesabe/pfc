@@ -8,6 +8,8 @@ wesabe.$class('wesabe.views.widgets.transactions.Transaction', wesabe.views.widg
   var number = wesabe.lang.number;
 
   $.extend($class.prototype, {
+    _id: null,
+
     _noteContainerElement: null,
     _noteLabel: null,
 
@@ -77,6 +79,24 @@ wesabe.$class('wesabe.views.widgets.transactions.Transaction', wesabe.views.widg
       this._transferOtherAccountLink = new wesabe.views.widgets.HistoryLink(this._transferContainerElement.find('.other-account'));
       this._transferFromOtherConjunctionLabel = new wesabe.views.widgets.Label(this._transferContainerElement.find('.from'));
       this._transferToOtherConjunctionLabel = new wesabe.views.widgets.Label(this._transferContainerElement.find('.to'));
+    },
+
+    /**
+     * Gets the id of this transaction if it has one.
+     *
+     * @return {number}
+     */
+    getId: function() {
+      return this._id;
+    },
+
+    /**
+     * Sets the id of this transaction if it has one.
+     *
+     * @param {?number} id
+     */
+    setId: function(id) {
+      this._id = id;
     },
 
     /**
