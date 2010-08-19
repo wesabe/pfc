@@ -45,6 +45,7 @@ Pfc::Application.routes.draw do
     end
   end
 
+  resources :tags
   resources :attachments
   resources :account_merchant_tag_stats
   resources :targets
