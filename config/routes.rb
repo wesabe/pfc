@@ -36,6 +36,7 @@ Pfc::Application.routes.draw do
 
   # TODO: Fix this hack.
   get '/transactions/rational(.:format)' => 'rational_txactions#index'
+  get '/transactions/rational/*tags(.:format)', :to => 'rational_txactions#index'
 
   resources :transactions, :controller => 'txactions' do
     member do
