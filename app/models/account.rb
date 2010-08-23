@@ -53,6 +53,21 @@ class Account < ActiveRecord::Base
   # public class methods
   #
 
+  def self.find_or_create(account)
+    if existing_account = find(:first, :order => "status ASC",
+      :conditions => ["account_key = ? and account_number = ? and account_type_id = ? \
+                       and status != ? and financial_inst_id = ?",
+                       account.account_key, last4(account.account_number), account.account_type_id,
+                       Constants::Status::DELETED, account.financial_inst_id])
+      return existing_account
+    else
+      # FIXME: this is to try to debug "Validation failed" exceptions
+      account.save
+      raise "Generate name didn't work: #{account.inspect}" if account.new_record?
+      return account
+    end
+  end
+
   # find account by account number. just match on last 4 digits
   def self.find_account(user, account_number, account_type, financial_inst_id)
     for_user(user).
