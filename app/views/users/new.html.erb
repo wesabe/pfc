@@ -27,6 +27,10 @@
           :prepend_text => "That email address ", :append_text => '.', :css_class => 'error-message' %>
       </div>
       <div class="field">
+      <label class="field-title" for="currency">Default Currency<span>sets your default currency</span></label>
+      <%= select('user','default_currency', currency_full_options_for_select, {:include_blank => true}) %>
+      </div>
+      <div class="field">
       <label for="password" class="field-title">Password</label>
       <%= password_field :user, :password %>
       <%= error_message_on "user", "password", :prepend_text => "The password ", :append_text => '.', :css_class => 'error-message' %>
@@ -50,7 +54,7 @@
           <%= text_field :user, :postal_code %>
     </div>
     <div class="field">
-      <label for="country" class="field-title">Country<span>sets default currency</span></label>
+      <label for="country" class="field-title">Country</label>
       <%= select('user', 'country_id', Country.find(:all).collect {|c| [ c.name, c.id ] }, {:include_blank => true}) %>
     </div>
   </div>
