@@ -629,18 +629,18 @@ jQuery(function($) {
         recomputeSplitTotal();
 
         // bind the date picker
-        $('.date-edit', edit_box).datepicker()
-          .val(wesabe.lang.date.format(widget.getDate(), 'yyyy-MM-dd'));
+        var dateVal = wesabe.lang.date.format((widget && widget.getDate() ? widget.getDate() : new Date()), 'yyyy-MM-dd');
+	$('.date-edit', edit_box).datepicker().val(dateVal);
 
         // bind the merchant autocompleter
         self.fn('startMerchantAutocomplete');
 
         // toggle the merchant icons
         self.find('form div.merchant-icons').removeClass('on');
-        if (widget.getTags().length > 0) self.find('form div.merchant-icons.tags').addClass('on tags-on');
-        if (widget.getNote() && widget.getNote().length > 0) self.find('form div.merchant-icons.notes').addClass('on notes-on');
+        if (widget && widget.getTags().length > 0) self.find('form div.merchant-icons.tags').addClass('on tags-on');
+        if (widget && widget.getNote() && widget.getNote().length > 0) self.find('form div.merchant-icons.notes').addClass('on notes-on');
         if (self.fn('attachments').length > 0) self.find('form div.merchant-icons.attachments').addClass('on attachments-on');
-        if (widget.isTransfer()) self.find('form div.merchant-icons.transfer').addClass('on transfer-on');
+        if (widget && widget.isTransfer()) self.find('form div.merchant-icons.transfer').addClass('on transfer-on');
 
         // bind the tabs to show the content divs when clicked
         $('a.edit-dialog-inset-tab', edit_box).click(function(){
@@ -932,7 +932,7 @@ jQuery(function($) {
         var self = $(this),
             widget = self.data('widget');
 
-        var editing = !!widget.getId();
+        var editing = widget && widget.getId();
         var form = $('form:first', self);
         if (editing) {
           form.append('<input type="hidden" name="_method" value="PUT">');
