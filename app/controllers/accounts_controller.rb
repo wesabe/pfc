@@ -21,42 +21,6 @@ class AccountsController < ApplicationController
     end
   end
 
-  # PUT /accounts/1
-  def update
-    if account.nil?
-      return render :nothing => true, :status => :not_found
-    end
-
-    account.name = params[:name] unless params[:name].blank?
-    if params[:currency]
-      account.currency = Currency.known?(params[:currency]) ? params[:currency] : 'USD'
-    end
-
-    # Update status
-    case params[:status]
-    when "active"
-      account.status = Constants::Status::ACTIVE
-    when "archived"
-      account.status = Constants::Status::ARCHIVED
-    end
-
-    # update balance and account type
-    if params[:enable_balance] && account.manual_account?
-      account.account_type_id = (params[:enable_balance] =~ /^(true|1|t)$/) ?
-        AccountType::MANUAL : AccountType::CASH
-    end
-
-    if account.has_balance? && params[:current_balance]
-      account.balance = params[:current_balance]
-    end
-
-    account.save!
-
-    respond_to do |format|
-      format.json { render :json => present(account) }
-    end
-  end
-
   # DELETE /accounts/1
   def destroy
     if account.nil?

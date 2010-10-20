@@ -7,7 +7,7 @@ class BrcmController < ApplicationController
   before_filter :check_authentication
 
   def passthrough
-    res = brcm.get(request.fullpath.sub(%r{^/data}, "")) do |req|
+    res = brcm.request(request.method, request.fullpath.sub(%r{^/data}, ""), params) do |req|
       req.user = current_user
       req.headers["Accept-Language"] = request.headers["HTTP_ACCEPT_LANGUAGE"]
       req.headers["Accept"] = request.headers["HTTP_ACCEPT"]
@@ -19,7 +19,7 @@ class BrcmController < ApplicationController
   end
 
   def transactions
-    res = brcm.get(request.fullpath.sub(%r{^/data}, "")) do |req|
+    res = brcm.request(request.method, request.fullpath.sub(%r{^/data}, ""), params) do |req|
       req.user = current_user
       req.headers["Accept-Language"] = request.headers["HTTP_ACCEPT_LANGUAGE"]
       req.headers["Accept"] = (params[:format] == 'xml') ? 'application/xml' : 'application/json'
