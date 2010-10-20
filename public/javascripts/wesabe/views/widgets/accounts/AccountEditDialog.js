@@ -164,43 +164,92 @@ wesabe.$class('wesabe.views.widgets.accounts.AccountEditDialog', wesabe.views.wi
     },
 
     onSave: function() {
-      var me = this;
+      var me = this,
+          account = me._account,
+          dirty = false,
+          accountURI = "/data"+me._account.getURI(),
+          shouldTrackBalance = me._trackBalanceBox.attr('checked');
 
-      var saveData = {
-        name: me._name.val(),
-        currency: me._currency.val(),
-        enable_balance: me._trackBalanceBox.attr('checked'),
-        current_balance: me._currentBalance.val(),
-        status: me._archivedBox.attr('checked') ? 'archived' : 'active'
-      };
+      function commitAttributes() {
+        var data = {
+          name: me._name.val(),
+          currency: me._currency.val()
+        };
 
-      $.ajax({
-        type: "PUT",
-        data: saveData,
-        url: me._account.getURI(),
-        dataType: "json",
-        beforeSend: function() {
-          me._spinner.show();
-          me.setButtonsDisabled(true);
-        },
-        success: function(data, textStatus) {
-          if (data.status == 'active') {
-            me._account.update(data);
-          } else {
-            // Hide archived accounts immediately
-            me._account.remove();
-          }
-          me._accountWidget.refresh();
-          me.onEndEdit();
-        },
-        error: function(XMLHttpRequest, textStatus, errorThrown) {
-          me._saveError.slideDown();
-        },
-        complete: function() {
-          me._spinner.hide();
-          me.setButtonsDisabled(false);
+        if (data.name === account.getName() && data.currency === account.getCurrency()) {
+          // nothing changed
+          enableOrDisableBalance();
+        } else {
+          dirty = true;
+          $.ajax({
+            type: "PUT",
+            url: accountURI,
+            data: data,
+            beforeSend: busy,
+            success: enableOrDisableBalance,
+            error: error
+          });
         }
-      });
+      }
+
+      function enableOrDisableBalance() {
+        if (!account.isCash() || !(shouldTrackBalance ^ account.hasBalance())) {
+          // can't do anything about it or nothing has changed
+          commitBalance();
+        } else {
+          dirty = true;
+          $.ajax({
+            type: "PUT",
+            url: accountURI+"/"+(shouldTrackBalance ? "enable" : "disable")+"-balance",
+            beforeSend: busy,
+            success: commitBalance,
+            error: error
+          })
+        }
+      }
+
+      function commitBalance() {
+        var newBalance = me._currentBalance.val();
+
+        if (!shouldTrackBalance || !hasValue(newBalance) || (newBalance === "") || (newBalance === account.getTotal())) {
+          // not tracking balance or nothing changed
+          notBusy();
+          done();
+        } else {
+          dirty = true;
+          $.ajax({
+            type: "POST",
+            url: accountURI+"/balances",
+            data: {balance: newBalance && newBalance.replace(/[^\d\.,]+/g, '')},
+            beforeSend: busy,
+            success: done,
+            error: error,
+            complete: notBusy
+          });
+        }
+      }
+
+      function busy() {
+        me._spinner.show();
+        me.setButtonsDisabled(true);
+      }
+
+      function notBusy() {
+        me._spinner.hide();
+        me.setButtonsDisabled(false);
+      }
+
+      function error() {
+        me._saveError.slideDown();
+      }
+
+      function done() {
+        if (dirty)
+          me._accountWidget.refresh();
+        me.onEndEdit();
+      }
+
+      commitAttributes();
     },
 
     onDeleteConf: function() {

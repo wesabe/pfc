@@ -18,14 +18,37 @@ class Service
     @auth_scheme = auth_scheme
   end
 
-  def get(path)
+  def get(path, &block)
+    request :get, path, &block
+  end
+
+  def post(path, params, &block)
+    request :post, path, params, &block
+  end
+
+  def put(path, params, &block)
+    request :put, path, params, &block
+  end
+
+  def delete(path, &block)
+    request :delete, path, &block
+  end
+
+  def request(method, path, params={}, &block)
+    request_for(path, params, &block).__send__(method.to_s.downcase)
+  end
+
+  private
+
+  def request_for(path, params={})
     # strip leading slashes for URI#+
     path = path[1..-1] if path.starts_with?('/')
 
-    return(Request.new(@base_uri + path) do |req|
+    Request.new(@base_uri + path) do |req|
       req.auth_scheme = auth_scheme if auth_scheme
+      req.params = params
       yield req if block_given?
-    end.get)
+    end
   end
 
   def self.get(name)
@@ -48,7 +71,7 @@ class Service
     attr_reader   :uri, :headers
     attr_accessor :timeout, :retries,
                   :user, :auth_scheme,
-                  :proxy_url
+                  :proxy_url, :params
 
     def initialize(uri)
       # set defaults
@@ -56,6 +79,7 @@ class Service
       @proxy_url   = nil # disable proxy
       @retries     = 2
       @auth_scheme = 'Basic'
+      @params      = {}
 
       yield self if block_given?
 
@@ -63,13 +87,31 @@ class Service
     end
 
     def get
+      perform :get
+    end
+
+    def put
+      perform :put
+    end
+
+    def post
+      perform :post
+    end
+
+    def delete
+      perform :delete
+    end
+
+    private
+
+    def perform(method)
       retries   = @retries
       old_proxy = RestClient.proxy
       res       = nil
 
       begin
         RestClient.proxy = proxy_url.blank?? nil : proxy_url
-        res = get_without_error_handling
+        res = [:put, :post].include?(method) ? resource.__send__(method, params) : resource.__send__(method)
       rescue RestClient::Exception => e
         if retries > 0
           Service.logger.warn { ["#{e.class}: #{e.message}", *e.backtrace].join("\n") }
@@ -87,13 +129,11 @@ class Service
       return Response.new(res.code, res.headers, res.body, res.headers[:content_type]) if res
     end
 
-    private
-
-    def get_without_error_handling
+    def resource
       RestClient::Resource.new(uri.to_s,
         :timeout => timeout.to_i,
         :headers => headers_for_rest_client
-      ).get
+      )
     end
 
     def headers_for_rest_client
