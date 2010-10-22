@@ -46,6 +46,7 @@ class MakeOFX2
     # stderr messages should still come through in the logs).
     stdout, stderr = nil
 
+    Rails.logger.debug("calling fixofx: #{command}")
     IO.popen(command, "w+") do |pipe|
       pipe.write statement
       pipe.close_write
