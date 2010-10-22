@@ -1,0 +1,1 @@
+run "rake assets:roll"
