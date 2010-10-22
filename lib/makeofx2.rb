@@ -34,12 +34,13 @@ class MakeOFX2
     # OFX_CONVERTER defined in config/environments/[production|development].rb
     # the converter is currently a python app
 
-    command = OFX_CONVERTER + # ' -d ' +
-      (options[:account_number] ? " --acctid #{options[:account_number]}" : '') +
-      (options[:account_type] ? " --accttype \"#{options[:account_type]}\"" : '') +
-      (options[:balance] ? " --balance #{options[:balance]}" : '') +
-      (options[:currency] ? " --curdef #{options[:currency]}" : '') +
-     (options[:financial_inst].date_format_ddmmyyyy? ? ' --dayfirst' : '')
+    args = []
+    args << '--acctid' << options[:account_number] if options[:account_number]
+    args << '--accttype' << %{"#{options[:account_type]}"} if options[:account_type]
+    args << '--balance' << options[:balance] if options[:balance]
+    args << '--curdef' << options[:currency] if options[:currency]
+    args << ' --dayfirst' if options[:financial_inst].date_format_ddmmyyyy?
+    command = "#{OFX_CONVERTER} #{args.join(' ')}"
 
     # Not using ChildLabor because it was hanging for me.  Note - this
     # removes the ability to look at stderr (until Ruby 1.9, but the
