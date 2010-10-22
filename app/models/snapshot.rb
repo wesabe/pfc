@@ -12,6 +12,7 @@ class Snapshot < ActiveRecord::Base
   def build
     Exporter::Wesabe.new.write(user, archive)
     update_attribute :built_at, Time.now
+    update_attribute :error, nil
   rescue => e
     update_attribute :error, [e, *e.backtrace].join("\n")
     raise e
