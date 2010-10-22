@@ -31,5 +31,7 @@ Pfc::Application.configure do
   # Enable threaded mode
   # config.threadsafe!
 
-  ActionView::Base.class_eval { include DataPreloading }
+  config.after_initialize do
+    ActionView::Base.class_eval { include DataPreloading }
+  end
 end
