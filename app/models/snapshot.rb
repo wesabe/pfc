@@ -32,7 +32,7 @@ class Snapshot < ActiveRecord::Base
 
   def self.async_build_snapshot_for_user(user)
     user.snapshot.destroy if user.snapshot
-    create!(:user => user).delay.build(user.account_key)
+    create!(:user => user).delay.build
   end
 
   private
