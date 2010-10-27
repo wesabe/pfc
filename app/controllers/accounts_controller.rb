@@ -32,8 +32,7 @@ class AccountsController < ApplicationController
       return render :text => "Incorrect password", :status => :forbidden
     end
 
-    @account.safe_delete
-    @account.delay.destroy
+    @account.destroy_deferred
     render :nothing => true
   end
 

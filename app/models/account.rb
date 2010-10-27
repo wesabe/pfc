@@ -113,6 +113,11 @@ class Account < ActiveRecord::Base
   # public instance methods
   #
 
+  def destroy_deferred
+    safe_delete
+    Resque.enqueue(DestroyAccount, self.id)
+  end
+
   # override destroy method to set the status to DISABLED if this is an SSU account; otherwise, delete it outright
   def destroy
     _run_destroy_callbacks do
