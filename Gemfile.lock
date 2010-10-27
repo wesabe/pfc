@@ -38,8 +38,6 @@ GEM
     crack (0.1.8)
     daemon_controller (0.2.5)
     daemons (1.1.0)
-    delayed_job (2.1.0.pre)
-      daemons
     diff-lcs (1.1.2)
     erubis (2.6.6)
       abstract (>= 1.0.0)
@@ -143,7 +141,6 @@ DEPENDENCIES
   chronic (= 0.2.3)
   daemon_controller (= 0.2.5)
   daemons
-  delayed_job (= 2.1.0.pre)
   faker
   fastercsv
   libxml-ruby (= 1.1.3)

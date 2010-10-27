@@ -238,9 +238,9 @@ module SetReferrer
   end
 end
 
-# redefine DJ's delay method so that we can test
-class Object
-  def delay
-    self
+# redefine Reque's enqueue method so that we can test
+Resque.class_eval do
+  def self.enqueue(klass, *args)
+    klass.perform(*args)
   end
 end

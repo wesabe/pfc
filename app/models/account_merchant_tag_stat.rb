@@ -243,4 +243,16 @@ class AccountMerchantTagStat < ActiveRecord::Base
       entries_to_create.each {|entry| AccountMerchantTagStat.create!(entry) }
     end
   end
+
+  def self.fix_deferred!(account_key, old_tag, new_tag)
+    Resque.enqueue(FixAccountMerchantTagStat, account_key, old_tag, new_tag)
+  end
+
+  class FixAccountMerchantTagStat
+    @queue = :normal
+
+    def self.perform(account_key, old_tag, new_tag)
+      AccountMerchantTagStat.fix!(account_key, old_tag, new_tag)
+    end
+  end
 end

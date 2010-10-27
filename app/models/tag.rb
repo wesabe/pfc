@@ -224,10 +224,10 @@ class Tag < ActiveRecord::Base
         target.save!
       end
 
-      # update AMTS entries via Delayed Job
-      # FIXME: this isn't ideal, but using DJ breaks TagSpec. The fix is
+      # update AMTS entries via Resque
+      # FIXME: this isn't ideal, but using Resque breaks TagSpec. The fix is
       # to move the AMTS tests in TagSpec to the AMTS spec, testing AMTS.fix! separately
-      AccountMerchantTagStat.delay.fix!(user.account_key, old_tag, new_tag)
+      AccountMerchantTagStat.fix_deferred!(user.account_key, old_tag, new_tag)
     end
   end
 
@@ -287,10 +287,10 @@ class Tag < ActiveRecord::Base
       # delete original tag if it wasn't one of the replacement tags
       destroy(user, old_tag) unless keep_old_tag
 
-      # update AMTS entries via Delayed Job
-      # FIXME: this isn't ideal, but using DJ breaks TagSpec. The fix is
+      # update AMTS entries via Resque
+      # FIXME: this isn't ideal, but using Resque breaks TagSpec. The fix is
       # to move the AMTS tests in TagSpec to the AMTS spec, testing AMTS.fix! separately
-      AccountMerchantTagStat.delay.fix!(user.account_key, old_tag, replacement_tags)
+      AccountMerchantTagStat.fix_deferred!(user.account_key, old_tag, replacement_tags)
     end
 
     # return ids of replacement tags
