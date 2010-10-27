@@ -32,7 +32,7 @@ class Snapshot < ActiveRecord::Base
 
   def self.async_build_snapshot_for_user(user)
     user.snapshot.destroy if user.snapshot
-    create!(:user => user).delay.build
+    Resque.enqueue(BuildSnapshot, create!(:user => user).id)
   end
 
   private
@@ -43,5 +43,14 @@ class Snapshot < ActiveRecord::Base
 
   def remove_files
     archive.unlink if archive.exist?
+  end
+
+  class BuildSnapshot
+    @queue = :normal
+
+    def self.perform(snapshot_id)
+      snapshot = Snapshot.find(snapshot_id)
+      snapshot.build
+    end
   end
 end

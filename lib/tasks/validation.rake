@@ -6,7 +6,7 @@ require 'cgi'
 desc "Validate the source files."
 task :validate => %w[validate:javascript]
 
-module Wesabe
+module WesabeValidation
   class ScriptError
     include Comparable
 
@@ -98,7 +98,7 @@ def present_script_errors(errors)
   end
 end
 
-class Wesabe::JSLIgnoreManager
+class WesabeValidation::JSLIgnoreManager
   IGNORE_FILE_NAME = '.jslignore'
 
   def ignored_files
@@ -141,7 +141,7 @@ end
 namespace :validate do
   task :javascript do
     has_errors = false
-    ignore_manager = Wesabe::JSLIgnoreManager.new
+    ignore_manager = WesabeValidation::JSLIgnoreManager.new
 
     Dir['public/javascripts/**/*.js'].each do |file|
       next if ignore_manager.ignore?(file)
@@ -151,7 +151,7 @@ namespace :validate do
         base = Dir.pwd
         messages = out.scan(%r{^(.*#{Regexp.escape(file)})\((\d+)\): (.*)$\s*(.*)$})
         errors = messages.inject([]) do |list, message|
-          se = Wesabe::ScriptError.new(file, message[1], message[2])
+          se = WesabeValidation::ScriptError.new(file, message[1], message[2])
           list << se if se.error?
           list
         end

@@ -3,7 +3,7 @@
 
   <%# Snapshot is built and ready for download %>
   <h5 class="header">
-    <%= link_to '<div>snapshot.zip</div>', snapshot_url(:format => 'zip'), :class => 'download' %>
+    <%= link_to '<div>snapshot.zip</div>'.html_safe, snapshot_url(:format => 'zip'), :class => 'download' %>
   </h5>
   <span class="date">
     Built <%= time_ago_in_words @snapshot.built_at || @snapshot.created_at %> ago
