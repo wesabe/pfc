@@ -14,7 +14,7 @@ class UsersController < ApplicationController
       return render(:action => "delete_membership")
     end
 
-    current_user.delay.destroy
+    current_user.destroy_deferred
     clear_current_user
 
     redirect_to root_url

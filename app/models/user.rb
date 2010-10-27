@@ -391,6 +391,10 @@ class User < ActiveRecord::Base
     self.reload
   end
 
+  def destroy_deferred
+    Resque.enqueue(User::DestroyUser, self.id)
+  end
+
   has_image :column => :photo_key, :default => 'default_user_icon.jpg', :processor => ImageProcessing::Thumbnailer.new(:thumb => 48, :profile => 96)
   self.image_subdirectory = 'user_photos'
 
