@@ -20,6 +20,17 @@
 <%= form_tag login_url do %>
   <fieldset>
   <div class="two-col-centered fading-label signin">
+    <div class="field">
+      <label for="email" class="field-title">Email<span>old usernames still work</span></label>
+      <%= text_field_tag :email, params[:email], :class => 'initial-focus' %>
+    </div>
+    <div class="field">
+      <label for="password" class="field-title">Password</label>
+      <input type="password" id="password" name="password" />
+      <%= hidden_field_tag('intended_uri', @intended_uri) if @intended_uri -%>
+      <input id="tz_offset" name="tz_offset" type="hidden" />
+      <p class="field-subtext"><span id="forgot-password-link">Forgot your password? Too bad!</span></p>
+    </div>
     <a class="button green submit"><span>Sign In</span></a><p class="login-message">Not a member yet? <a href="/signup">Sign Up!</a></p>
   </div>
   </fieldset>

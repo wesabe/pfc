@@ -12,6 +12,9 @@ wesabe.$class('views.pages.credentials.NewPage', function($class, $super, $packa
     init: function() {
       this._fieldset = $('.content form fieldset > div');
       this._fields = [];
+
+      var connectButton = wesabe.views.widgets.Button.withText('Connect');
+      connectButton.appendTo(this._fieldset);
     },
 
     setFinancialInstitution: function(data) {

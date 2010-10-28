@@ -19,6 +19,12 @@ wesabe.$class('wesabe.views.widgets.Button', wesabe.views.widgets.BaseWidget, fu
     init: function(element, value) {
       var me = this;
 
+      if (!wesabe.isJQuery(element))
+        value = element, element = null;
+
+      if (!element)
+        element = $('<a class="button green"><span></span></a>');
+
       $super.init.call(me, element);
 
       // read the existing text
@@ -139,6 +145,14 @@ wesabe.$class('wesabe.views.widgets.Button', wesabe.views.widgets.BaseWidget, fu
      */
     setValue: function(value) {
       this._value = value;
+    }
+  });
+
+  $.extend($class, {
+    withText: function(text) {
+      var button = new this();
+      button.setText(text);
+      return button;
     }
   });
 });
