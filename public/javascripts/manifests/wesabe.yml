@@ -39,6 +39,7 @@
 - wesabe/views/widgets/Dialog.js
 - wesabe/views/widgets/BaseField.js
 - wesabe/views/widgets/AutocompleterField.js
+- wesabe/views/widgets/StateDropDownField.js
 - wesabe/views/widgets/HistoryLink.js
 - wesabe/views/widgets/tags/TagAutocompleterField.js
 - wesabe/views/widgets/transactions/TagLink.js

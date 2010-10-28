@@ -5,7 +5,7 @@ wesabe.$class('data.states.StateSet', function($class, $super, $package) {
   // import jQuery as $
   var $ = jQuery;
 
-  wesabe.extend($class.prototype, {
+  $.extend($class.prototype, {
     _states: null,
 
     get: function() {
@@ -15,23 +15,10 @@ wesabe.$class('data.states.StateSet', function($class, $super, $package) {
     set: function(data) {
       this._states = data;
       this.trigger('change', [this._states]);
-    },
-
-    asOptions: function() {
-      var options = [],
-          states = $package.get(),
-          length = states.length;
-
-      for (var i = 0; i < length; i++) {
-        var state = states[i];
-        options.push(new Option(state[0], state[1]));
-      }
-
-      return options;
     }
   });
 
-  wesabe.extend($package, {
+  $.extend($package, {
     sharedStateSet: new $class(),
 
     get: function() {

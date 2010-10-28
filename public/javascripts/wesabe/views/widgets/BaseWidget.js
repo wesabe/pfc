@@ -107,6 +107,24 @@ wesabe.$class('wesabe.views.widgets.BaseWidget', function($class, $super, $packa
         if (isOwnProperty && isIvar)
           this[key] = null;
       }
+    },
+
+    /**
+     * Appends the widget to the given jQuery +element+.
+     *
+     * @param {!jQuery} element
+     */
+    appendTo: function(element) {
+      this._element.appendTo(element);
+    },
+
+    /**
+     * Prepends the widget to the given jQuery +element+.
+     *
+     * @param {!jQuery} element
+     */
+    prependTo: function(element) {
+      this._element.prependTo(element);
     }
   });
 });

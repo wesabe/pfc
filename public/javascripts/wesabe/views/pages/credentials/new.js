@@ -60,13 +60,8 @@ wesabe.$class('views.pages.credentials.NewPage', function($class, $super, $packa
     },
 
     _createStateField: function(fi, data) {
-      var field = $('<div class="field"></div>'),
-          select = $('<select></select>');
-
-      select.append(new Option("-- select state --", ""));
-      select.append(wesabe.data.states.asOptions());
-      field.append(select);
-
+      var field = $('<div class="field"></div>');
+      new wesabe.views.widgets.StateDropDownField().appendTo(field);
       return field;
     },
 
