@@ -45,6 +45,8 @@
 - wesabe/views/widgets/transactions/TagLinkList.js
 - wesabe/data/currencies.js
 - wesabe/data/currency-data.js
+- wesabe/data/states.js
+- wesabe/data/state-data.js
 - wesabe/data/preferences.js
 - wesabe/data/BaseDataSource.js
 - wesabe/data/accounts/AccountDataSource.js
