@@ -3,6 +3,14 @@ class AccountCredsController < ApplicationController
   before_filter :require_account_cred, :only => [:destroy, :show]
   before_filter :check_ssu_enabled
 
+  def new
+    return unless @financial_inst = financial_inst
+
+    if (not ssu_enabled?) || ((not financial_inst.ssu_support?(current_user)) && (params[:force] != 'true'))
+      redirect_to(new_upload_path)
+    end
+  end
+
   def index
     @account_creds = current_user.account_creds
 
@@ -68,4 +76,11 @@ protected
     redirect_to home_path unless @account_cred && @account_cred.destroyable_by?(current_user)
   end
 
+  def financial_inst
+    @financial_inst ||= begin
+      FinancialInst.find_for_user(params[:fi], current_user).tap do |fi|
+        redirect_to new_upload_path if fi.nil?
+      end
+    end
+  end
 end

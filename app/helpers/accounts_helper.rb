@@ -1,14 +1,4 @@
 module AccountsHelper
-  def shared_domain(host)
-    host.split('.').last(2).join('.')
-  end
-
-  def ssu_uri(path=nil)
-    uri = URI.parse(SSU_URI)
-    uri += path if path
-    return uri
-  end
-
   def security_with_linked_ticker(security)
     str = security.to_s
     if !(security.ticker.blank? || security.ticker =~ /\d/)

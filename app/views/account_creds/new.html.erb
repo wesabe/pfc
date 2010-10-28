@@ -1,0 +1,42 @@
+<% set_page_title "Automatic Uploader" %>
+
+<% javascript 'wesabe/views/widgets/FadingLabelField' %>
+<% javascript 'wesabe/views/pages/credentials/new' %>
+<% javascript 'wesabe/views/shared/form' %>
+
+<script type="text/javascript">
+  jQuery(function() {
+    page.setFinancialInstitution(<%= @financial_inst.to_json.html_safe %>);
+  });
+</script>
+
+<div id="three-col-center">
+  <div class="two-column flat" id="upload-account">
+    <div class="top"><div class="right"><div class="grip"></div></div></div>
+    <div class="middle"><div class="right">
+    <div class="content">
+      <div class="module-header">
+        <h4>Getting Started</h4>
+      </div>
+
+      <%= form_tag do %>
+        <fieldset>
+          <div class="two-col-centered fading-label">
+            <div class="field">
+              <label for="email" class="field-title">Email<span>old usernames still work</span></label>
+              <%= text_field_tag :email, params[:email], :class => 'initial-focus' %>
+            </div>
+            <div class="field">
+              <label for="password" class="field-title">Password</label>
+              <input type="password" id="password" name="password" />
+              <!-- <p class="field-subtext"><span id="forgot-password-link">Forgot your password? Too bad!</span></p> -->
+            </div>
+            <a class="button green submit"><span>Connect</span></a></p>
+          </div>
+        </fieldset>
+      <% end %>
+    </div>
+    </div></div>
+    <div class="bottom"><div class="right"></div></div>
+  </div>
+</div>
