@@ -9,14 +9,56 @@ wesabe.$class('wesabe.views.widgets.FadingLabelField', wesabe.views.widgets.Base
   $.extend($class.prototype, {
     _label: null,
 
-    init: function(element, labelElement, delegate) {
-      $super.init.call(this, element, delegate);
-      this._label = new wesabe.views.widgets.Label(labelElement);
-      labelElement.bind('mousedown', function(){ return false });
+    init: function() {
+      var inputElement,
+          label,
+          delegate;
+
+      for (var i = 0, length = arguments.length; i < length; i++) {
+        var arg = arguments[i];
+
+        if (wesabe.isJQuery(arg)) {
+          if (!inputElement)
+            inputElement = arg;
+          else if (!label)
+            label = new $package.Label(arg);
+        } else if (arg.isInstanceOf && arg.isInstanceOf($package.Label)) {
+          label = arg;
+        } else if (typeof arg == 'string') {
+          label = new $package.Label(arg);
+        } else if (typeof arg == 'object') {
+          delegate = arg;
+        }
+      }
+
+      if (!inputElement)
+        inputElement = $('<input type="text">');
+
+      if (!label)
+        label = new $package.Label();
+
+      $super.init.call(this, inputElement, delegate);
+
+      if (this.isAttached() && !label.isAttached())
+        label.insertBefore(this);
+
+      this._label = label;
+      this._label.associateWithField(this);
       this.registerChildWidget(this._label);
+
+      // allow selection in the input field
+      label.getElement().bind('mousedown', function(){ return false });
 
       if (!this.isEmpty())
         this._label.setOpacity(0, /* animate = */false);
+    },
+
+    setLabelValue: function(value) {
+      this._label.setValue(value);
+    },
+
+    setLabelFormatter: function(formatter) {
+      this._label.setFormatter(formatter);
     },
 
     onChange: function() {
@@ -47,6 +89,13 @@ wesabe.$class('wesabe.views.widgets.FadingLabelField', wesabe.views.widgets.Base
         return;
 
       this._label.setOpacity(0, true);
+    },
+
+    /**
+     * @private
+     */
+    _didMoveToParent: function() {
+      this._label.insertBefore(this);
     }
   });
 });

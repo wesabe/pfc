@@ -7,12 +7,17 @@ wesabe.$class('views.pages.credentials.NewPage', function($class, $super, $packa
 
   $.extend($class.prototype, {
     _fieldset: null,
+    _fields: null,
 
     init: function() {
       this._fieldset = $('.content form fieldset > div');
+      this._fields = [];
     },
 
     setFinancialInstitution: function(data) {
+      for (var i = 0, length = this._fields.length; i < length; i++)
+        this._fields[i].remove();
+
       var fi = data.financial_inst,
           fields = fi.login_fields,
           length = fields.length;
@@ -32,6 +37,7 @@ wesabe.$class('views.pages.credentials.NewPage', function($class, $super, $packa
             break;
         }
 
+        this._fields.push(field);
         this._fieldset.prepend(field);
       }
     },
@@ -39,22 +45,28 @@ wesabe.$class('views.pages.credentials.NewPage', function($class, $super, $packa
     _createInputField: function(fi, data) {
       var field = $('<div class="field"></div>'),
           input = $('<input type="'+data.type+'">'),
-          label = $('<label class="field-title"></label>'),
           extra = $('<span></span>');
 
-      var id = this._generateUniqueId();
-      input.attr({name: data.key, id: id});
-      label.attr('for', id).text(data.label);
+      input.attr({name: data.key});
 
-      var url = fi.login_url || fi.homepage_url;
-      if (url) {
-        console.log(url);
-        extra.text('for '+url.match(/\/\/(?:www\d*\.)?([^\/]+)/)[1]);
-        label.append(extra);
-      }
+      var fadingLabelField = new wesabe.views.widgets.FadingLabelField(input);
 
-      new wesabe.views.widgets.FadingLabelField(input, label);
-      field.append(label, input);
+      fadingLabelField.setLabelFormatter({
+        format: function(value) {
+          var url = value && (value.login_url || fi.homepage_url);
+          if (url) {
+            var match = url.match(/\/\/(?:www\d*\.)?([^\/]+)/);
+            if (match)
+              return [value.label, match[1]];
+          }
+
+          return value && value.label;
+        }
+      });
+
+      fadingLabelField.setLabelValue(data);
+
+      fadingLabelField.appendTo(field);
 
       return field;
     },

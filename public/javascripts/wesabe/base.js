@@ -28,6 +28,25 @@ var SessionTimer = {
 var wesabe = {
   __name__: 'wesabe',
 
+  expando: (function() {
+    var element = $('<div></div>');
+    for (var k in element)
+      if (/^jQuery\d+$/.test(k))
+        return k;
+    // choose a semi-plausible fallback
+    return 'appendTo';
+  })(),
+
+  isJQuery: function(object) {
+    return !!(object && object[wesabe.expando]);
+  },
+
+  __idCounter__: 0,
+
+  uniqueId: function() {
+    return '__id'+(wesabe.__idCounter__++);
+  },
+
   get: function(pkg, module, base, callback) {
     var name  = wesabe._fqn(pkg, module),
         parts = name.split('.');

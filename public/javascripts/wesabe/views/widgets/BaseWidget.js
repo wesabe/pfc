@@ -21,6 +21,10 @@ wesabe.$class('wesabe.views.widgets.BaseWidget', function($class, $super, $packa
       return this.getElement().attr('id');
     },
 
+    setId: function(id) {
+      this.getElement().attr('id', id);
+    },
+
     isVisible: function() {
       return this.getElement().is(':visible');
     },
@@ -115,7 +119,11 @@ wesabe.$class('wesabe.views.widgets.BaseWidget', function($class, $super, $packa
      * @param {!jQuery} element
      */
     appendTo: function(element) {
+      if (element.getElement)
+        element = element.getElement();
+      this._willMoveToParent(element);
       this._element.appendTo(element);
+      this._didMoveToParent();
     },
 
     /**
@@ -124,7 +132,72 @@ wesabe.$class('wesabe.views.widgets.BaseWidget', function($class, $super, $packa
      * @param {!jQuery} element
      */
     prependTo: function(element) {
+      if (element.getElement)
+        element = element.getElement();
+      this._willMoveToParent(element);
       this._element.prependTo(element);
+      this._didMoveToParent();
+    },
+
+    /**
+     * Inserts this widget before the given jQuery +element+.
+     *
+     * @param {!jQuery} element
+     */
+    insertAfter: function(element) {
+      if (element.getElement)
+        element = element.getElement();
+      this._willMoveToParent(element.parent());
+      this._element.insertAfter(element);
+      this._didMoveToParent();
+    },
+
+    /**
+     * Inserts this widget before the given jQuery +element+.
+     *
+     * @param {!jQuery} element
+     */
+    insertBefore: function(element) {
+      if (element.getElement)
+        element = element.getElement();
+      this._willMoveToParent(element.parent());
+      this._element.insertBefore(element);
+      this._didMoveToParent();
+    },
+
+    /**
+     * @private
+     */
+    _willMoveToParent: function(element) {
+    },
+
+    /**
+     * @private
+     */
+    _didMoveToParent: function() {
+    },
+
+    /**
+     * Determines whether this widget is attached to an HTML document.
+     */
+    isAttached: function() {
+      return this._element &&
+             this._element.length &&
+             this._element.parent('html').length;
+    },
+
+    /**
+     * Adds +className+ to this widget's element.
+     */
+    addClassName: function(className) {
+      this._element.addClass(className);
+    },
+
+    /**
+     * Removes +className+ from this widget's element.
+     */
+    removeClassName: function(className) {
+      this._element.removeClass(className);
     }
   });
 });
