@@ -7,6 +7,14 @@ wesabe.$class('wesabe.views.widgets.Notification', wesabe.views.widgets.BaseWidg
 
   $class.STYLES = ['error', 'success', 'maintenance'];
 
+  $.each($class.STYLES, function(i, style) {
+    $class['with'+style.substring(0,1).toUpperCase()+style.substring(1)+'Style'] = function() {
+      var notification = new this();
+      notification.setStyle(style);
+      return notification;
+    };
+  });
+
   $.extend($class.prototype, {
     _titleElement: null,
     _titleText: null,
