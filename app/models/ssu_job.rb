@@ -20,8 +20,6 @@ class SsuJob < ActiveRecord::Base
 
   alias_attribute :jobid, :job_guid
 
-  before_save :update_accounts
-
   scope :pending,    :conditions => {:status => Status::PENDING}
   scope :complete,   :conditions => ['status <> ?', Status::PENDING]
   scope :failed,     :conditions => ['status NOT IN (?)', [Status::PENDING, Status::SUCCESSFUL]]
@@ -30,6 +28,10 @@ class SsuJob < ActiveRecord::Base
 
   def accounts
     user.accounts.where(:id_for_user => account_ids)
+  end
+
+  def to_param
+    job_guid
   end
 
   def expired?
@@ -75,9 +77,6 @@ class SsuJob < ActiveRecord::Base
     updates = {:status => params[:status], :result => params[:result], :version => params[:version]}
     updates[:data] = data.to_yaml if data
 
-    ## update associated accounts
-    self.update_accounts(true)
-
     ## do the UPDATE
     self.class.update_all(updates, update_conditions_constructor.conditions)
 
@@ -91,29 +90,5 @@ class SsuJob < ActiveRecord::Base
 
   def presenter
     SsuJobPresenter.new(self)
-  end
-
-  def update_accounts(save=false)
-    self.account_ids = account_cred.accounts.map(&:id_for_user)
-    self.class.update_all({:account_ids => self.account_ids.to_yaml}, {:id => self.id}) if save
-  end
-
-  # Class methods
-  def self.start(user, cred)
-    case cred.last_ssu_job && cred.last_ssu_job.status
-    when Status::PENDING
-      return false unless cred.last_ssu_job.expired?
-    when Status::UNAUTHENTICATED, Status::UNAUTHORIZED
-      return false
-    end
-    job_guid = cred.begin_job(user)
-    return unless job_guid
-    create! :account_cred => cred,
-           :account_key => user.account_key,
-           :job_guid => job_guid,
-           :expires_at => 1.hour.from_now,
-           :status => Status::PENDING,
-           :result => "started",
-           :created_at => Time.now
   end
 end

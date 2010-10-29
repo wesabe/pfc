@@ -6,6 +6,7 @@ wesabe.$class('views.pages.credentials.NewPage', function($class, $super, $packa
   $package.__id = 0;
 
   $.extend($class.prototype, {
+    _headerLabel: null,
     _fieldset: null,
     _fields: null,
     _notification: null,
@@ -13,6 +14,7 @@ wesabe.$class('views.pages.credentials.NewPage', function($class, $super, $packa
     _fiData: null,
 
     init: function() {
+      this._headerLabel = new wesabe.views.widgets.Label($('.content .module-header :header'));
       this._fieldset = $('.content form fieldset > div');
       this._notification = wesabe.views.widgets.Notification.withErrorStyle();
       this._notification.setVisible(false);
@@ -36,6 +38,8 @@ wesabe.$class('views.pages.credentials.NewPage', function($class, $super, $packa
 
       this._fieldset.find('.field').remove();
 
+      this._headerLabel.setValue(fi.name);
+
       for (var i = length; i--; ) {
         var data = fields[i],
             field;
@@ -52,9 +56,11 @@ wesabe.$class('views.pages.credentials.NewPage', function($class, $super, $packa
         var wrapper = $('<div class="field"></div>');
         field.appendTo(wrapper);
 
-        this._fields.push(field);
+        this._fields.unshift(field);
         this._fieldset.prepend(wrapper);
       }
+
+      this._fields[0].focus();
     },
 
     _createInputField: function(fi, data) {
@@ -70,7 +76,7 @@ wesabe.$class('views.pages.credentials.NewPage', function($class, $super, $packa
           if (url) {
             var match = url.match(/\/\/(?:www\d*\.)?([^\/]+)/);
             if (match)
-              return [value.label, match[1]];
+              return [value.label, 'for '+match[1]];
           }
 
           return value && value.label;
@@ -114,16 +120,70 @@ wesabe.$class('views.pages.credentials.NewPage', function($class, $super, $packa
         type: 'POST',
         url: '/credentials',
         data: {creds: $.toJSON(params), fi: me._fiData.wesabe_id},
-        success: function() {
-          me._credentialCreated();
+        success: function(data, textStatus, xhr) {
+          me._credentialCreated(xhr.getResponseHeader('Location'));
         },
-        error: function() {
+        error: function(xhr, textStatus, error) {
           notification.showWithTitleAndMessage(
             "Unable to connect",
             "We couldn't save the credentials you entered. "+
             "Please check your internet connection.");
         }
       });
+    },
+
+    _credentialCreated: function(url) {
+      var me = this;
+
+      $.ajax({
+        type: 'POST',
+        url: url+'/jobs',
+        success: function(data, textStatus, xhr) {
+          me._jobCreated(xhr.getResponseHeader('Location'));
+        },
+        error: function(xhr, textStatus, error) {
+        }
+      });
+    },
+
+    _jobCreated: function(url) {
+      var me = this,
+          errorsLeft = 5;
+
+      function pollStatus() {
+        $.ajax({
+          type: 'GET',
+          url: url,
+          success: function(data, textStatus, xhr) {
+            switch (data.status) {
+              case 'success':
+                window.location = '/';
+                break;
+              case 'pending':
+                setTimeout(pollStatus, 2000);
+                break;
+              case 'error':
+                me._showUnableToConnectNotification();
+                break;
+            }
+          },
+          error: function() {
+            if (errorsLeft-- > 0)
+              setTimeout(pollStatus, 5000);
+            else
+              me._showUnableToConnectNotification();
+          }
+        });
+      }
+
+      pollStatus();
+    },
+
+    _showUnableToConnectNotification: function() {
+      this._notification.showWithTitleAndMessage(
+        "Unable to connect",
+        "We saved the credentials, but we couldn't connect to "+
+        this._fiData.name+". Please check your internet connection.");
     }
   });
 });

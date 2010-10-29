@@ -10,11 +10,28 @@ module SSU
     attr_accessor :cookies
 
     def jobid
-      @jobid ||= UUID.create.to_s
+      @jobid ||= self.class.make_jobid
     end
 
     def profile
       @profile ||= SSU::Profile.with_name(jobid)
+    end
+
+    def self.enqueue(account_cred, user)
+      Resque.enqueue(
+        self,
+        jobid = make_jobid,
+        account_cred.financial_inst.wesabe_id,
+        user.id,
+        account_cred.creds,
+        account_cred.cookies
+      )
+
+      return jobid
+    end
+
+    def self.make_jobid
+      UUID.create.to_s
     end
 
     def self.perform(jobid, fid, user_id, creds, cookies)
@@ -32,9 +49,22 @@ module SSU
 
     def perform
       daemon.start
-      start_sync
-      wait_for_sync_to_finish
-      daemon.stop
+      begin
+        start_sync
+        wait_for_sync_to_finish
+        daemon.stop
+      rescue Object
+        unless Rails.env.development?
+          daemon.stop rescue logger.warn "SyncJob(#{jobid}) Unable to stop daemon!"
+        end
+
+        ssu_job && ssu_job.update_attributes(
+          :status => SsuJob::Status::GENERAL_ERROR,
+          :result => "ssu.sync.exception"
+        )
+
+        raise
+      end
     end
 
     def stop
@@ -42,6 +72,7 @@ module SSU
     end
 
     def start_sync
+      logger.info { "SyncJob(#{jobid}) Starting sync" }
       daemon.request('job.start',
         :jobid   => jobid,
         :fid     => fid,
@@ -70,6 +101,8 @@ module SSU
     private
 
     def wait_for_sync_to_finish
+      logger.info { "SyncJob(#{jobid}) Waiting for sync to finish" }
+
       last_version = 0
 
       while daemon.running?
@@ -77,11 +110,18 @@ module SSU
           this_version = status['version']
           if last_version < this_version
             last_version = this_version
-            ssu_job.update_attributes(
+
+            logger.info { "SyncJob(#{jobid}) Status changed to #{status['status']} #{status['result']}" }
+
+            ssu_job && ssu_job.update_attributes(
               :result => status['result'],
               :status => status['status'],
               :data   => status['data']
             )
+
+            break if status['completed']
+          else
+            logger.debug { "SyncJob(#{jobid}) Status has not changed" }
           end
         end
 

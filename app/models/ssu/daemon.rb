@@ -60,7 +60,7 @@ module SSU
 
     def xulrunner_command
       args = "-profile #{profile.path} -no-remote"
-      if RAILS_ENV != 'test' && RUBY_PLATFORM =~ /darwin/i
+      if !Rails.env.test? && RUBY_PLATFORM =~ /darwin/i
         "#{self.class.root}/script/server -- #{args}"
       else
         "xulrunner #{ini_path} #{args}"
@@ -118,7 +118,13 @@ module SSU
       end
 
       def read
-        ActiveSupport::JSON.decode(socket.readline)
+        body = socket.readline
+        begin
+          return ActiveSupport::JSON.decode(body.chomp)
+        rescue
+          Rails.logger.warn { "SSU(#{$$}) Unable to parse JSON response: #{body}" }
+          raise
+        end
       end
 
       def write(body)

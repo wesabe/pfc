@@ -354,19 +354,6 @@ class User < ActiveRecord::Base
       sort_by {|account| [account.position, account.name.downcase]}
   end
 
-  def account_creds
-    AccountCred.find_all_by_account_key(account_key)
-  end
-
-  def account_creds_in_limbo
-    AccountCred.find_all_by_account_key(account_key, :include => [:accounts, :financial_inst]).
-      find_all{|ac| ac.accounts.empty? || ac.failed? }
-  end
-
-  def ssu_jobs
-    SsuJob.find_all_by_account_key(account_key, :conditions => ["expires_at < ?", Time.now])
-  end
-
   def filter_tags
     Tag.filter_tags_for_user(self)
   end
