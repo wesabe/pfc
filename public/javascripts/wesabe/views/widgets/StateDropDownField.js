@@ -51,7 +51,7 @@ wesabe.$class('views.widgets.StateDropDownField', wesabe.views.widgets.BaseField
       this._placeholderText = placeholderText;
 
       if (this._placeholderText && !this._placeholderOption) {
-        this._placeholderOption = $(new Option());
+        this._placeholderOption = $(new Option('', ''));
         this.getElement().prepend(this._placeholderOption);
       }
 

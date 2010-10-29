@@ -8,6 +8,7 @@
 - jquery/scrollTo.js
 - jquery-ui/custom.js
 - jquery-ui/wesabe-extensions.js
+- json.js
 - wesabe/base.js
 - wesabe/lang/date.js
 - wesabe/lang/number.js
@@ -37,6 +38,7 @@
 - wesabe/views/widgets/Label.js
 - wesabe/views/widgets/BaseListWidget.js
 - wesabe/views/widgets/Dialog.js
+- wesabe/views/widgets/Notification.js
 - wesabe/views/widgets/BaseField.js
 - wesabe/views/widgets/AutocompleterField.js
 - wesabe/views/widgets/StateDropDownField.js

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101027180126) do
+ActiveRecord::Schema.define(:version => 20101029010419) do
 
   create_table "account_balances", :force => true do |t|
     t.integer  "account_id",                                  :default => 0, :null => false
@@ -31,17 +31,17 @@ ActiveRecord::Schema.define(:version => 20101027180126) do
   add_index "account_balances", ["upload_id"], :name => "upload_id"
 
   create_table "account_creds", :force => true do |t|
-    t.string   "cred_guid",         :default => "", :null => false
-    t.string   "cred_key",          :default => "", :null => false
     t.string   "account_key",       :default => "", :null => false
     t.integer  "financial_inst_id",                 :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.text     "creds",                             :null => false
+    t.integer  "version",                           :null => false
+    t.text     "cookies",                           :null => false
   end
 
   add_index "account_creds", ["account_key"], :name => "idx_account_creds_account_key"
   add_index "account_creds", ["created_at"], :name => "idx_account_creds_created_at"
-  add_index "account_creds", ["cred_guid"], :name => "idx_account_creds_cred_guid"
   add_index "account_creds", ["financial_inst_id"], :name => "idx_account_creds_financial_inst_id"
   add_index "account_creds", ["updated_at"], :name => "idx_account_creds_updated_at"
 

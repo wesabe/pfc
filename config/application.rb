@@ -46,7 +46,7 @@ module Pfc
     config.filter_parameters += [:password, :password_confirmation, :account_number,
                              :raw_post_data, :question_1, :question_2, :answer_1,
                              :answer_2, :upload, :visible_txaction_ids, :answers,
-                             :data, :cookies]
+                             :data, :cookies, :creds]
 
     config.active_support.deprecation = :log
   end
