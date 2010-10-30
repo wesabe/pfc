@@ -17,15 +17,6 @@ wesabe.$class('wesabe.data.credentials.CredentialDataSource', wesabe.data.BaseDa
      * no such credential can be found.
      */
     getCredentialDataByAccountURI: function(accountUri) {
-      var m = accountUri && accountUri.match(/\/accounts\/(\d+)/);
-      return m && this.getCredentialDataByAccountId(number.parse(m[1]));
-    },
-
-    /**
-     * Returns credential data for the account with id {accountId}, or null if
-     * no such credential can be found.
-     */
-    getCredentialDataByAccountId: function(accountId) {
       if (!this.hasData())
         return null;
 
@@ -33,7 +24,7 @@ wesabe.$class('wesabe.data.credentials.CredentialDataSource', wesabe.data.BaseDa
           length = credentials.length;
 
       while (length--)
-        if (array.contains(credentials[length].accounts, accountId))
+        if (array.contains(credentials[length].accounts, accountUri))
           return credentials[length];
 
       return null;
@@ -49,8 +40,8 @@ wesabe.$class('wesabe.data.credentials.CredentialDataSource', wesabe.data.BaseDa
         return false;
 
       for (var i = data.length; i--;) {
-        var job = data[i].job;
-        if (job && job.status_string === 'pending')
+        var job = data[i].last_job;
+        if (job && job.status === 'pending')
           return true;
       }
 

@@ -5,6 +5,9 @@ class AccountCred < ActiveRecord::Base
   belongs_to :user, :primary_key => 'account_key', :foreign_key => 'account_key'
   belongs_to :financial_inst
   has_many   :jobs, :class_name => 'SsuJob'
+  has_many   :accounts
+
+  has_one    :last_job, :class_name => 'SsuJob', :order => 'created_at DESC'
 
   scope :for_user, lambda {|user| {:conditions => {:account_key => user.account_key}} }
 
@@ -40,5 +43,9 @@ class AccountCred < ActiveRecord::Base
 
   def destroyable_by?(user)
     user.admin? || self.user == user
+  end
+
+  def as_json(options=nil)
+    raise NotImplementedError, "use present(account_cred) instead"
   end
 end

@@ -84,8 +84,8 @@ class SsuJob < ActiveRecord::Base
     return reload
   end
 
-  def to_json(options = nil)
-    raise NotImplementedError, "Intentionally left out to encourage the use of SsuJobPresenter instead"
+  def as_json(options=nil)
+    raise NotImplementedError, "use present(ssu_job) instead"
   end
 
   def presenter

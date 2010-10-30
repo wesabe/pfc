@@ -13,7 +13,7 @@ module DataPreloading
 
   def preload_credentials
     _preload_data(
-      current_user.account_creds,
+      present(current_user.account_creds),
       "wesabe.data.credentials.sharedDataSource.setData")
   end
 

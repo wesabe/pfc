@@ -8,28 +8,9 @@ class User::AccountUpdateManager
   end
 
   def login!
-    # start SSU jobs for any account updated more than six hours ago
-    begin
-      user.account_creds.each do |ac|
-        if update?(ac)
-          SsuJob.start(user, ac)
-        elsif destroy?(ac)
-          ac.destroy
-        end
-      end if ssu_enabled?
-    rescue SsuError => e
-      $stderr.puts e
-    end
-  end
-
-  def update?(cred)
-    options[:force] ||
-    !cred.last_ssu_job ||                         # There is no previous job or
-     cred.last_ssu_job.created_at < 6.hours.ago   # the previous job is earlier than 6 hours ago
-  end
-
-  def destroy?(cred)
-    !cred.accounts.any? && cred.financial_inst.ssu_support?(user)
+    user.account_creds.each do |ac|
+      ac.enqueue_sync
+    end if ssu_enabled?
   end
 
   def ssu_enabled?

@@ -15,7 +15,7 @@ class AccountCredsController < ApplicationController
     @account_creds = current_user.account_creds
 
     respond_to do |format|
-      format.json { render :json => @account_creds }
+      format.json { render :json => present(@account_creds.to_a) }
     end
   end
 

@@ -109,7 +109,7 @@ wesabe.$class('wesabe.views.widgets.BaseListWidget', wesabe.views.widgets.BaseWi
           element.addClass(isEven ? 'even' : 'odd')
             .removeClass(isEven ? 'odd' : 'even');
         }
-        elements[i] = element;
+        elements[i] = element[0];
       }
 
       if (this._items)
@@ -118,7 +118,8 @@ wesabe.$class('wesabe.views.widgets.BaseListWidget', wesabe.views.widgets.BaseWi
             this._items[i].remove();
 
       this._items = items;
-      $(elements).appendTo(this.getListElement());
+      //$(elements).appendTo(this.getListElement());
+      this.getListElement().append(elements);
     },
 
     /**
