@@ -119,7 +119,7 @@ jQuery(function($) {
           var self = $(this);
 
           var i;
-          var newTxactionList = [];
+          var newTxactionList = $([]);
 
           var transactions = data.transactions || data['investment-transactions'];
           var isInvestment = data['investment-transactions'] !== undefined;
@@ -129,7 +129,7 @@ jQuery(function($) {
           if (items.length == 0) {
             // no existing items, so just add the transactions
             for (i = 0; i < transactions.length; i++) {
-              newTxactionList.push(self.fn("create", isInvestment).fn("update", transactions[i]));
+              newTxactionList = newTxactionList.add(self.fn("create", isInvestment).fn("update", transactions[i]));
             }
           } else {
             var newTxactionsByURI = {};
@@ -163,18 +163,15 @@ jQuery(function($) {
                   uri = transaction.uri,
                   item = existingTxactionsByURI[uri];
 
-              if (item) {
-                newTxactionList.push(item);
-              } else {
+              if (!item)
                 item = self.fn("create", isInvestment);
-                newTxactionList.push(item);
-              }
 
+              newTxactionList = newTxactionList.add(item[0]);
               item.fn('update', transaction);
             }
           }
 
-          $(newTxactionList).prependTo(self);
+          self.prepend(newTxactionList);
 
           // FIXME: we need singleton txaction edit so bad
           //   this is still pretty awful, it will jump you to name from tags
