@@ -26,12 +26,11 @@ wesabe.$class('views.pages.credentials.NewPage', function($class, $super, $packa
       connectButton.bind('click', this._connectButtonWasClicked, this);
     },
 
-    setFinancialInstitution: function(data) {
+    setFinancialInstitution: function(fi) {
       for (var i = 0, length = this._fields.length; i < length; i++)
         this._fields[i].remove();
 
-      var fi = data.financial_inst,
-          fields = fi.login_fields,
+      var fields = fi.login_fields,
           length = fields.length;
 
       this._fiData = fi;
