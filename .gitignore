@@ -11,3 +11,4 @@ public/images/user_photos
 config/initializers/99_local_env.rb
 db/development_structure.sql
 .bundle
+fixofx
