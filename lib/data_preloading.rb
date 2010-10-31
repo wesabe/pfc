@@ -41,6 +41,7 @@ module DataPreloading
     end
   rescue Object => e
     Rails.logger.warn { "!!!!!!!!! #{e}\n#{e.backtrace.join("\n")}" }
+    Rails.logger.warn { "????????? data=#{data.inspect} --- setter=#{setter.inspect}" }
     raise e
   end
 end
