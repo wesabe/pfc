@@ -77,7 +77,7 @@ Pfc::Application.routes.draw do
   ## Big Rock Candy Mountain Passthrough
 
   match '/data/transactions/*uri(.:format)',            :to => 'brcm#transactions'
-  match '/data/investment-transactions/*uri(.:format)', :to => 'brcm#investment-transactions'
+  match '/data/investment-transactions/*uri(.:format)', :to => 'brcm#transactions'
   match '/data/*uri(.:format)',                         :to => 'brcm#passthrough'
 
   ## User Profile & Preferences
