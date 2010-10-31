@@ -136,8 +136,7 @@ jQuery(function($) {
             var existingTxactionsByURI = {};
 
             // clear the list if we're switching to or from investments
-            if ((isInvestment && !items[0].isInvestment) ||
-                (!isInvestment && items[0].isInvestment))
+            if (isInvestment ^ items[0].isInvestment)
               self.fn('clear');
             else {
               for (i = 0; i < transactions.length; i++) {
