@@ -39,5 +39,8 @@ module DataPreloading
 </script>
       HTML
     end
+  rescue Object => e
+    Rails.logger.warn { "!!!!!!!!! #{e}\n#{e.backtrace.join("\n")}" }
+    raise e
   end
 end
