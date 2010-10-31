@@ -10,7 +10,7 @@ class SimplePresenter < ActiveSupport::BasicObject
   end
 
   def inspect
-    "#<#{self.class}: presenter is a #{@presentable.class}, renderer is a #{@renderer.class}>"
+    "#<#{self.class}: presentable is a #{@presentable.class}, renderer is a #{@renderer.class}>"
   end
 
   def method_missing(sym, *args, &block)
