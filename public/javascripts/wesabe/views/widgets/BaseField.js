@@ -85,7 +85,7 @@ wesabe.$class('wesabe.views.widgets.BaseField', wesabe.views.widgets.BaseWidget,
           me._value = me.getValue();
           me.getElement().trigger('pollingchange');
         }
-        this._changeWatcher = setTimeout(arguments.callee, msToWait || 50);
+        me._changeWatcher = setTimeout(arguments.callee, msToWait || 50);
       })();
     },
 
