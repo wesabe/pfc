@@ -9,6 +9,9 @@ module SSU
     attr_accessor :creds
     attr_accessor :cookies
 
+    attr_reader :status
+    attr_reader :statements
+
     def jobid
       @jobid ||= self.class.make_jobid
     end
@@ -98,34 +101,55 @@ module SSU
       @logger = logger
     end
 
+    def complete?
+      status && status.fetch('completed')
+    end
+
     private
 
     def wait_for_sync_to_finish
       logger.info { "SyncJob(#{jobid}) Waiting for sync to finish" }
 
-      last_version = 0
-
       while daemon.running?
-        if status = daemon.request('job.status')
-          this_version = status['version']
-          if last_version < this_version
-            last_version = this_version
-
-            logger.info { "SyncJob(#{jobid}) Status changed to #{status['status']} #{status['result']}" }
-
-            ssu_job && ssu_job.update_attributes(
-              :result => status['result'],
-              :status => status['status'],
-              :data   => status['data']
-            )
-
-            break if status['completed']
-          else
-            logger.debug { "SyncJob(#{jobid}) Status has not changed" }
-          end
-        end
+        self.status = daemon.request('job.status')
+        self.statements = daemon.request('statement.list');
+        break if complete?
 
         sleep 1
+      end
+    end
+
+    def status=(status)
+      if @status.nil? || (@status['version'] < status['version'])
+        logger.info { "SyncJob(#{jobid}) Status changed to #{status['status']} #{status['result']}" }
+        @status = status
+
+        if ssu_job
+          ssu_job.update_attributes(
+            :result  => status['result'],
+            :status  => status['status'],
+            :data    => status['data']
+          )
+
+          ssu_job.account_cred.update_attributes(
+            :cookies => status['cookies']
+          )
+        end
+      else
+        logger.debug { "SyncJob(#{jobid}) Status has not changed" }
+      end
+    end
+
+    def statements=(statements)
+      logger.debug { "SyncJob(#{jobid}) Available statements: #{statements.join(', ')}" } unless statements.blank?
+
+      @statements ||= []
+      statements_to_process = statements - @statements
+      @statements = statements
+
+      statements_to_process.each do |statement|
+        logger.info { "SyncJob(#{jobid}) Adding statement #{statement} to the import queue" }
+        Resque.enqueue(StatementImport, user_id, fid, daemon.request('statement.read', statement), jobid)
       end
     end
 

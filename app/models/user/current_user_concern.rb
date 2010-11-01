@@ -10,4 +10,14 @@ class User
       "Invalid user. Expected an object of class 'User', got #{user.inspect}") if user && !user.is_a?(User)
     Thread.current[:pfc_user] = user
   end
+
+  def self.with_current_user(user)
+    old_current_user = self.current
+    begin
+      self.current = user
+      yield
+    ensure
+      self.current = old_current_user
+    end
+  end
 end

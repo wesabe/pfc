@@ -28,8 +28,12 @@ module SSU
       path.join('wuff_log.txt')
     end
 
+    def statements_path
+      path.join('statements')
+    end
+
     def archive
-      (path.children - [config_path, pid_path, log_path]).each do |child|
+      (path.children - [config_path, pid_path, log_path, statements_path]).each do |child|
         child.rmtree
       end
     end
