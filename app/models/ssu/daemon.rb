@@ -49,12 +49,14 @@ module SSU
       ENV['HOME'] ||= Dir.pwd
 
       @controller ||= DaemonController.new(
-        :identifier       => "Server-Side Uploader (#{profile.path})",
-        :start_command    => xulrunner_command,
-        :ping_command     => lambda { host && port && connection },
-        :pid_file         => profile.pid_path.to_s,
-        :log_file         => profile.log_path.to_s,
-        :daemonize_for_me => true
+        :identifier                => "Server-Side Uploader (#{profile.path})",
+        :start_command             => xulrunner_command,
+        :ping_command              => lambda { host && port && connection },
+        :pid_file                  => profile.pid_path.to_s,
+        :log_file                  => profile.log_path.to_s,
+        :daemonize_for_me          => true,
+        :start_timeout             => 30,
+        :log_file_activity_timeout => 30
       )
     end
 
