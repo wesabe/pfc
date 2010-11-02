@@ -48,7 +48,7 @@ class BrcmController < ApplicationController
   private
 
   def brcm
-    Service.get(:brcm)
+    @brcm ||= Service.get(:brcm)
   end
 
   def assert_valid_response(res)

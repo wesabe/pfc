@@ -51,5 +51,9 @@ module Pfc
     config.active_support.deprecation = :log
 
     config.active_record.include_root_in_json = false
+
+    def self.standalone?
+      ENV['STANDALONE'] == '1'
+    end
   end
 end

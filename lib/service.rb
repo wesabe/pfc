@@ -1,10 +1,23 @@
 require 'uri'
 require 'yaml'
+require 'socket'
 
 class Service
-  attr_reader :base_uri, :auth_scheme
+  attr_reader :base_uri
+  attr_accessor :name
+  attr_accessor :auth_scheme
 
-  def initialize(base_uri, auth_scheme=nil)
+  def initialize(name, options)
+    options = options.symbolize_keys
+
+    self.name = name.to_s
+    self.base_uri = options.delete(:uri)
+    self.auth_scheme = options.delete(:auth_scheme)
+
+    @daemon_options = options
+  end
+
+  def base_uri=(base_uri)
     case base_uri
     when String
       base_uri += '/' unless base_uri.ends_with?('/')
@@ -14,8 +27,6 @@ class Service
     else
       @base_uri = base_uri
     end
-
-    @auth_scheme = auth_scheme
   end
 
   def get(path, &block)
@@ -38,7 +49,26 @@ class Service
     request_for(path, params, &block).__send__(method.to_s.downcase)
   end
 
+  def running?
+    daemon.running?
+  end
+
+  def start
+    daemon.start
+  end
+
+  def stop
+    daemon.stop
+  end
+
   private
+
+  def daemon
+    @daemon ||= DaemonController.new(@daemon_options.merge(
+      :identifier => name,
+      :ping_command => lambda { TCPSocket.new(base_uri.host, base_uri.port) }
+    ))
+  end
 
   def request_for(path, params={})
     # strip leading slashes for URI#+
@@ -53,14 +83,17 @@ class Service
 
   def self.get(name)
     named_config = config[name] || config[:default]
-    new(named_config[:uri], named_config[:auth_scheme])
+    new(name, named_config)
   end
 
   def self.config
     @config ||= begin
-      config_path = Rails.root.join('config/services.yml')
       YAML.load_file(config_path).with_indifferent_access[Rails.env]
     end
+  end
+
+  def self.config_path
+    Rails.root.join('config/services.yml')
   end
 
   def self.logger
