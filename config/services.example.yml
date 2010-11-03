@@ -11,6 +11,11 @@ development:
     auth_scheme: 'Wesabe'
   grendel:
     uri: 'http://localhost:8081'
+  redis:
+    uri: 'redis://localhost:6379'
+    start_command: 'redis-server config/redis.conf'
+    pid_file: '/var/run/redis.pid'
+    log_file: '/var/log/redis.log'
 
 test:
   brcm:
