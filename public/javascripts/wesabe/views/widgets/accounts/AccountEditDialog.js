@@ -173,10 +173,11 @@ wesabe.$class('wesabe.views.widgets.accounts.AccountEditDialog', wesabe.views.wi
       function commitAttributes() {
         var data = {
           name: me._name.val(),
-          currency: me._currency.val()
+          currency: me._currency.val(),
+          archived: me._archivedBox.attr('checked')
         };
 
-        if (data.name === account.getName() && data.currency === account.getCurrency()) {
+        if (data.name === account.getName() && data.currency === account.getCurrency() && data.archived === account.isArchived()) {
           // nothing changed
           enableOrDisableBalance();
         } else {
