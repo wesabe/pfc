@@ -27,17 +27,22 @@ wesabe.$class('views.pages.credentials.NewPage', function($class, $super, $packa
     },
 
     setFinancialInstitution: function(fi) {
+      this._fiData = fi;
+      this._headerLabel.setValue(fi.name)
+      this._setFields(fi.login_fields, fi);
+    },
+
+    askSecurityQuestions: function(questions) {
+      this._setFields(questions, null);
+    },
+
+    _setFields: function(fields, fi) {
       for (var i = 0, length = this._fields.length; i < length; i++)
         this._fields[i].remove();
 
-      var fields = fi.login_fields,
-          length = fields.length;
-
-      this._fiData = fi;
-
       this._fieldset.find('.field').remove();
 
-      this._headerLabel.setValue(fi.name);
+      var length = fields.length;
 
       for (var i = length; i--; ) {
         var data = fields[i],
@@ -45,10 +50,13 @@ wesabe.$class('views.pages.credentials.NewPage', function($class, $super, $packa
 
         switch (data.type) {
           case 'state':
-            field = this._createStateField(fi, data);
+            field = this._createStateField(data, fi);
+            break;
+          case 'choice':
+            field = this._createChoiceField(data, fi);
             break;
           default:
-            field = this._createInputField(fi, data);
+            field = this._createInputField(data, fi);
             break;
         }
 
@@ -62,7 +70,7 @@ wesabe.$class('views.pages.credentials.NewPage', function($class, $super, $packa
       this._fields[0].focus();
     },
 
-    _createInputField: function(fi, data) {
+    _createInputField: function(data, fi) {
       var input = $('<input type="'+data.type+'">');
 
       input.attr({name: data.key});
@@ -71,7 +79,7 @@ wesabe.$class('views.pages.credentials.NewPage', function($class, $super, $packa
 
       field.setLabelFormatter({
         format: function(value) {
-          var url = value && (value.login_url || fi.homepage_url);
+          var url = value && fi && (fi.login_url || fi.homepage_url);
           if (url) {
             var match = url.match(/\/\/(?:www\d*\.)?([^\/]+)/);
             if (match)
@@ -87,7 +95,20 @@ wesabe.$class('views.pages.credentials.NewPage', function($class, $super, $packa
       return field;
     },
 
-    _createStateField: function(fi, data) {
+    _createChoiceField: function(data, fi) {
+      var field = new wesabe.views.widgets.DropDownField();
+      field.getElement().attr('name', data.key);
+
+      var choices = data.choices;
+      for (var i = 0, length = choices.length; i < length; i++) {
+        var choice = choices[i];
+        field.addOption(choice.label, choice.value);
+      }
+
+      return field;
+    },
+
+    _createStateField: function(data, fi) {
       var field = new wesabe.views.widgets.StateDropDownField();
       field.getElement().attr('name', data.key);
       return field;
@@ -141,6 +162,10 @@ wesabe.$class('views.pages.credentials.NewPage', function($class, $super, $packa
           me._jobCreated(xhr.getResponseHeader('Location'));
         },
         error: function(xhr, textStatus, error) {
+          me._notification.showWithTitleAndMessage(
+            "Unable to start job",
+            "We saved your credentials but we couldn't start "+
+            "a sync job with "+me._fiData.name+".");
         }
       });
     },
@@ -159,9 +184,12 @@ wesabe.$class('views.pages.credentials.NewPage', function($class, $super, $packa
                 window.location = '/';
                 break;
               case 'pending':
-                setTimeout(pollStatus, 2000);
+                if (/^suspended\./.test(data.result))
+                  me.askSecurityQuestions(data.data[data.result].questions);
+                else
+                  setTimeout(pollStatus, 2000);
                 break;
-              case 'error':
+              case 'failed':
                 me._showUnableToConnectNotification();
                 break;
             }
@@ -182,7 +210,7 @@ wesabe.$class('views.pages.credentials.NewPage', function($class, $super, $packa
       this._notification.showWithTitleAndMessage(
         "Unable to connect",
         "We saved the credentials, but we couldn't connect to "+
-        this._fiData.name+". Please check your internet connection.");
+        this._fiData.name+". Please try again.");
     }
   });
 });

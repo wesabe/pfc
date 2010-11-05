@@ -6,9 +6,9 @@ module SSU
 
     attr_accessor :fid
     attr_accessor :user_id
-    attr_accessor :creds
     attr_accessor :cookies
 
+    attr_reader :creds
     attr_reader :status
     attr_reader :statements
 
@@ -70,6 +70,24 @@ module SSU
       end
     end
 
+    def creds=(creds)
+      if creds != @creds
+        @creds = creds
+
+        if paused?
+          @last_resumed_version = status['version']
+          daemon.request('job.resume', :creds => creds)
+        end
+      end
+    end
+
+    def paused?
+      status &&
+      (@last_resumed_version.nil? || @last_resumed_version < status['version']) &&
+      status['result'] &&
+      status['result'].starts_with?('suspended')
+    end
+
     def stop
       daemon.stop
     end
@@ -113,7 +131,13 @@ module SSU
       while daemon.running?
         self.status = daemon.request('job.status')
         self.statements = daemon.request('statement.list');
-        break if complete?
+
+        if complete?
+          break
+        elsif paused? && account_cred
+          # attempt to update the creds
+          self.creds = account_cred.reload.creds
+        end
 
         sleep 1
       end
@@ -155,6 +179,10 @@ module SSU
 
     def ssu_job
       @ssu_job ||= SsuJob.find_by_job_guid(jobid)
+    end
+
+    def account_cred
+      ssu_job && ssu_job.account_cred
     end
   end
 end

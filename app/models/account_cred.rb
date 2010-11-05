@@ -29,6 +29,11 @@ class AccountCred < ActiveRecord::Base
     ActiveSupport::JSON.decode(read_attribute(:creds))
   end
 
+  def creds=(creds)
+    creds = ActiveSupport::JSON.encode(creds) unless creds.nil? || creds.is_a?(String)
+    write_attribute(:creds, creds)
+  end
+
   def successful?
     last_ssu_job && last_ssu_job.successful?
   end
