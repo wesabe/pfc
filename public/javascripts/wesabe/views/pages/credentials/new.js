@@ -14,7 +14,7 @@ wesabe.$class('views.pages.credentials.NewPage', function($class, $super, $packa
 
       me._module = module;
 
-      me._notification = wesabe.views.widgets.Notification.withErrorStyle();
+      me._notification = new wesabe.views.widgets.Notification();
       me._notification.setVisible(false);
       module.appendChildWidget(me._notification);
 
@@ -106,15 +106,14 @@ wesabe.$class('views.pages.credentials.NewPage', function($class, $super, $packa
 
     _connectButtonWasClicked: function() {
       var me = this,
-          notification = me._notification,
           params = me._form.getFieldValues();
 
-      notification.setVisible(false);
+      me._notification.setVisible(false);
 
       for (var k in params) {
         if (params.hasOwnProperty(k)) {
           if (!params[k]) {
-            notification.showWithTitleAndMessage(
+            me._showNotification('error',
               "Please fill out all fields",
               "All the fields below are required. "+
               "Please fill them out and try submitting the form again.");
@@ -122,6 +121,8 @@ wesabe.$class('views.pages.credentials.NewPage', function($class, $super, $packa
           }
         }
       }
+
+      me._form.setEnabled(false);
 
       $.ajax({
         type: 'POST',
@@ -131,7 +132,8 @@ wesabe.$class('views.pages.credentials.NewPage', function($class, $super, $packa
           me._credentialCreated(xhr.getResponseHeader('Location'));
         },
         error: function(xhr, textStatus, error) {
-          notification.showWithTitleAndMessage(
+          me._form.setEnabled(false);
+          me._showNotification('error',
             "Unable to connect",
             "We couldn't save the credentials you entered. "+
             "Please check your internet connection.");
@@ -146,13 +148,17 @@ wesabe.$class('views.pages.credentials.NewPage', function($class, $super, $packa
         type: 'POST',
         url: url+'/jobs',
         success: function(data, textStatus, xhr) {
+          me._showNotification('success',
+            "Successfully connected to "+me._fiData.name+"!",
+            "We're retrieving your statements.");
           me._jobCreated(xhr.getResponseHeader('Location'));
         },
         error: function(xhr, textStatus, error) {
-          me._notification.showWithTitleAndMessage(
+          me._form.setEnabled(true);
+          me._showNotification('error',
             "Unable to start job",
-            "We saved your credentials but we couldn't start "+
-            "a sync job with "+me._fiData.name+".");
+            "We saved your credentials but we couldn't retrieve "+
+            "your statements from "+me._fiData.name+".");
         }
       });
     },
@@ -168,15 +174,23 @@ wesabe.$class('views.pages.credentials.NewPage', function($class, $super, $packa
           success: function(data, textStatus, xhr) {
             switch (data.status) {
               case 'successful':
-                window.location = '/';
+                me._showNotification('success',
+                  "Successfully retrieved statements from "+me._fiData.name+"!",
+                  "We'll return you to My Accounts now so you can review.");
+                setTimeout(function(){ window.location = '/accounts'; }, 1000);
                 break;
               case 'pending':
-                if (/^suspended\./.test(data.result))
+                if (/^suspended\./.test(data.result)) {
                   me.askSecurityQuestions(data.data[data.result].questions);
-                else
+                  me._showNotification('maintenance',
+                    me._fiData.name+" needs more information from you",
+                    "Please fill out all the fields below.");
+                } else {
                   setTimeout(pollStatus, 2000);
+                }
                 break;
               case 'failed':
+                me._form.setEnabled(true);
                 me._showUnableToConnectNotification();
                 break;
             }
@@ -184,8 +198,10 @@ wesabe.$class('views.pages.credentials.NewPage', function($class, $super, $packa
           error: function() {
             if (errorsLeft-- > 0)
               setTimeout(pollStatus, 5000);
-            else
+            else {
+              me._form.setEnabled(true);
               me._showUnableToConnectNotification();
+            }
           }
         });
       }
@@ -194,10 +210,15 @@ wesabe.$class('views.pages.credentials.NewPage', function($class, $super, $packa
     },
 
     _showUnableToConnectNotification: function() {
-      this._notification.showWithTitleAndMessage(
+      this._showNotification('error',
         "Unable to connect",
         "We saved the credentials, but we couldn't connect to "+
         this._fiData.name+". Please try again.");
+    },
+
+    _showNotification: function(style, title, message) {
+      this._notification.setStyle(style);
+      this._notification.showWithTitleAndMessage(title, message);
     }
   });
 });

@@ -57,6 +57,16 @@ wesabe.$class('wesabe.views.widgets.BaseField', wesabe.views.widgets.BaseWidget,
       this.getElement().attr('name', name);
     },
 
+    isEnabled: function() {
+      return !this.getElement().attr('disabled');
+    },
+
+    setEnabled: function(enabled) {
+      this.getElement().attr('disabled', !enabled);
+      if (!enabled)
+        this.blur();
+    },
+
     clear: function() {
       this.getElement().val('');
     },

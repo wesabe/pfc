@@ -22,7 +22,14 @@ wesabe.$class('wesabe.views.widgets.Notification', wesabe.views.widgets.BaseWidg
     _messageText: null,
     _style: null,
 
-    init: function(element) {
+    init: function(elementOrStyle) {
+      var element, style;
+
+      if (typeof elementOrStyle == 'string')
+        style = elementOrStyle;
+      else
+        element = elementOrStyle;
+
       if (!element) {
         element = $('<div class="notification">'+
                       '<div class="top">'+
@@ -48,6 +55,9 @@ wesabe.$class('wesabe.views.widgets.Notification', wesabe.views.widgets.BaseWidg
           break;
         }
       }
+
+      if (style)
+        this.setStyle(style);
     },
 
     getTitleText: function() {

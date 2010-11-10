@@ -4,6 +4,7 @@ wesabe.$class('views.widgets.Form', wesabe.views.widgets.BaseWidget, function($c
 
   $.extend($class.prototype, {
     _contentElement: null,
+    _enabled: true,
 
     _fields: null,
 
@@ -23,14 +24,34 @@ wesabe.$class('views.widgets.Form', wesabe.views.widgets.BaseWidget, function($c
       return this._contentElement;
     },
 
+    isEnabled: function() {
+      return this._enabled;
+    },
+
+    setEnabled: function(enabled) {
+      enabled = !!enabled;
+
+      if (this._enabled === enabled)
+        return;
+
+      this._enabled = enabled;
+      for (var i = 0, length = this._fields.length; i < length; i++) {
+        var field = this._fields[i];
+        field.setEnabled(enabled);
+      }
+    },
+
     onSubmit: function(event) {
       event.preventDefault();
-      this.trigger('submit');
+      if (this._enabled)
+        this.trigger('submit');
     },
 
     addField: function(field) {
       var lastField = this._fields[this._fields.length-1];
       this._fields.push(field);
+
+      field.setEnabled(this._enabled);
 
       var wrapper = $('<div class="field"></div>');
 
@@ -68,6 +89,6 @@ wesabe.$class('views.widgets.Form', wesabe.views.widgets.BaseWidget, function($c
     focus: function() {
       var firstField = this._fields[0];
       if (firstField) firstField.focus();
-    },
+    }
   });
 });
