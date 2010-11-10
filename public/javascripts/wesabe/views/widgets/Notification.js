@@ -90,8 +90,8 @@ wesabe.$class('wesabe.views.widgets.Notification', wesabe.views.widgets.BaseWidg
       if (this._style === style)
         return;
 
-      for (var i = 0, length = $class.STYLES; i < length; i++)
-        this.removeClassName(i);
+      for (var i = 0, length = $class.STYLES.length; i < length; i++)
+        this.removeClassName($class.STYLES[i]);
 
       this._style = style;
       this.addClassName(style);
