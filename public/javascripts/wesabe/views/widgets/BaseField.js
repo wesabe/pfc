@@ -49,6 +49,14 @@ wesabe.$class('wesabe.views.widgets.BaseField', wesabe.views.widgets.BaseWidget,
       this.getElement().val(value);
     },
 
+    getName: function() {
+      return this.getElement().attr('name');
+    },
+
+    setName: function(name) {
+      this.getElement().attr('name', name);
+    },
+
     clear: function() {
       this.getElement().val('');
     },

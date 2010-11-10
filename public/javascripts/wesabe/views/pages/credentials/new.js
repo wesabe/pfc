@@ -1,34 +1,35 @@
 wesabe.$class('views.pages.credentials.NewPage', function($class, $super, $package) {
-
   // import jQuery as $
   var $ = jQuery;
 
-  $package.__id = 0;
-
   $.extend($class.prototype, {
-    _headerLabel: null,
-    _fieldset: null,
-    _fields: null,
+    _module: null,
+    _form: null,
     _notification: null,
 
     _fiData: null,
 
-    init: function() {
-      this._headerLabel = new wesabe.views.widgets.Label($('.content .module-header :header'));
-      this._fieldset = $('.content form fieldset > div');
-      this._notification = wesabe.views.widgets.Notification.withErrorStyle();
-      this._notification.setVisible(false);
-      this._notification.insertAfter($('.content .module-header'));
-      this._fields = [];
+    init: function(module) {
+      var me = this;
+
+      me._module = module;
+
+      me._notification = wesabe.views.widgets.Notification.withErrorStyle();
+      me._notification.setVisible(false);
+      module.appendChildWidget(me._notification);
+
+      me._form = new wesabe.views.widgets.Form();
+      me._form.bind('submit', me._connectButtonWasClicked, me);
+      module.appendChildWidget(me._form);
 
       var connectButton = wesabe.views.widgets.Button.withText('Connect');
-      connectButton.appendTo(this._fieldset);
-      connectButton.bind('click', this._connectButtonWasClicked, this);
+      connectButton.bind('click', me._connectButtonWasClicked, me);
+      me._form.appendChildWidget(connectButton);
     },
 
     setFinancialInstitution: function(fi) {
       this._fiData = fi;
-      this._headerLabel.setValue(fi.name)
+      this._module.setTitle(fi.name)
       this._setFields(fi.login_fields, fi);
     },
 
@@ -37,45 +38,34 @@ wesabe.$class('views.pages.credentials.NewPage', function($class, $super, $packa
     },
 
     _setFields: function(fields, fi) {
-      for (var i = 0, length = this._fields.length; i < length; i++)
-        this._fields[i].remove();
+      var form = this._form;
 
-      this._fieldset.find('.field').remove();
+      form.clearFields();
 
-      var length = fields.length;
-
-      for (var i = length; i--; ) {
-        var data = fields[i],
-            field;
+      for (var i = 0, length = fields.length; i < length; i++) {
+        var data = fields[i];
 
         switch (data.type) {
           case 'state':
-            field = this._createStateField(data, fi);
+            form.addField(this._createStateField(data, fi));
             break;
           case 'choice':
-            field = this._createChoiceField(data, fi);
+            form.addField(this._createChoiceField(data, fi));
             break;
           default:
-            field = this._createInputField(data, fi);
+            form.addField(this._createInputField(data, fi));
             break;
         }
-
-        var wrapper = $('<div class="field"></div>');
-        field.appendTo(wrapper);
-
-        this._fields.unshift(field);
-        this._fieldset.prepend(wrapper);
       }
 
-      this._fields[0].focus();
+      form.focus();
     },
 
     _createInputField: function(data, fi) {
       var input = $('<input type="'+data.type+'">');
 
-      input.attr({name: data.key});
-
       var field = new wesabe.views.widgets.FadingLabelField(input);
+      field.setName(data.key);
 
       field.setLabelFormatter({
         format: function(value) {
@@ -97,7 +87,7 @@ wesabe.$class('views.pages.credentials.NewPage', function($class, $super, $packa
 
     _createChoiceField: function(data, fi) {
       var field = new wesabe.views.widgets.DropDownField();
-      field.getElement().attr('name', data.key);
+      field.setName(data.key);
 
       var choices = data.choices;
       for (var i = 0, length = choices.length; i < length; i++) {
@@ -110,30 +100,27 @@ wesabe.$class('views.pages.credentials.NewPage', function($class, $super, $packa
 
     _createStateField: function(data, fi) {
       var field = new wesabe.views.widgets.StateDropDownField();
-      field.getElement().attr('name', data.key);
+      field.setName(data.key);
       return field;
     },
 
     _connectButtonWasClicked: function() {
       var me = this,
           notification = me._notification,
-          params = {};
+          params = me._form.getFieldValues();
 
       notification.setVisible(false);
 
-      for (var i = 0, length = me._fields.length; i < length; i++) {
-        var field = me._fields[i],
-            value = field.getValue();
-
-        if (!value) {
-          notification.showWithTitleAndMessage(
-            "Please fill out all fields",
-            "All the fields below are required. "+
-            "Please fill them out and try submitting the form again.");
-          return;
+      for (var k in params) {
+        if (params.hasOwnProperty(k)) {
+          if (!params[k]) {
+            notification.showWithTitleAndMessage(
+              "Please fill out all fields",
+              "All the fields below are required. "+
+              "Please fill them out and try submitting the form again.");
+            return;
+          }
         }
-
-        params[field.getElement().attr('name')] = value;
       }
 
       $.ajax({
@@ -180,7 +167,7 @@ wesabe.$class('views.pages.credentials.NewPage', function($class, $super, $packa
           url: url,
           success: function(data, textStatus, xhr) {
             switch (data.status) {
-              case 'success':
+              case 'successful':
                 window.location = '/';
                 break;
               case 'pending':
@@ -214,5 +201,3 @@ wesabe.$class('views.pages.credentials.NewPage', function($class, $super, $packa
     }
   });
 });
-
-window.page = new wesabe.views.pages.credentials.NewPage();

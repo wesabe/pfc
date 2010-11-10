@@ -96,6 +96,8 @@ wesabe.$class('wesabe.views.widgets.FadingLabelField', wesabe.views.widgets.Base
      */
     _didMoveToParent: function() {
       this._label.insertBefore(this);
+      if (this.getElement().parents('.fading-label').length == 0)
+        this.getElement().parents('form').addClass('fading-label');
     }
   });
 });

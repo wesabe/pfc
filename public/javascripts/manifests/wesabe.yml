@@ -33,6 +33,8 @@
 - yui/aliases.js
 - wesabe/views/shared.js
 - wesabe/views/widgets/BaseWidget.js
+- wesabe/views/widgets/Module.js
+- wesabe/views/widgets/Form.js
 - wesabe/views/widgets/Button.js
 - wesabe/views/widgets/ButtonGroup.js
 - wesabe/views/widgets/Label.js

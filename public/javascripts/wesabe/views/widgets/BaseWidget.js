@@ -17,6 +17,15 @@ wesabe.$class('wesabe.views.widgets.BaseWidget', function($class, $super, $packa
       return this._element;
     },
 
+    /**
+     * Returns the element to which content will be added.
+     *
+     * @returns {Element}
+     */
+    getContentElement: function() {
+      return this.getElement();
+    },
+
     getId: function() {
       return this.getElement().attr('id');
     },
@@ -77,6 +86,24 @@ wesabe.$class('wesabe.views.widgets.BaseWidget', function($class, $super, $packa
     registerChildWidgets: function() {
       if (!this._childWidgets) this._childWidgets = [];
       this._childWidgets = this._childWidgets.concat($.makeArray(arguments));
+    },
+
+    /**
+     * Unregisters a child widget that was previously registered.
+     *
+     * @param {!BaseWidget} child
+     */
+    unregisterChildWidget: function(child) {
+      this._childWidgets = wesabe.lang.array.minus(this._childWidgets, [child]);
+    },
+
+    /**
+     * Unregisters child widgets that were previously registered.
+     *
+     * @param {...BaseWidget} var_args
+     */
+    unregisterChildWidgets: function() {
+      this._childWidgets = wesabe.lang.array.minus(this._childWidgets, arguments);
     },
 
     /**
@@ -175,6 +202,44 @@ wesabe.$class('wesabe.views.widgets.BaseWidget', function($class, $super, $packa
      * @private
      */
     _didMoveToParent: function() {
+    },
+
+    /**
+     * Adds +widget+ to the end of this widget's content.
+     *
+     * @param {!BaseWidget} widget
+     */
+    appendChildWidget: function(widget) {
+      widget.appendTo(this.getContentElement());
+      this.registerChildWidget(widget);
+    },
+
+    /**
+     * Adds +widget+ to the beginning of this widget's content.
+     *
+     * @param {!BaseWidget} widget
+     */
+    prependChildWidget: function(widget) {
+      widget.prependTo(this.getContentElement());
+      this.registerChildWidget(widget);
+    },
+
+    /**
+     * Adds +element+ to the end of this widget's content.
+     *
+     * @param {!Element} element
+     */
+    appendElement: function(element) {
+      this.getContentElement().append(element);
+    },
+
+    /**
+     * Adds +element+ to the beginning of this widget's content.
+     *
+     * @param {!Element} element
+     */
+    prependElement: function(element) {
+      this.getContentElement().prepend(element);
     },
 
     /**
