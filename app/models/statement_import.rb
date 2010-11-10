@@ -28,6 +28,20 @@ class StatementImport
       )
 
       Importer.import(upload)
+      upload.reload
+
+      if account_cred.nil?
+        warn { "has no account credentials" }
+      elsif upload.accounts.empty?
+        warn { "no accounts to associate!" }
+      else
+        upload.accounts.each do |account|
+          account = Account.find(account.id) # work around read-only attributes
+          info { "associating #{account} with account credentials" }
+          account.account_cred = account_cred
+          account.save
+        end
+      end
     end
   end
 
@@ -35,5 +49,17 @@ class StatementImport
 
   def ssu_job
     @ssu_job ||= jobid && SsuJob.find_by_job_guid(jobid)
+  end
+
+  def account_cred
+    ssu_job && ssu_job.account_cred
+  end
+
+  %w[debug info warn error].each do |level|
+    class_eval <<-RUBY
+    def #{level}(text=nil)
+      Rails.logger.#{level} { "StatementImport(\#{jobid || 'no job'}) \#{text || yield}" }
+    end
+    RUBY
   end
 end
