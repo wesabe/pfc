@@ -17,6 +17,9 @@ wesabe.$class('wesabe.views.widgets.BaseField', wesabe.views.widgets.BaseWidget,
     init: function(element, delegate) {
       var me = this;
 
+      if (!element)
+        element = $('<input type="text">');
+
       $super.init.call(me, element);
 
       // bind the events that subclasses or delegates declare themselves interested in
