@@ -1,7 +1,7 @@
 /**
  * Wraps a dialog and provides functionality common to all dialogs.
  */
-wesabe.$class('wesabe.views.widgets.Dialog', wesabe.views.widgets.BaseWidget, function($class, $super, $package) {
+wesabe.$class('wesabe.views.widgets.Dialog', wesabe.views.widgets.Container, function($class, $super, $package) {
   // import jQuery as $
   var $ = jQuery;
   // import wesabe.lang.array
@@ -129,6 +129,7 @@ wesabe.$class('wesabe.views.widgets.Dialog', wesabe.views.widgets.BaseWidget, fu
 
       var me = this;
 
+      element = this.getElement();
       me._confirmButton = new $package.Button(element.find('.button.confirm'));
       me._confirmButton.bind('click', function(event){ me.onConfirmCheckingForDisabled(event) });
       me._cancelButton = new $package.Button(element.find('.button.cancel'));

@@ -1,4 +1,4 @@
-wesabe.$class('views.widgets.Module', wesabe.views.widgets.BaseWidget, function($class, $super, $package) {
+wesabe.$class('views.widgets.Module', wesabe.views.widgets.Container, function($class, $super, $package) {
   // import jQuery as $
   var $ = jQuery;
 
@@ -17,22 +17,23 @@ wesabe.$class('views.widgets.Module', wesabe.views.widgets.BaseWidget, function(
       else
         element = elementOrStyle;
 
+      var topContent, middleContent, bottomContent;
+
       if (!element) {
-        element = $('<div>'+
-                      '<div class="top"><div class="right"><div class="grip"></div></div></div>'+
-                      '<div class="middle"><div class="right">'+
-                      '<div class="content">'+
-                        '<div class="module-header">'+
-                          '<h4></h4>'+
-                        '</div>'+
-                        // content goes here
-                      '</div>'+
-                      '</div></div>'+
-                      '<div class="bottom"><div class="right"></div></div>'+
-                    '</div>');
+        topContent = $('<div class="grip"></div>');
+        middleContent = $('<div class="content"><div class="module-header"><h4></h4></div></div>');
+        bottomContent = null;
       }
 
       $super.init.call(this, element);
+
+      if (topContent)
+        topContent.appendTo(this.getTopElement());
+      if (middleContent)
+        middleContent.appendTo(this.getMiddleElement());
+      if (bottomContent)
+        bottomContent.appendTo(this.getBottomElement());
+
       this.setContentElement(element.find('.content'));
       this._headerElement = element.find('.module-header');
       this._headerTitleLabel = new wesabe.views.widgets.Label(this._headerElement.find(':header'));
