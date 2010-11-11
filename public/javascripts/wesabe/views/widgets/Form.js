@@ -3,7 +3,6 @@ wesabe.$class('views.widgets.Form', wesabe.views.widgets.BaseWidget, function($c
   var $ = jQuery;
 
   $.extend($class.prototype, {
-    _contentElement: null,
     _enabled: true,
 
     _fields: null,
@@ -15,13 +14,9 @@ wesabe.$class('views.widgets.Form', wesabe.views.widgets.BaseWidget, function($c
         element = $('<form><fieldset><div class="two-col-centered"></div></fieldset></form>');
 
       $super.init.call(me, element);
-      me._contentElement = element.find('> fieldset > div');
+      me.setContentElement(element.find('> fieldset > div'));
       me._fields = [];
       element.bind('submit', function(event){ me.onSubmit(event) });
-    },
-
-    getContentElement: function() {
-      return this._contentElement;
     },
 
     isEnabled: function() {

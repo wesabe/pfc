@@ -3,8 +3,11 @@ wesabe.$class('views.widgets.Module', wesabe.views.widgets.BaseWidget, function(
   var $ = jQuery;
 
   $.extend($class.prototype, {
-    _contentElement: null,
+    _headerElement: null,
     _headerTitleLabel: null,
+    _movableElements: null,
+
+    _movable: false,
 
     init: function(elementOrStyle) {
       var element, style;
@@ -30,9 +33,13 @@ wesabe.$class('views.widgets.Module', wesabe.views.widgets.BaseWidget, function(
       }
 
       $super.init.call(this, element);
-      this._contentElement = element.find('.content');
-      this._headerTitleLabel = new wesabe.views.widgets.Label(element.find('.module-header :header'));
+      this.setContentElement(element.find('.content'));
+      this._headerElement = element.find('.module-header');
+      this._headerTitleLabel = new wesabe.views.widgets.Label(this._headerElement.find(':header'));
       this.registerChildWidget(this._headerTitleLabel);
+
+      this._movableElements = element.find('> .top > .right > .grip, > .top > .right');
+      this._movable = this._movableElements.hasClass('movable');
 
       if (style)
         this.addClassName(style);
@@ -56,8 +63,22 @@ wesabe.$class('views.widgets.Module', wesabe.views.widgets.BaseWidget, function(
       this._headerTitleLabel.setValue(title);
     },
 
-    getContentElement: function() {
-      return this._contentElement;
+    getHeaderElement: function() {
+      return this._headerElement;
     },
+
+    isMovable: function() {
+      return this._movable;
+    },
+
+    setMovable: function(movable) {
+      movable = !!movable;
+      if (movable === this._movable)
+        return;
+
+      this._movable = movable;
+      if (movable) this._movableElements.addClass('movable');
+      else         this._movableElements.removeClass('movable');
+    }
   });
 });

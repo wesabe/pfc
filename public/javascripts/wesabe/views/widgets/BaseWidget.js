@@ -7,6 +7,7 @@ wesabe.$class('wesabe.views.widgets.BaseWidget', function($class, $super, $packa
 
   $.extend($class.prototype, {
     _element: null,
+    _contentElement: null,
     _childWidgets: null,
 
     init: function(element) {
@@ -23,7 +24,17 @@ wesabe.$class('wesabe.views.widgets.BaseWidget', function($class, $super, $packa
      * @returns {Element}
      */
     getContentElement: function() {
-      return this.getElement();
+      return this._contentElement || this.getElement();
+    },
+
+    /**
+     * Sets the element to which content will be added. Set this to +null+
+     * to revert the content element back to the container element.
+     *
+     * @param {Element} element
+     */
+    setContentElement: function(element) {
+      this._contentElement = element;
     },
 
     getId: function() {
