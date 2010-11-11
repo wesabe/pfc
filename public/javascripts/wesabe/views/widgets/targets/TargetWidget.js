@@ -1,7 +1,7 @@
 /**
  * Wraps the targets widget on the dashboard.
  */
-wesabe.$class('wesabe.views.widgets.targets.TargetWidget', wesabe.views.widgets.BaseWidget, function($class, $super, $package) {
+wesabe.$class('wesabe.views.widgets.targets.TargetWidget', wesabe.views.widgets.Module, function($class, $super, $package) {
   // import jQuery as $
   var $ = jQuery;
   // import wesabe.lang.date
@@ -14,7 +14,6 @@ wesabe.$class('wesabe.views.widgets.targets.TargetWidget', wesabe.views.widgets.
   $.extend($class.prototype, {
     _dataSource: null,
     _targetList: null,
-    _addTargetButton: null,
     _addTargetDialog: null,
     _addTargetDialogElement: null,
     _previousMonthButton: null,
@@ -33,8 +32,9 @@ wesabe.$class('wesabe.views.widgets.targets.TargetWidget', wesabe.views.widgets.
       this._targetList = new $package.TargetList($("#targets-list"), this, this._dataSource);
 
       // bind click on Add Target to show the add target dialog
-      this._addTargetButton = new Button(element.find('#add-target-button'));
-      this._addTargetButton.bind('click', this.onAddTarget, this);
+      var addTargetButton = Button.withText('Add Spending Target');
+      addTargetButton.bind('click', this.onAddTarget, this);
+      addTargetButton.prependTo(this.getHeaderElement());
       this._addTargetDialogElement = element.find('#add-target .dialog');
 
       // set up the month navigation buttons
@@ -66,7 +66,7 @@ wesabe.$class('wesabe.views.widgets.targets.TargetWidget', wesabe.views.widgets.
 
       // make sure we GC the target list and add target button when we're cleaning up
       this.registerChildWidgets(
-        this._targetList, this._addTargetButton,
+        this._targetList, addTargetButton,
         this._previousMonthButton, this._nextMonthButton
       );
 
