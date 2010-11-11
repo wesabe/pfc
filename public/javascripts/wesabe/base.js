@@ -38,7 +38,7 @@ var wesabe = {
   })(),
 
   isJQuery: function(object) {
-    return !!(object && object[wesabe.expando]);
+    return !!(object && object[wesabe.expando] && !object.getClass);
   },
 
   __idCounter__: 0,
