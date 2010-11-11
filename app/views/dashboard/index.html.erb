@@ -1,7 +1,5 @@
 <%= stylesheet_link_manifest "dashboard" -%>
 <% content_for :footer do -%>
-  <%# requires javascript 'wesabe/views/shared/form' %>
-  <%# requires javascript 'wesabe/views/dashboard' %>
   <%= javascript_include_manifest :dashboard %>
   <!--[if IE]><%= javascript_include_tag "excanvas" %><![endif]-->
 <% end -%>
@@ -15,7 +13,7 @@
 </div>
 
 <script type="text/javascript">
-  jQuery(function(){ page = new wesabe.views.pages.dashboard() });
+  jQuery(function(){ page = new wesabe.views.pages.DashboardPage() });
 </script>
 
 

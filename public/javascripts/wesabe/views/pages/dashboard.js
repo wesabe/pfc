@@ -1,14 +1,18 @@
-wesabe.provide('views.pages.dashboard', function() {
-  wesabe.views.shared
-    .setCurrentTab("dashboard")
-    .setPageTitle("Dashboard")
-    .enableDefaultAccountsSearch()
-    .enableDefaultAccountSidebarBehavior();
+wesabe.$class('views.pages.DashboardPage', function($class, $super, $package) {
+  // import jQuery as $
+  var $ = jQuery;
 
-  var me = this;
-  $(function() {
-    var targetDataSource = new wesabe.data.TargetDataSource();
-    targetDataSource.setCachingEnabled(true);
-    me.targets = new wesabe.views.widgets.targets.TargetWidget($("#spending-targets"), targetDataSource);
+  $.extend($class.prototype, {
+    init: function() {
+      wesabe.views.shared
+        .setCurrentTab("dashboard")
+        .setPageTitle("Dashboard")
+        .enableDefaultAccountsSearch()
+        .enableDefaultAccountSidebarBehavior();
+
+      var targetDataSource = new wesabe.data.TargetDataSource();
+      targetDataSource.setCachingEnabled(true);
+      this._targets = new wesabe.views.widgets.targets.TargetWidget($("#spending-targets"), targetDataSource);
+    }
   });
 });
