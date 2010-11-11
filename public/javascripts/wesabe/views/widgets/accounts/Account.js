@@ -210,12 +210,19 @@ wesabe.$class('wesabe.views.widgets.accounts.Account', wesabe.views.widgets.Base
       return this.getCredential() ? true : false;
     },
 
+    lastSSUJob: function() {
+      var cred = this.getCredential();
+      return cred && cred.last_job;
+    },
+
     hasSSUError: function() {
-      return this.isSSU() && (job = this.getCredential().job) && job.status_string === 'failed';
+      var lastJob = this.lastSSUJob();
+      return lastJob && lastJob.status == 'failed';
     },
 
     isUpdating: function() {
-      return this.isSSU() && (job = this.getCredential().job) && job.status_string === 'pending';
+      var lastJob = this.lastSSUJob();
+      return lastJob && lastJob.status == 'pending';
     },
 
     /**
@@ -277,7 +284,7 @@ wesabe.$class('wesabe.views.widgets.accounts.Account', wesabe.views.widgets.Base
         return;
 
       var ds = this._accountGroup.getCredentialDataSource();
-      $.post('/credentials/'+this.getCredential().id+'/jobs', function() {
+      $.post(this.getCredential().uri+'/jobs', function() {
         ds.pollUntilSyncDone();
       });
     },
