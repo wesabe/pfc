@@ -26,6 +26,7 @@ wesabe.$class('views.widgets.Module', wesabe.views.widgets.Container, function($
       }
 
       $super.init.call(this, element);
+      element = this.getElement();
 
       if (topContent)
         topContent.appendTo(this.getTopElement());
