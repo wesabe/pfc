@@ -3,6 +3,7 @@
 - wesabe/views/shared/form.js
 - wesabe/views/pages/dashboard.js
 - wesabe/views/widgets/MoneyLabel.js
+- wesabe/views/widgets/CurrencyDropDownField.js
 - wesabe/views/widgets/accounts/AccountWidget.js
 - wesabe/views/widgets/accounts/AccountGroupList.js
 - wesabe/views/widgets/accounts/AccountGroup.js

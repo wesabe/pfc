@@ -7,6 +7,7 @@ wesabe.$class('data.currencies.CurrencySet', function($class, $super, $package) 
 
   $.extend($class.prototype, {
     _currencies: null,
+    _currencyList: null,
 
     /**
      * Gets the data behind this +CurrencySet+.
@@ -15,6 +16,27 @@ wesabe.$class('data.currencies.CurrencySet', function($class, $super, $package) 
      */
     get: function() {
       return this._currencies;
+    },
+
+    getList: function() {
+      if (!this._currencyList) {
+        var data = this._currencies, list = [];
+
+        for (var key in data) {
+          if (data.hasOwnProperty(key)) {
+            data[key].code = key;
+            list.push(data[key]);
+          }
+        }
+
+        this._currencyList = list.sort(function(a, b) {
+          return (a.code < b.code) ? -1 :
+                 (a.code > b.code) ?  1 :
+                                      0;
+        });
+      }
+
+      return this._currencyList;
     },
 
     /**

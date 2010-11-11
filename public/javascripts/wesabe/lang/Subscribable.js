@@ -72,6 +72,16 @@ wesabe.provide('lang.Subscribable', {
   },
 
   /**
+   * Syntactic sugar for {jQuery#unbind}.
+   *
+   * @param {!String} eventType
+   * @param {?Function} eventHandler
+   */
+  unbind: function(eventType, eventHandler) {
+    $(this).unbind(eventType, eventHandler);
+  },
+
+  /**
    * Syntactic sugar for {jQuery#trigger}.
    */
   trigger: function() {
