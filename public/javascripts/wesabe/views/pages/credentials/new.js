@@ -158,9 +158,9 @@ wesabe.$class('views.pages.credentials.NewPage', function($class, $super, $packa
         type: 'POST',
         url: url+'/jobs',
         success: function(data, textStatus, xhr) {
-          me._showNotification('success',
-            "Successfully connected to "+me._fiData.name+"!",
-            "We're retrieving your statements.");
+          me._showNotification('info',
+            "Starting connection to "+me._fiData.name+"!",
+            "We'll login and download your statements now. If we need any more information, we'll ask you momentarily.");
           me._jobURL = xhr.getResponseHeader('Location');
           me._watchJob(me._jobURL);
         },
