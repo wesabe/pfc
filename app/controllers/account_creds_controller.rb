@@ -21,7 +21,7 @@ class AccountCredsController < ApplicationController
 
   def create
     @account_cred = AccountCred.create(
-      :creds          => params[:creds],
+      :creds          => creds,
       :user           => current_user,
       :financial_inst => financial_inst
     )
@@ -30,6 +30,20 @@ class AccountCredsController < ApplicationController
       render :nothing => true, :status => :created, :location => credential_url(@account_cred)
     else
       render :text => @account_cred.error_sentence, :status => :bad_request
+    end
+  end
+
+  def update
+    if account_cred.nil?
+      render :nothing => true, :status => :not_found
+    else
+      begin
+        account_cred.creds = account_cred.creds.merge(creds)
+        account_cred.save!
+        render :json => present(account_cred)
+      rescue
+        render :nothing => true, :status => :bad_request
+      end
     end
   end
 
@@ -55,6 +69,12 @@ protected
 
   def account_cred
     @account_cred ||= AccountCred.for_user(current_user).find(params[:id])
+  end
+
+  def creds
+    return nil unless params.include?(:creds)
+
+    ActiveSupport::JSON.decode(params[:creds])
   end
 
   def financial_inst

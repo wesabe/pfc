@@ -152,7 +152,8 @@ module SSU
           ssu_job.update_attributes(
             :result  => status['result'],
             :status  => status['status'],
-            :data    => status['data']
+            :data    => status['data'],
+            :version => status['version']
           )
 
           ssu_job.account_cred.update_attributes(

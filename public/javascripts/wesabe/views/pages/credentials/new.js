@@ -8,6 +8,9 @@ wesabe.$class('views.pages.credentials.NewPage', function($class, $super, $packa
     _notification: null,
 
     _fiData: null,
+    _credentialURL: null,
+    _jobURL: null,
+    _lastVersion: -1,
 
     init: function(module) {
       var me = this;
@@ -30,10 +33,12 @@ wesabe.$class('views.pages.credentials.NewPage', function($class, $super, $packa
     setFinancialInstitution: function(fi) {
       this._fiData = fi;
       this._module.setTitle(fi.name)
+      this._form.setEnabled(true);
       this._setFields(fi.login_fields, fi);
     },
 
     askSecurityQuestions: function(questions) {
+      this._form.setEnabled(true);
       this._setFields(questions, null);
     },
 
@@ -125,14 +130,19 @@ wesabe.$class('views.pages.credentials.NewPage', function($class, $super, $packa
       me._form.setEnabled(false);
 
       $.ajax({
-        type: 'POST',
-        url: '/credentials',
+        type: me._credentialURL ? 'PUT' : 'POST',
+        url: me._credentialURL || '/credentials',
         data: {creds: $.toJSON(params), fi: me._fiData.wesabe_id},
         success: function(data, textStatus, xhr) {
-          me._credentialCreated(xhr.getResponseHeader('Location'));
+          if (me._credentialURL) {
+            me._watchJob(me._jobURL);
+          } else {
+            me._credentialURL = xhr.getResponseHeader('Location');
+            me._credentialCreated(me._credentialURL);
+          }
         },
         error: function(xhr, textStatus, error) {
-          me._form.setEnabled(false);
+          me._reset();
           me._showNotification('error',
             "Unable to connect",
             "We couldn't save the credentials you entered. "+
@@ -151,10 +161,11 @@ wesabe.$class('views.pages.credentials.NewPage', function($class, $super, $packa
           me._showNotification('success',
             "Successfully connected to "+me._fiData.name+"!",
             "We're retrieving your statements.");
-          me._jobCreated(xhr.getResponseHeader('Location'));
+          me._jobURL = xhr.getResponseHeader('Location');
+          me._watchJob(me._jobURL);
         },
         error: function(xhr, textStatus, error) {
-          me._form.setEnabled(true);
+          me._reset();
           me._showNotification('error',
             "Unable to start job",
             "We saved your credentials but we couldn't retrieve "+
@@ -163,7 +174,7 @@ wesabe.$class('views.pages.credentials.NewPage', function($class, $super, $packa
       });
     },
 
-    _jobCreated: function(url) {
+    _watchJob: function(url) {
       var me = this,
           errorsLeft = 5;
 
@@ -172,6 +183,15 @@ wesabe.$class('views.pages.credentials.NewPage', function($class, $super, $packa
           type: 'GET',
           url: url,
           success: function(data, textStatus, xhr) {
+            // ignore ones we've already seen or are stale
+            if (data.version <= me._lastVersion) {
+              me._jobTimeout = setTimeout(pollStatus, 2000);
+              console.log('skipping version', data.version, ' (we already have', me._lastVersion, ')');
+              return;
+            }
+
+            console.log('updating from version', me._lastVersion, 'to', data.version);
+            me._lastVersion = data.version;
             switch (data.status) {
               case 'successful':
                 me._showNotification('success',
@@ -186,20 +206,20 @@ wesabe.$class('views.pages.credentials.NewPage', function($class, $super, $packa
                     me._fiData.name+" needs more information from you",
                     "Please fill out all the fields below.");
                 } else {
-                  setTimeout(pollStatus, 2000);
+                  me._jobTimeout = setTimeout(pollStatus, 2000);
                 }
                 break;
               case 'failed':
-                me._form.setEnabled(true);
+                me._reset();
                 me._showUnableToConnectNotification();
                 break;
             }
           },
           error: function() {
             if (errorsLeft-- > 0)
-              setTimeout(pollStatus, 5000);
+              me._jobTimeout = setTimeout(pollStatus, 5000);
             else {
-              me._form.setEnabled(true);
+              me._reset();
               me._showUnableToConnectNotification();
             }
           }
@@ -207,6 +227,17 @@ wesabe.$class('views.pages.credentials.NewPage', function($class, $super, $packa
       }
 
       pollStatus();
+    },
+
+    _stopWatchingJob: function() {
+      cancelTimeout(this._jobTimeout);
+    },
+
+    _reset: function() {
+      this._form.setEnabled(true);
+      this._credentialURL = null;
+      this._jobURL = null;
+      this._lastVersion = -1;
     },
 
     _showUnableToConnectNotification: function() {
