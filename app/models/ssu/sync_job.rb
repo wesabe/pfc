@@ -133,7 +133,7 @@ module SSU
         self.statements = daemon.request('statement.list');
 
         if complete?
-          break
+          return
         elsif paused? && account_cred
           # attempt to update the creds
           self.creds = account_cred.reload.creds
@@ -141,6 +141,9 @@ module SSU
 
         sleep 1
       end
+
+      logger.warn { "SyncJob(#{jobid}) SSU Daemon quit unexpectedly!" }
+      ssu_job && ssu_job.update_attributes(:status => 500, :result => 'ssu.error.quit')
     end
 
     def status=(status)
