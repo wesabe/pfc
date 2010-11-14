@@ -58,13 +58,15 @@ wesabe.$class('wesabe.views.widgets.accounts.Account', wesabe.views.widgets.Base
       this._ssuStatusElement = this._accountStatusElements.filter('.update:not(.error)');
       this._ssuUpdateSpinner = this._ssuStatusElement.find('.updating-spinner');
       this._ssuErrorStatusElement = this._accountStatusElements.filter('.update.error');
-      this._ssuErrorHoverBox = new $package.AutomaticUploaderErrorDialog(this._ssuErrorStatusElement.find('.hover-box'), this);
+      this._ssuErrorHoverBox = new $package.AutomaticUploaderErrorDialog(this);
+      this._ssuErrorHoverBox.setVisible(false);
+      this._ssuErrorHoverBox.appendTo(this._ssuErrorStatusElement);
       this._manualUploadStatusElement = this._accountStatusElements.filter('.upload');
       this._manualUploadHoverBox = new $package.ManualUploadDialog(this._manualUploadStatusElement.find('.hover-box'), this);
       this._uploadStatusElement = this._accountStatusElements.filter('.upload');
       this._restoreAccountStatus();
 
-      this.registerChildWidgets(this._total, this._ssuErrorStatusElement, this._manualUploadHoverBox);
+      this.registerChildWidgets(this._total, this._ssuErrorHoverBox, this._manualUploadHoverBox);
     },
 
     /**

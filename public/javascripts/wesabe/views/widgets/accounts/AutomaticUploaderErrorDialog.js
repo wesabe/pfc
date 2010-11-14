@@ -9,10 +9,20 @@ wesabe.$class('wesabe.views.widgets.accounts.AutomaticUploaderErrorDialog', wesa
     _account: null,
     _resetCredLink: null,
 
-    init: function(element, account) {
-      $super.init.call(this, element);
+    init: function(account) {
+      $super.init.call(this);
       this._account = account;
-      this._resetCredLink = element.find('a.reset-creds');
+
+      this.addClassName("hover-box");
+      this.setContentElement(this.getTopElement());
+
+      var contents = $('<div class="contents">'+
+                         '<div class="header">Automatic Uploader Error</div>'+
+                         '<p>Your bank has reported an error. To reset your bank credentials, click <a class="reset-creds">here</a>.</p>'+
+                       '</div>');
+
+      this.appendElement(contents);
+      this._resetCredLink = contents.find('a.reset-creds');
     },
 
     onBlur: function() {
