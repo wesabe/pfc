@@ -8,7 +8,7 @@ wesabe.$class('wesabe.views.widgets.transactions.Transaction', wesabe.views.widg
   var number = wesabe.lang.number;
 
   $.extend($class.prototype, {
-    _id: null,
+    _uri: null,
 
     _noteContainerElement: null,
     _noteLabel: null,
@@ -82,21 +82,21 @@ wesabe.$class('wesabe.views.widgets.transactions.Transaction', wesabe.views.widg
     },
 
     /**
-     * Gets the id of this transaction if it has one.
+     * Gets the uri of this transaction if it has one.
      *
      * @return {number}
      */
-    getId: function() {
-      return this._id;
+    getURI: function() {
+      return this._uri;
     },
 
     /**
-     * Sets the id of this transaction if it has one.
+     * Sets the uri of this transaction if it has one.
      *
-     * @param {?number} id
+     * @param {?String} uri
      */
-    setId: function(id) {
-      this._id = id;
+    setURI: function(uri) {
+      this._uri = uri;
     },
 
     /**

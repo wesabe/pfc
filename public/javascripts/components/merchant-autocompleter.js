@@ -29,7 +29,7 @@ MerchantAutocompleter.prototype = {
     useIFrame: true,
     footer: null,
     showChecks: false,
-    txactionId: null
+    txactionURI: null
   },
 
   init: function(input, options, callback) {
@@ -72,7 +72,7 @@ MerchantAutocompleter.prototype = {
     };
 
     if (options.showChecks) {
-      this.loadChecks(options.txactionId);
+      this.loadChecks(options.txactionURI);
     }
   },
 
@@ -108,9 +108,10 @@ MerchantAutocompleter.prototype = {
     return results;
   },
 
-  loadChecks: function(txactionId) {
+  loadChecks: function(txactionURI) {
     var self = this;
-    $.ajax({url: '/txactions/merchant_list_checks/' + txactionId,
+    $.ajax({
+      url: txactionURI+'/merchant_list_checks',
       dataType: 'json',
       success: function(data) {
         MerchantAutocompleter.checks = data;

@@ -43,6 +43,7 @@ Pfc::Application.routes.draw do
       put :undelete
       get :on_select_merchant
       get :transfer_selector
+      get :merchant_list_checks
     end
   end
 

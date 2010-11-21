@@ -364,7 +364,7 @@ jQuery(function($) {
 
         var widget = self.data('widget');
 
-        widget.setId(data['id']);
+        widget.setURI(data['id']);
         widget.setNote(data['note']);
         widget.setDate(data['date']);
 
@@ -476,7 +476,6 @@ jQuery(function($) {
 
     investmentTransaction: {
       isInvestment: true,
-      id:               $.getsetdata('id'),
       uri:              $.getsetdata('uri'),
       account:          $.getsetdata('account'),
       // investment transaction attributes
@@ -699,7 +698,7 @@ jQuery(function($) {
           // show Happy Magic Check Autocomplete if this is a check and it is unedited
           if (checkNumber && checkNumber.length > 0 && !merchant.id) {
             options.showChecks = true;
-            options.txactionId = self.fn("id");
+            options.txactionURI = self.fn("uri");
           }
 
           options.footer = self.fn('uneditedName');
@@ -1030,7 +1029,6 @@ jQuery(function($) {
       var checked = $("input[type=radio]:checked", this).val();
       return (checked == "spent") ? "-" : "+";
     },
-    id: function() { return null; },
     account: $.getsetdata('account'),
     uri: function() {
       var account = $(this).fn('account');
