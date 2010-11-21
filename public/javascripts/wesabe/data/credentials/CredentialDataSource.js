@@ -31,6 +31,55 @@ wesabe.$class('wesabe.data.credentials.CredentialDataSource', wesabe.data.BaseDa
     },
 
     /**
+     * Destroys the credential at the given +uri+. If +uri+ is a credential
+     * structure, the uri will be determined for you.
+     *
+     * @param {!String|Object} uri
+     */
+    destroy: function(uri) {
+      if (uri && uri.uri)
+        uri = uri.uri;
+
+      if (!uri)
+        return;
+
+      var me = this;
+      $.ajax({
+        type: 'DELETE',
+        url: uri,
+        success: function(){ me.onDestroy(uri); },
+        error: function(xhr, textStatus, errorThrown){ me.onDestroyFailed(uri, xhr, textStatus, errorThrown); }
+      });
+    },
+
+    onDestroy: function(uri) {
+      if (this.isCachingEnabled()) {
+        // remove from the cache
+        for (var k in this._cache) {
+          var cache = this._cache[k], result = [];
+
+          for (var i = 0, length = cache.length; i < length; i++)
+            if (cache[i].uri != uri)
+              result.push(cache[i]);
+
+          this._cache[k] = result;
+        }
+      }
+
+      this.trigger('destroy', [uri]);
+
+      if (this.isCachingEnabled()) {
+        var data = this.getCache({});
+        if (data)
+          this.trigger('change', [data]);
+      }
+    },
+
+    onDestroyFailed: function(uri, xhr, textStatus, errorThrown) {
+      this.trigger('destroy-failed', [uri, xhr, textStatus, errorThrown]);
+    },
+
+    /**
      * Returns true if there are any credentials still pending, false otherwise.
      */
     isUpdating: function() {

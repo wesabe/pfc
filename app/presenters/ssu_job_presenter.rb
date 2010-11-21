@@ -21,6 +21,7 @@ class SsuJobPresenter < SimplePresenter
 
   def as_json(options=nil)
     {:id => jobid,
+     :uri => credential_job_path(account_cred, presentable),
      :status => status,
      :result => result,
      :version => version,
