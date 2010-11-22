@@ -2,7 +2,7 @@ require 'timeout'
 
 module SSU
   class SyncJob
-    @queue = :normal
+    @queue = :low
 
     attr_writer   :jobid
 
