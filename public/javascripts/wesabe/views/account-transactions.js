@@ -747,7 +747,7 @@ jQuery(function($) {
         attachmentList.empty().append(self.fn('attachmentListItems', true));
 
         $('.transfer-details input[type=checkbox]', edit_box)
-          .attr('id', 'is_transfer_' + widget.getId())
+          .attr('id', 'is_transfer_' + widget.getURI())
           .attr('checked', widget.isTransfer())
           .click(function(){
             if ($(this).attr('checked')) {
@@ -927,7 +927,7 @@ jQuery(function($) {
         var self = $(this),
             widget = self.data('widget');
 
-        var editing = !!widget.getId();
+        var editing = !!widget.getURI();
         var form = $('form:first', self);
         if (editing) {
           form.append('<input type="hidden" name="_method" value="PUT">');
