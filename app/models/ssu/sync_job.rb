@@ -1,3 +1,5 @@
+require 'timeout'
+
 module SSU
   class SyncJob
     @queue = :normal
@@ -54,7 +56,14 @@ module SSU
       daemon.start
       begin
         start_sync
-        wait_for_sync_to_finish
+
+        Timeout.timeout(10*60) do
+          wait_for_sync_to_finish
+        end
+
+        daemon.stop
+      rescue Timeout::Error
+        logger.error "SyncJob(#{jobid}) Sync timed out, stopping the daemon"
         daemon.stop
       rescue Object
         unless Rails.env.development?
