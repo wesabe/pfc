@@ -65,6 +65,11 @@ module SSU
       rescue Timeout::Error
         logger.error "SyncJob(#{jobid}) Sync timed out, stopping the daemon"
         daemon.stop
+
+        ssu_job && ssu_job.update_attributes(
+          :status => SsuJob::Status::GENERAL_ERROR,
+          :result => "ssu.timeout"
+        )
       rescue Object
         unless Rails.env.development?
           daemon.stop rescue logger.warn "SyncJob(#{jobid}) Unable to stop daemon!"
