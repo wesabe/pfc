@@ -92,6 +92,65 @@ class Account < ActiveRecord::Base
     find_by_id_for_user(uri[%r{^/accounts/([^/]+)$}, 1]) if uri
   end
 
+  # merge two accounts into a third account, setting the status of the old ones to deleted
+  # we create a third account so we can easily undo if necessary
+  # if transactions overlap, we keep the merchant_id of the destination account transaction,
+  # and merge the one-time tags of both transactions
+  def self.merge(from_account, to_account)
+    new_account = nil
+    Account.transaction do
+      # create duplicate of to account as new_account
+      new_account = Account.create!(to_account.attributes)
+      to_account.txactions.each do |t|
+        # update wesabe_txid with the account #
+        t.wesabe_txid.gsub!(/^\d+/,new_account.id.to_s) if t.wesabe_txid
+        t.account = new_account
+        new_txaction = Txaction.new(t.attributes)
+        new_txaction.bulk_update_save!
+        if t.taggings.any?
+          TxactionTagging.update_all(["txaction_id = ?", new_txaction.id], ["txaction_id = ?", t.id])
+        end
+      end
+      # merge account balances and uploads
+      AccountBalance.update_all(["account_id = ?", new_account.id], ["account_id in (?)", [to_account.id, from_account.id]])
+      AccountUpload.update_all(["account_id = ?", new_account.id], ["account_id in (?)", [to_account.id, from_account.id]])
+
+      # create a lookup hash of wesabe_txids in the new account (replace the account number in the beginning with
+      # that of the from account, since we're going to be looking up those txactions)
+      unless to_account.manual_account?
+        new_ids_array = new_account.txactions.map do |t|
+          [t.wesabe_txid.gsub(/^\d+/,from_account.id.to_s), t]
+        end.flatten
+        new_wesabe_txids = Hash[*new_ids_array]
+      end
+
+      from_account.txactions.each do |t|
+        if new_wesabe_txids && new_wesabe_txids[t.wesabe_txid]
+          # txaction exists in destination account, so merge tags
+          new_txaction = new_wesabe_txids[t.wesabe_txid]
+          new_txaction.add_tags(t.tags)
+        else
+          # fix the wesabe_txid
+          t.wesabe_txid.gsub!(/^\d+/, new_account.id.to_s) if t.wesabe_txid
+          t.account = new_account
+          new_txaction = Txaction.new(t.attributes)
+          new_txaction.bulk_update_save!
+          if t.taggings.any?
+            TxactionTagging.update_all(["txaction_id = ?", new_txaction.id], ["txaction_id = ?", t.id])
+          end
+        end
+      end
+
+      # set status of from_ and to_accounts to deleted
+      from_account.safe_delete
+      to_account.safe_delete
+    end
+    # run final calculations on the new account
+    new_account.reload # make sure the various associations are reloaded
+    new_account.calculate!
+    return new_account
+  end
+
   # Return last 4 word characters of account number.
   # If a regex is provided, use that to find the "last 4" digits. Up to 6 characters
   # (the size of the accounts.account_number column) can be stored if a regex is provided
