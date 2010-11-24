@@ -14,10 +14,16 @@ wesabe.$class('wesabe.data.Record', function($class, $super, $package) {
   });
 
   $.extend($class.prototype, {
+    _dataStore: null,
     _readyState: null,
 
-    init: function() {
+    init: function(dataStore) {
+      this._dataStore = dataStore;
       this._readyState = $package.Record.INITIALIZED;
+    },
+
+    refresh: function() {
+      this._dataStore.refreshRecord(this);
     },
 
     /// State Management
@@ -57,14 +63,5 @@ wesabe.$class('wesabe.data.Record', function($class, $super, $package) {
       this._readyState = partiallyLoaded ? ((this._readyState | $package.Record.PARTIAL) & ~$package.Record.LOADED) : (this._readyState & ~$package.Record.PARTIAL);
       this.trigger('change');
     }
-
-    // INSTANCE METHODS
-    // getData: function() {
-    //   return this._data;
-    // },
-    //
-    // setData: function(data) {
-    //   this._data = data;
-    // }
   });
 });

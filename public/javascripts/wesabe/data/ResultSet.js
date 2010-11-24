@@ -27,6 +27,10 @@ wesabe.$class('wesabe.data.ResultSet', function($class, $super, $package) {
       this._records = [];
     },
 
+    refresh: function() {
+      this._dataStore.refreshResultSet(this);
+    },
+
     getDataStore: function() {
       return this._dataStore;
     },
@@ -36,6 +40,10 @@ wesabe.$class('wesabe.data.ResultSet', function($class, $super, $package) {
      */
     setDataStore: function(dataStore) {
       this._dataStore = dataStore;
+    },
+
+    getQuery: function() {
+      return this._query;
     },
 
     getDataSource: function() {

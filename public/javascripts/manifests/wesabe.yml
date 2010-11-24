@@ -36,9 +36,9 @@
 - wesabe/data/Query.js
 - wesabe/data/Record.js
 - wesabe/data/Account.js
-- wesabe/data/AccountDataSource2.js
 - wesabe/data/Transaction.js
-- wesabe/data/TransactionDataSource2.js
+- wesabe/data/brcm/AccountDataSource.js
+- wesabe/data/brcm/TransactionDataSource.js
 - wesabe/views/shared.js
 - wesabe/views/widgets/BaseWidget.js
 - wesabe/views/widgets/Container.js

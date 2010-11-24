@@ -1,7 +1,7 @@
 /**
- * Retrieves Transactions for a DataStore.
+ * Retrieves Accounts from BRCM for a DataStore.
  */
-wesabe.$class('wesabe.data.TransactionDataSource2', function($class, $super, $package) {
+wesabe.$class('wesabe.data.brcm.AccountDataSource', null, function($class, $super, $package) {
   // import jQuery as $
   var $ = jQuery;
   // import wesabe.lang.date
@@ -25,7 +25,7 @@ wesabe.$class('wesabe.data.TransactionDataSource2', function($class, $super, $pa
     fetchRecords: function(dataStore, query) {
       var me = this;
 
-      if (query.getType() != wesabe.data.Transaction)
+      if (query.getType() != wesabe.data.Account)
         return false;
 
       $.ajax({
@@ -33,13 +33,13 @@ wesabe.$class('wesabe.data.TransactionDataSource2', function($class, $super, $pa
         url: this.buildURL(query),
         dataType: 'json',
         success: function(response) {
-          var data = response.transactions,
+          var data = response.accounts,
+              groups   = response['account-groups'],
               idFilter = null;
 
           if (!data)
             return [];
 
-          // really, really naive implementation. DO NOT USE
           if (query.wantsSpecificRecords()) {
             idFilter = {};
             var ids = query.getIds();
@@ -49,12 +49,13 @@ wesabe.$class('wesabe.data.TransactionDataSource2', function($class, $super, $pa
 
           var records = [];
           for (var i = 0, length = data.length; i < length; i++) {
-            var datum = data[i], id = datum.id, record;
+            var datum = data[i], id = datum.uri, record;
+
             if (!idFilter || idFilter[id]) {
-              record = dataStore.getOrCreateCachedRecord(query.getType(), id);
-              me.updateRecordWithData(record, data);
+              record = dataStore.getOrCreateRecord(query.getType(), id);
+              me.updateRecordWithData(record, datum);
               record.onLoad();
-              records.push(record);
+              records.push(record)
             }
           }
 
@@ -68,25 +69,24 @@ wesabe.$class('wesabe.data.TransactionDataSource2', function($class, $super, $pa
       return true;
     },
 
+    /**
+     * @private
+     */
     updateRecordWithData: function(record, data) {
-      record.setId(data.id);
       record.setURI(data.uri);
-      record.setDate(date.parse(data.date));
-      record.setOriginalDate(date.parse(data['original-date']));
-      record.setAmount(data.amount);
-      record.setMerchant(data.merchant);
-      record.setCheckNumber(data['check-number']);
-      record.setUneditedName(data['unedited-name']);
-      record.setNote(data.note);
-
-      // make these use models
-      record.setAccount(data.account);
-      record.setTags(data.tags);
-      record.setTransfer(data.transfer);
+      record.setName(data.name);
+      record.setLastBalanceAt(date.parse(data['last-balance-at']));
+      record.setCurrency(data.currency);
+      record.setArchived(data.status == 'archived');
+      record.setType(data.type);
+      record.setBalance(data.balance);
     },
 
+    /**
+     * @private
+     */
     buildURL: function(query) {
-      return '/data/transactions/'+this._defaultCurrency;
+      return '/data/accounts/all/'+this._defaultCurrency;
     }
   });
 });

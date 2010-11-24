@@ -1,7 +1,7 @@
 /**
- * Retrieves Accounts for a DataStore.
+ * Retrieves Transactions from BRCM for a DataStore.
  */
-wesabe.$class('wesabe.data.AccountDataSource2', null, function($class, $super, $package) {
+wesabe.$class('wesabe.data.brcm.TransactionDataSource', function($class, $super, $package) {
   // import jQuery as $
   var $ = jQuery;
   // import wesabe.lang.date
@@ -25,7 +25,7 @@ wesabe.$class('wesabe.data.AccountDataSource2', null, function($class, $super, $
     fetchRecords: function(dataStore, query) {
       var me = this;
 
-      if (query.getType() != wesabe.data.Account)
+      if (query.getType() != wesabe.data.Transaction)
         return false;
 
       $.ajax({
@@ -33,13 +33,13 @@ wesabe.$class('wesabe.data.AccountDataSource2', null, function($class, $super, $
         url: this.buildURL(query),
         dataType: 'json',
         success: function(response) {
-          var data = response.accounts,
-              groups   = response['account-groups'],
+          var data = response.transactions,
               idFilter = null;
 
           if (!data)
             return [];
 
+          // really, really naive implementation. DO NOT USE
           if (query.wantsSpecificRecords()) {
             idFilter = {};
             var ids = query.getIds();
@@ -49,13 +49,12 @@ wesabe.$class('wesabe.data.AccountDataSource2', null, function($class, $super, $
 
           var records = [];
           for (var i = 0, length = data.length; i < length; i++) {
-            var datum = data[i], id = datum.uri, record;
-
+            var datum = data[i], id = datum.id, record;
             if (!idFilter || idFilter[id]) {
               record = dataStore.getOrCreateRecord(query.getType(), id);
-              me.updateRecordWithData(record, datum);
+              me.updateRecordWithData(record, datum, query, dataStore);
               record.onLoad();
-              records.push(record)
+              records.push(record);
             }
           }
 
@@ -69,21 +68,36 @@ wesabe.$class('wesabe.data.AccountDataSource2', null, function($class, $super, $
       return true;
     },
 
-    updateRecordWithData: function(record, data) {
+    /**
+     * @private
+     */
+    updateRecordWithData: function(record, data, query, dataStore) {
+      record.setId(data.id);
       record.setURI(data.uri);
-      record.setName(data.name);
-      record.setLastBalanceAt(date.parse(data['last-balance-at']));
-      record.setCurrency(data.currency);
-      record.setArchived(data.status == 'archived');
-      record.setType(data.type);
-      record.setBalance(data.balance);
+      record.setDate(date.parse(data.date));
+      record.setOriginalDate(date.parse(data['original-date']));
+      record.setAmount(data.amount);
+      record.setMerchant(data.merchant);
+      record.setCheckNumber(data['check-number']);
+      record.setUneditedName(data['unedited-name']);
+      record.setNote(data.note);
+
+      var account = dataStore.getOrCreateRecord(wesabe.data.Account, data.account.uri)
+      record.setAccount(account);
+
+      if (query.shouldFetchAssociation('account') && !account.isLoaded())
+        account.refresh();
+
+      // make these use models
+      record.setTags(data.tags);
+      record.setTransfer(data.transfer);
     },
 
     /**
      * @private
      */
     buildURL: function(query) {
-      return '/data/accounts/all/'+this._defaultCurrency;
+      return '/data/transactions/'+this._defaultCurrency;
     }
   });
 });

@@ -25,6 +25,15 @@ wesabe.$class('wesabe.data.DataStore', function($class, $super, $package) {
 
     /**
      * Finds records of type +type+ with the given +options+.
+     *
+     * @param {!subclass of wesabe.data.Record} type
+     * @param {Object} options
+     * @return wesabe.data.ResultSet
+     *
+     * Or, just pass a +query+:
+     *
+     * @param {!wesabe.data.Query} query
+     * @return wesabe.data.ResultSet
      */
     find: function(type, query) {
       if (type && type.isInstanceOf && type.isInstanceOf($package.Query))
@@ -51,6 +60,33 @@ wesabe.$class('wesabe.data.DataStore', function($class, $super, $package) {
       if (shouldRunQuery)
           this.executeQuery(query, resultSet);
 
+      return resultSet;
+    },
+
+    /**
+     * Fetches a specific record.
+     *
+     * @param {!wesabe.data.Record} record
+     * @return wesabe.data.ResultSet
+     */
+    refreshRecord: function(record) {
+      var query = new $package.Query(record.getClass(), {id: record.getId()}),
+          resultSet = new $package.ResultSet();
+
+      resultSet.setRecords([record]);
+      this.executeQuery(query, resultSet);
+
+      return resultSet;
+    },
+
+    /**
+     * Re-runs the query that generated +resultSet+.
+     *
+     * @param {!wesabe.data.ResultSet} resultSet
+     * @return wesabe.data.ResultSet
+     */
+    refreshResultSet: function(resultSet) {
+      this.executeQuery(resultSet.getQuery(), resultSet);
       return resultSet;
     },
 
@@ -84,7 +120,7 @@ wesabe.$class('wesabe.data.DataStore', function($class, $super, $package) {
 
         if (!record) {
           foundAll = false;
-          record = new type();
+          record = this.getOrCreateRecord(type, ids[i]);
           record.setId(ids[i]);
           record.setDirty(false);
           record.onBeginLoading();
@@ -125,7 +161,7 @@ wesabe.$class('wesabe.data.DataStore', function($class, $super, $package) {
       var record = this.getCachedRecord(type, id);
 
       if (!record) {
-        record = new type();
+        record = new type(this);
 
         if (id) {
           record.setId(id);

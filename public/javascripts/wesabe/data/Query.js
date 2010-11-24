@@ -32,6 +32,21 @@ wesabe.$class('wesabe.data.Query', function($class, $super, $package) {
         return [ids];
 
       return ids;
+    },
+
+    shouldFetchAssociation: function(associationName) {
+      var includedAssociations = this._options.include;
+
+      if (!includedAssociations)
+        return false;
+
+      if (includedAssociations == '*')
+        return true;
+
+      if (!$.isArray(includedAssociations))
+        return includedAssociations == associationName;
+
+      return wesabe.lang.array(includedAssociations, associationName);
     }
   });
 });
