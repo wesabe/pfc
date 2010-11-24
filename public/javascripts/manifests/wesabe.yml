@@ -31,6 +31,14 @@
 - yui/autocomplete-min.js
 - yui/autocomplete-wesabe-extensions.js
 - yui/aliases.js
+- wesabe/data/DataStore.js
+- wesabe/data/ResultSet.js
+- wesabe/data/Query.js
+- wesabe/data/Record.js
+- wesabe/data/Account.js
+- wesabe/data/AccountDataSource2.js
+- wesabe/data/Transaction.js
+- wesabe/data/TransactionDataSource2.js
 - wesabe/views/shared.js
 - wesabe/views/widgets/BaseWidget.js
 - wesabe/views/widgets/Container.js

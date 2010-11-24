@@ -181,6 +181,7 @@ var wesabe = {
 
     // create the constructor and inject it into the tree
     var $class = wesabe.provide(name, function() {
+      this.UID = wesabe.uniqueId();
       if (this.init)
         this.init.apply(this, arguments);
     });
@@ -197,6 +198,7 @@ var wesabe = {
     if (callback)
       callback($class, $super, $package);
 
+    $class.UID = wesabe.uniqueId();
     return $class;
   }
 };
