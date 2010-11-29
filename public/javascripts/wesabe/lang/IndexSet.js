@@ -1,7 +1,7 @@
 /**
  * Represents a set of indexes.
  */
-wesabe.$class('wesabe.lang.IndexSet', null, function($class, $super, $package) {
+wesabe.$class('wesabe.lang.IndexSet', function($class, $super, $package) {
   // import jQuery as $
   var $ = jQuery;
 
