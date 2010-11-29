@@ -67,18 +67,21 @@ wesabe.$class('wesabe.lang.IndexSet', function($class, $super, $package) {
       var closestRangeIndex = this.closestRangeIndexFromBelow(index),
           range = this._ranges[closestRangeIndex];
 
-      if (range && (range.location === index)) {
+      if (!range)
+        return;
+
+      if (range.location === index) {
         // marks the beginning of the range
         range.location++;
         range.length--;
         if (range.length === 0)
           this.deleteRange(closestRangeIndex);
-      } else if (range && (range.location+range.length === index + 1)) {
+      } else if (range.location+range.length === index + 1) {
         // marks the end of the range
         range.length--;
         if (range.length === 0)
           this.deleteRange(closestRangeIndex);
-      } else if (range && (range.location+range.length > index)) {
+      } else if (range.location+range.length > index) {
         // appears in the middle of the range, so we need to split it
         var tail = {location: index+1, length: range.location+range.length - index-1};
         range.length = index - range.location;
