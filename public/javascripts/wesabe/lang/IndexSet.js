@@ -19,13 +19,12 @@ wesabe.$class('wesabe.lang.IndexSet', null, function($class, $super, $package) {
      * @return Boolean
      */
     contains: function(index) {
-      for (var i = 0, length = this._ranges.length; i < length; i++) {
-        var range = this._ranges[i];
-        if (range.location <= index && (range.location+range.length > index))
-          return true;
-      }
+      var range = this._ranges[this.closestRangeIndexFromBelow(index)];
 
-      return false;
+      if (!range || (range.location+range.length) <= index)
+        return false;
+
+      return true;
     },
 
     /**
