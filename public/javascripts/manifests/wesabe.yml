@@ -19,6 +19,7 @@
 - wesabe/lang/string.js
 - wesabe/lang/params.js
 - wesabe/lang/math.js
+- wesabe/lang/IndexSet.js
 - wesabe/lang/Subscribable.js
 - wesabe/util/Logger.js
 - wesabe/util/Selection.js

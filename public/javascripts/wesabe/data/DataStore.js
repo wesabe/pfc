@@ -129,8 +129,8 @@ wesabe.$class('wesabe.data.DataStore', function($class, $super, $package) {
         records.push(record);
       }
 
-      if (foundAll) resultSet.loadRecords(records);
-      else resultSet.setRecords(records);
+      resultSet.loadRecordsWithOffset(records, 0);
+      resultSet.setCount(ids.length);
 
       return foundAll;
     },
@@ -141,12 +141,13 @@ wesabe.$class('wesabe.data.DataStore', function($class, $super, $package) {
      *
      * @private
      */
-    executeQuery: function(query, resultSet) {
+    executeQuery: function(query, resultSet, index) {
       this.registerResultSetForQuery(query, resultSet);
+      index = index || 0;
 
       for (var i = 0, length = this._dataSources.length; i < length; i++) {
         var dataSource = this._dataSources[i];
-        if (dataSource.fetchRecords(this, query)) {
+        if (dataSource.fetchRecords(this, query, index)) {
           resultSet.setDataSource(dataSource);
           resultSet.onBeginLoading();
           return true;
@@ -193,7 +194,7 @@ wesabe.$class('wesabe.data.DataStore', function($class, $super, $package) {
     /**
      * Callback method for DataSources to notify us that they got new records.
      */
-    dataSourceDidRetrieveRecordsForQuery: function(dataSource, query, records) {
+    dataSourceDidRetrieveRecordsForQuery: function(dataSource, query, records, index, count) {
       var resultSet = this.resultSetForQuery(query);
 
       if (!resultSet) {
@@ -201,13 +202,14 @@ wesabe.$class('wesabe.data.DataStore', function($class, $super, $package) {
         return;
       }
 
-      resultSet.loadRecords(records);
+      resultSet.loadRecordsWithOffset(records, index);
+      resultSet.setCount(count || records.length);
     },
 
     /**
      * Callback method for DataSources to notify us that they failed to get new records.
      */
-    dataSourceDidFailToRetrieveRecordsForQuery: function(dataSource, query, error) {
+    dataSourceDidFailToRetrieveRecordsForQuery: function(dataSource, query, index, error) {
       wesabe.error("failed to execute query:", query, "; an error occurred:", error);
 
       var resultSet = this.resultSetForQuery(query);

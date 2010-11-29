@@ -9,9 +9,18 @@ wesabe.$class('wesabe.data.brcm.TransactionDataSource', function($class, $super,
 
   $.extend($class.prototype, {
     _defaultCurrency: null,
+    _batchSize: null,
 
     init: function(defaultCurrency) {
       this._defaultCurrency = defaultCurrency;
+    },
+
+    getBatchSize: function() {
+      return this._batchSize;
+    },
+
+    setBatchSize: function(batchSize) {
+      this._batchSize = batchSize;
     },
 
     getDefaultCurrency: function() {
@@ -22,15 +31,19 @@ wesabe.$class('wesabe.data.brcm.TransactionDataSource', function($class, $super,
       this._defaultCurrency = defaultCurrency;
     },
 
-    fetchRecords: function(dataStore, query) {
+    fetchRecords: function(dataStore, query, index) {
       var me = this;
 
       if (query.getType() != wesabe.data.Transaction)
         return false;
 
+      if (index && this._batchSize)
+        index -= index % this._batchSize;
+
       $.ajax({
         type: 'GET',
-        url: this.buildURL(query),
+        url: this.buildURL(query, index),
+        data: this.buildParams(query, index),
         dataType: 'json',
         success: function(response) {
           var data = response.transactions,
@@ -58,10 +71,10 @@ wesabe.$class('wesabe.data.brcm.TransactionDataSource', function($class, $super,
             }
           }
 
-          dataStore.dataSourceDidRetrieveRecordsForQuery(me, query, records);
+          dataStore.dataSourceDidRetrieveRecordsForQuery(me, query, records, index, response.count.total);
         },
         error: function(xhr, textStatus, errorThrown) {
-          dataStore.dataSourceDidFailToRetrieveRecordsForQuery(me, query, textStatus);
+          dataStore.dataSourceDidFailToRetrieveRecordsForQuery(me, query, index, textStatus);
         }
       });
 
@@ -96,8 +109,18 @@ wesabe.$class('wesabe.data.brcm.TransactionDataSource', function($class, $super,
     /**
      * @private
      */
-    buildURL: function(query) {
+    buildURL: function(query, index) {
       return '/data/transactions/'+this._defaultCurrency;
+    },
+
+    /**
+     * @private
+     */
+    buildParams: function(query, index) {
+      if (this._batchSize && !query.wantsSpecificRecords())
+        return {offset: index || 0, limit: this._batchSize};
+
+      return {};
     }
   });
 });

@@ -15,6 +15,7 @@ wesabe.$class('wesabe.data.ResultSet', function($class, $super, $package) {
   $.extend($class.prototype, {
     _count: 0,
     _records: null,
+    _loadedIndexes: null,
     _readyState: null,
     _error: null,
     _dataStore: null,
@@ -25,6 +26,7 @@ wesabe.$class('wesabe.data.ResultSet', function($class, $super, $package) {
       this._query = query;
       this._readyState = $class.INITIALIZED;
       this._records = [];
+      this._loadedIndexes = new wesabe.lang.IndexSet();
     },
 
     refresh: function() {
@@ -60,29 +62,24 @@ wesabe.$class('wesabe.data.ResultSet', function($class, $super, $package) {
     /// Record Accessors
 
     get: function(index) {
-      var record = this._records[index];
-
-      if (!record)
+      if (index >= this._count)
         throw "index out of bounds ("+index+" not in 0..."+this._count+")";
 
-      return record;
+      if (!this._loadedIndexes.contains(index))
+        this._dataStore.executeQuery(this._query, this, index);
+
+      return this._records[index];
     },
 
     /**
      * @protected
      */
-    setRecords: function(records) {
-      this._records = records || [];
-      this._count = this._records.length;
+    loadRecordsWithOffset: function(records, offset) {
+      for (var i = 0, length = records.length; i < length; i++)
+        this._records[i+offset] = records[i];
+
+      this._loadedIndexes.addRange(offset, records.length);
       this.trigger('change');
-    },
-
-    /**
-     * @protected
-     */
-    loadRecords: function(record) {
-      this._readyState = $class.LOADED;
-      this.setRecords(record);
     },
 
     getCount: function() {
