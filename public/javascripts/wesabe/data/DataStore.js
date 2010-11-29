@@ -48,7 +48,7 @@ wesabe.$class('wesabe.data.DataStore', function($class, $super, $package) {
         return resultSet;
 
       var shouldRunQuery = true;
-      resultSet = new $package.ResultSet(),
+      resultSet = new $package.ResultSet(this, query),
 
       if (query.wantsSpecificRecords()) {
         var ids = query.getIds();
@@ -58,7 +58,7 @@ wesabe.$class('wesabe.data.DataStore', function($class, $super, $package) {
       }
 
       if (shouldRunQuery)
-          this.executeQuery(query, resultSet);
+        this.executeQuery(query, resultSet);
 
       return resultSet;
     },
