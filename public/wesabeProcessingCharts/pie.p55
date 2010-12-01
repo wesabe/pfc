@@ -595,7 +595,7 @@ void mouseMoved() {
       if (rads > begRadians && currentPie[i] >= rads) {
         var percentage = Math.round((pieCharts[current].amounts[i]/pieCharts[current].totalAmt)*100) + "%";
         if (percentage === "0%") percentage = "< 1%"
-        var ahref = (pieCharts[current].labels[i] === "unedited") ? "/accounts?unedited" : "/transactions/tag/" + pieCharts[current].labels[i];
+        var ahref = (pieCharts[current].labels[i] === "unedited") ? UNEDITED_TXACTIONS_URL : "/transactions/tag/" + pieCharts[current].labels[i];
         var dialogStr =
           "<div style='text-decoration: underline;cursor: pointer;font-size: 11px;color: rgb(" + pieCharts[current].colr[((i+pieCharts[current].colorShift)%7)] + ");'>" +
           pieCharts[current].labels[i] + " <span style='font-weight: normal'>" + percentage + "</span></div>" +
@@ -662,7 +662,7 @@ void mousePressed() {
           getSlice('');
         }
         else if (labels[i] === "unedited") {
-          window.location = "/accounts?unedited";
+          window.location = UNEDITED_TXACTIONS_URL;
         }
         else {
           getSlice(labels[i]);
