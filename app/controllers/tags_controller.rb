@@ -10,6 +10,17 @@ class TagsController < ApplicationController
     end
   end
 
+  def update
+    if tag.nil?
+      render :nothing => true, :status => :not_found
+    elsif replacement_tags = params[:replacement_tags]
+      Tag.replace(current_user, tag, replacement_tags)
+      render :nothing => true, :status => :ok
+    else
+      render :nothing => true, :status => :bad_request
+    end
+  end
+
   private
 
   def tag

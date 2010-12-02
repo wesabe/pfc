@@ -233,11 +233,11 @@ class Tag < ActiveRecord::Base
 
   # replace a user tag with one or more tags. The original tag can be passed in by id or name; the replacement
   # tags is either an array of tags or a string that will be parsed out into individual tags
-  def self.replace(user, old_tag_name, replacement_tags)
-    old_tag_name = *old_tag_name
+  def self.replace(user, old_tag, replacement_tags)
+    old_tag = Array(old_tag).first
     replacement_tags = Tag.parse_to_tags(replacement_tags)
     return if replacement_tags.empty?
-    old_tag = Tag.find_by_name(old_tag_name)
+    old_tag = Tag.find_by_name(old_tag) unless old_tag.is_a?(Tag)
 
     # if there's only one replacement tag, just do a straight rename
     return rename(user, old_tag, replacement_tags[0]) if replacement_tags.size == 1
@@ -247,7 +247,7 @@ class Tag < ActiveRecord::Base
       taggings = TxactionTagging.find(:all, :from => 'txaction_taggings, txactions',
                               :conditions => ["txaction_taggings.name = ? and txaction_taggings.txaction_id = txactions.id \
                                  and txactions.account_id in (?)",
-                                 old_tag_name, user.accounts.map(&:id)])
+                                 old_tag.name, user.accounts.map(&:id)])
 
       keep_old_tag = false
       for tagging in taggings
