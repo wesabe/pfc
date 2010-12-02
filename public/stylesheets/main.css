@@ -525,9 +525,9 @@ textarea {
   height: 108px;
   width: 400px;
 }
-input[type=text], input[type=password], textarea, select {margin:0; font:0.9em; vertical-align: baseline; width:230px;}
-input[type=text], input[type=password], textarea {border:1px solid #CCC; padding:2px;}
-input[type=text].error,input[type=password].error {border:1px solid #F47878; color:#666; padding:2px;}
+input[type=email], input[type=text], input[type=password], textarea, select {margin:0; font:0.9em; vertical-align: baseline; width:230px;}
+input[type=email], input[type=text], input[type=password], textarea {border:1px solid #CCC; padding:2px;}
+input[type=email].error, input[type=text].error,input[type=password].error {border:1px solid #F47878; color:#666; padding:2px;}
 
 *[disabled] { color: #ccc; font-style: italic;}
 

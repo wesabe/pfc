@@ -22,7 +22,7 @@
   <div class="two-col-centered">
     <div class="field">
       <label for="user_email" class="field-title">Email<span>will be kept strictly private</span></label>
-      <%= text_field :user, :email, :class => "initial-focus" %>
+      <%= text_field :user, :email, :class => "initial-focus", :type => 'email' %>
       <%= error_message_on "user", "email",
           :prepend_text => "That email address ", :append_text => '.', :css_class => 'error-message' %>
     </div>
