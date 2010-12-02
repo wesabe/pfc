@@ -20,45 +20,45 @@
 <%= form_tag signup_path do %>
   <fieldset>
   <div class="two-col-centered">
-      <div class="field">
+    <div class="field">
       <label for="user_email" class="field-title">Email<span>will be kept strictly private</span></label>
       <%= text_field :user, :email, :class => "initial-focus" %>
       <%= error_message_on "user", "email",
           :prepend_text => "That email address ", :append_text => '.', :css_class => 'error-message' %>
-      </div>
-      <div class="field">
-      <label class="field-title" for="currency">Default Currency<span>sets your default currency</span></label>
-      <%= select('user','default_currency', currency_full_options_for_select, {:include_blank => true}) %>
-      </div>
-      <div class="field">
-      <label for="password" class="field-title">Password</label>
+    </div>
+    <div class="field">
+      <label for="user_password" class="field-title">Password</label>
       <%= password_field :user, :password %>
       <%= error_message_on "user", "password", :prepend_text => "The password ", :append_text => '.', :css_class => 'error-message' %>
-      </div>
+    </div>
     <div class="field">
-      <label for="password_confirm" class="field-title">Confirm Password</label>
+      <label for="user_password_confirm" class="field-title">Confirm Password</label>
       <%= password_field :user, :password_confirmation %>
-      </div>
+    </div>
   </div>
   <div class="two-col-centered">
     <div class="tab-background">
     <h6>Optional</h6>
     <div class="field">
       <label for="user_name" class="field-title">Screen Name<span>your public name</span></label>
-          <%= text_field :user, :name %>
-          <%= error_message_on "user", "name",
-              :prepend_text => "The screen name ", :append_text => '.', :css_class => 'error-message' %>
-        </div>
-    <div class="field">
-      <label for="postal_code" class="field-title">ZIP/Postal Code<span>helps matching tips</span></label>
-          <%= text_field :user, :postal_code %>
+      <%= text_field :user, :name %>
+      <%= error_message_on "user", "name",
+          :prepend_text => "The screen name ", :append_text => '.', :css_class => 'error-message' %>
     </div>
     <div class="field">
-      <label for="country" class="field-title">Country</label>
+      <label for="user_postal_code" class="field-title">ZIP/Postal Code<span>helps matching tips</span></label>
+      <%= text_field :user, :postal_code %>
+    </div>
+    <div class="field">
+      <label for="user_default_currency" class="field-title">Default Currency</label>
+      <%= select('user','default_currency', currency_full_options_for_select, {:include_blank => true}) %>
+    </div>
+    <div class="field">
+      <label for="user_country_id" class="field-title">Country</label>
       <%= select('user', 'country_id', Country.find(:all).collect {|c| [ c.name, c.id ] }, {:include_blank => true}) %>
     </div>
-  </div>
-  <a class="button green submit"><span>Sign Up</span></a><p class="login-message">Already a member? <a href="/login">Sign In</a></p>
+    </div>
+    <a class="button green submit"><span>Sign Up</span></a><p class="login-message">Already a member? <a href="/login">Sign In</a></p>
   </div>
   </fieldset>
   <input id="tz_offset" name="tz_offset" type="hidden" />
