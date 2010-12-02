@@ -221,7 +221,7 @@ wesabe.$class('wesabe.views.widgets.accounts.AccountEditDialog', wesabe.views.wi
           $.ajax({
             type: "POST",
             url: accountURI+"/balances",
-            data: {balance: newBalance && newBalance.replace(/[^\d\.,]+/g, '')},
+            data: {balance: newBalance && newBalance.replace(/[^-\d\.,]+/g, '')},
             beforeSend: busy,
             success: done,
             error: error,
