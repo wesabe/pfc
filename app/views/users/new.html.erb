@@ -46,10 +46,6 @@
           :prepend_text => "The screen name ", :append_text => '.', :css_class => 'error-message' %>
     </div>
     <div class="field">
-      <label for="user_postal_code" class="field-title">ZIP/Postal Code<span>helps matching tips</span></label>
-      <%= text_field :user, :postal_code %>
-    </div>
-    <div class="field">
       <label for="user_default_currency" class="field-title">Default Currency</label>
       <%= select('user','default_currency', currency_full_options_for_select, {:include_blank => true}) %>
     </div>
