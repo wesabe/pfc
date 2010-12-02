@@ -15,7 +15,6 @@ wesabe.$class('wesabe.views.widgets.accounts.AccountEditDialog', wesabe.views.wi
     _name: null,
     _currency: null,
     _currentBalance: null,
-    _password: null,
     _currentBalanceText: null,
     _editText: null,
     _editButtons: null,
@@ -48,7 +47,6 @@ wesabe.$class('wesabe.views.widgets.accounts.AccountEditDialog', wesabe.views.wi
       me._name = element.find('input[name=account-name]');
       me._currency = element.find('select[name=account-currency]');
       me._currentBalance = element.find('input[name=current-balance]');
-      me._password = element.find('input[name=delete-account-password]');
 
       me._currentBalanceText = element.find('div.current-balance');
       me._editText = element.find('div.top div.edit-details');
@@ -264,7 +262,7 @@ wesabe.$class('wesabe.views.widgets.accounts.AccountEditDialog', wesabe.views.wi
       var me = this;
 
       me._deleteButtons.hide();
-      me._deleteText.slideUp(function(){ me._password.val(''); });
+      me._deleteText.slideUp();
       me._editButtons.show();
       me._editText.slideDown();
       me._deleteError.slideUp();
@@ -275,7 +273,6 @@ wesabe.$class('wesabe.views.widgets.accounts.AccountEditDialog', wesabe.views.wi
 
       $.ajax({
         type: "DELETE",
-        data: {'password': me._password.val()},
         url: me._account.getURI(),
         dataType: "text",
         beforeSend: function() {
@@ -386,9 +383,6 @@ wesabe.$class('wesabe.views.widgets.accounts.AccountEditDialog', wesabe.views.wi
       // Show edit panel and buttons
       this._editButtons.show();
       this._editText.show();
-
-      // Clear the password field
-      this._password.val('');
 
       this._ssuTab.add(this._balanceTab).removeClass('on').hide();
       this._tabs.removeClass('on');

@@ -24,16 +24,11 @@ class AccountsController < ApplicationController
   # DELETE /accounts/1
   def destroy
     if account.nil?
-      return render :text => "Could not delete your account.", :status => :forbidden
-    end
-
-    # require correct password to delete an account
-    if not current_user.valid_password?(params[:password])
-      return render :text => "Incorrect password", :status => :forbidden
+      return render :text => "Could not delete your account.", :status => :not_found
     end
 
     @account.destroy_deferred
-    render :nothing => true
+    render :nothing => true, :status => :accepted
   end
 
   # GET /accounts/1/financial_institution_site
