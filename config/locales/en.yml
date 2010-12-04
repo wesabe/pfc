@@ -2,4 +2,6 @@
 # See http://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
 
 en:
-  hello: "Hello world"
+  txaction_notices:
+    too_big:
+      subject: Large transaction posted to your account

@@ -328,6 +328,10 @@ class Account < ActiveRecord::Base
     id_for_user.to_s
   end
 
+  def to_s
+    name
+  end
+
 private
 
   # generate a guid for this account. called from before_create

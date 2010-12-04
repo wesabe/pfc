@@ -7,6 +7,7 @@ class Txaction < ActiveRecord::Base
   concerned_with :transfers
   concerned_with :attachments
   concerned_with :merchants
+  concerned_with :notices
 
   belongs_to :txaction_type
 
