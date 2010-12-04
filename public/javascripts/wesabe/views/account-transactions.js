@@ -925,7 +925,8 @@ jQuery(function($) {
 
       saveEdit: function() {
         var self = $(this),
-            widget = self.data('widget');
+            widget = self.data('widget'),
+            doneSaving = false;
 
         var editing = widget && widget.getURI();
         var form = $('form:first', self);
@@ -933,33 +934,34 @@ jQuery(function($) {
           form.append('<input type="hidden" name="_method" value="PUT">');
         }
         form.ajaxSubmit({
-            url: self.fn('uri'),
-            type: editing ? "PUT" : "POST",
-            dataType: "json",
-            beforeSend: function(xhr) {
-               xhr.setRequestHeader('Accept', 'application/json');
-            },
-            beforeSubmit: function() {
-              $('.edit-dialog .error-message', self).slideUp("normal");
-              $('.edit-dialog', self).slideUp("slow", function(){
-                $('img.uploading-spinner', self).show();
-                if(root.fn('unedited')) self.next().fn('startEdit');
-              });
+          url: self.fn('uri'),
+          type: editing ? "PUT" : "POST",
+          dataType: "json",
+          beforeSend: function(xhr) {
+             xhr.setRequestHeader('Accept', 'application/json');
+          },
+          beforeSubmit: function() {
+            $('.edit-dialog .error-message', self).slideUp("normal");
+            $('.edit-dialog', self).slideUp("slow", function(){
+              if (!doneSaving) $('img.uploading-spinner', self).show();
+              if(root.fn('unedited')) self.next().fn('startEdit');
+            });
 
-              // TODO: add live-validation callbacks here so that you can't submit
-              //   the form if the data is invalid
-            },
-            error: function() {
-              $('.edit-dialog .error-message', self).slideDown('normal');
-            },
-            success: function(data) {
-              self.fn('teardownEdit')
-              root.trigger('transaction-changed', [self]);
-            },
-            complete: function() {
-              $('img.uploading-spinner', self).hide();
-            }
-          });
+            // TODO: add live-validation callbacks here so that you can't submit
+            //   the form if the data is invalid
+          },
+          error: function() {
+            $('.edit-dialog .error-message', self).slideDown('normal');
+          },
+          success: function(data) {
+            self.fn('teardownEdit')
+            root.trigger('transaction-changed', [self]);
+          },
+          complete: function() {
+            doneSaving = true;
+            $('img.uploading-spinner', self).hide();
+          }
+        });
       },
 
       showDeleted: function () {
