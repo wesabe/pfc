@@ -32,7 +32,7 @@ class Account
   end
 
   def active?
-    status == ACTIVE
+    status == Status::ACTIVE
   end
 
   def active!
@@ -40,7 +40,7 @@ class Account
   end
 
   def deleted?
-    status == DELETED
+    status == Status::DELETED
   end
 
   def deleted!
