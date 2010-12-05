@@ -56,7 +56,7 @@ class Account
   end
 
   def disabled?
-    status = Status::DISABLED
+    status == Status::DISABLED
   end
 
   def disabled!
