@@ -1,5 +1,4 @@
 Account:  <%= @account %>
 Merchant: <%= @txaction.merchant_name || @txaction.raw_name %>
 Amount:   <%= @txaction.money_amount %>
-
-<%# account_url(@account) %>
+Date:     <%= short_friendly_date(@txaction.fi_date_posted) %>

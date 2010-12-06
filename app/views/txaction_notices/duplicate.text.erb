@@ -1,3 +1,4 @@
-TxactionNotices#duplicate
-
-<%= @greeting %>, find me in app/views/app/views/txaction_notices/duplicate.text.erb
+Account:  <%= @account %>
+Merchant: <%= @duplicate.merchant_name || @duplicate.raw_name %>
+Amount:   <%= @duplicate.money_amount %>
+Date:     <%= short_friendly_date(@duplicate.fi_date_posted) %>

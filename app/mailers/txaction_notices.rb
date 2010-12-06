@@ -19,9 +19,12 @@ class TxactionNotices < ActionMailer::Base
   #
   #   en.txaction_notices.duplicate.subject
   #
-  def duplicate
-    @greeting = "Hi"
+  def duplicate(duplicate, original)
+    @duplicate = duplicate
+    @original  = original
+    @account   = @duplicate.account
+    @user      = @account.user
 
-    mail :to => "to@example.org"
+    mail :to => @user.email
   end
 end

@@ -5,3 +5,5 @@ en:
   txaction_notices:
     too_big:
       subject: Large transaction posted to your account
+    duplicate:
+      subject: Possible duplicate transaction posted to your account
