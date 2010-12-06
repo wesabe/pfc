@@ -31,8 +31,7 @@ end
 
 group :test do
   gem 'webmock'
-  gem 'rspec-rails',     '>= 2.0.0.beta.17'
-  gem 'rspec',           '>= 2.0.0.beta.17'
+  gem 'rspec-rails',     '>= 2.0.1'
   gem 'ruby-debug'
   gem 'machinist'
   gem 'faker'
