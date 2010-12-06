@@ -13,7 +13,6 @@ end
 
 gem 'chronic',           '0.2.3'
 gem 'fastercsv'
-gem 'riddle'
 gem 'memcache-client',              :require => 'memcache'
 gem 'mime-types',                   :require => 'mime/types'
 gem 'rest-client',                  :require => 'rest_client'

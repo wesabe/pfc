@@ -92,7 +92,6 @@ GEM
       vegas (~> 0.1.2)
     rest-client (1.6.0)
       mime-types (>= 1.16)
-    riddle (1.0.12)
     rspec (2.0.1)
       rspec-core (~> 2.0.1)
       rspec-expectations (~> 2.0.1)
@@ -150,7 +149,6 @@ DEPENDENCIES
   rdoc
   resque (= 1.10.0)
   rest-client
-  riddle
   rspec-rails (>= 2.0.1)
   ruby-debug
   rubyzip
