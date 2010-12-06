@@ -125,7 +125,9 @@ module JsonMatchers
 
       super
     end
-
   end
+end
 
+RSpec.configure do |config|
+  config.include(JsonMatchers)
 end

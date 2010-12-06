@@ -45,3 +45,7 @@ module SearchParserMatchers
     FilterOn.new(name, value)
   end
 end
+
+RSpec.configure do |config|
+  config.include(SearchParserMatchers)
+end

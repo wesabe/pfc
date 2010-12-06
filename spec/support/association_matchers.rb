@@ -77,3 +77,7 @@ module ActiveRecordMatchers
     AssociationMatcher.new(:has_and_belongs_to_many, model, options)
   end
 end
+
+RSpec.configure do |config|
+  config.include(ActiveRecordMatchers)
+end
