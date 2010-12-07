@@ -8,9 +8,12 @@ class User::AccountUpdateManager
   end
 
   def login!
+    return unless ssu_enabled?
+
     user.account_creds.each do |ac|
-      ac.enqueue_sync
-    end if ssu_enabled?
+      last_job = ac.last_job
+      ac.enqueue_sync if last_job.nil? || (last_job.updated_at < 3.hours.ago)
+    end
   end
 
   def ssu_enabled?
