@@ -3,6 +3,10 @@ class Account::DestroyAccount
 
   def self.perform(id)
     account = Account.find_by_id(id)
-    account.destroy if account
+    return if account.nil?
+
+    User.with_current_user(account.user) do
+      account.destroy
+    end
   end
 end
