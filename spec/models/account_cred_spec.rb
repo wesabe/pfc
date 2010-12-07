@@ -21,7 +21,7 @@ describe AccountCred do
 
   it "is successful if the last job succeeded" do
     # when
-    @account_cred.stub!(:last_ssu_job).and_return(mock(:job, :successful? => true))
+    @account_cred.stub!(:last_job).and_return(mock(:job, :successful? => true))
 
     # then
     @account_cred.should be_successful
@@ -29,7 +29,7 @@ describe AccountCred do
 
   it "is failed if the last job failed" do
     # when
-    @account_cred.stub!(:last_ssu_job).and_return(mock(:job, :failed? => true))
+    @account_cred.stub!(:last_job).and_return(mock(:job, :failed? => true))
 
     # then
     @account_cred.should be_failed
@@ -179,7 +179,7 @@ describe AccountCred do
     end
 
     it "should provide a finder method for the last ssu job" do
-      @account_cred.last_ssu_job.should == @ssu_job
+      @account_cred.last_job.should == @ssu_job
     end
   end
 end

@@ -250,7 +250,7 @@ describe Account do
       uploads = mock(:uploads, :count => 1)
       @account.stub!(:uploads).and_return(uploads)
       @job.stub!(:accounts).and_return([@account])
-      @cred = mock_model(AccountCred, :last_ssu_job => @job)
+      @cred = mock_model(AccountCred, :last_job => @job)
 
       # then
       @account.should be_newly_created_by(@cred)

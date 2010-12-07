@@ -14,7 +14,7 @@ describe User::AccountUpdateManager do
 
   describe "when the AccountCred has no last job" do
     before do
-      @cred.stub!(:last_ssu_job).and_return(nil)
+      @cred.stub!(:last_job).and_return(nil)
     end
 
     it "should update the cred" do
@@ -24,7 +24,7 @@ describe User::AccountUpdateManager do
 
   describe "when the AccountCred's last job was created more than 6 hours ago" do
     before do
-      @cred.stub!(:last_ssu_job).and_return(@job)
+      @cred.stub!(:last_job).and_return(@job)
       @job.stub!(:created_at).and_return(1.day.ago)
     end
 
@@ -46,7 +46,7 @@ describe User::AccountUpdateManager do
 
   describe "when the AccountCred's last job was created less than 6 hours ago" do
     before do
-      @cred.stub!(:last_ssu_job).and_return(@job)
+      @cred.stub!(:last_job).and_return(@job)
       @job.stub!(:created_at).and_return(4.hours.ago)
     end
 
@@ -67,7 +67,7 @@ describe User::AccountUpdateManager do
 
   describe "when the AccountCred has no accounts" do
     before do
-      @cred.stub!(:last_ssu_job).and_return(@job)
+      @cred.stub!(:last_job).and_return(@job)
       @cred.stub!(:accounts).and_return([])
     end
 
@@ -91,7 +91,7 @@ describe User::AccountUpdateManager do
   describe "when the AccountCred has accounts" do
     before do
       @accounts = [stub_model(Account)]
-      @cred.stub!(:last_ssu_job).and_return(@job)
+      @cred.stub!(:last_job).and_return(@job)
       @cred.stub!(:accounts).and_return(@accounts)
     end
 

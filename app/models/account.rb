@@ -238,8 +238,8 @@ class Account < ActiveRecord::Base
     last_balance.update_attribute(:balance, -last_balance.balance) if last_balance
   end
 
-  def last_ssu_job
-    account_cred && account_cred.last_ssu_job
+  def last_job
+    account_cred && account_cred.last_job
   end
 
   def ssu_candidate?(user)
@@ -247,7 +247,7 @@ class Account < ActiveRecord::Base
   end
 
   def ssu?
-    account_cred_id && last_ssu_job && last_ssu_job.status
+    account_cred_id && last_job && last_job.status
   end
 
   def has_disabled_txactions?
@@ -289,7 +289,7 @@ class Account < ActiveRecord::Base
   #   +true+ if this account was just created while running the job (or the) cred's latest
   #   job, and +false+ otherwise.
   def newly_created_by?(job_or_cred)
-    job = job_or_cred.is_a?(AccountCred) ? job_or_cred.last_ssu_job : job_or_cred
+    job = job_or_cred.is_a?(AccountCred) ? job_or_cred.last_job : job_or_cred
     (uploads.count == 1) && job.accounts.include?(self)
   end
 

@@ -42,7 +42,7 @@ describe SsuJobsController do
       describe "where the last job was denied" do
         it "renders an error" do
           SsuJob.stub!(:start).and_return(nil)
-          @account_cred.stub!(:last_ssu_job).and_return(@job)
+          @account_cred.stub!(:last_job).and_return(@job)
           @job.stub!(:status).and_return(401)
 
           post :create

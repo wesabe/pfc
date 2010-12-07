@@ -35,15 +35,15 @@ class AccountCred < ActiveRecord::Base
   end
 
   def successful?
-    last_ssu_job && last_ssu_job.successful?
+    last_job && last_job.successful?
   end
 
   def failed?
-    last_ssu_job && last_ssu_job.failed?
+    last_job && last_job.failed?
   end
 
   def pending?
-    last_ssu_job && last_ssu_job.pending?
+    last_job && last_job.pending?
   end
 
   def destroyable_by?(user)

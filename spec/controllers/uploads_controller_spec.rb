@@ -50,7 +50,7 @@ describe UploadsController, 'handling GET /uploads/select' do
     @job = mock_model(SsuJob, :accounts => @accounts)
 
     # cred is hooked up to all accounts
-    @cred = stub_model(AccountCred, :accounts => @accounts, :last_ssu_job => @job)
+    @cred = stub_model(AccountCred, :accounts => @accounts, :last_job => @job)
     AccountCred.stub!(:find_by_account_key_and_cred_guid).and_return(@cred)
     @current_user.stub!(:account_key).and_return('010101')
   end
