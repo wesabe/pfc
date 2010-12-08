@@ -73,15 +73,15 @@
         self.onSelectionChanged();
       });
 
-      $(window).bind('hash-changed', function(_, hash) {
-        self.attemptToReloadState(hash);
+      $.address.change(function() {
+        self.attemptToReloadState();
       });
 
       // load all accounts view
       $('#accounts .module-header :header a, #nav-accounts > a')
         .click(function(event) {
           self.selection.clear();
-          $.historyLoad('');
+          $.address.value('/accounts');
           return false;
         });
 
@@ -138,7 +138,7 @@
       $("#searchform").submit(function(event) {
         event.preventDefault();
         $('#query').blur();
-        $.historyLoad(shared.historyHash('/search/'+$('#query').val()));
+        shared.pushState('/accounts/search', {q: $('#query').val()});
         setTimeout(function(){ self._needsReload = true }, 0);
       });
     },
@@ -280,19 +280,20 @@
       }, 250);
     },
 
-    attemptToReloadState: function(hash) {
+    attemptToReloadState: function(state) {
       if (this._hasLoadedAccounts && this._hasLoadedTransactions && this._hasLoadedTags) {
-        this.reloadState(hash);
+        this.reloadState(state);
       }
     },
 
-    reloadState: function(hash) {
-      hash = (hash || window.location.hash).replace(/^#/, '');
+    reloadState: function(state) {
+      var state = state || shared.parseState(),
+          path = state.path,
+          params = state.params,
 
-      var selectableObjects,
+          selectableObjects,
           selectableObjectsByURI,
 
-          hashParts = shared.historyParts(hash),
           selectedObjects = [],
           m = null,
 
@@ -311,23 +312,42 @@
       while (length--)
         selectableObjects[selectableObjects[length].getURI()] = selectableObjects[length];
 
-      for (var j = 0; j < hashParts.length; j++) {
-        var part = hashParts[j], selectableObject = selectableObjects[part];
+      for (var key in params) {
+        if (!params.hasOwnProperty(key)) return;
 
-        if (selectableObject) {
-          selectedObjects.push(selectableObject);
-        } else if (m = part.match(/^\/merchants\/(.*)$/)) {
-          selectedObjects.push(new wesabe.views.widgets.accounts.Merchant(m[1]));
-        } else if (part === 'unedited') {
-          unedited = true;
-        } else if (m = part.match(/^\/search\/(.+)$/)) {
-          search = m[1];
-        } else if (m = part.match(/^offset=(\d+)$/)) {
-          offset = number.parse(m[1]);
-        } else if (m = part.match(/^start=(\d+)$/)) {
-          start = date.parse(m[1]);
-        } else if (m = part.match(/^end=(\d+)$/)) {
-          end = date.parse(m[1]);
+        var value = params[key];
+        switch (key) {
+          case 'selection':
+            for (var i = 0; i < value.length; i++) {
+              var selectableObject = selectableObjects[value[i]];
+              if (selectableObject)
+                selectedObjects.push(selectableObject);
+            }
+            break;
+
+          case 'unedited':
+            unedited = (value == true) || (value == 'true');
+            break;
+
+          case 'q':
+            search = value;
+            break;
+
+          case 'offset':
+            offset = number.parse(value);
+            break;
+
+          case 'limit':
+            limit = number.parse(value);
+            break;
+
+          case 'start':
+            start = date.parse(value);
+            break;
+
+          case 'end':
+            end = date.parse(value);
+            break;
         }
       }
 
@@ -335,6 +355,9 @@
         this.unedited = unedited;
         this.transactions.fn('unedited', unedited);
       }
+
+      if (selectableObjects[path])
+        selectedObjects.push(selectableObjects[path]);
 
       this.selection.set(selectedObjects);
 
@@ -449,35 +472,44 @@
     },
 
     storeState: function() {
-      var tokens = [], selection = this.selection.get();
+      var path = '/accounts',
+          params = {},
+          selection = this.selection.get();
 
       // handle the selection
-      for (var i = 0; i < selection.length; i++) {
-        tokens.push(selection[i].getURI());
+      if (selection.length == 1) {
+        path = selection[0].getURI();
+      } else if (selection.length > 1) {
+        params.selection = [];
+        for (var i = 0; i < selection.length; i++) {
+          console.log(selection[i]);
+          params.selection.push(selection[i].getURI());
+        }
       }
 
-      if (this.search)
-        tokens.push('/search/'+this.search);
+      if (this.search) {
+        path = '/accounts/search';
+        params.q = this.search;
+      }
 
       // handle the unedited flag
       if (this.unedited)
-        tokens.push('unedited');
+        params.unedited = true;
 
       if (this.offset)
-        tokens.push('offset='+this.offset);
+        params.offset = this.offset;
 
       if (this.start)
-        tokens.push('start='+date.toParam(this.start));
+        params.start = date.toParam(this.start);
 
       if (this.end)
-        tokens.push('end='+date.toParam(this.end));
+        params.end = date.toParam(this.end);
 
-      var entry = shared.historyHash(tokens);
-
+      var state = {path: path, params: params};
       // create the history entry
-      $.historyLoad(entry);
+      shared.pushState(state);
 
-      return entry;
+      return state;
     },
 
     setTitleForState: function(accounts, groups, tags, merchants, search) {

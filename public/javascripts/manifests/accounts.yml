@@ -19,7 +19,6 @@
 - wesabe/views/shared/form.js
 - wesabe/data/credentials/CredentialDataSource.js
 - jquery.form.js
-- jquery.history.js
 - components/merchant-autocompleter.js
 - processing.js
 - wesabeCharts.js

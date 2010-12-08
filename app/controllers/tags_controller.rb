@@ -1,6 +1,14 @@
 class TagsController < ApplicationController
   before_filter :check_authentication
 
+  def show
+    if tag
+      render :action => 'accounts/index'
+    else
+      redirect_to accounts_url
+    end
+  end
+
   def destroy
     if tag
       Tag.destroy(current_user, tag)

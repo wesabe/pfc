@@ -305,7 +305,7 @@ jQuery(function($) {
 
         $('.account-name', self)
           .click(function(event) {
-            $.historyLoad(self.fn('account').uri);
+            $.address.value(self.fn('account').uri);
             event.preventDefault();
           });
 
@@ -550,7 +550,7 @@ jQuery(function($) {
 
         $('.account-name', self)
           .click(function(event) {
-            $.historyLoad(self.fn('account').uri);
+            $.address.value(self.fn('account').uri);
             event.preventDefault();
           });
 

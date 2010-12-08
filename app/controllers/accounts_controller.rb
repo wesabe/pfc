@@ -13,11 +13,7 @@ class AccountsController < ApplicationController
     if account.nil?
       redirect_to accounts_url
     else
-      respond_to do |format|
-        format.html do
-          redirect_to accounts_url(:anchor => account_path(account))
-        end
-      end
+      render :action => 'index'
     end
   end
 

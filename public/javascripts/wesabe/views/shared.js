@@ -35,13 +35,97 @@ wesabe.provide('views.shared', {
     return hash;
   },
 
-  historyParts: function(hash) {
-    var parts = hash.split(',');
+  parseState: function(stateString) {
+    var path = null,
+        search = null,
+        params = {};
 
-    for (var i = 0; i < parts.length; i++)
-      parts[i] = decodeURIComponent(parts[i]).replace(/-comma-/g, ',');
+    if (stateString !== undefined) {
+      var pathAndSearch = stateString.split('?');
+      path = pathAndSearch[0];
+      search = pathAndSearch[1];
+    } else {
+      path = window.location.pathname;
+      search = window.location.search && window.location.search.replace(/^\?/, '');
+    }
 
-    return parts;
+    if (search) {
+      var parts = search.split('&');
+
+      for (var i = 0; i < parts.length; i++) {
+        var pair = parts[i].split('='),
+            key = decodeURIComponent(pair[0]), value = decodeURIComponent(pair[1]);
+
+        var m;
+
+        if (m = key.match(/^(.+)\[\]$/)) {
+          // id[]=1
+          key = m[1];
+          var arrayValue = params[key] || [];
+          arrayValue.push(value);
+          value = arrayValue;
+        } else if (m = key.match(/^(.+)\[([^\]]+)\]$/)) {
+          // name[first]=Frank
+          key = m[1];
+          var subkey = m[2];
+          var hashValue = params[key] || {};
+          hashValue[subkey] = value;
+          value = hashValue;
+        }
+
+        params[key] = value;
+      }
+    }
+
+    return {path: path, params: params};
+  },
+
+  pushState: function(state) {
+    if (this.statesEqual(state, this.parseState()))
+      return;
+
+    var search = state.params && $.param(state.params),
+        url = state.path;
+
+    if (search)
+      url += '?'+search;
+
+    $.address.value(url);
+  },
+
+  statesEqual: function(state1, state2) {
+    function equal(o1, o2) {
+      if (o1 === o2)
+        return true;
+
+      if ($.isArray(o1)) {
+        if (!$.isArray(o2) || (o1.length != o2.length))
+          return false;
+
+        for (var i = 0; i < o1.length; i++)
+          if (!equal(o1[i], o2[i]))
+            return false;
+      } else if (typeof o1 == 'object') {
+        var keys = {};
+
+        for (var key in o1)
+          if (o1.hasOwnProperty(key))
+            keys[key] = true;
+        for (var key in o2)
+          if (o2.hasOwnProperty(key))
+            keys[key] = true;
+
+        for (var key in keys)
+          if (keys.hasOwnProperty(key) && !equal(o1[key], o2[key]))
+            return false;
+      } else {
+        return (''+o1) === (''+o2);
+      }
+
+      return true;
+    }
+
+    return equal(state1, state2);
   },
 
   addSearchListener: function(fn) {
