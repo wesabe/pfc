@@ -1,6 +1,10 @@
 class MerchantsController < ApplicationController
   before_filter :check_authentication, :except => [:show]
 
+  def show
+    render :action => 'accounts/index'
+  end
+
   def user_index
     render :json => current_user.merchants.
                       sort_by {|m| [-m.count.to_i, m.name]}.

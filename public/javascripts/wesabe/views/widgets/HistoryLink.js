@@ -36,7 +36,8 @@ wesabe.$class('wesabe.views.widgets.HistoryLink', wesabe.views.widgets.Label, fu
       if (event.ctrlKey || event.metaKey)
         return;
 
-      $.historyLoad(this.getURI());
+      $.address.value(this.getURI());
+      event.preventDefault();
     },
 
     /**

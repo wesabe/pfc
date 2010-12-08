@@ -45,8 +45,8 @@ wesabe.provide('views.shared', {
       path = pathAndSearch[0];
       search = pathAndSearch[1];
     } else {
-      path = window.location.pathname;
-      search = window.location.search && window.location.search.replace(/^\?/, '');
+      path = $.address.path();
+      search = $.address.queryString();
     }
 
     if (search) {
@@ -77,7 +77,7 @@ wesabe.provide('views.shared', {
       }
     }
 
-    return {path: path, params: params};
+    return {path: decodeURIComponent(path).replace(/\+/g, ' '), params: params};
   },
 
   pushState: function(state) {
