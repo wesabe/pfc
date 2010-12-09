@@ -178,9 +178,8 @@
       ds.requestData();
     },
 
-    // reloading means clearing the list and refreshing
+    // reloading means hiding the list while refreshing
     reloadTransactions: function() {
-      this.transactions.fn('transactions').fn('clear');
       this.transactions.fn('loading', true);
       this.refreshTransactions();
     },
