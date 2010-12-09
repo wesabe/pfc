@@ -181,7 +181,7 @@ wesabe.provide('views.shared', {
         return $('<a></a>')
           .attr('href', object.uri)
           .text(object.name)
-          .click(function(){ $.historyLoad(object.uri); });
+          .click(function(){ $.address.value(object.uri); });
       };
 
       $.each(data['account-groups'], function(i, group) {
@@ -211,13 +211,8 @@ $(function(){
       return false;
     });
 
-  $('a.hash-link').click(function() {
-    var linkPath = this.href.replace(/^http(s)?:\/\/[^\/]+/,'');
-    if (linkPath.indexOf(window.location.pathname) == 0) {
-      var hash = linkPath.replace(/^.*?#/,'');
-      $.historyLoad(hash);
-      return false;
-    }
+  $('a.history-link').each(function() {
+    new wesabe.views.widgets.HistoryLink($(this), this.href.replace(/^http(s)?:\/\/[^\/]+/,''));
   });
 
   // Highlight and show the sidebar link to this page if there is one

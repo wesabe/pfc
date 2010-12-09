@@ -38,23 +38,36 @@ jQuery(function($) {
           self.fn("update");
         });
 
-        $(window).bind('hash-changed', function(_, hash) {
-          self.fn("_restoreFromHash", hash);
+        $.address.change(function() {
+          self.fn('_restoreState');
         });
 
-        if (window.location.hash) {
-          self.fn("_restoreFromHash", window.location.hash);
-        } else {
-          $.historyLoad("spending");
-        }
+        if ($.address.path() == "/trends") $.address.value("/trends/spending");
+        else self.fn('_restoreState');
 
         return self;
       },
 
-      _restoreFromHash: function(hash) {
-        var match = hash.match(/spending|earnings/);
-        if (match)
-          $(this).fn("spendingOrEarnings", match[0]);
+      _restoreState: function() {
+        var match = $.address.path().match(/^\/trends\/(spending|earnings)$/),
+            mode = match && match[1];
+
+        if (mode) {
+          $(this).fn("spendingOrEarnings", mode);
+
+          $('#trends-summary li').each(function() {
+            var li = $(this);
+            if (li.hasClass(mode)) li.addClass('on');
+            else li.removeClass('on');
+          });
+
+          var viewportMinY = document.body.scrollTop,
+              viewportMaxY = viewportMinY + window.innerHeight,
+              destination = $('#spending-summary').offset().top;
+
+          if (destination < viewportMinY || destination > viewportMaxY)
+            $("body:not(:animated)").animate({ scrollTop: destination-20}, 500 );
+        }
       },
 
       title: function() {

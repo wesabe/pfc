@@ -9,8 +9,8 @@
       </div>
       <div class="one-col-list">
         <ul class="one-col-list" id="spending-earnings-summary">
-          <li class="spending"><%= link_to "Spending Trends", trends_path(:anchor => "spending"), :class => "hash-link" %></li>
-          <li class="earnings"><%= link_to "Earnings Trends", trends_path(:anchor => "earnings"), :class => "hash-link" %></li>
+          <li class="spending"><%= link_to "Spending Trends", trend_path("spending"), :class => 'history-link' %></li>
+          <li class="earnings"><%= link_to "Earnings Trends", trend_path("earnings"), :class => 'history-link' %></li>
         </ul>
       </div>
     </div>

@@ -17,8 +17,8 @@
         <ul>
           <div class="menu-content">
             <li class="menu-head">Trends</li>
-            <li><%= link_to "Spending Trends", trends_path(:anchor => "spending"), :class => "hash-link" %></li>
-            <li><%= link_to "Earnings Trends", trends_path(:anchor => "earnings"), :class => "hash-link" %></li>
+            <li><%= link_to "Spending Trends", trend_path("spending"), :class => 'history-link' %></li>
+            <li><%= link_to "Earnings Trends", trend_path("earnings"), :class => 'history-link' %></li>
           </div>
         </ul>
       </li>
