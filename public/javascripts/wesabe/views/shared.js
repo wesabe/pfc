@@ -140,7 +140,7 @@ wesabe.provide('views.shared', {
   enableDefaultAccountsSearch: function() {
     var self = this;
     self.addSearchListener(function(event) {
-      self.navigateTo('/accounts/#/search/'+$('#query').val());
+      self.navigateTo('/accounts/search?q='+encodeURIComponent($('#query').val()));
     });
     return self;
   },
@@ -149,7 +149,7 @@ wesabe.provide('views.shared', {
     var self = this;
     wesabe.ready('wesabe.views.widgets.accounts.__instance__', function(accounts) {
       accounts.getSelection().bind('changed', function(_, selection) {
-        self.navigateTo('/accounts/#'+selection[0].getURI());
+        self.navigateTo(selection[0].getURI());
       });
     });
     return self;
@@ -159,7 +159,7 @@ wesabe.provide('views.shared', {
     var self = this;
     wesabe.ready('wesabe.views.widgets.tags.__instance__', function() {
       wesabe.views.widgets.tags.__instance__.getSelection().bind('changed', function(_, selection) {
-        self.navigateTo('/accounts/#'+selection[0].getURI());
+        self.navigateTo(selection[0].getURI());
       });
     });
     return self;
@@ -172,7 +172,7 @@ wesabe.provide('views.shared', {
       accountListColumn.children().remove();
       var linkTo = function(object) {
         return $('<a></a>')
-          .attr('href', '/accounts#'+object.uri)
+          .attr('href', object.uri)
           .text(object.name)
           .click(function(){ $.historyLoad(object.uri); });
       };
