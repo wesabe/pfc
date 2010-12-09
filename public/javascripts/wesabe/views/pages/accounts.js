@@ -69,8 +69,6 @@
           return false;
         });
 
-      this.setUpSearch();
-
       wesabe.ready('wesabe.views.widgets.accounts.__instance__', function() {
         self.setUpAccountsWidget();
       });
@@ -83,19 +81,16 @@
         self.setUpTagsWidget();
       });
 
+      shared.addSearchListener(function(query) {
+        self.onSearch(query);
+      });
+
       $(function(){ self.attemptToReloadState() });
     },
 
-    setUpSearch: function() {
-      var self = this;
-
-      // enable search
-      $('#nav-search').show();
-      $("#searchform").submit(function(event) {
-        event.preventDefault();
-        $('#query').blur();
-        shared.pushState('/accounts/search', {q: $('#query').val()});
-      });
+    onSearch: function(query) {
+      this.search = query;
+      this.storeState();
     },
 
     setUpAccountsWidget: function() {
@@ -340,7 +335,7 @@
         }
       }
 
-      $('#query').val(this.search || '');
+      shared.setSearch(this.search || '');
       this.setTitleForState(accounts, groups, tags, merchants, this.search);
       this.setAddTransactionAvailabilityForState(accounts, groups, tags, merchants, this.search);
     },
@@ -477,18 +472,14 @@
       var chart = wesabe.charts.txn;
       chart.params = this.paramsForCurrentSelection();
 
-      if (this.search) chart.hide();
-      else {
-        var account = page.selection.getByClass(wesabe.views.widgets.accounts.Account)[0];
-        if (account && account.isInvestment()) {
-          chart.hide();
-          this.displayInvestmentHeader(account);
-        }
-        else {
-          $("#investment-header").hide();
-          chart.redraw();
-          chart.show();
-        }
+      var account = page.selection.getByClass(wesabe.views.widgets.accounts.Account)[0];
+      if (account && account.isInvestment()) {
+        chart.hide();
+        this.displayInvestmentHeader(account);
+      } else {
+        $("#investment-header").hide();
+        chart.redraw();
+        chart.show();
       }
     },
 
@@ -546,18 +537,14 @@
         params.push({name: 'end', value: date.toParam(this.end)});
       }
 
-      if (this.search) {
+      if (this.search != null)
         params.push({name: 'query', value: this.search});
-        // searching requires an offset and a limit, so always give it something
-        params.push({name: 'offset', value: this.offset || 0});
-        params.push({name: 'limit', value: this.limit || TRANSACTIONS_PER_PAGE});
-      } else {
-        // when not searching we don't necessarily need offset and limit
-        if (this.offset !== null)
-          params.push({name: 'offset', value: this.offset});
-        if (this.limit !== null)
-          params.push({name: 'limit', value: this.limit});
-      }
+
+      // when not searching we don't necessarily need offset and limit
+      if (this.offset !== null)
+        params.push({name: 'offset', value: this.offset});
+      if (this.limit !== null)
+        params.push({name: 'limit', value: this.limit});
 
       params.push({name: 'unedited', value: this.unedited ? 'true' : 'false'});
 

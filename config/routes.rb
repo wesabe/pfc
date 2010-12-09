@@ -25,6 +25,7 @@ Pfc::Application.routes.draw do
     end
 
     collection do
+      get  :search
       post :enable
       post :trigger_updates
     end

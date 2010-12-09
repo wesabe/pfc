@@ -17,6 +17,11 @@ class AccountsController < ApplicationController
     end
   end
 
+  # GET /accounts/search
+  def search
+    render :action => 'index'
+  end
+
   # DELETE /accounts/1
   def destroy
     if account.nil?

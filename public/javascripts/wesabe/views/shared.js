@@ -129,12 +129,19 @@ wesabe.provide('views.shared', {
   },
 
   addSearchListener: function(fn) {
+    var input = $('#query');
+
     $('#nav-search').show();
     $("#searchform").submit(function(event) {
       event.preventDefault();
-      fn();
+      fn(input.val());
+      input.blur();
     });
     return this;
+  },
+
+  setSearch: function(search) {
+    $('#query').val(search);
   },
 
   enableDefaultAccountsSearch: function() {

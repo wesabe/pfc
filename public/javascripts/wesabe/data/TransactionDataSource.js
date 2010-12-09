@@ -23,9 +23,7 @@ wesabe.$class('wesabe.data.TransactionDataSource', wesabe.data.BaseDataSource, f
     getSourceURI: function() {
       // REVIEW: I'm sure this is not the right way to do this, but it works
       var accountSelections = page.selection.getByClass(wesabe.views.widgets.accounts.Account);
-      if (this.isSearch())
-        return '/accounts/search'
-      else if (accountSelections[0] && accountSelections[0].isInvestment()) // main selection needs to be investment account
+      if (accountSelections[0] && accountSelections[0].isInvestment()) // main selection needs to be investment account
         return '/data/investment-transactions/'+this._getCurrency();
       else
         return '/data/transactions/'+this._getCurrency();
@@ -76,24 +74,7 @@ wesabe.$class('wesabe.data.TransactionDataSource', wesabe.data.BaseDataSource, f
      * @return {jQuery.ajax.data}
      */
     getRequestQueryParams: function() {
-      var params = this.getParams();
-
-      if (!this.isSearch())
-        return params;
-
-      // ask for the right data type
-      lang.params.set(params, 'format', this.getDataType());
-
-      // pfc expects q=, not query=
-      lang.params.set(params, 'q', lang.params.get(params, 'query'));
-      lang.params.remove(params, 'query');
-
-      // pfc expects a page number, not offset/limit
-      lang.params.set(params, 'page', this._getPageNumber());
-      lang.params.remove(params, 'offset');
-      lang.params.remove(params, 'limit');
-
-      return params;
+      return this.getParams();
     },
 
     /**
