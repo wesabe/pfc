@@ -8,7 +8,7 @@ var options = wesCharts.getChartOptions(curElement.parentNode.id);
 options = options ? options : {};
 var logger;
 
-var UNEDITED_TXACTIONS_URL = '/accounts#unedited';
+var UNEDITED_TXACTIONS_URL = '/accounts?unedited=true';
 
 
 var preferences = wesabe.data.preferences;
@@ -546,7 +546,7 @@ void grabSliceDialog(e) {
     if (tagLabel == pieCharts[current].labels[i]) {
         var percentage = Math.round((pieCharts[current].amounts[i]/pieCharts[current].totalAmt)*100) + "%";
         if (percentage === "0%") percentage = "< 1%"
-        var ahref = (pieCharts[current].labels[i] === "unedited") ? UNEDITED_TXACTIONS_URL : "/accounts#/tags/" + pieCharts[current].labels[i];
+        var ahref = (pieCharts[current].labels[i] === "unedited") ? UNEDITED_TXACTIONS_URL : "/tags/" + pieCharts[current].labels[i];
         var dialogStr =
           "<div style='text-decoration: underline;cursor: pointer;font-size: 11px;color: rgb(" + pieCharts[current].colr[((i+pieCharts[current].colorShift)%7)] + ");'>" +
           pieCharts[current].labels[i] + " <span style='font-weight: normal'>" + percentage + "</span></div>" +
@@ -595,7 +595,7 @@ void mouseMoved() {
       if (rads > begRadians && currentPie[i] >= rads) {
         var percentage = Math.round((pieCharts[current].amounts[i]/pieCharts[current].totalAmt)*100) + "%";
         if (percentage === "0%") percentage = "< 1%"
-        var ahref = (pieCharts[current].labels[i] === "unedited") ? UNEDITED_TXACTIONS_URL : "/accounts#/tags/" + pieCharts[current].labels[i];
+        var ahref = (pieCharts[current].labels[i] === "unedited") ? UNEDITED_TXACTIONS_URL : "/tags/" + pieCharts[current].labels[i];
         var dialogStr =
           "<div style='text-decoration: underline;cursor: pointer;font-size: 11px;color: rgb(" + pieCharts[current].colr[((i+pieCharts[current].colorShift)%7)] + ");'>" +
           pieCharts[current].labels[i] + " <span style='font-weight: normal'>" + percentage + "</span></div>" +
