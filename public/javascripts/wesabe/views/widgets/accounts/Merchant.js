@@ -1,19 +1,15 @@
 /**
  * Provides selection support for merchants.
  */
-wesabe.$class('wesabe.views.widgets.accounts.Merchant', null, function($class, $super, $package) {
+wesabe.$class('wesabe.views.widgets.accounts.Merchant', function($class, $super, $package) {
   $.extend($class.prototype, {
-    _name: null,
+    /**
+     * The name of the merchant (e.g. "Starbucks").
+     */
+    name: null,
 
     init: function(name) {
-      this._name = name;
-    },
-
-    /**
-     * Gets the name of the merchant (e.g. "Starbucks").
-     */
-    getName: function() {
-      return this._name;
+      this.name = name;
     },
 
     /**
@@ -21,8 +17,8 @@ wesabe.$class('wesabe.views.widgets.accounts.Merchant', null, function($class, $
      *
      * See {wesabe.views.pages.accounts#storeState}.
      */
-    getURI: function() {
-      return '/merchants/'+this.getName();
+    uri: function() {
+      return '/merchants/'+this.get('name');
     },
 
     /**
@@ -31,14 +27,14 @@ wesabe.$class('wesabe.views.widgets.accounts.Merchant', null, function($class, $
      * See {wesabe.views.pages.accounts#paramsForCurrentSelection}.
      */
     toParams: function() {
-      return [{name: 'merchant', value: this.getName()}];
+      return [{name: 'merchant', value: this.get('name')}];
     },
 
     /**
      * Returns true if {other} is a {Merchant} and has the same name.
      */
     isEqualTo: function(other) {
-      return other && other.isInstanceOf($class) && (this.getName() === other.getName());
+      return other && other.isInstanceOf($class) && (this.get('name') === other.get('name'));
     }
   });
 });

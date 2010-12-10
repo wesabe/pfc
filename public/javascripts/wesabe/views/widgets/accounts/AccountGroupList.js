@@ -12,10 +12,16 @@ wesabe.$class('wesabe.views.widgets.accounts.AccountGroupList', wesabe.views.wid
   var array = wesabe.lang.array;
 
   $.extend($class.prototype, {
+    editMode: false,
+
+    /**
+     * Returns the {wesabe.util.Selection} associated with this
+     * {AccountGroupList}.
+     */
+    selection: null,
+
     _widget: null,
     _template: null,
-    _selection: null,
-    _editMode: false,
 
     init: function(element, widget) {
       $super.init.call(this, element);
@@ -26,29 +32,14 @@ wesabe.$class('wesabe.views.widgets.accounts.AccountGroupList', wesabe.views.wid
       this._template = template.clone().removeClass('template');
       template.remove();
 
-      this.setSelection(new wesabe.util.Selection());
-    },
-
-    /**
-     * Returns the {wesabe.util.Selection} associated with this
-     * {AccountGroupList}.
-     */
-    getSelection: function() {
-      return this._selection;
-    },
-
-    /**
-     * Sets the {wesabe.util.Selection} associated with this {AccountGroupList}.
-     */
-    setSelection: function(selection) {
-      this._selection = selection;
+      this.set('selection', new wesabe.util.Selection());
     },
 
     /**
      * Gets the {CredentialDataSource} used to populate this {AccountGroupList}.
      */
-    getCredentialDataSource: function() {
-      return this._widget.getCredentialDataSource();
+    credentialDataSource: function() {
+      return this._widget.get('credentialDataSource');
     },
 
     /**
@@ -58,7 +49,7 @@ wesabe.$class('wesabe.views.widgets.accounts.AccountGroupList', wesabe.views.wid
      * @return {Account}
      */
     getAccountByURI: function(uri) {
-      var items = this.getItems();
+      var items = this.get('items');
 
       for (var i = items.length; i--;) {
         var account = items[i].getAccountByURI(uri);
@@ -81,7 +72,7 @@ wesabe.$class('wesabe.views.widgets.accounts.AccountGroupList', wesabe.views.wid
 
         if (!item) {
           item = new $package.AccountGroup(this._template.clone(), this);
-          item.setEditMode(this._editMode);
+          item.set('editMode', this.editMode);
         }
 
         if (accountGroupDatum.key === 'archived')
@@ -91,14 +82,14 @@ wesabe.$class('wesabe.views.widgets.accounts.AccountGroupList', wesabe.views.wid
         item.update(accountGroupDatum);
       }
 
-      this.setItems(items);
+      this.set('items', items);
     },
 
     /**
      * Refreshes the upload status of the {AccountGroup} children.
      */
     updateUploadStatus: function(credentialDataSource) {
-      var items = this.getItems(),
+      var items = this.get('items'),
           length = items.length;
 
       while (length--)
@@ -110,16 +101,16 @@ wesabe.$class('wesabe.views.widgets.accounts.AccountGroupList', wesabe.views.wid
      * in account edit mode (expands all groups, shows editing pencils).
      */
     setEditMode: function(editMode) {
-      if (this._editMode === editMode)
+      if (this.editMode === editMode)
         return;
 
-      this._editMode = editMode;
+      this.editMode = editMode;
 
-      var items = this.getItems(),
+      var items = this.get('items'),
           length = items.length;
 
       while (length--)
-        items[length].setEditMode(editMode);
+        items[length].set('editMode', editMode);
     },
 
     /**

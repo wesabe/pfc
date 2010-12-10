@@ -321,7 +321,7 @@ wesabe.$class('wesabe.views.widgets.accounts.Account', wesabe.views.widgets.Base
       this._status = accountData.status;
       this.set('type', accountData.type);
       this.set('uri', accountData.uri);
-      this.credential = this._accountGroup.get('credentialDataSource').getCredentialDataByAccountURI(accountData.uri);
+      this.set('credential', this._accountGroup.get('credentialDataSource').getCredentialDataByAccountURI(accountData.uri));
       this.set('currency', accountData.currency);
       this.setLastBalanceDate(date.parse(accountData['last-balance-at']));
       this._balance = accountData.balance;

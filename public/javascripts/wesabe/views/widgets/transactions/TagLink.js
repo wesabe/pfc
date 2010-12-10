@@ -8,9 +8,21 @@ wesabe.$class('wesabe.views.widgets.transactions.TagLink', wesabe.views.widgets.
   var number = wesabe.lang.number;
 
   $.extend($class.prototype, {
-    _name: null,
+    /**
+     * The name of the tag being displayed.
+     *
+     * @type {string}
+     */
+    name: null,
+
+    /**
+     * The amount of the transaction that should count toward this tag.
+     *
+     * @type {object}
+     */
+    splitAmount: null,
+
     _nameLink: null,
-    _splitAmount: null,
     _splitElement: null,
 
     init: function(element) {
@@ -22,26 +34,17 @@ wesabe.$class('wesabe.views.widgets.transactions.TagLink', wesabe.views.widgets.
     },
 
     /**
-     * Gets the name of the tag being displayed.
-     *
-     * @return {string}
-     */
-    getName: function() {
-      return this._name;
-    },
-
-    /**
      * Sets the name of the tag being displayed and redraws.
      *
      * @param {!string} name The name of the tag being displayed.
      */
     setName: function(name) {
-      if (name === this._name)
+      if (name === this.name)
         return;
 
-      this._name = name;
+      this.name = name;
       this._nameLink.setText(name);
-      this._nameLink.setURI(this.getURI());
+      this._nameLink.set('uri', this.get('uri'));
     },
 
     /**
@@ -49,20 +52,18 @@ wesabe.$class('wesabe.views.widgets.transactions.TagLink', wesabe.views.widgets.
      *
      * @return {string}
      */
-    getURI: function() {
-      return "/tags/" + this.getName();
+    uri: function() {
+      return "/tags/" + encodeURIComponent(this.get('name'));
     },
 
     /**
      * Sets the split amount and redraws.
-     *
-     * @param {number|Money} splitAmount The amount this tag is split by.
      */
     setSplitAmount: function(splitAmount) {
-      if (splitAmount === this._splitAmount)
+      if (splitAmount === this.splitAmount)
         return;
 
-      this._splitAmount = splitAmount;
+      this.splitAmount = splitAmount;
 
       var display = '';
       if (splitAmount && splitAmount.value)

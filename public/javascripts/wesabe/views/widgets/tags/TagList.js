@@ -118,8 +118,11 @@ wesabe.$class('wesabe.views.widgets.tags.TagList', wesabe.views.widgets.BaseList
           length = items.length;
 
       element = $(element);
-      while (!element.is('.tag'))
+      while (element.length && !element.is('.tag'))
         element = element.parent();
+
+      if (!element.length)
+        return null;
 
       while (length--)
         if ($.same(items[length].get('element'), element))

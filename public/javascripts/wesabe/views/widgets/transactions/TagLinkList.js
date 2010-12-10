@@ -30,12 +30,12 @@ wesabe.$class('wesabe.views.widgets.transactions.TagLinkList', wesabe.views.widg
         if (!item)
           item = new $package.TagLink(this._template.clone());
 
-        item.setName(tag.name);
-        item.setSplitAmount(tag.amount);
+        item.set('name', tag.name);
+        item.set('splitAmount', tag.amount);
         items.unshift(item);
       }
 
-      this.setItems(items);
+      this.set('items', items);
     },
 
     /**
@@ -45,10 +45,10 @@ wesabe.$class('wesabe.views.widgets.transactions.TagLinkList', wesabe.views.widg
      * @return {TagLink}
      */
     getItemByName: function(name) {
-      var items = this.getItems();
+      var items = this.get('items');
 
       for (var i = items.length; i--;)
-        if (items[i].getName() === name)
+        if (items[i].get('name') === name)
           return items[i];
 
       return null;

@@ -16,20 +16,28 @@ wesabe.$class('wesabe.views.widgets.accounts.AccountGroup', wesabe.views.widgets
     /**
      * URI for this {AccountGroup} (e.g. "/account-groups/checking").
      *
-     * See {wesabe.views.pages.accounts#storeState}.
+     * @type {string}
      */
     uri: null,
 
     /**
      * Visible name of the group (e.g. "Checking").
+     *
+     * @type {string}
      */
     name: null,
+
+    /**
+     * The short url-friendly name for this {AccountGroup} (e.g. "credit").
+     *
+     * @type {string}
+     */
+    key: null,
 
     _template: null,
     _nameElement: null,
     _accountGroupList: null,
     _total: null,
-    _key: null,
     _expanded: false,
     _editMode: false,
     _wasExpanded: null,
@@ -67,26 +75,17 @@ wesabe.$class('wesabe.views.widgets.accounts.AccountGroup', wesabe.views.widgets
     },
 
     /**
-     * Returns the short url-friendly name for this {AccountGroup} (e.g. "credit").
-     *
-     * @return {string}
-     */
-    getKey: function() {
-      return this._key;
-    },
-
-    /**
      * Sets the short url-friendly name for this {AccountGroup}. This determines
      * which icon shows up next to the name.
      *
      * @param {!string} key
      */
     setKey: function(key) {
-      if (this._key === key)
+      if (this.key === key)
         return;
 
-      if (this._key) this.get('element').removeClass(this._key);
-      this._key = key;
+      if (this.key) this.get('element').removeClass(this.key);
+      this.key = key;
       if (key) this.get('element').addClass(key);
     },
 
@@ -150,7 +149,7 @@ wesabe.$class('wesabe.views.widgets.accounts.AccountGroup', wesabe.views.widgets
     /**
      * Gets the {CredentialDataSource} used to populate this {AccountGroup}.
      */
-    getCredentialDataSource: function() {
+    credentialDataSource: function() {
       return this._accountGroupList.get('credentialDataSource');
     },
 
@@ -310,8 +309,8 @@ wesabe.$class('wesabe.views.widgets.accounts.AccountGroup', wesabe.views.widgets
     update: function(accountGroup) {
       this.setName(accountGroup.name);
       this._total.setMoney(accountGroup.total);
-      this._uri = accountGroup.uri;
-      this.setKey(accountGroup.key);
+      this.set('uri', accountGroup.uri);
+      this.set('key', accountGroup.key);
 
       var accounts = accountGroup.accounts,
           length = accounts.length,
@@ -349,7 +348,7 @@ wesabe.$class('wesabe.views.widgets.accounts.AccountGroup', wesabe.views.widgets
     /**
      * Returns true if any of the accounts in this group are doing an SSU update, false otherwise.
      */
-    isUpdatingAccounts: function() {
+    updatingAccounts: function() {
       var items = this.get('items'),
           length = items.length;
 
@@ -380,7 +379,7 @@ wesabe.$class('wesabe.views.widgets.accounts.AccountGroup', wesabe.views.widgets
     },
 
     _fullPrefKey: function(shortKey) {
-      return 'accounts.groups.' + this._key + '.' + shortKey;
+      return 'accounts.groups.' + this.key + '.' + shortKey;
     }
   });
 });

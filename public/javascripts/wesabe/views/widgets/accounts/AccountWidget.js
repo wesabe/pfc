@@ -11,19 +11,36 @@ wesabe.$class('wesabe.views.widgets.accounts.AccountWidget', wesabe.views.widget
   var $ = jQuery;
 
   $.extend($class.prototype, {
+    /**
+     * Returns a boolean indicating whether this {AccountWidget} is currently
+     * loading data from the servers.
+     */
+    loading: false,
+
+    /**
+     * Gets the {CredentialDataSource} used to populate this {AccountGroupList}.
+     */
+    credentialDataSource: null,
+
+    /**
+     * Gets the {AccountGroupList} wrapping the <ul class="account-groups">.
+     */
+    accountGroupList: null,
+
+    /**
+     * Gets the {wesabe.views.widgets.MoneyLabel} wrapping the net worth line.
+     */
+    total: null,
+
     _editButton: null,
     _doneButton: null,
     _updateButton: null,
     _updateButtonSpinner: null,
-    _total: null,
-    _accountGroupList: null,
     _accountEditDialog: null,
     _selectableObjects: null,
-    _loading: false,
     _editMode: false,
     _hasDoneInitialLoad: false,
     _accountDataSource: null,
-    _credentialDataSource: null,
 
     init: function(element, accountDataSource, credentialDataSource) {
       $super.init.call(this, element);
@@ -31,10 +48,10 @@ wesabe.$class('wesabe.views.widgets.accounts.AccountWidget', wesabe.views.widget
       var me = this;
 
       me._accountDataSource = accountDataSource;
-      me._credentialDataSource = credentialDataSource;
+      me.credentialDataSource = credentialDataSource;
       // set up children
-      me._accountGroupList = new $package.AccountGroupList(element.find('ul.account-groups'), me);
-      me._total = new wesabe.views.widgets.MoneyLabel(element.find('.accounts-total .total'));
+      me.accountGroupList = new $package.AccountGroupList(element.find('ul.account-groups'), me);
+      me.total = new wesabe.views.widgets.MoneyLabel(element.find('.accounts-total .total'));
       me._editButton = new wesabe.views.widgets.Button(element.find('div.module-header a.edit-button'));
       me._editButton.bind('click', me.onEditButtonClick, me);
       me._doneButton = new wesabe.views.widgets.Button(element.find('div.module-header a.done-button'));
@@ -56,7 +73,7 @@ wesabe.$class('wesabe.views.widgets.accounts.AccountWidget', wesabe.views.widget
         me.loadData();
       }
 
-      var creds = me._credentialDataSource;
+      var creds = me.credentialDataSource;
 
       // set up the credential data source callbacks
       creds.subscribe(me.onUploadStatusChanged, me);
@@ -67,7 +84,7 @@ wesabe.$class('wesabe.views.widgets.accounts.AccountWidget', wesabe.views.widget
       // set up DOM event handlers
       element.click(function(event){ me.onClick(event) });
 
-      me.registerChildWidgets(me._total, me._accountGroupList, me._editButton, me._doneButton, me._updateButton);
+      me.registerChildWidgets(me.total, me.accountGroupList, me._editButton, me._doneButton, me._updateButton);
     },
 
     /**
@@ -81,29 +98,15 @@ wesabe.$class('wesabe.views.widgets.accounts.AccountWidget', wesabe.views.widget
     /**
      * Returns the {wesabe.util.Selection} associated with this {AccountWidget}.
      */
-    getSelection: function() {
-      return this._accountGroupList.get('selection');
+    selection: function() {
+      return this.accountGroupList.get('selection');
     },
 
     /**
      * Sets the {wesabe.util.Selection} associated with this {AccountWidget}.
      */
     setSelection: function(selection) {
-      this._accountGroupList.setSelection(selection);
-    },
-
-    /**
-     * Gets the {CredentialDataSource} used to populate this {AccountGroupList}.
-     */
-    getCredentialDataSource: function() {
-      return this._credentialDataSource;
-    },
-
-    /**
-     * Gets the {AccountGroupList} wrapping the <ul class="account-groups">.
-     */
-    getAccountGroupList: function() {
-      return this._accountGroupList;
+      this.accountGroupList.set('selection', selection);
     },
 
     /**
@@ -114,13 +117,6 @@ wesabe.$class('wesabe.views.widgets.accounts.AccountWidget', wesabe.views.widget
      */
     getAccountByURI: function(uri) {
       return this.get('accountGroupList').getAccountByURI(uri);
-    },
-
-    /**
-     * Gets the {wesabe.views.widgets.MoneyLabel} wrapping the net worth line.
-     */
-    getTotal: function() {
-      return this._total;
     },
 
     /**
@@ -156,25 +152,17 @@ wesabe.$class('wesabe.views.widgets.accounts.AccountWidget', wesabe.views.widget
      */
     refresh: function() {
       this._accountDataSource.requestData();
-      this._credentialDataSource.pollUntilSyncDone();
+      this.credentialDataSource.pollUntilSyncDone();
     },
 
     /**
      * Triggers updates of out-of-date SSU accounts for the user.
      */
     triggerUpdates: function() {
-      var ds = this._credentialDataSource;
+      var ds = this.credentialDataSource;
       $.post('/accounts/trigger-updates', function() {
         ds.pollUntilSyncDone();
       });
-    },
-
-    /**
-     * Returns a boolean indicating whether this {AccountWidget} is currently
-     * loading data from the servers.
-     */
-    getLoading: function() {
-      return this._loading;
     },
 
     /**
@@ -183,11 +171,13 @@ wesabe.$class('wesabe.views.widgets.accounts.AccountWidget', wesabe.views.widget
      * appropriately.
      */
     setLoading: function(loading) {
-      if (this._loading !== loading) {
-        loading ? this.get('element').addClass('loading') :
-                  this.get('element').removeClass('loading');
-        this._loading = loading;
-      }
+      loading = !!loading;
+      if (this.loading === loading)
+        return;
+
+      loading ? this.get('element').addClass('loading') :
+                this.get('element').removeClass('loading');
+      this.loading = loading;
     },
 
     /**
@@ -208,7 +198,7 @@ wesabe.$class('wesabe.views.widgets.accounts.AccountWidget', wesabe.views.widget
           this._accountEditDialog.onEndEdit();
       }
 
-      this._accountGroupList.setEditMode(editMode);
+      this.accountGroupList.set('editMode', editMode);
 
       if (!$package.AccountEditDialog)
         wesabe.load($package, 'AccountEditDialog');
@@ -220,7 +210,7 @@ wesabe.$class('wesabe.views.widgets.accounts.AccountWidget', wesabe.views.widget
      * @private
      */
     onAccountDataChanged: function() {
-      this.setLoading(false);
+      this.set('loading', false);
       this.updateAccountListing(this._accountDataSource.get('data'));
       this._hasDoneInitialLoad = true;
       this.set('selectableObjects', null);
@@ -240,7 +230,7 @@ wesabe.$class('wesabe.views.widgets.accounts.AccountWidget', wesabe.views.widget
      * Update the listing of accounts only, not the update status.
      */
     updateAccountListing: function(data) {
-      this.get('total').setMoney(data.total);
+      this.set('total.money', data.total);
       this.get('accountGroupList').update(data['account-groups']);
     },
 
@@ -248,21 +238,22 @@ wesabe.$class('wesabe.views.widgets.accounts.AccountWidget', wesabe.views.widget
      * Called when the account upload status has changed.
      */
     onUploadStatusChanged: function() {
-      this._updateButton.setVisible(this._credentialDataSource.hasCredentials());
-      this.get('accountGroupList').updateUploadStatus(this._credentialDataSource);
-      this._updateButtonSpinner.css('visibility', this.isUpdatingAccounts() ? 'visible' : 'hidden');
+      this._updateButton.setVisible(this.credentialDataSource.hasCredentials());
+      this.get('accountGroupList').updateUploadStatus(this.credentialDataSource);
+      this._updateButtonSpinner.css('visibility', this.get('updatingAccounts') ? 'visible' : 'hidden');
     },
 
     /**
      * Returns a boolean indicating whether any accounts are currently being
      * updated via the Automatic Uploader.
      */
-    isUpdatingAccounts: function() {
-      var groups = this.get('accountGroupList').get('items'),
+    updatingAccounts: function() {
+      var groups = this.get('accountGroupList.items'),
           length = groups.length;
 
       while (length--)
-        if (groups[length].isUpdatingAccounts()) return true;
+        if (groups[length].get('updatingAccounts'))
+          return true;
 
       return false;
     },
@@ -296,14 +287,14 @@ wesabe.$class('wesabe.views.widgets.accounts.AccountWidget', wesabe.views.widget
      * Called when the user clicks the Edit button.
      */
     onEditButtonClick: function() {
-      this.setEditMode(true);
+      this.set('editMode', true);
     },
 
     /**
      * Called when the user clicks the Done button.
      */
     onDoneButtonClick: function() {
-      this.setEditMode(false);
+      this.set('editMode', false);
     },
 
     /**
