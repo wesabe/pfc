@@ -629,8 +629,7 @@ void mousePressed() {
         page.end   = wesabe.lang.date.toParam(endDate);
       }
       page.offset = null;
-      page.storeAndReloadState();
-      page.reload();
+      page.storeState();
     }
   }
 
