@@ -593,7 +593,7 @@ jQuery(function($) {
             .add($('.tag-bar-spent', self));
 
           clickables.click(function() {
-            shared.navigateTo('/accounts#/tags/'+self.fn("data")["name"].replace(/\s/g, '%20'));
+            shared.navigateTo('/tags/'+encodeURIComponent(self.fn("data")["name"].replace(/\s/g, '%20')));
           });
           // </HACK>
 
