@@ -173,8 +173,12 @@ var wesabe = {
       $super = undefined;
     }
 
-    // make sure everything is Subscribable by default
-    if ($super === undefined) $super = wesabe.lang.Subscribable;
+    // mix in some default modules if there's no superclass
+    if ($super === undefined) {
+      $super = function() {}.prototype;
+      $.extend($super, wesabe.lang.Subscribable);
+      $.extend($super, wesabe.lang.KeyValueCoding);
+    }
 
     // use the prototype if they gave us a class
     if ($super && $super.prototype) $super = $super.prototype;

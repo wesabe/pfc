@@ -35,7 +35,7 @@ wesabe.provide('data.preferences', {
 
   // Special Cases
 
-  getDefaultCurrency: function() {
+  defaultCurrency: function() {
     var defaultCurrency = this.get('default_currency');
     return defaultCurrency ? defaultCurrency.name : 'USD';
   }

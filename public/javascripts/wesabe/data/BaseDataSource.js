@@ -11,14 +11,38 @@ wesabe.$class('wesabe.data.BaseDataSource', function($class) {
    */
   $class.dataSourceWithURI = function(uri) {
     return $.extend(new $class(), {
-      getSourceURI: function() {
-        return $.isFunction(uri) ? uri() : uri;
-      }
+      sourceURI: uri
     });
   };
 
   $.extend($class.prototype, {
-    _cachingEnabled: false,
+    /**
+     * URI indicating what XHR endpoint to use.
+     *
+     * @type {String}
+     */
+    sourceURI: null,
+
+    /**
+     * The jQuery data type this data source should ask for.
+     *
+     * @type {String}
+     */
+    dataType: 'json',
+
+    /**
+     * The data retrieved from the server.
+     */
+    data: null,
+
+    /**
+     * true if requests to the same URL (including query params) will
+     * be stored and retrieved from a cache.
+     *
+     * @type {boolean}
+     */
+    cachingEnabled: false,
+
     _cache: {},
     _loading: false,
     _data: null,
@@ -34,7 +58,7 @@ wesabe.$class('wesabe.data.BaseDataSource', function($class) {
      */
     requestDataUnlessHasData: function(callback) {
       if (this.hasData()) {
-        callback && callback(this.getData());
+        callback && callback(this.get('data'));
       } else {
         this.requestData(callback);
       }
@@ -56,9 +80,9 @@ wesabe.$class('wesabe.data.BaseDataSource', function($class) {
       } else {
         // we've already got the data, run the callback ourselves
         if (callback && callback.change)
-          callback.change.call(context, this.getData());
+          callback.change.call(context, this.get('data'));
         else if (callback)
-          callback.call(context, this.getData());
+          callback.call(context, this.get('data'));
       }
     },
 
@@ -78,28 +102,9 @@ wesabe.$class('wesabe.data.BaseDataSource', function($class) {
       if (this.isLoading())
         return;
 
-      var cachedData = this.getCache(this.getRequestOptions());
-      if (cachedData) this.setData(cachedData);
+      var cachedData = this.getCache(this.get('requestOptions'));
+      if (cachedData) this.set('data', cachedData);
       else return this._doBeginLoading();
-    },
-
-    /**
-     * Returns true if requests to the same URL (including query params) will
-     * be stored and retrieved from a cache.
-     *
-     * @return {boolean}
-     */
-    isCachingEnabled: function() {
-      return this._cachingEnabled;
-    },
-
-    /**
-     * Sets whether or not to cache and return the results of XHR requests.
-     *
-     * @param {!boolean} cachingEnabled
-     */
-    setCachingEnabled: function(cachingEnabled) {
-      this._cachingEnabled = cachingEnabled;
     },
 
     /**
@@ -118,7 +123,7 @@ wesabe.$class('wesabe.data.BaseDataSource', function($class) {
 
     /**
      * Clears the entire cache for this data source, but not the currently
-     * loaded data (i.e. calling {#getData} will still return data).
+     * loaded data (i.e. calling {#get('data')} will still return data).
      */
     clearCache: function() {
       this._cache = {};
@@ -150,26 +155,12 @@ wesabe.$class('wesabe.data.BaseDataSource', function($class) {
     },
 
     /**
-     * Returns a {String} URI indicating what XHR endpoint to use.
-     */
-    getSourceURI: function() {
-      // TODO: implement this in subclasses
-    },
-
-    /**
-     * Returns what jQuery data type this data source should ask for.
-     */
-    getDataType: function() {
-      return 'json';
-    },
-
-    /**
      * Gets the default set of options to pass to {jQuery.ajax}.
      */
-    getRequestOptions: function() {
+    requestOptions: function() {
       return {
-        url: this.getSourceURI(),
-        dataType: this.getDataType()
+        url: this.get('sourceURI'),
+        dataType: this.get('dataType')
       };
     },
 
@@ -184,7 +175,7 @@ wesabe.$class('wesabe.data.BaseDataSource', function($class) {
             success: function(data){ me.onDataLoaded(data, options) },
             error: function(){ me.onDataError(options) },
             complete: function(){ me.onAfterLoad(options) }
-          }, me.getRequestOptions());
+          }, me.get('requestOptions'));
 
       me.onBeforeLoad();
       return $.ajax(options);
@@ -212,8 +203,8 @@ wesabe.$class('wesabe.data.BaseDataSource', function($class) {
      * @private
      */
     onDataLoaded: function(data, options) {
-      this.setData(data);
-      if (this.isCachingEnabled())
+      this.set('data', data);
+      if (this.get('cachingEnabled'))
         this.setCache(options, data);
     },
 
@@ -232,21 +223,14 @@ wesabe.$class('wesabe.data.BaseDataSource', function($class) {
      * @private
      */
     onDataChanged: function() {
-      $(this).trigger('change', [this.getData()]);
-    },
-
-    /**
-     * Returns the data retrieved from the server, if any.
-     */
-    getData: function() {
-      return this._data;
+      $(this).trigger('change', [this.get('data')]);
     },
 
     /**
      * Sets the data to {data}.
      */
     setData: function(data) {
-      this._data = data;
+      this.data = data;
       this.onDataChanged();
     },
 
@@ -254,7 +238,7 @@ wesabe.$class('wesabe.data.BaseDataSource', function($class) {
      * Returns true if this data source has data, false otherwise.
      */
     hasData: function() {
-      return this._data != null;
+      return this.get('data') != null;
     },
 
     /**

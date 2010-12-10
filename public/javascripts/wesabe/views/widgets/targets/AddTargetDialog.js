@@ -20,16 +20,16 @@ wesabe.$class('wesabe.views.widgets.targets.AddTargetDialog', wesabe.views.widge
         wesabe.data.tags.sharedDataSource,
         this
       );
-      this._tagAutocompleterField.setMatchMultiple(false);
+      this._tagAutocompleterField.set('matchMultiple', false);
       this._amountField = new wesabe.views.widgets.BaseField(element.find('input[name=amount]'), this);
     },
 
-    getTag: function() {
-      return this._tagAutocompleterField.getValue().replace(/['"](.*?)['"]/, '$1');
+    tag: function() {
+      return this._tagAutocompleterField.get('value').replace(/['"](.*?)['"]/, '$1');
     },
 
-    getAmount: function() {
-      return number.parse(this._amountField.getValue());
+    amount: function() {
+      return number.parse(this._amountField.get('value'));
     },
 
     onWillShow: function(callback) {

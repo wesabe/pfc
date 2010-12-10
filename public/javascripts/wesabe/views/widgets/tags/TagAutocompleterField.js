@@ -9,7 +9,14 @@ wesabe.$class('wesabe.views.widgets.tags.TagAutocompleterField', wesabe.views.wi
 
   $.extend($class.prototype, {
     _tagDataSource: null,
-    _splitAutocompletionTotal: null,
+
+    /**
+     * Gets the total amount avaialble to autocomplete with splits. If the
+     * value is +null+, splits will not be autocompleted.
+     *
+     * @type {number}
+     */
+    splitAutocompletionTotal: null,
 
     init: function(element, tagDataSource) {
       $super.init.call(this, element);
@@ -28,28 +35,9 @@ wesabe.$class('wesabe.views.widgets.tags.TagAutocompleterField', wesabe.views.wi
      *
      * @return {jQuery}
      */
-    getWrapperElement: function() {
-      return $super.getWrapperElement.call(this)
+    wrapperElement: function() {
+      return $super.wrapperElement.call(this)
         .addClass('tag-autocomplete');
-    },
-
-    /**
-     * Gets the total amount avaialble to autocomplete with splits.
-     *
-     * @return {number}
-     */
-    getSplitAutocompletionTotal: function() {
-      return this._splitAutocompletionTotal;
-    },
-
-    /**
-     * Sets the total amount to do split autocompletion with, or null to
-     * disable split amount autocompletion.
-     *
-     * @param {?number} splitAutocompletionTotal
-     */
-    setSplitAutocompletionTotal: function(splitAutocompletionTotal) {
-      this._splitAutocompletionTotal = splitAutocompletionTotal;
     },
 
     /**
@@ -68,17 +56,17 @@ wesabe.$class('wesabe.views.widgets.tags.TagAutocompleterField', wesabe.views.wi
       if (this._lastKeyPressKeyCode != 58 /* : (colon) */)
         return;
 
-      var total = this.getSplitAutocompletionTotal();
+      var total = this.get('splitAutocompletionTotal');
       if (!total)
         return;
 
       total = Math.abs(total);
       var remainder = total,
-          sel = this.getElement().caret(),
-          value = this.getValue(),
+          sel = this.get('element').caret(),
+          value = this.get('value'),
           before = value.substring(0, sel.begin).replace(/\s*:$/, ':'), // remove any spaces between the colon and the amount
           after = value.substring(sel.end, value.length),
-          taglist = wesabe.data.tags.parseTagString(this.getValue());
+          taglist = wesabe.data.tags.parseTagString(this.get('value'));
 
       while (taglist.length) {
         var tag = taglist.shift();
@@ -95,8 +83,8 @@ wesabe.$class('wesabe.views.widgets.tags.TagAutocompleterField', wesabe.views.wi
       remainder = Math.round(remainder * 100) / 100;
       remainder = (remainder == 0 || isNaN(remainder)) ? '' : remainder.toString();
 
-      this.setValue(before+remainder+after);
-      this.getElement().caret(before.length, before.length+remainder.length);
+      this.set('value', before+remainder+after);
+      this.get('element').caret(before.length, before.length+remainder.length);
       this._lastKeyPressKeyCode = null;
     },
 
@@ -106,15 +94,15 @@ wesabe.$class('wesabe.views.widgets.tags.TagAutocompleterField', wesabe.views.wi
      * @private
      */
     _refreshCompletions: function() {
-      var allTagNames = this._tagDataSource.getTagNames();
-      var enteredTags = wesabe.data.tags.parseTagString(this.getValue());
+      var allTagNames = this._tagDataSource.get('tagNames');
+      var enteredTags = wesabe.data.tags.parseTagString(this.get('value'));
       var enteredTagNames = [];
 
       for (var i = enteredTags.length; i--; ) {
         enteredTagNames.push(enteredTags[i].name);
       }
 
-      this.setCompletions(wesabe.lang.array.minus(allTagNames, enteredTagNames));
+      this.set('completions', wesabe.lang.array.minus(allTagNames, enteredTagNames));
     }
   });
 });

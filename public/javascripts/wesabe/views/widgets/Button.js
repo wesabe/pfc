@@ -10,11 +10,34 @@ wesabe.$class('wesabe.views.widgets.Button', wesabe.views.widgets.BaseWidget, fu
   /** @const */ $class.SELECTED_CLASS = 'on';
 
   $.extend($class.prototype, {
-    _enabled: true,
-    _color: null,
-    _text: null,
+    /**
+     * Value of the button. Used with {ButtonGroup}s to allow
+     * referring to specific buttons by value rather than by reference.
+     */
+    value: null,
+
+    /**
+     * Text of the button.
+     *
+     * @type {string}
+     */
+    text: null,
+
+    /**
+     * true if this button responds to clicks, false otherwise.
+     *
+     * @type {boolean}
+     */
+    enabled: true,
+
+    /**
+     * The color of this button. It can be one of {wesabe.views.widgets.Button.COLORS}.
+     *
+     * @type {string}
+     */
+    color: null,
+
     _textElement: null,
-    _value: null,
 
     init: function(element, value) {
       var me = this;
@@ -29,15 +52,15 @@ wesabe.$class('wesabe.views.widgets.Button', wesabe.views.widgets.BaseWidget, fu
 
       // read the existing text
       me._textElement = element.children('span');
-      me._text = me._textElement.text();
+      me.text = me._textElement.text();
 
       // set the value
-      me._value = value;
+      me.value = value;
 
       // figure out what color it should be
       for (var i = $class.COLORS.length; i--;) {
         if (element.hasClass($class.COLORS[i])) {
-          me._color = $class.COLORS[i];
+          me.color = $class.COLORS[i];
           break;
         }
       }
@@ -57,20 +80,11 @@ wesabe.$class('wesabe.views.widgets.Button', wesabe.views.widgets.BaseWidget, fu
       event.preventDefault();
 
       // don't do anything if we're disabled
-      if (!this.isEnabled())
+      if (!this.get('enabled'))
         return;
 
       // notify listeners of the click
       this.trigger('click');
-    },
-
-    /**
-     * Returns true if this button responds to clicks, false otherwise.
-     *
-     * @return {boolean}
-     */
-    isEnabled: function() {
-      return this._enabled;
     },
 
     /**
@@ -80,15 +94,25 @@ wesabe.$class('wesabe.views.widgets.Button', wesabe.views.widgets.BaseWidget, fu
      * @param {!boolean} enabled
      */
     setEnabled: function(enabled) {
-      if (this._enabled === enabled)
+      if (this.enabled === enabled)
         return;
 
-      this._enabled = enabled;
-      if (this._color) {
-        this.getElement()
-          .addClass(enabled ? this._color : $class.DISABLED_COLOR)
-          .removeClass(enabled ? $class.DISABLED_COLOR : this._color);
+      this.enabled = enabled;
+      if (this.color) {
+        this.get('element')
+          .addClass(enabled ? this.color : $class.DISABLED_COLOR)
+          .removeClass(enabled ? $class.DISABLED_COLOR : this.color);
       }
+    },
+
+    setColor: function(color) {
+      if (this.color === color)
+        return;
+
+      this.get('element')
+        .removeClass(this.color)
+        .addClass(color);
+      this.color = color;
     },
 
     /**
@@ -96,8 +120,8 @@ wesabe.$class('wesabe.views.widgets.Button', wesabe.views.widgets.BaseWidget, fu
      *
      * @return {boolean}
      */
-    isSelected: function() {
-      return this.getElement().hasClass($class.SELECTED_CLASS);
+    selected: function() {
+      return this.get('element').hasClass($class.SELECTED_CLASS);
     },
 
     /**
@@ -106,17 +130,8 @@ wesabe.$class('wesabe.views.widgets.Button', wesabe.views.widgets.BaseWidget, fu
      * @param {!boolean} selected
      */
     setSelected: function(selected) {
-      if (this.isSelected() !== selected)
-        this.getElement().toggleClass($class.SELECTED_CLASS);
-    },
-
-    /**
-     * Gets the text of this button.
-     *
-     * @return {string}
-     */
-    getText: function() {
-      return this._text;
+      if (this.get('selected') !== selected)
+        this.get('element').toggleClass($class.SELECTED_CLASS);
     },
 
     /**
@@ -125,33 +140,18 @@ wesabe.$class('wesabe.views.widgets.Button', wesabe.views.widgets.BaseWidget, fu
      * @param {!string} text
      */
     setText: function(text) {
-      if (this._text === text)
+      if (this.text === text)
         return;
 
-      this._text = text;
+      this.text = text;
       this._textElement.text(text);
-    },
-
-    /**
-     * Gets the value of the button. Used with {ButtonGroup}s to allow
-     * referring to specific buttons by value rather than by reference.
-     */
-    getValue: function() {
-      return this._value;
-    },
-
-    /**
-     * Sets the value of the button.
-     */
-    setValue: function(value) {
-      this._value = value;
     }
   });
 
   $.extend($class, {
     withText: function(text) {
       var button = new this();
-      button.setText(text);
+      button.set('text', text);
       return button;
     }
   });

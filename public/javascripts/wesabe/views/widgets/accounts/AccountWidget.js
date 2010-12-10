@@ -40,7 +40,7 @@ wesabe.$class('wesabe.views.widgets.accounts.AccountWidget', wesabe.views.widget
       me._doneButton = new wesabe.views.widgets.Button(element.find('div.module-header a.done-button'));
       me._doneButton.bind('click', me.onDoneButtonClick, me);
       me._updateButton = new wesabe.views.widgets.Button(element.find('div.module-header .update-button'));
-      me._updateButtonSpinner = me._updateButton.getElement().children('.updating-spinner');
+      me._updateButtonSpinner = me._updateButton.get('element').children('.updating-spinner');
       me._updateButton.bind('click', me.triggerUpdates, me);
 
       // set up data source callbacks
@@ -51,7 +51,7 @@ wesabe.$class('wesabe.views.widgets.accounts.AccountWidget', wesabe.views.widget
 
       // if we already have the data (preloaded), use it, otherwise load it
       if (me._accountDataSource.hasData()) {
-        me.onAccountDataChanged(me._accountDataSource.getData());
+        me.onAccountDataChanged(me._accountDataSource.get('data'));
       } else {
         me.loadData();
       }
@@ -82,7 +82,7 @@ wesabe.$class('wesabe.views.widgets.accounts.AccountWidget', wesabe.views.widget
      * Returns the {wesabe.util.Selection} associated with this {AccountWidget}.
      */
     getSelection: function() {
-      return this._accountGroupList.getSelection();
+      return this._accountGroupList.get('selection');
     },
 
     /**
@@ -113,7 +113,7 @@ wesabe.$class('wesabe.views.widgets.accounts.AccountWidget', wesabe.views.widget
      * @return {Account}
      */
     getAccountByURI: function(uri) {
-      return this.getAccountGroupList().getAccountByURI(uri);
+      return this.get('accountGroupList').getAccountByURI(uri);
     },
 
     /**
@@ -136,7 +136,7 @@ wesabe.$class('wesabe.views.widgets.accounts.AccountWidget', wesabe.views.widget
         callback(me._accountEditDialog);
       } else {
         wesabe.ready('wesabe.views.widgets.accounts.AccountEditDialog', function() {
-          var editDialogElement = me.getElement().find('div.edit-dialog');
+          var editDialogElement = me.get('element').find('div.edit-dialog');
           me._accountEditDialog = new $package.AccountEditDialog(editDialogElement, me);
           callback(me._accountEditDialog);
         });
@@ -184,8 +184,8 @@ wesabe.$class('wesabe.views.widgets.accounts.AccountWidget', wesabe.views.widget
      */
     setLoading: function(loading) {
       if (this._loading !== loading) {
-        loading ? this.getElement().addClass('loading') :
-                  this.getElement().removeClass('loading');
+        loading ? this.get('element').addClass('loading') :
+                  this.get('element').removeClass('loading');
         this._loading = loading;
       }
     },
@@ -221,9 +221,9 @@ wesabe.$class('wesabe.views.widgets.accounts.AccountWidget', wesabe.views.widget
      */
     onAccountDataChanged: function() {
       this.setLoading(false);
-      this.updateAccountListing(this._accountDataSource.getData());
+      this.updateAccountListing(this._accountDataSource.get('data'));
       this._hasDoneInitialLoad = true;
-      this._selectableObjects = null;
+      this.set('selectableObjects', null);
       this.trigger('loaded');
     },
 
@@ -240,8 +240,8 @@ wesabe.$class('wesabe.views.widgets.accounts.AccountWidget', wesabe.views.widget
      * Update the listing of accounts only, not the update status.
      */
     updateAccountListing: function(data) {
-      this.getTotal().setMoney(data.total);
-      this.getAccountGroupList().update(data['account-groups']);
+      this.get('total').setMoney(data.total);
+      this.get('accountGroupList').update(data['account-groups']);
     },
 
     /**
@@ -249,7 +249,7 @@ wesabe.$class('wesabe.views.widgets.accounts.AccountWidget', wesabe.views.widget
      */
     onUploadStatusChanged: function() {
       this._updateButton.setVisible(this._credentialDataSource.hasCredentials());
-      this.getAccountGroupList().updateUploadStatus(this._credentialDataSource);
+      this.get('accountGroupList').updateUploadStatus(this._credentialDataSource);
       this._updateButtonSpinner.css('visibility', this.isUpdatingAccounts() ? 'visible' : 'hidden');
     },
 
@@ -258,7 +258,7 @@ wesabe.$class('wesabe.views.widgets.accounts.AccountWidget', wesabe.views.widget
      * updated via the Automatic Uploader.
      */
     isUpdatingAccounts: function() {
-      var groups = this.getAccountGroupList().getItems(),
+      var groups = this.get('accountGroupList').get('items'),
           length = groups.length;
 
       while (length--)
@@ -276,7 +276,7 @@ wesabe.$class('wesabe.views.widgets.accounts.AccountWidget', wesabe.views.widget
           groupElement = element.parents('.group');
 
       if (groupElement.length) {
-        var group = this.getAccountGroupList().getItemByElement(groupElement);
+        var group = this.get('accountGroupList').getItemByElement(groupElement);
         if (group)
           group.onClick(event);
         return;
@@ -311,17 +311,18 @@ wesabe.$class('wesabe.views.widgets.accounts.AccountWidget', wesabe.views.widget
      *
      * See {wesabe.views.pages.accounts#reloadState}.
      */
-    getSelectableObjects: function() {
+    selectableObjects: function() {
       if (!this._selectableObjects) {
-        var groups = this.getAccountGroupList().getItems(),
+        var groups = this.get('accountGroupList').get('items'),
             length = groups.length,
             objects = $.makeArray(groups);
 
         while (length--)
-          objects = objects.concat(groups[length].getItems());
+          objects = objects.concat(groups[length].get('items'));
 
         this._selectableObjects = objects;
       }
+
       return this._selectableObjects;
     }
   });

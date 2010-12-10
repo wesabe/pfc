@@ -13,12 +13,22 @@ wesabe.$class('wesabe.views.widgets.accounts.AccountGroup', wesabe.views.widgets
   var prefs = wesabe.data.preferences;
 
   $.extend($class.prototype, {
+    /**
+     * URI for this {AccountGroup} (e.g. "/account-groups/checking").
+     *
+     * See {wesabe.views.pages.accounts#storeState}.
+     */
+    uri: null,
+
+    /**
+     * Visible name of the group (e.g. "Checking").
+     */
+    name: null,
+
     _template: null,
     _nameElement: null,
     _accountGroupList: null,
     _total: null,
-    _name: null,
-    _uri: null,
     _key: null,
     _expanded: false,
     _editMode: false,
@@ -45,21 +55,14 @@ wesabe.$class('wesabe.views.widgets.accounts.AccountGroup', wesabe.views.widgets
     },
 
     /**
-     * Gets the name of the group (e.g. "Checking").
-     */
-    getName: function() {
-      return this._name;
-    },
-
-    /**
      * Sets the name of this {AccountGroup} and updates the text, but does not
      * update the name on the server.
      */
     setName: function(name) {
-      if (this._name === name)
+      if (this.name === name)
         return;
 
-      this._name = name;
+      this.name = name;
       this._nameElement.text(name);
     },
 
@@ -82,18 +85,9 @@ wesabe.$class('wesabe.views.widgets.accounts.AccountGroup', wesabe.views.widgets
       if (this._key === key)
         return;
 
-      if (this._key) this.getElement().removeClass(this._key);
+      if (this._key) this.get('element').removeClass(this._key);
       this._key = key;
-      if (key) this.getElement().addClass(key);
-    },
-
-    /**
-     * Gets the URI for this {AccountGroup} (e.g. "/account-groups/checking").
-     *
-     * See {wesabe.views.pages.accounts#storeState}.
-     */
-    getURI: function() {
-      return this._uri;
+      if (key) this.get('element').addClass(key);
     },
 
     /**
@@ -103,11 +97,11 @@ wesabe.$class('wesabe.views.widgets.accounts.AccountGroup', wesabe.views.widgets
      * @return {Account}
      */
     getAccountByURI: function(uri) {
-      var items = this.getItems();
+      var items = this.get('items');
 
       for (var i = items.length; i--;) {
         var account = items[i];
-        if (account.getURI() === uri) return account;
+        if (account.get('uri') === uri) return account;
       }
 
       return null;
@@ -121,7 +115,7 @@ wesabe.$class('wesabe.views.widgets.accounts.AccountGroup', wesabe.views.widgets
      */
     toParams: function() {
       var params = [],
-          accounts = this.getItems(),
+          accounts = this.get('items'),
           length = accounts.length;
 
       while (length--)
@@ -136,12 +130,12 @@ wesabe.$class('wesabe.views.widgets.accounts.AccountGroup', wesabe.views.widgets
      * See {wesabe.views.pages.accounts#paramsForCurrentSelection}.
      */
     getCurrencies: function() {
-      var items = this.getItems(),
+      var items = this.get('items'),
           length = items.length,
           currencies = [];
 
       while (length--)
-        currencies = currencies.concat(items[length].getCurrencies());
+        currencies = currencies.concat(items[length].get('currencies'));
 
       return array.uniq(currencies);
     },
@@ -150,14 +144,14 @@ wesabe.$class('wesabe.views.widgets.accounts.AccountGroup', wesabe.views.widgets
      * Returns the {wesabe.util.Selection} associated with this {AccountGroup}.
      */
     getSelection: function() {
-      return this._accountGroupList.getSelection();
+      return this._accountGroupList.get('selection');
     },
 
     /**
      * Gets the {CredentialDataSource} used to populate this {AccountGroup}.
      */
     getCredentialDataSource: function() {
-      return this._accountGroupList.getCredentialDataSource();
+      return this._accountGroupList.get('credentialDataSource');
     },
 
     /**
@@ -175,7 +169,7 @@ wesabe.$class('wesabe.views.widgets.accounts.AccountGroup', wesabe.views.widgets
 
       // did they click the expand/collapse button?
       if (target.hasClass('view')) {
-        if (!this.getListElement().is(':animated')) {
+        if (!this.get('listElement').is(':animated')) {
           this.animateExpanded(!this.isExpanded());
           this._persistPreferences();
         }
@@ -193,9 +187,9 @@ wesabe.$class('wesabe.views.widgets.accounts.AccountGroup', wesabe.views.widgets
 
       // we got clicked somewhere that isn't a hotspot
       if (event.ctrlKey || event.metaKey) {
-        this.getSelection().toggle(this);
+        this.get('selection').toggle(this);
       } else {
-        this.getSelection().set(this);
+        this.get('selection').set(this);
         if (!this.isExpanded()) {
           this.animateExpanded(true);
           this._persistPreferences();
@@ -208,10 +202,10 @@ wesabe.$class('wesabe.views.widgets.accounts.AccountGroup', wesabe.views.widgets
      * becomes part of the current selection.
      */
     onSelect: function() {
-      if (this.getElement()) {
-        this.getElement().addClass('on');
-        if (this.getElement().hasClass('open'))
-          this.getElement().addClass('open-on');
+      if (this.get('element')) {
+        this.get('element').addClass('on');
+        if (this.get('element').hasClass('open'))
+          this.get('element').addClass('open-on');
       }
     },
 
@@ -220,8 +214,8 @@ wesabe.$class('wesabe.views.widgets.accounts.AccountGroup', wesabe.views.widgets
      * ceases to be part of the current selection.
      */
     onDeselect: function() {
-      if (this.getElement())
-        this.getElement().removeClass('on').removeClass('open-on');
+      if (this.get('element'))
+        this.get('element').removeClass('on').removeClass('open-on');
     },
 
     /**
@@ -252,7 +246,7 @@ wesabe.$class('wesabe.views.widgets.accounts.AccountGroup', wesabe.views.widgets
         this._wasExpanded = null;
       }
 
-      var items = this.getItems(),
+      var items = this.get('items'),
           length = items.length;
 
       while (length--)
@@ -298,12 +292,12 @@ wesabe.$class('wesabe.views.widgets.accounts.AccountGroup', wesabe.views.widgets
         return;
 
       if (expanded) {
-        me.getListElement().slideDown(speed, function() {
-          me.getElement().addClass('open');
+        me.get('listElement').slideDown(speed, function() {
+          me.get('element').addClass('open');
         });
       } else {
-        me.getListElement().slideUp(speed, function() {
-          me.getElement().removeClass('open');
+        me.get('listElement').slideUp(speed, function() {
+          me.get('element').removeClass('open');
         });
       }
 
@@ -345,18 +339,18 @@ wesabe.$class('wesabe.views.widgets.accounts.AccountGroup', wesabe.views.widgets
      * Updates the upload statuses for the child {Account} items.
      */
     updateUploadStatus: function(credentialDataSource) {
-      var items = this.getItems(),
+      var items = this.get('items'),
           length = items.length;
 
       while (length--)
-        items[length].setCredential(credentialDataSource.getCredentialDataByAccountURI(items[length].getURI()));
+        items[length].setCredential(credentialDataSource.getCredentialDataByAccountURI(items[length].get('uri')));
     },
 
     /**
      * Returns true if any of the accounts in this group are doing an SSU update, false otherwise.
      */
     isUpdatingAccounts: function() {
-      var items = this.getItems(),
+      var items = this.get('items'),
           length = items.length;
 
       while (length--)

@@ -11,9 +11,9 @@ wesabe.$class('wesabe.data.accounts.AccountDataSource', wesabe.data.BaseDataSour
     /**
      * Gets the default set of options to pass to {jQuery.ajax}.
      */
-    getRequestOptions: function() {
-      return $.extend($super.getRequestOptions.apply(this, arguments), {
-        url: '/data/accounts/all/' + prefs.getDefaultCurrency(),
+    requestOptions: function() {
+      return $.extend($super.requestOptions.apply(this, arguments), {
+        url: '/data/accounts/all/' + prefs.defaultCurrency(),
         data: {include_archived: true},
         cache: false
       });
@@ -51,7 +51,7 @@ wesabe.$class('wesabe.data.accounts.AccountDataSource', wesabe.data.BaseDataSour
       if (!this.hasData())
         return null;
 
-      var accounts = this.getData().accounts,
+      var accounts = this.get('data').accounts,
           length = accounts.length;
 
       while (length--)

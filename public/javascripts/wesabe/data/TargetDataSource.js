@@ -5,8 +5,19 @@ wesabe.$class('wesabe.data.TargetDataSource', wesabe.data.BaseDataSource, functi
   var date = wesabe.lang.date;
 
   $.extend($class.prototype, {
-    _startDate: null,
-    _endDate: null,
+    /**
+     * The start date to get target data for.
+     *
+     * @type {date}
+     */
+    startDate: null,
+
+    /**
+     * The end date to get target data for.
+     *
+     * @type {date}
+     */
+    endDate: null,
 
     /**
      * Selects the current month as the date range for this data source.
@@ -21,57 +32,21 @@ wesabe.$class('wesabe.data.TargetDataSource', wesabe.data.BaseDataSource, functi
      * @param {!date} dateInMonth
      */
     selectMonth: function(dateInMonth) {
-      this._startDate = date.startOfMonth(dateInMonth);
-      this._endDate = date.endOfMonth(dateInMonth);
+      this.startDate = date.startOfMonth(dateInMonth);
+      this.endDate = date.endOfMonth(dateInMonth);
     },
 
     /**
      * Gets the default set of options to pass to {jQuery.ajax}.
      */
-    getRequestOptions: function() {
-      return $.extend($super.getRequestOptions.apply(this, arguments), {
+    requestOptions: function() {
+      return $.extend($super.requestOptions.apply(this, arguments), {
         url: '/targets',
         data: {
-          start_date: date.toParam(this._startDate),
-          end_date: date.toParam(this._endDate)
+          start_date: date.toParam(this.get('startDate')),
+          end_date: date.toParam(this.get('endDate'))
         }
       });
-    },
-
-    /**
-     * Gets the start date to get target data for.
-     *
-     * @return {date}
-     */
-    getStartDate: function() {
-      return this._startDate;
-    },
-
-    /**
-     * Sets the start date to get target data for.
-     *
-     * @param {!date} startDate
-     */
-    setStartDate: function(startDate) {
-      this._startDate = startDate;
-    },
-
-    /**
-     * Gets the end date to get target data for.
-     *
-     * @return {date}
-     */
-    getEndDate: function() {
-      return this._endDate;
-    },
-
-    /**
-     * Sets the end date to get target data for.
-     *
-     * @param {!date} endDate
-     */
-    setEndDate: function(endDate) {
-      this._endDate = endDate;
     },
 
     /**

@@ -8,7 +8,10 @@ wesabe.$class('wesabe.views.widgets.transactions.Transaction', wesabe.views.widg
   var number = wesabe.lang.number;
 
   $.extend($class.prototype, {
-    _uri: null,
+    /**
+     * URI of this transaction if it has one.
+     */
+    uri: null,
 
     _noteContainerElement: null,
     _noteLabel: null,
@@ -82,15 +85,6 @@ wesabe.$class('wesabe.views.widgets.transactions.Transaction', wesabe.views.widg
     },
 
     /**
-     * Gets the uri of this transaction if it has one.
-     *
-     * @return {number}
-     */
-    getURI: function() {
-      return this._uri;
-    },
-
-    /**
      * Sets the uri of this transaction if it has one.
      *
      * @param {?String} uri
@@ -105,7 +99,7 @@ wesabe.$class('wesabe.views.widgets.transactions.Transaction', wesabe.views.widg
      * @return {?string}
      */
     getNote: function() {
-      return this._noteLabel.getValue();
+      return this._noteLabel.get('value');
     },
 
     /**
@@ -170,7 +164,7 @@ wesabe.$class('wesabe.views.widgets.transactions.Transaction', wesabe.views.widg
      * @return {date}
      */
     getDate: function() {
-      return this._dateLabel.getValue();
+      return this._dateLabel.get('value');
     },
 
     /**
@@ -188,7 +182,7 @@ wesabe.$class('wesabe.views.widgets.transactions.Transaction', wesabe.views.widg
      * @return {object}
      */
     getAccount: function() {
-      return this._accountLabel.getValue();
+      return this._accountLabel.get('value');
     },
 
     /**
@@ -199,8 +193,8 @@ wesabe.$class('wesabe.views.widgets.transactions.Transaction', wesabe.views.widg
     setAccount: function(account) {
       account = account && this._getAccountDataByURI(account.uri);
       this._account = account;
-      this._accountLabel.setValue(account);
-      this._accountLabel.setURI(account && account.uri);
+      this._accountLabel.set('value', account);
+      this._accountLabel.set('uri', account && account.uri);
     },
 
     /**
@@ -208,8 +202,8 @@ wesabe.$class('wesabe.views.widgets.transactions.Transaction', wesabe.views.widg
      *
      * @return {boolean}
      */
-    isAccountVisible: function() {
-      return this._accountLabel.isVisible();
+    accountVisible: function() {
+      return this._accountLabel.get('visible');
     },
 
     /**
@@ -218,7 +212,7 @@ wesabe.$class('wesabe.views.widgets.transactions.Transaction', wesabe.views.widg
      * @param {!boolean} visible
      */
     setAccountVisible: function(visible) {
-      this._accountLabel.setVisible(visible);
+      this._accountLabel.set('visible', visible);
     },
 
     /**
@@ -226,8 +220,8 @@ wesabe.$class('wesabe.views.widgets.transactions.Transaction', wesabe.views.widg
      *
      * @return {object}
      */
-    getBalance: function() {
-      return this._balanceLabel.getMoney();
+    balance: function() {
+      return this._balanceLabel.get('money');
     },
 
     /**
@@ -236,7 +230,7 @@ wesabe.$class('wesabe.views.widgets.transactions.Transaction', wesabe.views.widg
      * @param {?string|object} balance
      */
     setBalance: function(balance) {
-      this._balanceLabel.setMoney(balance || {display: 'n/a'});
+      this._balanceLabel.set('money', balance || {display: 'n/a'});
     },
 
     /**
@@ -254,7 +248,7 @@ wesabe.$class('wesabe.views.widgets.transactions.Transaction', wesabe.views.widg
      * @return {object}
      */
     getAmount: function() {
-      return this._amountLabel.getMoney();
+      return this._amountLabel.get('money');
     },
 
     /**
@@ -323,7 +317,7 @@ wesabe.$class('wesabe.views.widgets.transactions.Transaction', wesabe.views.widg
       } else {
         this._transferContainerElement.addClass('on transfer-on');
 
-        var thisAccount = this.getAccount(),
+        var thisAccount = this.get('account'),
             otherAccount = transfer.account;
 
         thisAccount = thisAccount && this._getAccountDataByURI(thisAccount.uri);

@@ -68,7 +68,7 @@ jQuery(function($) {
       var endDate = this.endDate();
 
       var params = page.paramsForCurrentSelection();
-      var currency = params.currency || wesabe.data.preferences.getDefaultCurrency();
+      var currency = params.currency || wesabe.data.preferences.defaultCurrency();
       delete params.currency;
 
       // TODO: handle export from search results

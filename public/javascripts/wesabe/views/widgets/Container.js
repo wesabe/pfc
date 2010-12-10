@@ -3,8 +3,8 @@ wesabe.$class('views.widgets.Container', wesabe.views.widgets.BaseWidget, functi
   var $ = jQuery;
 
   $.extend($class.prototype, {
-    _topElement: null,
-    _bottomElement: null,
+    topElement: null,
+    bottomElement: null,
 
     init: function(elementOrStyle) {
       var element, style;
@@ -23,24 +23,16 @@ wesabe.$class('views.widgets.Container', wesabe.views.widgets.BaseWidget, functi
 
       $super.init.call(this, element);
 
-      this._topElement = element.find('> .top > .right');
-      this.setContentElement(element.find('> .middle > .right'));
-      this._bottomElement = element.find('> .bottom > .right');
+      this.topElement = element.find('> .top > .right');
+      this.set('contentElement', element.find('> .middle > .right'));
+      this.bottomElement = element.find('> .bottom > .right');
 
       if (style)
         this.addClassName(style);
     },
 
-    getTopElement: function() {
-      return this._topElement;
-    },
-
-    getMiddleElement: function() {
-      return this.getContentElement();
-    },
-
-    getBottomElement: function() {
-      return this._bottomElement;
+    middleElement: function() {
+      return this.get('contentElement');
     }
   });
 });

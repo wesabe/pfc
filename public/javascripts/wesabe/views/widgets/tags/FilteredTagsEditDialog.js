@@ -21,7 +21,7 @@ wesabe.$class('wesabe.views.widgets.tags.FilteredTagsEditDialog', wesabe.views.w
       );
 
       // read the original value from the input element
-      me._originalValue = me.getValue();
+      me._originalValue = me.get('value');
     },
 
     /**
@@ -47,8 +47,8 @@ wesabe.$class('wesabe.views.widgets.tags.FilteredTagsEditDialog', wesabe.views.w
      *
      * @return {string}
      */
-    getValue: function() {
-      return this._tagEditField.getValue();
+    value: function() {
+      return this._tagEditField.get('value');
     },
 
     /**
@@ -57,7 +57,7 @@ wesabe.$class('wesabe.views.widgets.tags.FilteredTagsEditDialog', wesabe.views.w
      * @param {!string}
      */
     setValue: function(value) {
-      this._tagEditField.setValue(value);
+      this._tagEditField.set('value', value);
     },
 
     /**
@@ -65,7 +65,7 @@ wesabe.$class('wesabe.views.widgets.tags.FilteredTagsEditDialog', wesabe.views.w
      * before the user edited it.
      */
     resetValue: function() {
-      this.setValue(this._originalValue);
+      this.set('value', this._originalValue);
     },
 
     onConfirm: function() {
@@ -74,7 +74,7 @@ wesabe.$class('wesabe.views.widgets.tags.FilteredTagsEditDialog', wesabe.views.w
       $.ajax({
         url: '/user/edit_filter_tags',
         type: 'POST',
-        data: {filter_tags: me.getValue()},
+        data: {filter_tags: me.get('value')},
         dataType: 'json',
         success: function(data, textStatus) {
           me._originalValue = data.join(' ');

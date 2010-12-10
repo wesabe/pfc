@@ -20,7 +20,7 @@ wesabe.$class('wesabe.data.credentials.CredentialDataSource', wesabe.data.BaseDa
       if (!this.hasData())
         return null;
 
-      var credentials = this.getData(),
+      var credentials = this.get('data'),
           length = credentials.length;
 
       while (length--)
@@ -53,7 +53,7 @@ wesabe.$class('wesabe.data.credentials.CredentialDataSource', wesabe.data.BaseDa
     },
 
     onDestroy: function(uri) {
-      if (this.isCachingEnabled()) {
+      if (this.get('cachingEnabled')) {
         // remove from the cache
         for (var k in this._cache) {
           var cache = this._cache[k], result = [];
@@ -68,7 +68,7 @@ wesabe.$class('wesabe.data.credentials.CredentialDataSource', wesabe.data.BaseDa
 
       this.trigger('destroy', [uri]);
 
-      if (this.isCachingEnabled()) {
+      if (this.get('cachingEnabled')) {
         var data = this.getCache({});
         if (data)
           this.trigger('change', [data]);
@@ -83,7 +83,7 @@ wesabe.$class('wesabe.data.credentials.CredentialDataSource', wesabe.data.BaseDa
      * Returns true if there are any credentials still pending, false otherwise.
      */
     isUpdating: function() {
-      var data = this.getData();
+      var data = this.get('data');
 
       if (!data)
         return false;
@@ -105,7 +105,7 @@ wesabe.$class('wesabe.data.credentials.CredentialDataSource', wesabe.data.BaseDa
     hasCredentials: function() {
       if (!this.hasData())
         return false;
-      else if (this.getData().length > 0)
+      else if (this.get('data').length > 0)
         return true;
       else
         return false;

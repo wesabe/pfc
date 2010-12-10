@@ -3,11 +3,11 @@ wesabe.$class('views.widgets.Module', wesabe.views.widgets.Container, function($
   var $ = jQuery;
 
   $.extend($class.prototype, {
+    movable: false,
+
     _headerElement: null,
     _headerTitleLabel: null,
     _movableElements: null,
-
-    _movable: false,
 
     init: function(elementOrStyle) {
       var element, style;
@@ -26,22 +26,22 @@ wesabe.$class('views.widgets.Module', wesabe.views.widgets.Container, function($
       }
 
       $super.init.call(this, element);
-      element = this.getElement();
+      element = this.get('element');
 
       if (topContent)
-        topContent.appendTo(this.getTopElement());
+        topContent.appendTo(this.get('topElement'));
       if (middleContent)
-        middleContent.appendTo(this.getMiddleElement());
+        middleContent.appendTo(this.get('middleElement'));
       if (bottomContent)
-        bottomContent.appendTo(this.getBottomElement());
+        bottomContent.appendTo(this.get('bottomElement'));
 
-      this.setContentElement(element.find('.content'));
+      this.set('contentElement', element.find('.content'));
       this._headerElement = element.find('.module-header');
       this._headerTitleLabel = new wesabe.views.widgets.Label(this._headerElement.find(':header'));
       this.registerChildWidget(this._headerTitleLabel);
 
       this._movableElements = element.find('> .top > .right > .grip, > .top > .right');
-      this._movable = this._movableElements.hasClass('movable');
+      this.movable = this._movableElements.hasClass('movable');
 
       if (style)
         this.addClassName(style);
@@ -52,8 +52,8 @@ wesabe.$class('views.widgets.Module', wesabe.views.widgets.Container, function($
      *
      * @return {String}
      */
-    getTitle: function() {
-      return this._headerTitleLabel.getValue();
+    title: function() {
+      return this._headerTitleLabel.get('value');
     },
 
     /**
@@ -62,23 +62,19 @@ wesabe.$class('views.widgets.Module', wesabe.views.widgets.Container, function($
      * @param {String} title
      */
     setTitle: function(title) {
-      this._headerTitleLabel.setValue(title);
+      this._headerTitleLabel.set('value', title);
     },
 
-    getHeaderElement: function() {
+    headerElement: function() {
       return this._headerElement;
-    },
-
-    isMovable: function() {
-      return this._movable;
     },
 
     setMovable: function(movable) {
       movable = !!movable;
-      if (movable === this._movable)
+      if (movable === this.movable)
         return;
 
-      this._movable = movable;
+      this.movable = movable;
       if (movable) this._movableElements.addClass('movable');
       else         this._movableElements.removeClass('movable');
     }

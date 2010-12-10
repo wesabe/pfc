@@ -2,7 +2,7 @@
  * Provides access to tag data over specific time ranges.
  */
 wesabe.$class('wesabe.data.tags.TagDataSource',
-  wesabe.data.BaseDataSource.dataSourceWithURI(function(){ return '/data/analytics/summaries/tags/all/' + wesabe.data.preferences.getDefaultCurrency(); }),
+  wesabe.data.BaseDataSource.dataSourceWithURI(function(){ return '/data/analytics/summaries/tags/all/' + wesabe.data.preferences.defaultCurrency(); }),
   function($class, $super, $package) {
   // import jQuery as $
   var $ = jQuery;
@@ -23,7 +23,7 @@ wesabe.$class('wesabe.data.tags.TagDataSource',
     /**
      * Returns a list of names of the tags in this data source.
      */
-    getTagNames: function() {
+    tagNames: function() {
       // if it's cached, return a copy of the cache
       if (this._tagNames)
         return this._tagNames.concat();
@@ -32,7 +32,7 @@ wesabe.$class('wesabe.data.tags.TagDataSource',
         return [];
 
       var result = [],
-          summaries = this.getData().summaries,
+          summaries = this.get('data').summaries,
           length = summaries.length;
 
       while (length--)

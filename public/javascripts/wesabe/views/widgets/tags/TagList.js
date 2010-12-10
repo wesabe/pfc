@@ -12,68 +12,72 @@ wesabe.$class('wesabe.views.widgets.tags.TagList', wesabe.views.widgets.BaseList
   var array = wesabe.lang.array;
 
   $.extend($class.prototype, {
-    _selection: null,
+    /**
+     * The selection used by this tag list.
+     *
+     * @type {wesabe.util.Selection}
+     */
+    selection: null,
+
+    /**
+     * The current style (i.e. either "cloud" or "list").
+     *
+     * @type {String}
+     */
+    style: null,
+
     _editDialog: null,
     _template: null,
-    _style: null,
 
     init: function(element, selection, editDialog) {
       $super.init.call(this, element);
 
       var me = this;
 
-      me._selection = selection;
+      me.selection = selection;
       me._editDialog = editDialog;
       // extract the template element
-      var template = element.children('li.template');
+      var template = me.get('element').children('li.template');
       me._template = template.clone().removeClass('template');
       template.remove();
 
       // register a delegating click handler
-      element.click(function(event){ me.onClick(event) });
+      me.get('element').click(function(event){ me.onClick(event) });
 
       // use zebra striping
-      me.setStripingEnabled(true);
+      me.set('stripingEnabled', true);
     },
 
     /**
-     * Gets the current style (i.e. either "cloud" or "list").
-     */
-    getStyle: function() {
-      return this._style;
-    },
-
-    /**
-     * Sets the current style to either "cloud" or "list".
-     *
      * NOTE: This does not update the user's preferences.
      */
     setStyle: function(newStyle) {
-      var oldStyle = this._style;
-      if (newStyle !== oldStyle) {
-        this._style = newStyle;
-        this.onStyleChanged(newStyle, oldStyle);
-      }
+      if (this.style === newStyle)
+        return;
+
+      var oldStyle = this.style;
+      this.style = newStyle;
+      this.onStyleChanged(newStyle, oldStyle);
     },
 
     /**
      * Handles changes to the current style of this {TagList}.
      */
     onStyleChanged: function(newStyle, oldStyle) {
-      this.getElement().addClass(newStyle)
-      if (oldStyle) this.getElement().removeClass(oldStyle);
+      this.get('element').addClass(newStyle)
+      if (oldStyle) this.get('element').removeClass(oldStyle);
 
       if (newStyle === 'list') {
-        this.getElement().add(this.getElement().parent())
+        this.get('element').add(this.get('element').parent())
           .removeClass('one-col-list-off')
           .addClass('one-col-list');
       } else {
-        this.getElement().add(this.getElement().parent())
+        this.get('element').add(this.get('element').parent())
           .removeClass('one-col-list')
           .addClass('one-col-list-off');
       }
 
-      var items = this.getItems(),
+      var items = this.get('items'),
           length = items.length;
 
       while (length--)
@@ -110,7 +114,7 @@ wesabe.$class('wesabe.views.widgets.tags.TagList', wesabe.views.widgets.BaseList
      * if no such {TagListItem} can be found.
      */
     _getTagListItemForElement: function(element) {
-      var items = this.getItems(),
+      var items = this.get('items'),
           length = items.length;
 
       element = $(element);
@@ -118,38 +122,24 @@ wesabe.$class('wesabe.views.widgets.tags.TagList', wesabe.views.widgets.BaseList
         element = element.parent();
 
       while (length--)
-        if ($.same(items[length].getElement(), element))
+        if ($.same(items[length].get('element'), element))
           return items[length];
 
       return null;
     },
 
     /**
-     * Returns the {wesabe.util.Selection} associated with this {TagList}.
-     */
-    getSelection: function() {
-      return this._selection;
-    },
-
-    /**
-     * Sets the {wesabe.util.Selection} associated with this {TagList}.
-     */
-    setSelection: function(selection) {
-      this._selection = selection;
-    },
-
-    /**
      * Toggles selected status for the given {TagListItem}.
      */
     toggleListItemSelection: function(tagListItem) {
-      this._selection.toggle(tagListItem);
+      this.get('selection').toggle(tagListItem);
     },
 
     /**
      * Selects the given {TagListItem}.
      */
     selectListItem: function(tagListItem) {
-      this._selection.set(tagListItem);
+      this.get('selection').set(tagListItem);
     },
 
     /**
@@ -170,7 +160,7 @@ wesabe.$class('wesabe.views.widgets.tags.TagList', wesabe.views.widgets.BaseList
         item.update(summary);
       }
 
-      this.setItems(items);
+      this.set('items', items);
     },
 
     /**
@@ -178,11 +168,11 @@ wesabe.$class('wesabe.views.widgets.tags.TagList', wesabe.views.widgets.BaseList
      * if no such {TagListItem} is found.
      */
     getItemByName: function(name) {
-      var items = this.getItems(),
+      var items = this.get('items'),
           length = items.length;
 
       while (length--)
-        if (items[length].getName() === name) return items[length];
+        if (items[length].get('name') === name) return items[length];
 
       return null;
     }

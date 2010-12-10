@@ -47,18 +47,18 @@ wesabe.$class('wesabe.views.widgets.FadingLabelField', wesabe.views.widgets.Base
       this.registerChildWidget(this._label);
 
       // allow selection in the input field
-      label.getElement().bind('mousedown', function(){ return false });
+      label.get('element').bind('mousedown', function(){ return false });
 
       if (!this.isEmpty())
         this._label.setOpacity(0, /* animate = */false);
     },
 
     setLabelValue: function(value) {
-      this._label.setValue(value);
+      this._label.set('value', value);
     },
 
     setLabelFormatter: function(formatter) {
-      this._label.setFormatter(formatter);
+      this._label.set('formatter', formatter);
     },
 
     onChange: function() {
@@ -96,8 +96,8 @@ wesabe.$class('wesabe.views.widgets.FadingLabelField', wesabe.views.widgets.Base
      */
     _didMoveToParent: function() {
       this._label.insertBefore(this);
-      if (this.getElement().parents('.fading-label').length == 0)
-        this.getElement().parents('form').addClass('fading-label');
+      if (this.get('element').parents('.fading-label').length == 0)
+        this.get('element').parents('form').addClass('fading-label');
     }
   });
 });

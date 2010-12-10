@@ -6,19 +6,19 @@ wesabe.$class('data.currencies.CurrencySet', function($class, $super, $package) 
   var $ = jQuery;
 
   $.extend($class.prototype, {
-    _currencies: null,
-    _currencyList: null,
+    /**
+     * Currencies mapped by code.
+     *
+     * @type {object}
+     */
+    currencies: null,
 
     /**
-     * Gets the data behind this +CurrencySet+.
+     * Sorted array of currencies.
      *
-     * @return {object}
+     * @type {Array.<object>}
      */
-    get: function() {
-      return this._currencies;
-    },
-
-    getList: function() {
+    currencyList: function() {
       if (!this._currencyList) {
         var data = this._currencies, list = [];
 
@@ -43,12 +43,10 @@ wesabe.$class('data.currencies.CurrencySet', function($class, $super, $package) 
      * Sets the data behind this +CurrencySet+. It should be a map from symbol to
      * either an array of properties or an object literal.
      *
-     * WARNING: Modifies its argument.
-     *
      * @param {!object} data
      */
-    set: function(data) {
-      this._currencies = this._normalize(data);
+    setCurrencies: function(data) {
+      this.currencies = this._normalize(data);
       this.trigger('change', [this._currencies]);
     },
 
@@ -73,11 +71,11 @@ wesabe.$class('data.currencies.CurrencySet', function($class, $super, $package) 
     sharedCurrencySet: new $class(),
 
     get: function() {
-      return $package.sharedCurrencySet.get();
+      return $package.sharedCurrencySet.get('currencies');
     },
 
     set: function(data) {
-      $package.sharedCurrencySet.set(data);
+      $package.sharedCurrencySet.set('currencies', data);
     }
   });
 });

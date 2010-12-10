@@ -155,8 +155,8 @@ wesabe.provide('views.shared', {
   enableDefaultAccountSidebarBehavior: function() {
     var self = this;
     wesabe.ready('wesabe.views.widgets.accounts.__instance__', function(accounts) {
-      accounts.getSelection().bind('changed', function(_, selection) {
-        self.navigateTo(selection[0].getURI());
+      accounts.get('selection').bind('changed', function(_, selection) {
+        self.navigateTo(selection[0].get('uri'));
       });
     });
     return self;
@@ -165,8 +165,8 @@ wesabe.provide('views.shared', {
   enableDefaultTagSidebarBehavior: function() {
     var self = this;
     wesabe.ready('wesabe.views.widgets.tags.__instance__', function() {
-      wesabe.views.widgets.tags.__instance__.getSelection().bind('changed', function(_, selection) {
-        self.navigateTo(selection[0].getURI());
+      wesabe.views.widgets.tags.__instance__.get('selection').bind('changed', function(_, selection) {
+        self.navigateTo(selection[0].get('uri'));
       });
     });
     return self;

@@ -98,7 +98,7 @@
 
       self.accounts = wesabe.views.widgets.accounts.__instance__;
       // use the shared selection for the accounts widget's selection
-      self.accounts.setSelection(self.selection);
+      self.accounts.set('selection', self.selection);
       // wait until the accounts have loaded to try to restore selection
       function loaded() {
         self.accounts.unbind('loaded', loaded);
@@ -174,7 +174,7 @@
     // refreshing just means repopulating the list with new data
     refreshTransactions: function() {
       var ds = this.transactions.fn('transactionDataSource');
-      ds.setParams(this.paramsForCurrentSelection());
+      ds.set('params', this.paramsForCurrentSelection());
       ds.requestData();
     },
 
@@ -195,7 +195,7 @@
 
       self.tags = wesabe.views.widgets.tags.__instance__;
       // use the shared selection for the tags widget's selection
-      self.tags.setSelection(self.selection);
+      self.tags.set('selection', self.selection);
       // wait until the tags have loaded to try to restore selection
       self.tags.bind('loaded', loaded);
 
@@ -227,12 +227,12 @@
 
           length;
 
-      selectableObjects = this.accounts.getSelectableObjects();
-      selectableObjects = selectableObjects.concat(this.tags.getSelectableObjects());
+      selectableObjects = this.accounts.get('selectableObjects');
+      selectableObjects = selectableObjects.concat(this.tags.get('selectableObjects'));
       length = selectableObjects.length;
 
       while (length--)
-        selectableObjects[selectableObjects[length].getURI()] = selectableObjects[length];
+        selectableObjects[selectableObjects[length].get('uri')] = selectableObjects[length];
 
       for (var key in params) {
         if (!params.hasOwnProperty(key)) return;
@@ -346,11 +346,11 @@
 
       // handle the selection
       if (selection.length == 1) {
-        path = selection[0].getURI();
+        path = selection[0].get('uri');
       } else if (selection.length > 1) {
         params.selection = [];
         for (var i = 0; i < selection.length; i++) {
-          params.selection.push(selection[i].getURI());
+          params.selection.push(selection[i].get('uri'));
         }
       }
 
@@ -382,7 +382,7 @@
     setTitleForState: function(accounts, groups, tags, merchants, search) {
       var title = null, subtitle = null;
       var quote = function(item) {
-        if (typeof item != 'string') item = item.getName();
+        if (typeof item != 'string') item = item.get('name');
         return '“'+item+'”'
       };
 
@@ -419,9 +419,9 @@
           $.each(groups, function(i, group){ $.merge(accounts, $(group).fn('items')) });
           accountsDisplay.push($.unique(accounts).length + ' Accounts');
         } else if (accounts.length) {
-          accountsDisplay.push(accounts[0].getName());
+          accountsDisplay.push(accounts[0].get('name'));
         } else if (groups.length) {
-          accountsDisplay.push(groups[0].getName())
+          accountsDisplay.push(groups[0].get('name'))
           accountsDisplay.push('Account Group');
         }
 
@@ -483,7 +483,7 @@
     },
 
     displayInvestmentHeader: function(account) {
-      var positions = account.getInvestmentPositions();
+      var positions = account.get('investmentPositions');
       $("#investment-positions .position").remove();
       for (i = 0; i < positions.length; i++) {
         var position = positions[i];
@@ -504,7 +504,7 @@
         $("#investment-positions tr.header").after(row);
       }
 
-      var availableCash = account.getInvestmentBalance("available-cash");
+      var availableCash = account.get('investmentBalance', "available-cash");
       if (availableCash) {
         $("#available-cash").html(availableCash.display)
         $("tr.available-cash").show();
@@ -512,8 +512,8 @@
         $("tr.available-cash").hide();
       }
 
-      $("#market-value").html(account.getMarketValue().display);
-      $("#account-value").html(account.getBalance().display);
+      $("#market-value").html(account.get('marketValue').display);
+      $("#account-value").html(account.get('balance').display);
       $("#investment-header").show();
     },
 
@@ -527,8 +527,8 @@
         var selectedObject = selection[length];
         if (jQuery.isFunction(selectedObject.toParams))
           params = params.concat(selectedObject.toParams());
-        if (jQuery.isFunction(selectedObject.getCurrencies))
-          currencies = currencies.concat(selectedObject.getCurrencies());
+        try { currencies = currencies.concat(selectedObject.get('currencies')); }
+        catch (e) {}
       }
 
       if (this.start && this.end) {
@@ -550,7 +550,7 @@
       currencies = array.uniq(currencies);
       params.currency = (currencies.length == 1) ?
                           currencies[0] :
-                          wesabe.data.preferences.getDefaultCurrency();
+                          wesabe.data.preferences.defaultCurrency();
 
       return params;
     }

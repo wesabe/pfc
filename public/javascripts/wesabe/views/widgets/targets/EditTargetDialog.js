@@ -8,8 +8,8 @@ wesabe.$class('wesabe.views.widgets.targets.EditTargetDialog', wesabe.views.widg
   var number = wesabe.lang.number;
 
   $.extend($class.prototype, {
-    _amount: null,
-    _tagName: null,
+    amount: null,
+    tagName: null,
 
     _delegate: null,
     _tagLabel: null,
@@ -23,17 +23,9 @@ wesabe.$class('wesabe.views.widgets.targets.EditTargetDialog', wesabe.views.widg
       this.registerChildWidget(this._amountField);
     },
 
-    getAmount: function() {
-      return this._amount;
-    },
-
     setAmount: function(amount) {
-      this._amount = amount;
+      this.amount = amount;
       this._redraw();
-    },
-
-    getTagName: function() {
-      return this._tagName;
     },
 
     alignWithTarget: function(targetElement) {
@@ -41,7 +33,7 @@ wesabe.$class('wesabe.views.widgets.targets.EditTargetDialog', wesabe.views.widg
     },
 
     setTagName: function(tagName) {
-      this._tagName = tagName;
+      this.tagName = tagName;
       this._redraw();
     },
 
@@ -56,8 +48,8 @@ wesabe.$class('wesabe.views.widgets.targets.EditTargetDialog', wesabe.views.widg
     },
 
     _redraw: function() {
-      this._amountField.setValue(this._amount);
-      this._tagLabel.text(this._tagName);
+      this._amountField.setValue(this.amount);
+      this._tagLabel.text(this.tagName);
     },
 
     onConfirm: function() {

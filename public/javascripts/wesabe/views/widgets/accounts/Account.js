@@ -13,13 +13,44 @@ wesabe.$class('wesabe.views.widgets.accounts.Account', wesabe.views.widgets.Base
     // state
     _editMode: false,
 
-    // data
-    _credential: null,
-    _name: null,
-    _uri: null,
-    _currency: null,
+    /**
+     * Gets the credential (i.e. ssu sync status) for this {Account}.
+     *
+     * @type {object}
+     */
+    credential: null,
+
+    /**
+     * Visible name of the account (e.g. "Bank of America - Checking").
+     *
+     * @type {string}
+     */
+    name: null,
+
+    /**
+     * URI for this {Account} (e.g. "/accounts/1").
+     *
+     * See {wesabe.views.pages.accounts#storeState}.
+     *
+     * @type {string}
+     */
+    uri: null,
+
+    /**
+     * Currency code for this account (e.g. "USD").
+     *
+     * @type {string}
+     */
+    currency: null,
+
+    /**
+     * The type of account.
+     *
+     * @type {string}
+     */
+    type: null,
+
     _status: null,
-    _type: null,
     _balance: null,
     _marketValue: null,
     _lastBalanceDate: null,
@@ -70,21 +101,14 @@ wesabe.$class('wesabe.views.widgets.accounts.Account', wesabe.views.widgets.Base
     },
 
     /**
-     * Gets the name of the account (e.g. "Bank of America - Checking").
-     */
-    getName: function() {
-      return this._name;
-    },
-
-    /**
      * Sets the name of this {Account} and updates the text, but does not
      * update the name on the server.
      */
     setName: function(name) {
-      if (this._name === name)
+      if (this.name === name)
         return;
 
-      this._name = name;
+      this.name = name;
       this._nameElement.text(name);
     },
 
@@ -93,16 +117,7 @@ wesabe.$class('wesabe.views.widgets.accounts.Account', wesabe.views.widgets.Base
         return;
 
       this._lastBalanceDate = lastBalanceDate;
-      this.getElement().attr('title', lastBalanceDate ? 'Updated ' + date.timeAgoInWords(lastBalanceDate) : '');
-    },
-
-    /**
-     * Gets the URI for this {Account} (e.g. "/accounts/1").
-     *
-     * See {wesabe.views.pages.accounts#storeState}.
-     */
-    getURI: function() {
-      return this._uri;
+      this.get('element').attr('title', lastBalanceDate ? 'Updated ' + date.timeAgoInWords(lastBalanceDate) : '');
     },
 
     /**
@@ -111,10 +126,10 @@ wesabe.$class('wesabe.views.widgets.accounts.Account', wesabe.views.widgets.Base
      * See {wesabe.views.pages.accounts#storeState}.
      */
     getTransactionsURI: function() {
-      if (this._type === "Investment")
-        return this.getURI() + '/investment-transactions';
+      if (this.get('type') === "Investment")
+        return this.get('uri') + '/investment-transactions';
       else
-        return this.getURI() + '/transactions';
+        return this.get('uri') + '/transactions';
     },
 
     /**
@@ -123,14 +138,7 @@ wesabe.$class('wesabe.views.widgets.accounts.Account', wesabe.views.widgets.Base
      * See {wesabe.views.pages.accounts#paramsForCurrentSelection}.
      */
     toParams: function() {
-      return [{name: 'account', value: this.getURI()}];
-    },
-
-    /**
-     * Gets the currency code for this account (e.g. "USD").
-     */
-    getCurrency: function() {
-      return this._currency;
+      return [{name: 'account', value: this.get('uri')}];
     },
 
     /**
@@ -138,11 +146,11 @@ wesabe.$class('wesabe.views.widgets.accounts.Account', wesabe.views.widgets.Base
      * the value of the currency on the server.
      */
     setCurrency: function(currency) {
-      if (this._currency === currency)
+      if (this.currency === currency)
         return;
 
-      this._currency = currency;
-      this._total.setCurrency(currency);
+      this.currency = currency;
+      this._total.set('currency', currency);
     },
 
     /**
@@ -150,21 +158,21 @@ wesabe.$class('wesabe.views.widgets.accounts.Account', wesabe.views.widgets.Base
      *
      * See {wesabe.views.pages.accounts#paramsForCurrentSelection}.
      */
-    getCurrencies: function() {
-      return [this.getCurrency()];
+    currencies: function() {
+      return [this.get('currency')];
     },
 
     /**
      * Returns the investment positions associated with this {Account}
      */
-    getInvestmentPositions: function() {
+    investmentPositions: function() {
       return this._investment_positions;
     },
 
     /**
      * Returns the investment balance associated with this {Account}
      */
-    getInvestmentBalance: function(balance) {
+    investmentBalance: function(balance) {
       if (this._investment_balance) {
         if (balance)
           return this._investment_balance[balance];
@@ -176,32 +184,24 @@ wesabe.$class('wesabe.views.widgets.accounts.Account', wesabe.views.widgets.Base
     /**
      * Returns the {wesabe.util.Selection} associated with this {Account}.
      */
-    getSelection: function() {
-      return this._accountGroup.getSelection();
+    selection: function() {
+      return this._accountGroup.get('selection');
     },
 
     hasBalance: function() {
-      return hasValue(this._total.getValue());
+      return hasValue(this._total.get('value'));
     },
 
-    getBalance: function() {
-      return this._balance;
-    },
-
-    getMarketValue: function() {
-      return this._marketValue;
-    },
-
-    getTotal: function() {
-      return this._total.getValue();
+    total: function() {
+      return this._total.get('value');
     },
 
     isCash: function() {
-      return (this._type == "Cash" || this._type == "Manual");
+      return (this.type == "Cash" || this.type == "Manual");
     },
 
     isInvestment: function() {
-      return this._type === "Investment";
+      return this.type === "Investment";
     },
 
     isArchived: function() {
@@ -209,11 +209,11 @@ wesabe.$class('wesabe.views.widgets.accounts.Account', wesabe.views.widgets.Base
     },
 
     isSSU: function() {
-      return this.getCredential() ? true : false;
+      return this.get('credential') ? true : false;
     },
 
     lastSSUJob: function() {
-      var cred = this.getCredential();
+      var cred = this.get('credential');
       return cred && cred.last_job;
     },
 
@@ -228,13 +228,6 @@ wesabe.$class('wesabe.views.widgets.accounts.Account', wesabe.views.widgets.Base
     },
 
     /**
-     * Gets the credential (i.e. ssu sync status) for this {Account}.
-     */
-    getCredential: function() {
-      return this._credential;
-    },
-
-    /**
      * Sets the credential and updates the UI accordingly.
      */
     setCredential: function(credential) {
@@ -242,7 +235,7 @@ wesabe.$class('wesabe.views.widgets.accounts.Account', wesabe.views.widgets.Base
           oldHasSSUError = this.hasSSUError(),
           oldIsUpdating = this.isUpdating();
 
-      this._credential = credential;
+      this.credential = credential;
 
       if (this.isSSU() !== oldIsSSU || this.hasSSUError() !== oldHasSSUError || this.isUpdating() !== oldIsUpdating)
         this._restoreAccountStatus();
@@ -268,9 +261,9 @@ wesabe.$class('wesabe.views.widgets.accounts.Account', wesabe.views.widgets.Base
         event.stopPropagation();
       } else {
         if (event.ctrlKey || event.metaKey) {
-          this.getSelection().toggle(this);
+          this.get('selection').toggle(this);
         } else {
-          this.getSelection().set(this);
+          this.get('selection').set(this);
         }
       }
     },
@@ -285,8 +278,8 @@ wesabe.$class('wesabe.views.widgets.accounts.Account', wesabe.views.widgets.Base
       if (!this.isSSU())
         return;
 
-      var ds = this._accountGroup.getCredentialDataSource();
-      $.post(this.getCredential().uri+'/jobs', function() {
+      var ds = this._accountGroup.get('credentialDataSource');
+      $.post(this.get('credential').uri+'/jobs', function() {
         ds.pollUntilSyncDone();
       });
     },
@@ -296,8 +289,8 @@ wesabe.$class('wesabe.views.widgets.accounts.Account', wesabe.views.widgets.Base
      * becomes part of the current selection.
      */
     onSelect: function() {
-      if (this.getElement())
-        this.getElement().addClass('on');
+      if (this.get('element'))
+        this.get('element').addClass('on');
       // ensure that the containing group is expanded
       if (this._accountGroup)
         this._accountGroup.animateExpanded(true);
@@ -316,20 +309,20 @@ wesabe.$class('wesabe.views.widgets.accounts.Account', wesabe.views.widgets.Base
      * ceases to be part of the current selection.
      */
     onDeselect: function() {
-      if (this.getElement())
-        this.getElement().removeClass('on');
+      if (this.get('element'))
+        this.get('element').removeClass('on');
     },
 
     /**
      * Update the display for this {Account} based on new data.
      */
     update: function(accountData) {
-      this.setName(accountData.name);
+      this.set('name', accountData.name);
       this._status = accountData.status;
-      this._type = accountData.type;
-      this._uri = accountData.uri;
-      this._credential = this._accountGroup.getCredentialDataSource().getCredentialDataByAccountURI(this._uri);
-      this._currency = accountData.currency;
+      this.set('type', accountData.type);
+      this.set('uri', accountData.uri);
+      this.credential = this._accountGroup.get('credentialDataSource').getCredentialDataByAccountURI(accountData.uri);
+      this.set('currency', accountData.currency);
       this.setLastBalanceDate(date.parse(accountData['last-balance-at']));
       this._balance = accountData.balance;
       this._marketValue = accountData["market-value"];

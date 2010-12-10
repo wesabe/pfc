@@ -96,20 +96,20 @@ wesabe.$class('wesabe.views.widgets.accounts.AccountEditDialog', wesabe.views.wi
       var me = this;
       me._account = account;
 
-      me.setButtonsDisabled(false);
+      me.set('buttonsDisabled', false);
 
       // Position and show the edit dialog
-      var aPos = account.getPosition();
-      me.getElement().css({top: aPos.top-12, left: aPos.left+299});
+      var aPos = account.get('position');
+      me.get('element').css({top: aPos.top-12, left: aPos.left+299});
       me.showModal();
 
       // Fill in data
-      me.setName(account.getName());
-      me.setBalance(account.getTotal());
-      me.setCurrency(account.getCurrency());
+      me.set('name', account.get('name'));
+      me.set('balance', account.get('total'));
+      me.set('currency', account.get('currency'));
       me._trackBalanceBox.attr('checked', account.hasBalance());
       me._archivedBox.attr('checked', account.isArchived());
-      me.getElement().find('.account-name-text').text(account.getName());
+      me.get('element').find('.account-name-text').text(account.get('name'));
 
       // Reset panel and field visibility
       me._saveError.hide();
@@ -123,7 +123,7 @@ wesabe.$class('wesabe.views.widgets.accounts.AccountEditDialog', wesabe.views.wi
       if (account.isSSU()) me._ssuTab.show();
 
       // Fix the styling on the first visible tab, select it
-      me.getElement().find('a.edit-dialog-inset-tab:visible:first')
+      me.get('element').find('a.edit-dialog-inset-tab:visible:first')
         .addClass('first-child')
         .trigger('click');
 
@@ -165,7 +165,7 @@ wesabe.$class('wesabe.views.widgets.accounts.AccountEditDialog', wesabe.views.wi
       var me = this,
           account = me._account,
           dirty = false,
-          accountURI = "/data"+me._account.getURI(),
+          accountURI = "/data"+me._account.get('uri'),
           shouldTrackBalance = me._trackBalanceBox.attr('checked');
 
       function commitAttributes() {
@@ -175,7 +175,7 @@ wesabe.$class('wesabe.views.widgets.accounts.AccountEditDialog', wesabe.views.wi
           archived: me._archivedBox.attr('checked')
         };
 
-        if (data.name === account.getName() && data.currency === account.getCurrency() && data.archived === account.isArchived()) {
+        if (data.name === account.get('name') && data.currency === account.get('currency') && data.archived === account.isArchived()) {
           // nothing changed
           enableOrDisableBalance();
         } else {
@@ -210,7 +210,7 @@ wesabe.$class('wesabe.views.widgets.accounts.AccountEditDialog', wesabe.views.wi
       function commitBalance() {
         var newBalance = me._currentBalance.val();
 
-        if (!shouldTrackBalance || !hasValue(newBalance) || (newBalance === "") || (newBalance === account.getTotal())) {
+        if (!shouldTrackBalance || !hasValue(newBalance) || (newBalance === "") || (newBalance === account.get('total'))) {
           // not tracking balance or nothing changed
           notBusy();
           done();
@@ -230,12 +230,12 @@ wesabe.$class('wesabe.views.widgets.accounts.AccountEditDialog', wesabe.views.wi
 
       function busy() {
         me._spinner.show();
-        me.setButtonsDisabled(true);
+        me.set('buttonsDisabled', true);
       }
 
       function notBusy() {
         me._spinner.hide();
-        me.setButtonsDisabled(false);
+        me.set('buttonsDisabled', false);
       }
 
       function error() {
@@ -273,14 +273,14 @@ wesabe.$class('wesabe.views.widgets.accounts.AccountEditDialog', wesabe.views.wi
 
       $.ajax({
         type: "DELETE",
-        url: me._account.getURI(),
+        url: me._account.get('uri'),
         dataType: "text",
         beforeSend: function() {
           me._spinner.show();
-          me.setButtonsDisabled(true);
+          me.set('buttonsDisabled', true);
         },
         success: function() {
-          me._account.getElement().hide();
+          me._account.get('element').hide();
           me._accountWidget.refresh();
           me.onEndEdit();
         },
@@ -292,19 +292,19 @@ wesabe.$class('wesabe.views.widgets.accounts.AccountEditDialog', wesabe.views.wi
         },
         complete: function() {
           me._spinner.hide();
-          me.setButtonsDisabled(false);
+          me.set('buttonsDisabled', false);
         }
       });
     },
 
     onResetCredentials: function() {
       if (this._account.isSSU())
-        wesabe.views.shared.navigateTo('/credentials/destroy/'+this._account.getCredential().id);
+        wesabe.views.shared.navigateTo('/credentials/destroy/'+this._account.get('credential').id);
     },
 
     onDeleteCredentials: function() {
       if (this._account.isSSU()) {
-        var me = this, credential = me._account.getCredential();
+        var me = this, credential = me._account.get('credential');
         $.ajax({
           url: '/credentials/destroy/'+credential.id,
 
@@ -315,14 +315,14 @@ wesabe.$class('wesabe.views.widgets.accounts.AccountEditDialog', wesabe.views.wi
           error: function(xhr, opts, error) {
             wesabe.error('there was a problem deleting credentials: status=', xhr.status, ' client error: ', error);
             // it didn't work, restore the credential info
-            me._account.setCredential(credential);
+            me._account.set('credential', credential);
             // show the ssu tab again
             me._ssuTab.show();
             me.switchToFirstVisibleTab();
           }
         });
         // be optimistic and assume it'll work
-        me._account.setCredential(null);
+        me._account.set('credential', null);
         // hide the ssu tab
         me._ssuTab.hide();
         me.switchToFirstVisibleTab();
@@ -350,7 +350,7 @@ wesabe.$class('wesabe.views.widgets.accounts.AccountEditDialog', wesabe.views.wi
       this._tabs.add(this._tabTexts).removeClass('on');
 
       var tabName = tab.children('span').attr('class');
-      tab.add('div.inset-tab-text.'+tabName, this.getElement()).addClass('on');
+      tab.add('div.inset-tab-text.'+tabName, this.get('element')).addClass('on');
 
       if (tabName == 'ssu') this.showHideSSUError();
     },

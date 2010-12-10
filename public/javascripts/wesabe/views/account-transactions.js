@@ -29,7 +29,7 @@ jQuery(function($) {
           new wesabe.views.widgets.Button(self.find("#all-transactions-button"), /* unedited = */ false),
           new wesabe.views.widgets.Button(self.find("#unedited-transactions-button"), /* unedited = */ true)], {
             onSelectionChange: function(sender, selectedButton) {
-              self.kvo('unedited', selectedButton.getValue());
+              self.kvo('unedited', selectedButton.get('value'));
             }
         }));
 
@@ -95,7 +95,7 @@ jQuery(function($) {
           });
 
           $('.date-range-detail .left-arrow, .prev-date-range', root).click(function() {
-            var txactions = transactionDataSource.getData();
+            var txactions = transactionDataSource.get('data');
             var total = (txactions && txactions.count && txactions.count.total) || 0;
             var newOffset = root.fn('offset') + root.fn('limit');
 
@@ -187,7 +187,7 @@ jQuery(function($) {
 
           var nextLink = $('.next-date-range, .right-arrow', root),
               prevLink = $('.prev-date-range, .left-arrow', root),
-              txactions = transactionDataSource.getData(),
+              txactions = transactionDataSource.get('data'),
               offset = root.fn('offset'),
               limit = root.fn('limit'),
               total = (txactions && txactions.count && txactions.count.total) || 0;
@@ -276,12 +276,12 @@ jQuery(function($) {
       'check-number': $.getsetdata('check-number'),
 
       merchant: $.getset({
-        get: function() { return $(this).data('widget').getMerchant(); },
+        get: function() { return $(this).data('widget').get('merchant'); },
         set: function(data, getset) {
           var self = $(this),
               widget = self.data('widget');
 
-          widget.setMerchant(data);
+          widget.set('merchant', data);
           $('.merchant-info', self)
             .unbind('click')
             .click(function() {
@@ -324,7 +324,7 @@ jQuery(function($) {
         }
 
         var transactionTags = data.tags,
-            tagSelection = $.map(selection.getByClass(wesabe.views.widgets.TagListItem), function(t){ return t.getName() });
+            tagSelection = $.map(selection.getByClass(wesabe.views.widgets.TagListItem), function(t){ return t.get('name') });
 
         // show the split amounts if the tags we've selected have splits
         if (tagSelection.length > 0 && transactionTags.length > 0) {
@@ -364,22 +364,22 @@ jQuery(function($) {
 
         var widget = self.data('widget');
 
-        widget.setURI(data['id']);
-        widget.setNote(data['note']);
-        widget.setDate(data['date']);
+        widget.set('uri', data['id']);
+        widget.set('note', data['note']);
+        widget.set('date', data['date']);
 
-        widget.setAccount(data['account']);
-        widget.setAccountVisible(!selectingSingleAccount);
-        widget.setBalance(data['balance']);
+        widget.set('account', data['account']);
+        widget.set('accountVisible', !selectingSingleAccount);
+        widget.set('balance', data['balance']);
         // Cash accounts shouldn't have balances
         if (data['account'].type == "Cash")
-          widget.setBalanceText(selectingSingleAccount ? '' : 'n/a');
-        widget.setAmount(data['display-amount'] || data['amount']);
-        widget.setTags(data['tags']);
-        widget.setTransfer(data['transfer'] || null);
-        // widget.setMerchant(data['merchant']);
+          widget.set('balanceText', selectingSingleAccount ? '' : 'n/a');
+        widget.set('amount', data['display-amount'] || data['amount']);
+        widget.set('tags', data['tags']);
+        widget.set('transfer', data['transfer'] || null);
+        // widget.set('merchant', data['merchant']);
 
-        var toEdit = !(merchant && merchant.name && widget.getTags().length > 0);
+        var toEdit = !(merchant && merchant.name && widget.get('tags').length > 0);
         self.toggleClass('to-edit', toEdit);
 
         return self;
@@ -534,7 +534,7 @@ jQuery(function($) {
         var selection = root.fn('selection').get();
         self.kvobserve('account', function(_, a) {
           if (a.uri) {
-            var accounts = wesabe.data.accounts.sharedDataSource.getData().accounts;
+            var accounts = wesabe.data.accounts.sharedDataSource.get('data').accounts;
             for (var i = accounts.length; i--;) {
               if (accounts[i].uri === a.uri) {
                 a = accounts[i];
@@ -617,14 +617,14 @@ jQuery(function($) {
                   self.data('fn.amount') ? self.fn('amount').value :
                                            null;
           if (amount)
-            tagAutocompleterField.setSplitAutocompletionTotal(number.parse(amount));
+            tagAutocompleterField.set('splitAutocompletionTotal', number.parse(amount));
         }
 
         amountField.bind('change', recomputeSplitTotal);
         recomputeSplitTotal();
 
         // bind the date picker
-        var dateVal = wesabe.lang.date.format((widget && widget.getDate() ? widget.getDate() : new Date()), 'yyyy-MM-dd');
+        var dateVal = wesabe.lang.date.format((widget && widget.get('date') ? widget.get('date') : new Date()), 'yyyy-MM-dd');
 	$('.date-edit', edit_box).datepicker().val(dateVal);
 
         // bind the merchant autocompleter
@@ -632,8 +632,8 @@ jQuery(function($) {
 
         // toggle the merchant icons
         self.find('form div.merchant-icons').removeClass('on');
-        if (widget && widget.getTags().length > 0) self.find('form div.merchant-icons.tags').addClass('on tags-on');
-        if (widget && widget.getNote() && widget.getNote().length > 0) self.find('form div.merchant-icons.notes').addClass('on notes-on');
+        if (widget && widget.get('tags').length > 0) self.find('form div.merchant-icons.tags').addClass('on tags-on');
+        if (widget && widget.get('note') && widget.get('note').length > 0) self.find('form div.merchant-icons.notes').addClass('on notes-on');
         if (self.fn('attachments').length > 0) self.find('form div.merchant-icons.attachments').addClass('on attachments-on');
         if (widget && widget.isTransfer()) self.find('form div.merchant-icons.transfer').addClass('on transfer-on');
 
@@ -741,13 +741,13 @@ jQuery(function($) {
         $('.delete.button', self).show()
           .click(function(){self.fn('destroy');});
 
-        $('textarea[name=note]', edit_box).val(widget.getNote() || '');
+        $('textarea[name=note]', edit_box).val(widget.get('note') || '');
 
         var attachmentList = $('.inset-tab-text div.attachments-list', self);
         attachmentList.empty().append(self.fn('attachmentListItems', true));
 
         $('.transfer-details input[type=checkbox]', edit_box)
-          .attr('id', 'is_transfer_' + widget.getURI())
+          .attr('id', 'is_transfer_' + widget.get('uri'))
           .attr('checked', widget.isTransfer())
           .click(function(){
             if ($(this).attr('checked')) {
@@ -791,12 +791,6 @@ jQuery(function($) {
 
             if (data['suggested-tags'] && data['suggested-tags'].length)
               self.fn('showSuggestedTags', data['suggested-tags']);
-
-            // FIXME: update the rating here
-            // var rating = defaults['rating'];
-            // if (rating) {
-            //   txaction.setDefaultRating(txid, rating.value);
-            // }
           },
           error: function(error) {
             wesabe.error("Failed to get merchant defaults: ", error);
@@ -928,7 +922,7 @@ jQuery(function($) {
             widget = self.data('widget'),
             doneSaving = false;
 
-        var editing = widget && widget.getURI();
+        var editing = widget && widget.get('uri');
         var form = $('form:first', self);
         if (editing) {
           form.append('<input type="hidden" name="_method" value="PUT">');
@@ -1034,7 +1028,7 @@ jQuery(function($) {
     account: $.getsetdata('account'),
     uri: function() {
       var account = $(this).fn('account');
-      return account.getTransactionsURI();
+      return account.get('transactionsURI');
     },
     tags: function() { return []; },
     notes: function() { return null; },

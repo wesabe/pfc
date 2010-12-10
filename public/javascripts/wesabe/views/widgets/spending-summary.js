@@ -8,7 +8,7 @@ jQuery(function($) {
   var prefs = wesabe.data.preferences;
   var root = $('#spending-summary');
 
-  var defaultCurrency = prefs.getDefaultCurrency();
+  var defaultCurrency = prefs.defaultCurrency();
 
   var ZERO_SUMMARY = { count: 0, value: 0, display: money.format(0, {currency: defaultCurrency}) };
 

@@ -34,7 +34,7 @@ wesabe.$class('wesabe.views.widgets.targets.TargetWidget', wesabe.views.widgets.
       // bind click on Add Target to show the add target dialog
       var addTargetButton = Button.withText('Add Spending Target');
       addTargetButton.bind('click', this.onAddTarget, this);
-      addTargetButton.prependTo(this.getHeaderElement());
+      addTargetButton.prependTo(this.get('headerElement'));
       this._addTargetDialogElement = element.find('#add-target .dialog');
 
       // set up the month navigation buttons
@@ -71,21 +71,21 @@ wesabe.$class('wesabe.views.widgets.targets.TargetWidget', wesabe.views.widgets.
       );
 
       // set things in motion by displaying the current month
-      this.setCurrentMonth(new Date());
+      this.set('currentMonth', new Date());
     },
 
     /**
      * Selects the month before the currently-selected month, updating the UI.
      */
     selectPreviousMonth: function() {
-      this.setCurrentMonth(this.getMonthWithOffsetInMonths(-1));
+      this.set('currentMonth', this.getMonthWithOffsetInMonths(-1));
     },
 
     /**
      * Selects the month before the currently-selected month, updating the UI.
      */
     selectNextMonth: function() {
-      this.setCurrentMonth(this.getMonthWithOffsetInMonths(1));
+      this.set('currentMonth', this.getMonthWithOffsetInMonths(1));
     },
 
     /**
@@ -95,7 +95,7 @@ wesabe.$class('wesabe.views.widgets.targets.TargetWidget', wesabe.views.widgets.
      * @private
      */
     getMonthWithOffsetInMonths: function(offset) {
-      return date.addMonths(this.getCurrentMonth(), offset);
+      return date.addMonths(this.get('currentMonth'), offset);
     },
 
     /**
@@ -103,8 +103,8 @@ wesabe.$class('wesabe.views.widgets.targets.TargetWidget', wesabe.views.widgets.
      *
      * @return {Date}
      */
-    getCurrentMonth: function() {
-      return this._dataSource.getStartDate();
+    currentMonth: function() {
+      return this._dataSource.get('startDate');
     },
 
     /**
@@ -113,7 +113,7 @@ wesabe.$class('wesabe.views.widgets.targets.TargetWidget', wesabe.views.widgets.
      * @return {boolean}
      */
     isThisMonth: function() {
-      return date.equals(date.startOfMonth(this.getCurrentMonth()), date.startOfMonth(new Date()));
+      return date.equals(date.startOfMonth(this.get('currentMonth')), date.startOfMonth(new Date()));
     },
 
     /**
@@ -125,11 +125,11 @@ wesabe.$class('wesabe.views.widgets.targets.TargetWidget', wesabe.views.widgets.
       this._dataSource.selectMonth(currentMonth);
       this._dataSource.requestData();
 
-      this._nextMonthButton.setVisible(!this.isThisMonth());
-      this._previousMonthLabel.setValue(this.getMonthWithOffsetInMonths(-1));
-      this._nextMonthLabel.setValue(this.getMonthWithOffsetInMonths(1));
-      this._currentMonthLabel.setValue(currentMonth);
-      this._headerMonthLabel.setValue(currentMonth);
+      this._nextMonthButton.set('visible', !this.isThisMonth());
+      this._previousMonthLabel.set('value', this.getMonthWithOffsetInMonths(-1));
+      this._nextMonthLabel.set('value', this.getMonthWithOffsetInMonths(1));
+      this._currentMonthLabel.set('value', currentMonth);
+      this._headerMonthLabel.set('value', currentMonth);
     },
 
     /**
@@ -168,7 +168,7 @@ wesabe.$class('wesabe.views.widgets.targets.TargetWidget', wesabe.views.widgets.
      * @private
      */
     onConfirm: function(dialog) {
-      this._dataSource.create(dialog.getTag(), dialog.getAmount(), function(){ this._targetList.refresh() }, this);
+      this._dataSource.create(dialog.get('tag'), dialog.get('amount'), function(){ this._targetList.refresh() }, this);
       dialog.hideModal();
     }
   });

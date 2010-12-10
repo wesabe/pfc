@@ -172,7 +172,7 @@ var chartView = echo({
     var period   = [];
     var endDate  = data[data.length-1].interval.end;
 
-    var tagSelection = $.map(page.selection.getByClass(wesabe.views.widgets.tags.TagListItem), function(t){ return t.getName() });
+    var tagSelection = $.map(page.selection.getByClass(wesabe.views.widgets.tags.TagListItem), function(t){ return t.get('name') });
 
     for (var d=0, dataLength = data.length;d < dataLength; d++) {
       var spent, earned, dataValue = data[d];

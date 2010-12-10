@@ -18,7 +18,7 @@ wesabe.$class('views.pages.credentials.NewPage', function($class, $super, $packa
       me._module = module;
 
       me._notification = new wesabe.views.widgets.Notification();
-      me._notification.setVisible(false);
+      me._notification.set('visible', false);
       module.appendChildWidget(me._notification);
 
       me._form = new wesabe.views.widgets.Form();
@@ -32,13 +32,13 @@ wesabe.$class('views.pages.credentials.NewPage', function($class, $super, $packa
 
     setFinancialInstitution: function(fi) {
       this._fiData = fi;
-      this._module.setTitle(fi.name)
-      this._form.setEnabled(true);
+      this._module.set('title', fi.name)
+      this._form.set('enabled', true);
       this._setFields(fi.login_fields, fi);
     },
 
     askSecurityQuestions: function(questions) {
-      this._form.setEnabled(true);
+      this._form.set('enabled', true);
       this._setFields(questions, null);
     },
 
@@ -70,9 +70,9 @@ wesabe.$class('views.pages.credentials.NewPage', function($class, $super, $packa
       var input = $('<input type="'+data.type+'">');
 
       var field = new wesabe.views.widgets.FadingLabelField(input);
-      field.setName(data.key);
+      field.set('name', data.key);
 
-      field.setLabelFormatter({
+      field.set('labelFormatter', {
         format: function(value) {
           var url = value && fi && (fi.login_url || fi.homepage_url);
           if (url) {
@@ -85,14 +85,14 @@ wesabe.$class('views.pages.credentials.NewPage', function($class, $super, $packa
         }
       });
 
-      field.setLabelValue(data);
+      field.set('labelValue', data);
 
       return field;
     },
 
     _createChoiceField: function(data, fi) {
       var field = new wesabe.views.widgets.DropDownField();
-      field.setName(data.key);
+      field.set('name', data.key);
 
       var choices = data.choices;
       for (var i = 0, length = choices.length; i < length; i++) {
@@ -105,15 +105,15 @@ wesabe.$class('views.pages.credentials.NewPage', function($class, $super, $packa
 
     _createStateField: function(data, fi) {
       var field = new wesabe.views.widgets.StateDropDownField();
-      field.setName(data.key);
+      field.set('name', data.key);
       return field;
     },
 
     _connectButtonWasClicked: function() {
       var me = this,
-          params = me._form.getFieldValues();
+          params = me._form.get('fieldValues');
 
-      me._notification.setVisible(false);
+      me._notification.set('visible', false);
 
       for (var k in params) {
         if (params.hasOwnProperty(k)) {
@@ -127,7 +127,7 @@ wesabe.$class('views.pages.credentials.NewPage', function($class, $super, $packa
         }
       }
 
-      me._form.setEnabled(false);
+      me._form.set('enabled', false);
 
       $.ajax({
         type: me._credentialURL ? 'PUT' : 'POST',
@@ -234,7 +234,7 @@ wesabe.$class('views.pages.credentials.NewPage', function($class, $super, $packa
     },
 
     _reset: function() {
-      this._form.setEnabled(true);
+      this._form.set('enabled', true);
       this._credentialURL = null;
       this._jobURL = null;
       this._lastVersion = -1;
@@ -248,7 +248,7 @@ wesabe.$class('views.pages.credentials.NewPage', function($class, $super, $packa
     },
 
     _showNotification: function(style, title, message) {
-      this._notification.setStyle(style);
+      this._notification.set('style', style);
       this._notification.showWithTitleAndMessage(title, message);
     }
   });

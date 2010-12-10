@@ -6,7 +6,8 @@ wesabe.$class('wesabe.views.widgets.Label', wesabe.views.widgets.BaseWidget, fun
   var $ = jQuery;
 
   $.extend($class.prototype, {
-    _value: null,
+    value: null,
+
     _formatter: null,
     _textElement: null,
 
@@ -18,7 +19,7 @@ wesabe.$class('wesabe.views.widgets.Label', wesabe.views.widgets.BaseWidget, fun
         element = $('<label></label>');
 
       $super.init.call(this, element);
-      this._value = element.text();
+      this.value = element.text();
       this._formatter = formatter;
       this._textElement = element.find('.text-content');
       if (!this._textElement.length) this._textElement = element;
@@ -26,15 +27,11 @@ wesabe.$class('wesabe.views.widgets.Label', wesabe.views.widgets.BaseWidget, fun
       this.addClassName('field-title');
     },
 
-    getValue: function() {
-      return this._value;
-    },
-
     setValue: function(value) {
-      if (this._value === value)
+      if (this.value === value)
         return;
 
-      this._value = value;
+      this.value = value;
       this._redraw();
     },
 
@@ -48,13 +45,13 @@ wesabe.$class('wesabe.views.widgets.Label', wesabe.views.widgets.BaseWidget, fun
     },
 
     associateWithField: function(field) {
-      if (!field.getId())
-        field.setId(wesabe.uniqueId());
-      this.getElement().attr('for', field.getId());
+      if (!field.get('id'))
+        field.set('id', wesabe.uniqueId());
+      this.get('element').attr('for', field.get('id'));
     },
 
     _redraw: function() {
-      var textValue = this._formatter ? this._formatter.format(this._value) : this._value,
+      var textValue = this._formatter ? this._formatter.format(this.value) : this.value,
           extraValue;
 
       if ($.isArray(textValue))

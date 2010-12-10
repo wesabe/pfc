@@ -13,7 +13,7 @@ wesabe.lang.money = {
       return moneyOrNumber;
     }
     else {
-      currency = either(currency, wesabe.data.preferences.getDefaultCurrency());
+      currency = either(currency, wesabe.data.preferences.defaultCurrency());
       var money = {currency: currency};
       money[currency] = moneyOrNumber;
       return money;
@@ -173,7 +173,7 @@ wesabe.lang.money = {
 
 wesabe.ready('wesabe.data.currencies.sharedCurrencySet', function(currencySet) {
   function updateCurrencies() {
-    wesabe.lang.money.CURRENCIES = currencySet.get();
+    wesabe.lang.money.CURRENCIES = currencySet.get('currencies');
   }
 
   updateCurrencies();

@@ -10,9 +10,15 @@ wesabe.$class('wesabe.views.widgets.AutocompleterField', wesabe.views.widgets.Ba
   var string = wesabe.lang.string;
 
   $.extend($class.prototype, {
+    /**
+     * The YUI autocompleter instance.
+     *
+     * @private
+     */
+    _autocompleter: null,
+
     _wasContainerOpen: false,
     _lastKeyPressKeyCode: null,
-    _autocompleter: null,
     _dataSource: null,
     _matchMultiple: true,
 
@@ -34,7 +40,7 @@ wesabe.$class('wesabe.views.widgets.AutocompleterField', wesabe.views.widgets.Ba
         }
       }
 
-      element.wrap(me.getWrapperElement());
+      element.wrap(me.get('wrapperElement'));
       element.after(container);
 
       me._dataSource = new YAHOO.util.LocalDataSource([]);
@@ -42,7 +48,7 @@ wesabe.$class('wesabe.views.widgets.AutocompleterField', wesabe.views.widgets.Ba
         queryDelay: 0,
         maxResultsDisplayed: 10,
         queryMatchContains: false,
-        delimChar: me._getDelimChar(),
+        delimChar: me.get('delimChar'),
         doubleQuoteOverrides: true,
         doubleQuoteResultsWithSpaces: true,
         useIFrame: $.browser.msie && $.browser.version == "6.0"
@@ -61,20 +67,11 @@ wesabe.$class('wesabe.views.widgets.AutocompleterField', wesabe.views.widgets.Ba
     },
 
     /**
-     * Gets the YUI autocompleter instance.
-     *
-     * @private
-     */
-    getAutocompleter: function() {
-      return this._autocompleter;
-    },
-
-    /**
      * Gets a wrapper element for the autocompleter.
      *
      * @return {jQuery}
      */
-    getWrapperElement: function() {
+    wrapperElement: function() {
       return $('<div></div>');
     },
 
@@ -83,7 +80,7 @@ wesabe.$class('wesabe.views.widgets.AutocompleterField', wesabe.views.widgets.Ba
      *
      * @return {Array.<string>}
      */
-    getCompletions: function() {
+    completions: function() {
       return this._dataSource && this._dataSource.liveData;
     },
 
@@ -115,7 +112,7 @@ wesabe.$class('wesabe.views.widgets.AutocompleterField', wesabe.views.widgets.Ba
     setMatchMultiple: function(matchMultiple) {
       this._matchMultiple = matchMultiple;
       if (this._autocompleter)
-        this._autocompleter.delimChar = this._getDelimChar();
+        this._autocompleter.delimChar = this.get('delimChar');
     },
 
     /**
@@ -124,7 +121,7 @@ wesabe.$class('wesabe.views.widgets.AutocompleterField', wesabe.views.widgets.Ba
      * @return {string|Array.<string>}
      * @private
      */
-    _getDelimChar: function() {
+    _delimChar: function() {
       return this._matchMultiple ? [' ', ','] : null;
     },
 
@@ -179,7 +176,7 @@ wesabe.$class('wesabe.views.widgets.AutocompleterField', wesabe.views.widgets.Ba
      * @param {!string} text
      */
     setTip: function(text) {
-      this.setFooter(
+      this.set('footer',
         '<div class="yui-ac-tip">'+
           '<strong>Tip:</strong> '+
           string.escapeHTML(text)+
@@ -222,8 +219,8 @@ wesabe.$class('wesabe.views.widgets.AutocompleterField', wesabe.views.widgets.Ba
      *
      * @return {string}
      */
-    getValue: function() {
-      return this.getElement().val();
+    value: function() {
+      return this.get('element').val();
     },
 
     /**
@@ -232,7 +229,7 @@ wesabe.$class('wesabe.views.widgets.AutocompleterField', wesabe.views.widgets.Ba
      * @param {!string} value
      */
     setValue: function(value) {
-      this.getElement().val(value);
+      this.get('element').val(value);
     }
   });
 });

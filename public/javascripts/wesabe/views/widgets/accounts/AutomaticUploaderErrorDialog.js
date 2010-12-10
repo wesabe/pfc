@@ -14,7 +14,7 @@ wesabe.$class('wesabe.views.widgets.accounts.AutomaticUploaderErrorDialog', wesa
       this._account = account;
 
       this.addClassName("hover-box");
-      this.setContentElement(this.getTopElement());
+      this.set('contentElement', this.get('topElement'));
 
       var contents = $('<div class="contents">'+
                          '<div class="header">Automatic Uploader Error</div>'+
@@ -34,7 +34,7 @@ wesabe.$class('wesabe.views.widgets.accounts.AutomaticUploaderErrorDialog', wesa
       // from when SSU was first created. It should instead do an ajax DELETE or
       // a form POST with _method=DELETE and then send the user to the right page
       // to re-enter their credentials.
-      this._resetCredLink.attr('href', '/credentials/destroy/'+this._account.getCredential().id);
+      this._resetCredLink.attr('href', '/credentials/destroy/'+this._account.get('credential').id);
       $super.show.call(this);
     }
   });

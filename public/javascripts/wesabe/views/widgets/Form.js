@@ -51,7 +51,7 @@ wesabe.$class('views.widgets.Form', wesabe.views.widgets.BaseWidget, function($c
       var wrapper = $('<div class="field"></div>');
 
       if (lastField)
-        wrapper.insertAfter(lastField.getElement().parent());
+        wrapper.insertAfter(lastField.get('element').parent());
       else
         this.prependElement(wrapper);
 
@@ -75,7 +75,7 @@ wesabe.$class('views.widgets.Form', wesabe.views.widgets.BaseWidget, function($c
 
       for (var i = 0, length = this._fields.length; i < length; i++) {
         var field = this._fields[i];
-        result[field.getName()] = field.getValue();
+        result[field.get('name')] = field.get('name');
       }
 
       return result;

@@ -5,6 +5,18 @@
  */
 wesabe.$class('wesabe.views.widgets.tags.TagListItem', wesabe.views.widgets.BaseWidget, function($class, $super, $package) {
   $.extend($class.prototype, {
+    /**
+     * Name of the tag (e.g. "food").
+     */
+    name: null,
+
+    /**
+     * URI for the tag (e.g. "/tags/food").
+     *
+     * See {wesabe.views.pages.accounts#storeState}.
+     */
+    uri: null,
+
     _tagList: null,
     _summary: null,
     _percent: null,
@@ -35,7 +47,7 @@ wesabe.$class('wesabe.views.widgets.tags.TagListItem', wesabe.views.widgets.Base
         display = 'block';
       }
 
-      this.getElement().css('display', display);
+      this.get('element').css('display', display);
       this._nameElement.css('font-size', size);
     },
 
@@ -66,8 +78,8 @@ wesabe.$class('wesabe.views.widgets.tags.TagListItem', wesabe.views.widgets.Base
      * becomes part of the current selection.
      */
     onSelect: function() {
-      if (this.getElement())
-        this.getElement().addClass('on');
+      if (this.get('element'))
+        this.get('element').addClass('on');
     },
 
     /**
@@ -75,46 +87,30 @@ wesabe.$class('wesabe.views.widgets.tags.TagListItem', wesabe.views.widgets.Base
      * ceases to be part of the current selection.
      */
     onDeselect: function() {
-      if (this.getElement())
-        this.getElement().removeClass('on');
+      if (this.get('element'))
+        this.get('element').removeClass('on');
     },
 
     /**
      * Update the display for this {TagListItem} based on new data.
      */
     update: function(summary) {
-      this.setName(summary.tag.name);
-      this._setPercent(summary.percent);
-      this._setCount(summary.net.count);
-    },
-
-    /**
-     * Gets the name of the tag (e.g. "food").
-     */
-    getName: function() {
-      return this._name;
+      this.set('name', summary.tag.name);
+      this.set('percent', summary.percent);
+      this.set('count', summary.net.count);
     },
 
     /**
      * Sets the name of the tag and updates the label.
      */
     setName: function(name) {
-      if (this._name === name)
+      if (this.name === name)
         return;
 
-      this._name = name;
-      this._uri = '/tags/'+name;
+      this.name = name;
+      this.set('uri', '/tags/'+name);
       this._nameElement.text(name)
-        .attr('href', '#'+this._uri);
-    },
-
-    /**
-     * Gets the URI for this {Tag} (e.g. "/tags/food").
-     *
-     * See {wesabe.views.pages.accounts#storeState}.
-     */
-    getURI: function() {
-      return this._uri;
+        .attr('href', '#'+this.uri);
     },
 
     /**
@@ -127,7 +123,7 @@ wesabe.$class('wesabe.views.widgets.tags.TagListItem', wesabe.views.widgets.Base
         return;
 
       this._percent = percent;
-      this.onStyleChanged(this._tagList.getStyle());
+      this.onStyleChanged(this._tagList.get('style'));
     },
 
     /**
@@ -149,7 +145,7 @@ wesabe.$class('wesabe.views.widgets.tags.TagListItem', wesabe.views.widgets.Base
      * See {wesabe.views.pages.accounts#paramsForCurrentSelection}.
      */
     toParams: function() {
-      return [{name: 'tag', value: this.getURI()}];
+      return [{name: 'tag', value: this.get('uri')}];
     },
 
     /**

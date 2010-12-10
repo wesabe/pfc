@@ -29,7 +29,7 @@ wesabe.$class('wesabe.views.widgets.Dialog', wesabe.views.widgets.Container, fun
     /**
      * Gets the {Dialog} that should be receiving all global keyboard events.
      */
-    getFirstReponder: function() {
+    firstReponder: function() {
       return $class._dialogStack[0];
     },
 
@@ -51,7 +51,7 @@ wesabe.$class('wesabe.views.widgets.Dialog', wesabe.views.widgets.Container, fun
      *
      * @return {boolean}
      */
-    getKeystrokesEnabled: function() {
+    keystrokesEnabled: function() {
       return this._keystrokesEnabled;
     },
 
@@ -72,7 +72,7 @@ wesabe.$class('wesabe.views.widgets.Dialog', wesabe.views.widgets.Container, fun
 
     onKeyDown: function(event) {
       var me = $class,
-          firstResponder = me.getFirstReponder();
+          firstResponder = me.firstReponder();
 
       if (!me._keystrokesEnabled || !firstResponder)
         return;
@@ -99,7 +99,7 @@ wesabe.$class('wesabe.views.widgets.Dialog', wesabe.views.widgets.Container, fun
     },
 
     onMouseDown: function(event) {
-      $class._mouseDownFirstResponder = $class.getFirstReponder();
+      $class._mouseDownFirstResponder = $class.firstReponder();
     },
 
     onMouseUp: function(event) {
@@ -109,7 +109,7 @@ wesabe.$class('wesabe.views.widgets.Dialog', wesabe.views.widgets.Container, fun
         return;
 
       me._mouseDownFirstResponder = null;
-      var el = firstResponder.getElement()[0], target = event.target;
+      var el = firstResponder.get('element')[0], target = event.target;
 
       while (target)
         if (target === el) return;
@@ -129,7 +129,7 @@ wesabe.$class('wesabe.views.widgets.Dialog', wesabe.views.widgets.Container, fun
 
       var me = this;
 
-      element = this.getElement();
+      element = this.get('element');
       me._confirmButton = new $package.Button(element.find('.button.confirm'));
       me._confirmButton.bind('click', function(event){ me.onConfirmCheckingForDisabled(event) });
       me._cancelButton = new $package.Button(element.find('.button.cancel'));
@@ -142,16 +142,16 @@ wesabe.$class('wesabe.views.widgets.Dialog', wesabe.views.widgets.Container, fun
       return this._modal;
     },
 
-    areButtonsDisabled: function() {
-      return !this._confirmButton.isEnabled();
+    buttonsDisabled: function() {
+      return !this._confirmButton.get('enabled');
     },
 
     setButtonsDisabled: function(buttonsDisabled) {
-      if (this.areButtonsDisabled() === buttonsDisabled)
+      if (this.get('buttonsDisabled') === buttonsDisabled)
         return;
 
-      this._confirmButton.setEnabled(!buttonsDisabled);
-      this._cancelButton.setEnabled(!buttonsDisabled);
+      this._confirmButton.set('enabled', !buttonsDisabled);
+      this._cancelButton.set('enabled', !buttonsDisabled);
     },
 
     onClick: function(event) {
@@ -184,7 +184,7 @@ wesabe.$class('wesabe.views.widgets.Dialog', wesabe.views.widgets.Container, fun
     },
 
     onConfirmCheckingForDisabled: function(event) {
-      if (this.areButtonsDisabled())
+      if (this.get('buttonsDisabled'))
         return;
       this.onConfirm(event);
     },
@@ -195,7 +195,7 @@ wesabe.$class('wesabe.views.widgets.Dialog', wesabe.views.widgets.Container, fun
 
     showWithOthers: function() {
       this._modal = false;
-      this.getElement().fadeIn();
+      this.get('element').fadeIn();
       this.makeFirstResponder();
     },
 
@@ -206,7 +206,7 @@ wesabe.$class('wesabe.views.widgets.Dialog', wesabe.views.widgets.Container, fun
       $class.hideExcept(me);
       me.makeFirstResponder();
       me.onWillShow(callback);
-      me.getElement().fadeIn('normal', function(){ me.onDidShow(callback) })
+      me.get('element').fadeIn('normal', function(){ me.onDidShow(callback) })
         .addClass('visible');
     },
 
@@ -233,7 +233,7 @@ wesabe.$class('wesabe.views.widgets.Dialog', wesabe.views.widgets.Container, fun
       }
 
        // Index the element on top of the mask and fade in
-       me.getElement()
+       me.get('element')
         .css("z-index", "1001")
         .fadeIn('normal', function(){ me.onDidShow(callback) })
         .addClass('visible');
@@ -241,8 +241,8 @@ wesabe.$class('wesabe.views.widgets.Dialog', wesabe.views.widgets.Container, fun
 
     hide: function(callback) {
       $class.removeFromResponders(this);
-      if (this.isVisible())
-        this.getElement().fadeOut(function(){ $(this).removeClass('visible'); if (callback) callback() });
+      if (this.get('visible'))
+        this.get('element').fadeOut(function(){ $(this).removeClass('visible'); if (callback) callback() });
       else if (callback)
         callback();
     },
@@ -253,14 +253,14 @@ wesabe.$class('wesabe.views.widgets.Dialog', wesabe.views.widgets.Container, fun
       $('#modal-mask').fadeOut("fast", function() {
         $(this).remove();
       });
-      if (this.isVisible())
-        this.getElement().fadeOut(function(){ $(this).removeClass('visible'); if (callback) callback() });
+      if (this.get('visible'))
+        this.get('element').fadeOut(function(){ $(this).removeClass('visible'); if (callback) callback() });
       else if (callback)
         callback();
     },
 
     toggle: function() {
-      if (this.isVisible())
+      if (this.get('visible'))
         this.hide();
       else
         this.show();

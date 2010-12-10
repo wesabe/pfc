@@ -11,7 +11,7 @@ wesabe.$class('views.pages.DashboardPage', function($class, $super, $package) {
         .enableDefaultAccountSidebarBehavior();
 
       var targetDataSource = new wesabe.data.TargetDataSource();
-      targetDataSource.setCachingEnabled(true);
+      targetDataSource.set('cachingEnabled', true);
       this._targets = new wesabe.views.widgets.targets.TargetWidget($("#spending-targets"), targetDataSource);
     }
   });

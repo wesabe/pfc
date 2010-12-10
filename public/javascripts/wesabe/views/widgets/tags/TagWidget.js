@@ -17,7 +17,16 @@ wesabe.$class('wesabe.views.widgets.tags.TagWidget', wesabe.views.widgets.BaseWi
   var number = wesabe.lang.number
 
   $.extend($class.prototype, {
-    _tagList: null,
+    /**
+     * The current style (i.e. either "cloud" or "list").
+     */
+    style: null,
+
+    /**
+     * The child {TagList} of this widget.
+     */
+    tagList: null,
+
     _noTagsLabel: null,
     _tagDataSource: null,
     _styleButtons: null,
@@ -38,13 +47,13 @@ wesabe.$class('wesabe.views.widgets.tags.TagWidget', wesabe.views.widgets.BaseWi
       me._filteredTagsButton = element.find("#filtered-tags-button").click(function(){filteredTagsEditDialog.toggle();});
 
       me._editButton = element.find(".module-header .edit-tags");
-      me._editButton.click(function(){ me.setEditModeEnabled(true) });
+      me._editButton.click(function(){ me.set('editModeEnabled', true) });
 
       me._doneButton = element.find(".module-header .done-tags");
-      me._doneButton.click(function(){ me.setEditModeEnabled(false) });
+      me._doneButton.click(function(){ me.set('editModeEnabled', false) });
 
-      me._tagList = new $package.TagList(element.find('.content ul.tags'), new wesabe.util.Selection(), me.getEditDialog());
-      me.registerChildWidget(me._tagList);
+      me.set('tagList', new $package.TagList(element.find('.content ul.tags'), new wesabe.util.Selection(), me.get('editDialog')));
+      me.registerChildWidget(me.get('tagList'));
 
       me._noTagsLabel = new wesabe.views.widgets.Label(element.find('.no-tags-label'));
       me.registerChildWidget(me._noTagsLabel);
@@ -73,44 +82,36 @@ wesabe.$class('wesabe.views.widgets.tags.TagWidget', wesabe.views.widgets.BaseWi
     /**
      * Returns the {wesabe.util.Selection} associated with this {TagWidget}.
      */
-    getSelection: function() {
-      return this.getTagList().getSelection();
+    selection: function() {
+      return this.get('tagList.selection');
     },
 
     /**
      * Sets the {wesabe.util.Selection} associated with this {TagWidget}.
      */
     setSelection: function(selection) {
-      this.getTagList().setSelection(selection);
+      this.set('tagList.selection', selection);
     },
 
     /**
-     * Gets the current style (i.e. either "cloud" or "list").
-     */
-    getStyle: function() {
-      return this._style;
-    },
-
-    /**
-     * Sets the current style to either "cloud" or "list".
-     *
      * NOTE: This does not update the user's preferences.
      */
     setStyle: function(newStyle) {
-      var oldStyle = this._style;
-      if (newStyle !== oldStyle) {
-        this._style = newStyle;
-        this.onStyleChanged(newStyle, oldStyle);
-      }
+      var oldStyle = this.style;
+      if (newStyle === oldStyle)
+        return;
+
+      this.style = newStyle;
+      this.onStyleChanged(newStyle, oldStyle);
     },
 
     /**
-     * Returns a list of objects that may be selected in this {TagWidget}.
+     * The objects that may be selected in this {TagWidget}.
      *
      * See {wesabe.views.pages.accounts#reloadState}.
      */
-    getSelectableObjects: function() {
-      return this.getTagList().getItems();
+    selectableObjects: function() {
+      return this.get('tagList.items');
     },
 
     /**
@@ -122,7 +123,7 @@ wesabe.$class('wesabe.views.widgets.tags.TagWidget', wesabe.views.widgets.BaseWi
     onStyleButtonClick: function(event) {
       var style = $(event.target).is('.list') ? 'list' : 'cloud';
       prefs.update('tag_cloud', (style == 'cloud'));
-      this.setStyle(style);
+      this.set('style', style);
     },
 
     /**
@@ -131,7 +132,7 @@ wesabe.$class('wesabe.views.widgets.tags.TagWidget', wesabe.views.widgets.BaseWi
      * @private
      */
     _restoreStyleFromPrefs: function () {
-      this.setStyle(prefs.get('tag_cloud') ? 'cloud' : 'list');
+      this.set('style', prefs.get('tag_cloud') ? 'cloud' : 'list');
     },
 
     /**
@@ -140,7 +141,7 @@ wesabe.$class('wesabe.views.widgets.tags.TagWidget', wesabe.views.widgets.BaseWi
     onStyleChanged: function(newStyle, oldStyle) {
       this._styleButtons.filter('.'+newStyle).addClass('on');
       this._styleButtons.filter(':not(.'+newStyle+')').removeClass('on');
-      this.getTagList().setStyle(newStyle);
+      this.set('tagList.style', newStyle);
     },
 
     /**
@@ -155,7 +156,7 @@ wesabe.$class('wesabe.views.widgets.tags.TagWidget', wesabe.views.widgets.BaseWi
      */
     onTagsChanged: function(data) {
       this.update(data);
-      this.onStyleChanged(this.getStyle());
+      this.onStyleChanged(this.get('style'));
       this._hasDoneInitialLoad = true;
       this.trigger('loaded');
     },
@@ -171,7 +172,7 @@ wesabe.$class('wesabe.views.widgets.tags.TagWidget', wesabe.views.widgets.BaseWi
      * Updates the DOM using the new tag data.
      */
     update: function(data) {
-      this._noTagsLabel.setVisible(data.summaries.length == 0);
+      this._noTagsLabel.set('visible', data.summaries.length == 0);
 
       // do some preprocessing to sort the data and generate useful stats
       data.summaries = array.caseInsensitiveSort(data.summaries,
@@ -199,33 +200,26 @@ wesabe.$class('wesabe.views.widgets.tags.TagWidget', wesabe.views.widgets.BaseWi
         }
       });
 
-      this.getTagList().update(data.summaries);
-    },
-
-    /**
-     * Gets the child {TagList}.
-     */
-    getTagList: function() {
-      return this._tagList;
+      this.get('tagList').update(data.summaries);
     },
 
     /**
      * Lazy-load the {TagEditDialog} for this tag list since editing is so rare.
      */
-    getEditDialog: function() {
-      if (!this._editDialog) {
-        this._editDialog = new $package.TagEditDialog(this.getElement().children('.edit-dialog'), this._tagDataSource);
-      }
+    editDialog: function() {
+      if (!this._editDialog)
+        this._editDialog = new $package.TagEditDialog(this.get('element').children('.edit-dialog'), this._tagDataSource);
+
       return this._editDialog;
     },
 
     selectTag: function(tagURI) {
       // REVIEW: totally unsure if this should be in tagList or not
-      var tagListItems = this.getTagList().getItems(),
+      var tagListItems = this.get('tagList.items'),
           length = tagListItems.length;
 
       while (length--) {
-        if (tagListItems[length].getURI() == tagURI) {
+        if (tagListItems[length].get('uri') == tagURI) {
           tagListItems[length].select();
           break;
         }
@@ -237,12 +231,12 @@ wesabe.$class('wesabe.views.widgets.tags.TagWidget', wesabe.views.widgets.BaseWi
      */
     setEditModeEnabled: function(enabled) {
       if (enabled) {
-        this.setStyle('list');
-        this.getElement().addClass("editing");
+        this.set('style', 'list');
+        this.get('element').addClass("editing");
       } else {
-        this.getEditDialog().hide();
+        this.get('editDialog').hide();
         this._restoreStyleFromPrefs();
-        this.getElement().removeClass("editing");
+        this.get('element').removeClass("editing");
       }
     }
   });

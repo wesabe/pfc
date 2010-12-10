@@ -49,26 +49,26 @@ wesabe.$class('wesabe.views.widgets.targets.TargetList', wesabe.views.widgets.Ba
           target = new $package.Target(this._template.clone(), this);
         }
 
-        target.setTagName(targetDatum.tag.name);
-        target.setMonthlyLimit(targetDatum.monthly_limit);
-        target.setAmountSpent(targetDatum.amount_spent);
+        target.set('tagName', targetDatum.tag.name);
+        target.set('monthlyLimit', targetDatum.monthly_limit);
+        target.set('amountSpent', targetDatum.amount_spent);
 
         items[i] = target;
       }
 
-      this.setItems(items);
+      this.set('items', items);
     },
 
     getItemByTagName: function(tagName) {
-      for (var i = this.getItems().length; i--; ) {
+      for (var i = this.get('items').length; i--; ) {
         var item = this.getItem(i);
-        if (item.getTagName() === tagName)
+        if (item.get('tagName') === tagName)
           return item;
       }
     },
 
     onConfirm: function(dialog) {
-      this._dataSource.update(dialog.getTagName(), dialog.getAmount(), this.refresh, this);
+      this._dataSource.update(dialog.get('tagName'), dialog.get('amount'), this.refresh, this);
       dialog.hideModal()
     },
 
@@ -76,6 +76,10 @@ wesabe.$class('wesabe.views.widgets.targets.TargetList', wesabe.views.widgets.Ba
      * Refreshes the data in the data source and, as a result, redraws the list.
      */
     refresh: function() {
+      for (var i = this.get('items').length; i--; )
+        if (this.getItem(i).get('destroyed'))
+          this.removeItemAtIndex(i);
+
       this._dataSource.clearCache();
       this._dataSource.requestData();
     },

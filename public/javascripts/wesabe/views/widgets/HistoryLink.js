@@ -6,8 +6,8 @@ wesabe.$class('wesabe.views.widgets.HistoryLink', wesabe.views.widgets.Label, fu
   var $ = jQuery;
 
   $.extend($class.prototype, {
-    _uri: null,
-    _text: null,
+    uri: null,
+    text: null,
 
     init: function(element, uri, formatter) {
       $super.init.call(this, element, formatter);
@@ -15,8 +15,8 @@ wesabe.$class('wesabe.views.widgets.HistoryLink', wesabe.views.widgets.Label, fu
       var me = this;
 
       element.click(function(event){ me.onClick(event) });
-      if (uri) me.setURI(uri);
-      else me._uri = element.attr('href');
+      if (uri) me.set('uri', uri);
+      else me.uri = element.attr('href');
     },
 
     /**
@@ -28,7 +28,7 @@ wesabe.$class('wesabe.views.widgets.HistoryLink', wesabe.views.widgets.Label, fu
         return;
 
       // don't let clicks do anything when there's no URI
-      if (!this.getURI()) {
+      if (!this.get('uri')) {
         event.preventDefault();
         return;
       }
@@ -37,17 +37,8 @@ wesabe.$class('wesabe.views.widgets.HistoryLink', wesabe.views.widgets.Label, fu
       if (event.ctrlKey || event.metaKey)
         return;
 
-      $.address.value(this.getURI());
+      $.address.value(this.get('uri'));
       event.preventDefault();
-    },
-
-    /**
-     * Gets the uri of this link (e.g. "/tags/food").
-     *
-     * @return {string}
-     */
-    getURI: function() {
-      return this._uri;
     },
 
     /**
@@ -56,20 +47,20 @@ wesabe.$class('wesabe.views.widgets.HistoryLink', wesabe.views.widgets.Label, fu
      * @param {string} uri The anchor.
      */
     setURI: function(uri) {
-      if (this._uri === uri)
+      if (this.uri === uri)
         return;
 
       this.uri = uri;
-      this.getElement().attr('href', uri || '');
+      this.get('element').attr('href', uri || '');
     },
 
     /**
-     * Alias for {#getValue}
+     * Alias for {#value}
      *
      * @return {object}
      */
-    getText: function() {
-      return this.getValue();
+    text: function() {
+      return this.get('value');
     },
 
     /**
@@ -78,7 +69,7 @@ wesabe.$class('wesabe.views.widgets.HistoryLink', wesabe.views.widgets.Label, fu
      * @param {!object} text
      */
     setText: function(text) {
-      this.setValue(text);
+      this.set('value', text);
     }
   });
 });

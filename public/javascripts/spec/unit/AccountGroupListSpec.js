@@ -76,9 +76,9 @@
       expect(accountGroupList.getItems().length).to(equal, accountGroupData.length);
       accountGroup = accountGroupList.getItems()[0];
 
-      expect(accountGroup.getURI()).to(equal, accountGroupData[0].uri);
-      expect(accountGroup.getName()).to(equal, accountGroupData[0].name);
-      expect(accountGroup.getElement()).to(match_selector, 'li.group');
+      expect(accountGroup.get('uri')).to(equal, accountGroupData[0].uri);
+      expect(accountGroup.get('name')).to(equal, accountGroupData[0].name);
+      expect(accountGroup.get('element')).to(match_selector, 'li.group');
     },
 
     "can get an AccountGroup given a valid child element": function() {

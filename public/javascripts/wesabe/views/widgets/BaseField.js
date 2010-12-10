@@ -44,43 +44,43 @@ wesabe.$class('wesabe.views.widgets.BaseField', wesabe.views.widgets.BaseWidget,
       element.attr('autocomplete', 'off');
     },
 
-    getValue: function() {
-      return this.getElement().val();
+    value: function() {
+      return this.get('element').val();
     },
 
     setValue: function(value) {
-      this.getElement().val(value);
+      this.get('element').val(value);
     },
 
-    getName: function() {
-      return this.getElement().attr('name');
+    name: function() {
+      return this.get('element').attr('name');
     },
 
     setName: function(name) {
-      this.getElement().attr('name', name);
+      this.get('element').attr('name', name);
     },
 
     isEnabled: function() {
-      return !this.getElement().attr('disabled');
+      return !this.get('element').attr('disabled');
     },
 
     setEnabled: function(enabled) {
-      this.getElement().attr('disabled', !enabled);
+      this.get('element').attr('disabled', !enabled);
       if (!enabled)
         this.blur();
     },
 
     clear: function() {
-      this.getElement().val('');
+      this.get('element').val('');
     },
 
     focus: function() {
-      var element = this.getElement();
+      var element = this.get('element');
       if (element.length) element[0].focus();
     },
 
     blur: function() {
-      this.getElement().blur();
+      this.get('element').blur();
     },
 
     clearAndBlur: function() {
@@ -89,22 +89,22 @@ wesabe.$class('wesabe.views.widgets.BaseField', wesabe.views.widgets.BaseWidget,
     },
 
     isEmpty: function() {
-      return !this.getElement().val();
+      return !this.get('element').val();
     },
 
     selectAllAndFocus: function() {
-      var element = this.getElement();
+      var element = this.get('element');
       element.caret(0, element.val().length);
       this.focus();
     },
 
     _startWatchingForChanges: function(msToWait) {
       var me = this;
-      me._value = me.getValue();
+      me._value = me.get('value');
       (function() {
-        if (me._value !== me.getValue()) {
-          me._value = me.getValue();
-          me.getElement().trigger('pollingchange');
+        if (me._value !== me.get('value')) {
+          me._value = me.get('value');
+          me.get('element').trigger('pollingchange');
         }
         me._changeWatcher = setTimeout(arguments.callee, msToWait || 50);
       })();

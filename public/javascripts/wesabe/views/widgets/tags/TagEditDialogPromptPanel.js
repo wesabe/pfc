@@ -8,10 +8,16 @@ wesabe.$class('wesabe.views.widgets.tags.TagEditDialogPromptPanel', wesabe.views
   var tags = wesabe.data.tags;
 
   $.extend($class.prototype, {
+    /**
+     * Stores the original (unedited) version of the tag.
+     *
+     * @private
+     */
+    _originalTag: null,
+
     _deleteButton: null,
     _tagNameField: null,
     _tagDataSource: null,
-    _originalTag: null,
 
     init: function(element, tagEditDialog, tagDataSource) {
       var me = this;
@@ -28,41 +34,41 @@ wesabe.$class('wesabe.views.widgets.tags.TagEditDialogPromptPanel', wesabe.views
       me._deleteButton.click(function(){ me.onDelete() });
     },
 
-    getTags: function() {
-      return tags.parseTagString(this.getTagString());
+    tags: function() {
+      return tags.parseTagString(this.get('tagString'));
     },
 
     setTags: function(list) {
       $super.setTags.apply(this, arguments);
-      this._tagNameField.setValue(tags.joinTags(list));
+      this._tagNameField.set('value', tags.joinTags(list));
     },
 
-    getTagString: function() {
-      return this._tagNameField.getValue();
+    tagString: function() {
+      return this._tagNameField.get('value');
     },
 
     onBeginEdit: function(tagListItem) {
       var me = this;
 
       // hang on to the original tag
-      me._originalTag = {name: tagListItem.getName()};
+      me.set('originalTag', {name: tagListItem.get('name')});
 
       // Editing "foo"
-      me._tagNameLabel.text('“' + me._originalTag.name + '”');
+      me._tagNameLabel.text('“' + me.get('originalTag').name + '”');
 
       // watch for tag changes
-      me._tagNameField.getElement().bind('keyup.tedpp', function(event){ me.onKeyUp(event) });
+      me._tagNameField.get('element').bind('keyup.tedpp', function(event){ me.onKeyUp(event) });
 
       // set the prompt value
-      me.setTags([me._originalTag]);
+      me.set('tags', [me.get('originalTag')]);
     },
 
     onEndEdit: function() {
-      this._tagNameField.getElement().unbind('keyup.tedpp');
+      this._tagNameField.get('element').unbind('keyup.tedpp');
     },
 
     onKeyUp: function(event) {
-      if (!tags.listsEqual(this._tags || [], this.getTags()))
+      if (!tags.listsEqual(this._tags || [], this.get('tags')))
         this._tagEditDialog.onTagsChanged(this);
     },
 
@@ -71,7 +77,7 @@ wesabe.$class('wesabe.views.widgets.tags.TagEditDialogPromptPanel', wesabe.views
         return;
 
       $super.setEnabled.call(this, enabled);
-      this._deleteButton.setEnabled(enabled);
+      this._deleteButton.set('enabled', enabled);
     },
 
     onDelete: function() {
@@ -82,7 +88,7 @@ wesabe.$class('wesabe.views.widgets.tags.TagEditDialogPromptPanel', wesabe.views
     },
 
     isDirty: function() {
-      return !tags.listsEqual(this.getTags(), [this._originalTag]);
+      return !tags.listsEqual(this.get('tags'), [this.get('originalTag')]);
     },
 
     setVisible: function(visible) {
@@ -96,7 +102,7 @@ wesabe.$class('wesabe.views.widgets.tags.TagEditDialogPromptPanel', wesabe.views
       var me = this;
 
       $super.animateVisible.call(me, visible, function() {
-        me.setVisible(visible);
+        me.set('visible', visible);
         callback && callback();
       });
     }

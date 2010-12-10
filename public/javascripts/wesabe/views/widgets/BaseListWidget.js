@@ -24,7 +24,7 @@ wesabe.$class('wesabe.views.widgets.BaseListWidget', wesabe.views.widgets.BaseWi
      * @return {element}
      */
     getListElement: function() {
-      return this._listElement || this.getElement();
+      return this._listElement || this.get('element');
     },
 
     /**
@@ -48,7 +48,7 @@ wesabe.$class('wesabe.views.widgets.BaseListWidget', wesabe.views.widgets.BaseWi
           length = items.length;
 
       while (length--)
-        if ($.same(element, items[length].getElement())) return items[length];
+        if ($.same(element, items[length].get('element'))) return items[length];
 
       return null;
     },
@@ -65,7 +65,7 @@ wesabe.$class('wesabe.views.widgets.BaseListWidget', wesabe.views.widgets.BaseWi
           length = items.length;
 
       while (length--)
-        if (items[length].getURI() === uri) return items[length];
+        if (items[length].get('uri') === uri) return items[length];
 
       return null;
     },
@@ -89,7 +89,20 @@ wesabe.$class('wesabe.views.widgets.BaseListWidget', wesabe.views.widgets.BaseWi
      * @return {BaseWidget}
      */
     getItem: function(index) {
-      return this.getItems()[index];
+      return this.get('items')[index];
+    },
+
+    /**
+     * Removes the item at +index+.
+     */
+    removeItemAtIndex: function(index) {
+      var items = this.get('items'),
+          length = items.length;
+
+      for (var i = index; i < length-1; i++)
+        items[i] = items[i+1];
+
+      items.length--;
     },
 
     /**
@@ -103,7 +116,7 @@ wesabe.$class('wesabe.views.widgets.BaseListWidget', wesabe.views.widgets.BaseWi
           stripe = this.isStripingEnabled();
 
       for (var i = items.length; i--;) {
-        var element = items[i].getElement();
+        var element = items[i].get('element');
         if (stripe) {
           var isEven = i % 2 == 0;
           element.addClass(isEven ? 'even' : 'odd')

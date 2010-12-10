@@ -23,12 +23,12 @@ wesabe.$class('wesabe.views.widgets.tags.TagEditDialog', wesabe.views.widgets.Di
     },
 
     onTagsChanged: function(tagEditDialogPromptPanel) {
-      if (!tagEditDialogPromptPanel.getTags().length) {
-        this.setButtonsDisabled(true);
+      if (!tagEditDialogPromptPanel.get('tags').length) {
+        this.set('buttonsDisabled', true);
       } else {
-        this.setButtonsDisabled(false);
+        this.set('buttonsDisabled', false);
 
-        tagEditDialogPromptPanel.setConfirmButtonText(
+        tagEditDialogPromptPanel.set('confirmButtonText',
           !tagEditDialogPromptPanel.isDirty() ? 'Save' :
                                this.isMerge() ? 'Merge…' :
                                                 'Rename…');
@@ -44,11 +44,11 @@ wesabe.$class('wesabe.views.widgets.tags.TagEditDialog', wesabe.views.widgets.Di
       me._showPanel(me._editPanel);
 
       // Move to line up witht he tag's edit button
-      me.getElement().css('top', tagListItem.getElement().offset().top-140)
+      me.get('element').css('top', tagListItem.get('element').offset().top-140)
       // show the edit dialog
       me.show(function() {
         // Focus on the input after fading in
-        me._editPanel.setVisible(true);
+        me._editPanel.set('visible', true);
       });
 
       var panels = me._panels,
@@ -83,11 +83,11 @@ wesabe.$class('wesabe.views.widgets.tags.TagEditDialog', wesabe.views.widgets.Di
       while (length--) {
         var p = panels[length];
         if (panel !== p) {
-          animate ? p.animateVisible(false) : p.setVisible(false);
+          animate ? p.animateVisible(false) : p.set('visible', false);
         } else {
-          p.setTags(this.getTags());
-          this.setButtonsDisabled(false);
-          animate ? p.animateVisible(true) : p.setVisible(true);
+          p.set('tags', this.get('tags'));
+          this.set('buttonsDisabled', false);
+          animate ? p.animateVisible(true) : p.set('visible', true);
         }
       }
 
@@ -103,10 +103,10 @@ wesabe.$class('wesabe.views.widgets.tags.TagEditDialog', wesabe.views.widgets.Di
 
       $.ajax({
         type: 'PUT',
-        url: me._tagListItem.getURI(),
-        data: { replacement_tags: me.getTagString() },
+        url: me._tagListItem.get('uri'),
+        data: { replacement_tags: me.get('tagString') },
         beforeSend: function () {
-          me.setButtonsDisabled(true);
+          me.set('buttonsDisabled', true);
         },
         success: function() {
           me._tagDataSource.requestData();
@@ -123,10 +123,10 @@ wesabe.$class('wesabe.views.widgets.tags.TagEditDialog', wesabe.views.widgets.Di
 
       $.ajax({
         type: 'DELETE',
-        url: me._tagListItem.getURI(),
+        url: me._tagListItem.get('uri'),
         data: '_=', // NOTE: fixes a possible Rails bug (nil.attributes when doing DELETE)
         beforeSend: function () {
-          me.setButtonsDisabled(true);
+          me.set('buttonsDisabled', true);
         },
         success: function() {
           me._tagDataSource.requestData();
@@ -181,9 +181,9 @@ wesabe.$class('wesabe.views.widgets.tags.TagEditDialog', wesabe.views.widgets.Di
       if (!this.isDirty())
         return false;
 
-      var newTags = this.getTags(),
+      var newTags = this.get('tags'),
           newTagsLength = newTags.length,
-          summaries = this._tagDataSource.getData().summaries,
+          summaries = this._tagDataSource.get('data').summaries,
           summariesLength = summaries.length;
 
       // it's not a merge if there are no new tags
@@ -210,12 +210,12 @@ wesabe.$class('wesabe.views.widgets.tags.TagEditDialog', wesabe.views.widgets.Di
       return this._editPanel.isDirty();
     },
 
-    getTags: function() {
-      return this._editPanel.getTags();
+    tags: function() {
+      return this._editPanel.get('tags');
     },
 
-    getTagString: function() {
-      return this._editPanel.getTagString();
+    tagString: function() {
+      return this._editPanel.get('tagString');
     }
   });
 });

@@ -14,11 +14,35 @@ wesabe.$class('wesabe.views.widgets.targets.Target', wesabe.views.widgets.BaseWi
   var Label = wesabe.views.widgets.Label;
 
   $.extend($class.prototype, {
-    _targetList: null,
-    _tagName: null,
-    _monthlyLimit: null,
-    _amountSpent: null,
+    /**
+     * The name of the tag this target is set for.
+     *
+     * @type {string}
+     */
+    tagName: null,
 
+    /**
+     * The monthly spending limit this target is set to.
+     *
+     * @type {number}
+     */
+    monthlyLimit: null,
+
+    /**
+     * The amount the user has spent on this target's tag so far this month.
+     *
+     * @type {number}
+     */
+    amountSpent: null,
+
+    /**
+     * true if this target has been destroyed, false otherwise
+     *
+     * @type {boolean}
+     */
+    destroyed: false,
+
+    _targetList: null,
     _tagNameElement: null,
     _barSpentElement: null,
     _amountSpentLabel: null,
@@ -48,55 +72,43 @@ wesabe.$class('wesabe.views.widgets.targets.Target', wesabe.views.widgets.BaseWi
       this._editButton.bind('click', this.onEdit, this);
 
       this._tagNameElement.add(this._barSpentElement).add(this._targetAmountLabelElement).bind('click', function() {
-        shared.navigateTo('/accounts#/tags/'+string.uriEscape(me.getTagName()));
+        shared.navigateTo('/accounts#/tags/'+string.uriEscape(me.get('tagName')));
       });
 
       this.registerChildWidgets(this._removeButton, this._editButton, this._amountSpentLabel, this._amountRemainingLabel, this._targetAmountLabel);
     },
 
-    getTagName: function() {
-      return this._tagName;
-    },
-
     setTagName: function(tagName) {
-      if (this._tagName === tagName)
+      if (this.tagName === tagName)
         return;
 
-      this._tagName = tagName;
+      this.tagName = tagName;
       this._tagNameElement.text(tagName);
     },
 
-    getMonthlyLimit: function() {
-      return this._monthlyLimit;
-    },
-
     setMonthlyLimit: function(monthlyLimit) {
-      this._monthlyLimit = monthlyLimit;
+      this.monthlyLimit = monthlyLimit;
       this.redraw();
-    },
-
-    getAmountSpent: function() {
-      return this._amountSpent;
     },
 
     setAmountSpent: function(amountSpent) {
-      this._amountSpent = amountSpent;
+      this.amountSpent = amountSpent;
       this.redraw();
     },
 
-    getPercentFull: function() {
-      var limit = money.amount(this._monthlyLimit);
-      var amountSpent = money.amount(this._amountSpent);
+    percentFull: function() {
+      var limit = money.amount(this.get('monthlyLimit'));
+      var amountSpent = money.amount(this.get('amountSpent'));
       if (limit == 0)
         return amountSpent == 0 ? 0 : 1;
 
       return amountSpent / limit;
     },
 
-    getAmountRemaining: function() {
+    amountRemaining: function() {
       return money.toMoney(
-          money.amount(this._monthlyLimit) - money.amount(this._amountSpent),
-          this._monthlyLimit.currency);
+          money.amount(this.get('monthlyLimit')) - money.amount(this.get('amountSpent')),
+          this.get('monthlyLimit').currency);
     },
 
     /**
@@ -104,8 +116,9 @@ wesabe.$class('wesabe.views.widgets.targets.Target', wesabe.views.widgets.BaseWi
      */
     onRemove: function() {
       var me = this;
-      this._targetList.removeTarget(this.getTagName());
-      this.getElement().fadeOut(function(){ me.remove() });
+      this._targetList.removeTarget(this.get('tagName'));
+      this.set('destroyed', true);
+      this.get('element').fadeOut(function(){ me.remove() });
     },
 
     /**
@@ -115,46 +128,46 @@ wesabe.$class('wesabe.views.widgets.targets.Target', wesabe.views.widgets.BaseWi
       var me = this;
 
       this._targetList.asyncGetEditTargetDialog(function(dialog) {
-        dialog.setTagName(me.getTagName());
-        dialog.setAmount(money.amount(me.getMonthlyLimit()));
+        dialog.set('tagName', me.get('tagName'));
+        dialog.set('amount', money.amount(me.get('monthlyLimit')));
         dialog.alignWithTarget(me);
         dialog.showModal();
       });
     },
 
     redraw: function() {
-      if (this._amountSpent === null || this._monthlyLimit === null)
+      if (this.get('amountSpent') === null || this.get('monthlyLimit') === null)
         return;
 
       var me              = this,
-          percentFull     = this.getPercentFull(),
-          amountRemaining = this.getAmountRemaining(),
+          percentFull     = this.get('percentFull'),
+          amountRemaining = this.get('amountRemaining'),
           hasLeftBuffer   = percentFull >= 0.1,
           hasRightBuffer  = percentFull <= 0.9;
 
       this.animateSpent(percentFull, function() {
         var remainingText = "";
         if (hasRightBuffer) {
-          remainingText += me._format(me.getAmountRemaining());
+          remainingText += me._format(me.get('amountRemaining'));
           if (!hasLeftBuffer) remainingText += ' left';
         }
-        me._amountRemainingLabel.setValue(remainingText);
+        me._amountRemainingLabel.set('value', remainingText);
 
         var spentText = "";
         if (hasLeftBuffer) {
-          spentText += me._format(me.getAmountSpent());
+          spentText += me._format(me.get('amountRemaining'));
         }
-        me._amountSpentLabel.setValue(spentText);
+        me._amountSpentLabel.set('value', spentText);
 
-        me._amountSpentLabel.setVisible(hasLeftBuffer);
-        me._amountRemainingLabel.setVisible(hasRightBuffer);
+        me._amountSpentLabel.set('visible', hasLeftBuffer);
+        me._amountRemainingLabel.set('visible', hasRightBuffer);
 
         if (money.amount(amountRemaining) < 0) {
-          me._targetAmountLabel.setValue(me._format(money.abs(amountRemaining))+' over');
-          me._targetAmountLabel.getElement().addClass('over');
+          me._targetAmountLabel.set('value', me._format(money.abs(amountRemaining))+' over');
+          me._targetAmountLabel.get('element').addClass('over');
         } else {
-          me._targetAmountLabel.setValue(me._format(me.getMonthlyLimit()))
-          me._targetAmountLabel.getElement().removeClass('over');
+          me._targetAmountLabel.set('value', me._format(me.get('monthlyLimit')))
+          me._targetAmountLabel.get('element').removeClass('over');
         }
       });
     },
@@ -167,7 +180,7 @@ wesabe.$class('wesabe.views.widgets.targets.Target', wesabe.views.widgets.BaseWi
         //.css('background-position', origin+'px 4px')
         .animate({ 'background-position': x+'px 4px' }, callback);
 
-      this._amountRemainingLabel.getElement()
+      this._amountRemainingLabel.get('element')
         //.css('left', origin+415)
         .animate({'left': x+415});
     },
