@@ -1,6 +1,5 @@
 class AccountCredsController < ApplicationController
   before_filter :check_authentication
-  before_filter :require_account_cred, :only => [:destroy, :show]
   before_filter :check_ssu_enabled
 
   def new
