@@ -45,6 +45,10 @@ jQuery(function($) {
         if ($.address.path() == "/trends") $.address.value("/trends/spending");
         else self.fn('_restoreState');
 
+        $('#trends-summary li a').each(function() {
+          new wesabe.views.widgets.HistoryLink($(this));
+        });
+
         return self;
       },
 

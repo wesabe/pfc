@@ -16,6 +16,7 @@ wesabe.$class('wesabe.views.widgets.HistoryLink', wesabe.views.widgets.Label, fu
 
       element.click(function(event){ me.onClick(event) });
       if (uri) me.setURI(uri);
+      else me._uri = element.attr('href');
     },
 
     /**
@@ -58,8 +59,8 @@ wesabe.$class('wesabe.views.widgets.HistoryLink', wesabe.views.widgets.Label, fu
       if (this._uri === uri)
         return;
 
-      this._uri = uri;
-      this.getElement().attr('href', uri ? '#'+uri : '');
+      this.uri = uri;
+      this.getElement().attr('href', uri || '');
     },
 
     /**
