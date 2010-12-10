@@ -72,7 +72,7 @@ wesabe.$class('wesabe.views.widgets.targets.Target', wesabe.views.widgets.BaseWi
       this._editButton.bind('click', this.onEdit, this);
 
       this._tagNameElement.add(this._barSpentElement).add(this._targetAmountLabelElement).bind('click', function() {
-        shared.navigateTo('/accounts#/tags/'+string.uriEscape(me.get('tagName')));
+        shared.navigateTo('/tags/'+string.uriEscape(me.get('tagName')));
       });
 
       this.registerChildWidgets(this._removeButton, this._editButton, this._amountSpentLabel, this._amountRemainingLabel, this._targetAmountLabel);
