@@ -230,7 +230,7 @@ wesabe.$class('wesabe.views.widgets.accounts.AccountWidget', wesabe.views.widget
      * Update the listing of accounts only, not the update status.
      */
     updateAccountListing: function(data) {
-      this.set('total.money', data.total);
+      this.setPath('total.money', data.total);
       this.get('accountGroupList').update(data['account-groups']);
     },
 
@@ -248,7 +248,7 @@ wesabe.$class('wesabe.views.widgets.accounts.AccountWidget', wesabe.views.widget
      * updated via the Automatic Uploader.
      */
     updatingAccounts: function() {
-      var groups = this.get('accountGroupList.items'),
+      var groups = this.getPath('accountGroupList.items'),
           length = groups.length;
 
       while (length--)

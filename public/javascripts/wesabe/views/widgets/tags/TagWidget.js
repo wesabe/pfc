@@ -83,14 +83,14 @@ wesabe.$class('wesabe.views.widgets.tags.TagWidget', wesabe.views.widgets.BaseWi
      * Returns the {wesabe.util.Selection} associated with this {TagWidget}.
      */
     selection: function() {
-      return this.get('tagList.selection');
+      return this.getPath('tagList.selection');
     },
 
     /**
      * Sets the {wesabe.util.Selection} associated with this {TagWidget}.
      */
     setSelection: function(selection) {
-      this.set('tagList.selection', selection);
+      this.setPath('tagList.selection', selection);
     },
 
     /**
@@ -111,7 +111,7 @@ wesabe.$class('wesabe.views.widgets.tags.TagWidget', wesabe.views.widgets.BaseWi
      * See {wesabe.views.pages.accounts#reloadState}.
      */
     selectableObjects: function() {
-      return this.get('tagList.items');
+      return this.getPath('tagList.items');
     },
 
     /**
@@ -141,7 +141,7 @@ wesabe.$class('wesabe.views.widgets.tags.TagWidget', wesabe.views.widgets.BaseWi
     onStyleChanged: function(newStyle, oldStyle) {
       this._styleButtons.filter('.'+newStyle).addClass('on');
       this._styleButtons.filter(':not(.'+newStyle+')').removeClass('on');
-      this.set('tagList.style', newStyle);
+      this.setPath('tagList.style', newStyle);
     },
 
     /**
@@ -215,7 +215,7 @@ wesabe.$class('wesabe.views.widgets.tags.TagWidget', wesabe.views.widgets.BaseWi
 
     selectTag: function(tagURI) {
       // REVIEW: totally unsure if this should be in tagList or not
-      var tagListItems = this.get('tagList.items'),
+      var tagListItems = this.getPath('tagList.items'),
           length = tagListItems.length;
 
       while (length--) {
