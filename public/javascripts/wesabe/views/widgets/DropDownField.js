@@ -6,7 +6,16 @@ wesabe.$class('wesabe.views.widgets.DropDownField', wesabe.views.widgets.BaseFie
   var $ = jQuery;
 
   $.extend($class.prototype, {
-    _placeholderText: null,
+    /**
+     * Text to use as a placeholder/call to action for the user.
+     *
+     * @type {string}
+     */
+    placeholderText: null,
+
+    /**
+     * @private
+     */
     _placeholderOption: null,
 
     init: function(element, delegate) {
@@ -29,11 +38,11 @@ wesabe.$class('wesabe.views.widgets.DropDownField', wesabe.views.widgets.BaseFie
     },
 
     addOption: function(key, value) {
-      this.getElement().append(new Option(key, value));
+      this.get('element').append(new Option(key, value));
     },
 
     clearOptions: function() {
-      var options = this.getElement().children();
+      var options = this.get('element').children();
 
       if (this._placeholderOption)
         options = options.not(this._placeholderOption);
@@ -41,25 +50,21 @@ wesabe.$class('wesabe.views.widgets.DropDownField', wesabe.views.widgets.BaseFie
       options.empty();
     },
 
-    getPlaceholderText: function() {
-      return this._placeholderText;
-    },
-
     setPlaceholderText: function(placeholderText) {
-      if (placeholderText == this._placeholderText)
+      if (placeholderText == this.placeholderText)
         return;
 
-      this._placeholderText = placeholderText;
+      this.placeholderText = placeholderText;
 
-      if (this._placeholderText && !this._placeholderOption) {
+      if (this.placeholderText && !this._placeholderOption) {
         this._placeholderOption = $(new Option('', ''));
-        this.getElement().prepend(this._placeholderOption);
+        this.get('element').prepend(this._placeholderOption);
       }
 
-      if (!this._placeholderText && this._placeholderOption)
+      if (!this.placeholderText && this._placeholderOption)
         this._placeholderOption.remove();
       else
-        this._placeholderOption.text(this._placeholderText);
+        this._placeholderOption.text(this.placeholderText);
     }
   });
 });
