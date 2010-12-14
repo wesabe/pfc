@@ -462,7 +462,7 @@ intervals.each = function(callback) {
 
 var dateRangeButtonGroup = new wesabe.views.widgets.ButtonGroup($.map(intervals, function(interval) {
   return new wesabe.views.widgets.Button($('#date-range .toggle-button.time-'+interval.key), interval);
-}), {onSelectionChange: function(sender, button){ setTimeRange(button.getValue()) }});
+}), {onSelectionChange: function(sender, button){ setTimeRange(button.get('value')) }});
 
 void drawTimeSelect() {
   intervals.each(function(interval, i, selected) {
@@ -495,7 +495,7 @@ for (var i = 0; i < viewChoices.length; i++) {
 
 viewChoiceButtonGroup = new wesabe.views.widgets.ButtonGroup(viewChoiceButtons, {
   onSelectionChange: function(sender, button) {
-    setView(button.getValue());
+    setView(button.get('value'));
   }
 });
 
