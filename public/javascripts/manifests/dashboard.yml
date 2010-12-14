@@ -16,6 +16,10 @@
 - wesabe/views/widgets/targets/Target.js
 - wesabe/views/widgets/targets/TargetList.js
 - wesabe/data/TargetDataSource.js
+- wesabe/data/TransactionDataSource.js
+- wesabe/data/TransactionSummaryDataSource.js
 - wesabe/data/credentials/CredentialDataSource.js
 - processing.js
+- raphael.js
+- wesabe/views/widgets/SeriesChart.js
 - wesabeCharts.js

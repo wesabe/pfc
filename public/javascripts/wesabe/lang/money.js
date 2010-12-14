@@ -129,10 +129,18 @@ wesabe.lang.money = {
     string += whole.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1"+delimiter);
     if (precision) {
       string += separator;
-      string += this._pad(fractional, precision);
+      string += wesabe.lang.money._pad(fractional, precision);
     }
 
     return prefix+string+suffix;
+  },
+
+  formatterWithOptions: function(options) {
+    return {
+      format: function(money) {
+        return wesabe.lang.money.format(money, options);
+      }
+    };
   },
 
   /**

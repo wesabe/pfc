@@ -21,6 +21,9 @@ wesabe.lang.date = {
   SECONDS: 1000,
 
   parse: function(string) {
+    if (typeof string == 'number')
+      return new Date(string);
+
     if (!string)
       return null;
 
@@ -171,6 +174,9 @@ wesabe.lang.date = {
   //
 
   format: function(date, format) {
+    if (!date.getMonth)
+      date = wesabe.lang.date.parse(date);
+
     var LZ = wesabe.lang.date.LZ;
 
     format = format + "";
@@ -242,6 +248,14 @@ wesabe.lang.date = {
       }
     }
     return result;
+  },
+
+  formatterWithFormat: function(format) {
+    return {
+      format: function(date) {
+        return wesabe.lang.date.format(date, format);
+      }
+    };
   },
 
   toParam: function(date) {
