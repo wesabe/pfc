@@ -8,6 +8,10 @@ wesabe.provide('data.preferences', {
     }
   },
 
+  getInt: function(key) {
+    return wesabe.lang.number.parse(wesabe.data.preferences.get(key));
+  },
+
   set: function(key, value) {
     if (typeof key == 'string') {
       $(this).kvo(key, value);

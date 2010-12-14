@@ -2,6 +2,7 @@
 ---
 - wesabe/views/shared/form.js
 - wesabe/views/pages/dashboard.js
+- wesabe/controllers/SvEChartController.js
 - wesabe/views/widgets/MoneyLabel.js
 - wesabe/views/widgets/CurrencyDropDownField.js
 - wesabe/views/widgets/accounts/AccountWidget.js
