@@ -1,7 +1,7 @@
 /**
  * Manages a group of toggle buttons where only one can be selected at a time.
  */
-wesabe.$class('wesabe.views.widgets.ButtonGroup', wesabe.views.widgets.BaseWidget, function($class, $super, $package) {
+wesabe.$class('wesabe.views.widgets.ButtonGroup', function($class, $super, $package) {
   // import jQuery as $
   var $ = jQuery;
 
@@ -20,13 +20,10 @@ wesabe.$class('wesabe.views.widgets.ButtonGroup', wesabe.views.widgets.BaseWidge
         var button = buttons[i];
         elements.push(button.get('element'));
         button.bind('click', function(){ self.onButtonClick(this) });
-        this.registerChildWidget(button);
         this._buttons.push(button);
         if (button.get('selected'))
           this._selectedButton = button;
       }
-
-      $super.init.call(this, elements);
     },
 
     onButtonClick: function(button) {
