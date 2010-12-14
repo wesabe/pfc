@@ -4,13 +4,32 @@
 wesabe.$class('wesabe.views.widgets.BaseWidget', function($class, $super, $package) {
   // import jQuery as $
   var $ = jQuery;
+  // import wesabe.lang.number
+  var number = wesabe.lang.number;
 
   $.extend($class.prototype, {
     element: null,
     _childWidgets: null,
 
+    width: null,
+    height: null,
+    padding: null,
+
+    needsRedraw: false,
+    _redrawTimeout: null,
+
     init: function(element) {
       this.set('element', element);
+      element = this.get('element');
+
+      this.width = element.width();
+      this.height = element.height();
+      this.padding = {
+        top: number.parse(element.css('padding-top')) || 0,
+        right: number.parse(element.css('padding-right')) || 0,
+        bottom: number.parse(element.css('padding-bottom')) || 0,
+        left: number.parse(element.css('padding-left')) || 0
+      };
     },
 
     /**
@@ -23,12 +42,9 @@ wesabe.$class('wesabe.views.widgets.BaseWidget', function($class, $super, $packa
     },
 
     /**
-     * Sets the element to which content will be added. Set this to +null+
-     * to revert the content element back to the container element.
-     *
-     * @param {Element} element
+     * @private
      */
-    setContentElement: function(element) {
+    _setContentElement: function(element) {
       this._contentElement = element;
     },
 
@@ -70,6 +86,102 @@ wesabe.$class('wesabe.views.widgets.BaseWidget', function($class, $super, $packa
       if (leftDelta) position.left += leftDelta;
       if (topDelta) position.top += topDelta;
       this.get('element').css(position);
+    },
+
+    /**
+     * Redraws the widget. Override in subclasses to do something useful.
+     */
+    redraw: function() {
+      this.get('element').css({
+        width: this.get('contentWidth'),
+        height: this.get('contentHeight'),
+        'padding-top': this.padding.top+'px',
+        'padding-right': this.padding.right+'px',
+        'padding-bottom': this.padding.bottom+'px',
+        'padding-left': this.padding.left+'px'
+      });
+    },
+
+    /**
+     * Notifies the widget that it needs to redraw itself, but it waits
+     * for the currently executing javascript to return control first.
+     *
+     * @param {boolean} needsRedraw
+     */
+    setNeedsRedraw: function(needsRedraw) {
+      if (this._redrawTimeout)
+        clearTimeout(this._redrawTimeout);
+
+      if (needsRedraw) {
+        var self = this;
+        this._redrawTimeout = setTimeout(function(){ self.redraw(); }, 0);
+      }
+    },
+
+    /**
+     * Left offset of the content rect.
+     *
+     * @return {number}
+     */
+    contentLeft: function() {
+      return this.padding.left;
+    },
+
+    /**
+     * Top of the content rect.
+     *
+     * @return {number}
+     */
+    contentTop: function() {
+      return this.padding.top;
+    },
+
+    /**
+     * Width of the content rect.
+     *
+     * @return {number}
+     */
+    contentWidth: function() {
+      return this.width - this.padding.left - this.padding.right;
+    },
+
+    /**
+     * Height of the content rect.
+     *
+     * @return {number}
+     */
+    contentHeight: function() {
+      return this.height - this.padding.top - this.padding.bottom;
+    },
+
+    /**
+     * Sets this widget's width.
+     *
+     * @param {number} width
+     */
+    setWidth: function(width) {
+      this.width = width;
+      this.setNeedsRedraw(true);
+    },
+
+    /**
+     * Sets this widget's height.
+     *
+     * @param {number} height
+     */
+    setHeight: function(height) {
+      this.height = height;
+      this.setNeedsRedraw(true);
+    },
+
+    /**
+     * Sets this widget's padding.
+     *
+     * @param {number} padding
+     */
+    setPadding: function(padding) {
+      this.padding = padding;
+      this.setNeedsRedraw(true);
     },
 
     /**
