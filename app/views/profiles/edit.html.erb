@@ -16,12 +16,6 @@
             <div class="two-col-centered">
               <h6>What other Wesabeans will see&hellip;</h6>
               <div class="field">
-                <label class="field-title" for="photo">Your Photo</label>
-                <%= image_tag @user.image_path(:profile) %>
-                <span style="font-style:oblique;font-size:70%; color:#999">Upload a new photo:<br/>
-                <%= file_field("photo", "photo", :class => 'input', :accept => "image/gif,image/jpeg,image/png") %>
-              </div>
-              <div class="field">
                 <label class="field-title" for="user_name">Username<span>your public name</span></label>
                 <%= text_field 'user', 'name', :size => 32, :maxlength => 32 %>
                 <%= error_message_on "user", "name",
