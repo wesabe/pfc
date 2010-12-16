@@ -65,10 +65,6 @@ wesabe.$class('views.widgets.Module', wesabe.views.widgets.Container, function($
       this._headerTitleLabel.set('value', title);
     },
 
-    headerElement: function() {
-      return this._headerElement;
-    },
-
     setMovable: function(movable) {
       movable = !!movable;
       if (movable === this.movable)

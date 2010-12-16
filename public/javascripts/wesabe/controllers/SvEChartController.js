@@ -19,10 +19,10 @@ wesabe.$class('wesabe.controllers.SvEChartController', function($class, $super, 
   var WEEK = "Week";
 
   $class.INTERVALS = [
-    {key: "0", shortLabel: '1m', label: 'past month', timeUnitsAgo: 1, unit: DAY, summaryType: 'daily'},
-    {key: "1", shortLabel: '3m', label: 'past 3 months', timeUnitsAgo: 12, unit: WEEK, summaryType: 'weekly'},
-    {key: "2", shortLabel: '6m', label: 'past 6 months', timeUnitsAgo: 6, unit: MONTH, summaryType: 'monthly'},
-    {key: "3", shortLabel: '1y', label: 'past 12 months', timeUnitsAgo: 12, unit: MONTH, summaryType: 'monthly'}
+    //{key: "0", shortLabel: '1m', label: 'past month', timeUnitsAgo: 31, unit: DAY, summaryType: 'daily'},
+    {key: "1", shortLabel: 'weekly', label: 'past 3 months', timeUnitsAgo: 12, unit: WEEK, summaryType: 'weekly'},
+    //{key: "2", shortLabel: '6m', label: 'past 6 months', timeUnitsAgo: 6, unit: MONTH, summaryType: 'monthly'},
+    {key: "3", shortLabel: 'monthly', label: 'past 12 months', timeUnitsAgo: 12, unit: MONTH, summaryType: 'monthly'}
   ];
 
   $class.DEFAULT_INTERVAL = $class.INTERVALS[1];
@@ -55,6 +55,29 @@ wesabe.$class('wesabe.controllers.SvEChartController', function($class, $super, 
         }
       });
       chart.set('yValueFormatter', money.formatterWithOptions({precision: 0}));
+    },
+
+    intervalButtons: function() {
+      var buttons = [],
+          buttonGroup;
+
+      for (var i = 0; i < $class.INTERVALS.length; i++) {
+        var interval = $class.INTERVALS[i],
+            button = new wesabe.views.widgets.Button($('<a class="toggle-button"><span></span></a>'));
+
+        button.set('text', interval.shortLabel);
+        button.set('value', interval);
+        buttons.push(button);
+      }
+
+      buttonGroup = new wesabe.views.widgets.ButtonGroup(buttons, this);
+      buttonGroup.selectButtonByValue(this.get('selectedInterval'));
+
+      return this.intervalButtons = buttonGroup;
+    },
+
+    onSelectionChange: function(sender, selection) {
+      this.set('selectedInterval', selection.get('value'));
     },
 
     _formatDate: function(value, index, count) {
@@ -112,10 +135,20 @@ wesabe.$class('wesabe.controllers.SvEChartController', function($class, $super, 
     },
 
     _selectedInterval: function() {
-      var range = preferences.getInt('charts.line.range'),
-          interval = $class.INTERVALS[range] || $class.DEFAULT_INTERVAL;
+      var range = preferences.getInt('charts.line.range');
 
-      return interval;
+      for (var i = 0; i < $class.INTERVALS.length; i++) {
+        var interval = $class.INTERVALS[i];
+        if (interval.key == range)
+          return interval;
+      }
+
+      return $class.DEFAULT_INTERVAL;
+    },
+
+    _setSelectedInterval: function(interval) {
+      preferences.set('charts.line.range', interval.key);
+      this.reload();
     },
 
     _dataDidChange: function() {

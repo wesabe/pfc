@@ -18,12 +18,16 @@ wesabe.$class('views.pages.DashboardPage', function($class, $super, $package) {
           height = 185;
 
       var sveController = new wesabe.controllers.SvEChartController(),
-          sveContainer = $('<div></div>').width(width).height(height).css('background-color', 'white'),
-          sve = new wesabe.views.widgets.SeriesChart(sveContainer),
+          sveContainer = new wesabe.views.widgets.Module($('#chart-sve')),
+          sve = new wesabe.views.widgets.SeriesChart(sveContainer.get('contentElement').find('.canvas-container')),
           dataSource = new wesabe.data.TransactionSummaryDataSource();
 
-      sveContainer.css({top: 0, left: 0, position: 'absolute', zIndex: 1000});
-      sveContainer.appendTo(document.body);
+      var sveHeader = sveContainer.get('headerElement'),
+          intervalButtons = sveController.get('intervalButtons').get('buttons');
+
+      for (var i = 0; i < intervalButtons.length; i++)
+        sveHeader.prepend(intervalButtons[i].get('element'));
+
       sve.set('width', width);
       sve.set('height', height);
 

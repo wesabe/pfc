@@ -511,14 +511,14 @@ window.onload = function() {
 
   if ( $("#right").length ) dashboardDnd.init($('#right'));
 
-  if ( $("#sve-chart").length ) {
-    var sveChartOptions = {
-      width: 630,
-      height: 175
-    };
-    var wesabeSvEChart = new wesCharts.baseChart(wesCharts.LINE, 'sve-chart', sveChartOptions);
-    wesabeSvEChart.render();
-  }
+  //if ( $("#sve-chart").length ) {
+  //  var sveChartOptions = {
+  //    width: 630,
+  //    height: 175
+  //  };
+  //  var wesabeSvEChart = new wesCharts.baseChart(wesCharts.LINE, 'sve-chart', sveChartOptions);
+  //  wesabeSvEChart.render();
+  //}
 
   if ( $("#spending-pie").length ) {
     var tagChartOptions = {
