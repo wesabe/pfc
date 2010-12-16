@@ -32,7 +32,7 @@ wesabe.$class('views.widgets.SeriesChart', wesabe.views.widgets.BaseWidget, func
     /**
      * @private
      */
-    _maxYValue: null,
+    _maxYValue: 0,
     /**
      * @private
      */
@@ -61,6 +61,7 @@ wesabe.$class('views.widgets.SeriesChart', wesabe.views.widgets.BaseWidget, func
 
     clearSeries: function() {
       this._series = [];
+      this._maxYValue = 0;
       this.setNeedsRedraw(true);
     },
 
@@ -205,7 +206,7 @@ wesabe.$class('views.widgets.SeriesChart', wesabe.views.widgets.BaseWidget, func
 
       var rect = this._canvas.rect(x, y+height, width, 0);
       rect.attr({fill: color, stroke: 'none'});
-      rect.animate({height: height, y: y}, 500);
+      rect.animate({height: height, y: y}, 250);
     }
   });
 });
