@@ -75,7 +75,7 @@ wesabe.$class('views.widgets.Form', wesabe.views.widgets.BaseWidget, function($c
 
       for (var i = 0, length = this._fields.length; i < length; i++) {
         var field = this._fields[i];
-        result[field.get('name')] = field.get('name');
+        result[field.get('name')] = field.get('value');
       }
 
       return result;
