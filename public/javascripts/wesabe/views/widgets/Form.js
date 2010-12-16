@@ -14,7 +14,7 @@ wesabe.$class('views.widgets.Form', wesabe.views.widgets.BaseWidget, function($c
         element = $('<form><fieldset><div class="two-col-centered"></div></fieldset></form>');
 
       $super.init.call(me, element);
-      me.setContentElement(element.find('> fieldset > div'));
+      me.set('contentElement', element.find('> fieldset > div'));
       me._fields = [];
       element.bind('submit', function(event){ me.onSubmit(event) });
     },
