@@ -77,11 +77,17 @@ wesabe.$class('views.widgets.SeriesChart', wesabe.views.widgets.BaseWidget, func
 
       this._canvas.clear();
 
+      if (this._series.length == 0)
+        return;
+
       this._drawGrid();
       this._drawSeriesData();
       this._drawLabels();
     },
 
+    /**
+     * @private
+     */
     _drawLabels: function() {
       var gridLines = 6,
           canvas = this._canvas,
@@ -123,6 +129,13 @@ wesabe.$class('views.widgets.SeriesChart', wesabe.views.widgets.BaseWidget, func
       }
     },
 
+    /**
+     * NOTE: all the 0.5s in this method are to make sure we actually
+     * draw single-pixel lines, since SVG drawing for (x, y) is actually
+     * done at (x+0.5, y+0.5).
+     *
+     * @private
+     */
     _drawGrid: function() {
       var gridLines = 6,
           canvas = this._canvas,
@@ -130,15 +143,24 @@ wesabe.$class('views.widgets.SeriesChart', wesabe.views.widgets.BaseWidget, func
           x0 = 0,
           x1 = this.get('contentWidth');
 
-      for (var i = 0; i < gridLines; i++) {
-        var y = i*(height/(gridLines-1));
-        canvas.path('M'+x0+' '+y+'L'+x1+' '+y).attr({
+      for (var i = 0; i < gridLines-1; i++) {
+        var y = Math.round(i*(height/(gridLines-1)))+0.5;
+        canvas.path('M'+x0+' '+y+' L'+x1+' '+y).attr({
           stroke: 'rgb(229,229,229)',
           'stroke-width': 0.5
         });
       }
+
+      // draw the bottom one darker
+      canvas.path('M'+x0+' '+(height+0.5)+' L'+x1+' '+(height+0.5)).attr({
+        stroke: 'rgb(200,200,200)',
+        'stroke-width': 0.5
+      });
     },
 
+    /**
+     * @private
+     */
     _drawSeriesData: function() {
       var barWidth = 20,
           xSpacing = (barWidth / 2) * (this._series.length + 2) + 2;
@@ -171,6 +193,9 @@ wesabe.$class('views.widgets.SeriesChart', wesabe.views.widgets.BaseWidget, func
       };
     },
 
+    /**
+     * @private
+     */
     _addBar: function(offset, value, color) {
       var chartRect = this.get('chartRect'),
           width = 20.0,
