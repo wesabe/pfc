@@ -308,7 +308,7 @@ class User < ActiveRecord::Base
   end
 
   def active_account_by_uri_for_user(uri_for_user)
-    active_account_by_id_for_user(uri_for_user[Account::URI_PATTERN, 1])
+    uri_for_user && active_account_by_id_for_user(uri_for_user[Account::URI_PATTERN, 1])
   end
 
   def active_account_by_id_or_uri_for_user(id_or_uri_for_user)
