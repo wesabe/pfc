@@ -73,7 +73,7 @@ wesabe.$class('wesabe.views.widgets.tags.TagEditDialogPromptPanel', wesabe.views
     },
 
     setEnabled: function(enabled) {
-      if (this.isEnabled() === enabled)
+      if (this.get('enabled') === enabled)
         return;
 
       $super.setEnabled.call(this, enabled);
@@ -81,7 +81,7 @@ wesabe.$class('wesabe.views.widgets.tags.TagEditDialogPromptPanel', wesabe.views
     },
 
     onDelete: function() {
-      if (!this.isEnabled())
+      if (!this.get('enabled'))
         return;
 
       this._tagEditDialog.onDelete(this);

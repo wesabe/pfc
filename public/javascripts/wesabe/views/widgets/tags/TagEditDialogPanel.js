@@ -4,8 +4,8 @@
 wesabe.$class('wesabe.views.widgets.tags.TagEditDialogPanel', wesabe.views.widgets.BaseWidget, function($class, $super, $package) {
   $.extend($class.prototype, {
     enabled: true,
-    tags: null,
 
+    _tags: null,
     _tagEditDialog: null,
     _confirmButton: null,
     _cancelButton: null,
@@ -52,8 +52,12 @@ wesabe.$class('wesabe.views.widgets.tags.TagEditDialogPanel', wesabe.views.widge
         });
     },
 
+    tags: function() {
+      return this._tags;
+    },
+
     setTags: function(newTags) {
-      this.tags = newTags;
+      this._tags = newTags;
 
       if (this._newTagsLabel.length) {
         var newTagsString = "",
