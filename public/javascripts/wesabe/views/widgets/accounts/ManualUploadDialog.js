@@ -17,8 +17,8 @@ wesabe.$class('wesabe.views.widgets.accounts.ManualUploadDialog', wesabe.views.w
     },
 
     show: function() {
-      this._accountUriInput.val(this._account.getURI());
-      this._fiLink.attr('href', this._account.getURI()+'/financial_institution_site');
+      this._accountUriInput.val(this._account.get('uri'));
+      this._fiLink.attr('href', this._account.get('uri')+'/financial_institution_site');
       $super.show.apply(this, arguments);
     },
 
