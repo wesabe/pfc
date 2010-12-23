@@ -34,10 +34,14 @@ wesabe.$class('views.widgets.SeriesChart', wesabe.views.widgets.BaseWidget, func
      */
     _handle: null,
     /**
+     * Caches the maximum Y-value we've seen for scaling purposes.
+     *
      * @private
      */
     _maxYValue: 0,
     /**
+     * Stores info about the series we're drawing.
+     *
      * @private
      */
     _series: null,
@@ -52,6 +56,9 @@ wesabe.$class('views.widgets.SeriesChart', wesabe.views.widgets.BaseWidget, func
 
     init: function(element) {
       $super.init.call(this, element || $('<div></div>'));
+
+      var self = this;
+      this.get('element').mousewheel(function(){ self.onMousewheel.apply(self, arguments) });
 
       this._series = [];
     },
@@ -107,26 +114,37 @@ wesabe.$class('views.widgets.SeriesChart', wesabe.views.widgets.BaseWidget, func
                 function(){ self.onDragEnd.apply(self, arguments); });
     },
 
+    onMousewheel: function(event) {
+      if (event.wheelDeltaX)
+        this.set('xOffset', this.get('xOffset')+event.wheelDeltaX);
+    },
+
     onDragMove: function(dx, dy) {
-      this._xOffset = dx;
-      for (var i = 0; i < this._scrollableElements.length; i++) {
-        var element = this._scrollableElements[i];
-        element.attr('x', element._dragStartX+dx);
-      }
+      this.set('xOffset', this._dragOffset+dx);
     },
 
     onDragStart: function() {
-      for (var i = 0; i < this._scrollableElements.length; i++) {
-        var element = this._scrollableElements[i];
-        element._dragStartX = element.attr('x');
-      }
+      this._dragOffset = this.get('xOffset');
     },
 
     onDragEnd: function() {
+      this._dragOffset = 0;
+    },
+
+    setXOffset: function(xOffset) {
+      var oldOffset = this._xOffset,
+          newOffset = xOffset;
+
       for (var i = 0; i < this._scrollableElements.length; i++) {
         var element = this._scrollableElements[i];
-        delete element._dragStartX;
+
+        if (!('_originalX' in element))
+          element._originalX = element.attr('x')-oldOffset;
+
+        element.attr('x', element._originalX+newOffset);
       }
+
+      this._xOffset = newOffset;
     },
 
     /**
@@ -217,7 +235,7 @@ wesabe.$class('views.widgets.SeriesChart', wesabe.views.widgets.BaseWidget, func
         for (var j = 0; j < data.length; j++) {
           var datum = data[j];
           this._scrollableElements.push(
-            this._addBar(j*xSpacing + i*barWidth/2 /* half overlap */, datum.y, color));
+            this._addBar(this._xOffset + j*xSpacing + i*barWidth/2 /* half overlap */, datum.y, color));
         }
       }
     },
