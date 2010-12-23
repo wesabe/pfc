@@ -27,10 +27,6 @@ wesabe.$class('data.states.StateSet', function($class, $super, $package) {
 
     set: function(data) {
       $package.sharedStateSet.set(data);
-    },
-
-    asOptions: function() {
-      return $package.sharedStateSet.asOptions();
     }
   });
 });
