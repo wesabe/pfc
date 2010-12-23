@@ -32,11 +32,23 @@ wesabe.$class('views.widgets.SeriesChart', wesabe.views.widgets.BaseWidget, func
     /**
      * @private
      */
+    _handle: null,
+    /**
+     * @private
+     */
     _maxYValue: 0,
     /**
      * @private
      */
     _series: null,
+    /**
+     * @private
+     */
+    _scrollableElements: null,
+    /**
+     * @private
+     */
+    _xOffset: 0,
 
     init: function(element) {
       $super.init.call(this, element || $('<div></div>'));
@@ -77,6 +89,7 @@ wesabe.$class('views.widgets.SeriesChart', wesabe.views.widgets.BaseWidget, func
         this._canvas = Raphael(this.get('element').get(0), this.get('contentWidth'), this.get('contentHeight'));
 
       this._canvas.clear();
+      this._scrollableElements = [];
 
       if (this._series.length == 0)
         return;
@@ -84,6 +97,36 @@ wesabe.$class('views.widgets.SeriesChart', wesabe.views.widgets.BaseWidget, func
       this._drawGrid();
       this._drawSeriesData();
       this._drawLabels();
+
+      var self = this;
+      this._canvas
+        .rect(0, 0, this.get('contentWidth'), this.get('contentHeight'))
+          .attr('stroke-width', 0).attr('fill', 'rgba(0,0,0,0)')
+          .drag(function(){ self.onDragMove.apply(self, arguments) },
+                function(){ self.onDragStart.apply(self, arguments); },
+                function(){ self.onDragEnd.apply(self, arguments); });
+    },
+
+    onDragMove: function(dx, dy) {
+      this._xOffset = dx;
+      for (var i = 0; i < this._scrollableElements.length; i++) {
+        var element = this._scrollableElements[i];
+        element.attr('x', element._dragStartX+dx);
+      }
+    },
+
+    onDragStart: function() {
+      for (var i = 0; i < this._scrollableElements.length; i++) {
+        var element = this._scrollableElements[i];
+        element._dragStartX = element.attr('x');
+      }
+    },
+
+    onDragEnd: function() {
+      for (var i = 0; i < this._scrollableElements.length; i++) {
+        var element = this._scrollableElements[i];
+        delete element._dragStartX;
+      }
     },
 
     /**
@@ -123,10 +166,10 @@ wesabe.$class('views.widgets.SeriesChart', wesabe.views.widgets.BaseWidget, func
         var text = canvas.text(0, y, textValue),
             textBox = text.getBBox();
 
-        text.attr({
+        this._scrollableElements.push(text.attr({
           x: x0+(((this._series.length+1)*barWidth/2) - textBox.width) / 2,
           y: y + textBox.height/2
-        });
+        }));
       }
     },
 
@@ -173,8 +216,8 @@ wesabe.$class('views.widgets.SeriesChart', wesabe.views.widgets.BaseWidget, func
 
         for (var j = 0; j < data.length; j++) {
           var datum = data[j];
-
-          this._addBar(j*xSpacing + i*barWidth/2 /* half overlap */, datum.y, color);
+          this._scrollableElements.push(
+            this._addBar(j*xSpacing + i*barWidth/2 /* half overlap */, datum.y, color));
         }
       }
     },
@@ -207,6 +250,7 @@ wesabe.$class('views.widgets.SeriesChart', wesabe.views.widgets.BaseWidget, func
       var rect = this._canvas.rect(x, y+height, width, 0);
       rect.attr({fill: color, stroke: 'none'});
       rect.animate({height: height, y: y}, 250);
+      return rect;
     }
   });
 });
