@@ -273,7 +273,6 @@ jQuery(function($) {
       uri:            $.getsetdata('uri'),
       amount:         $.getsetdata('amount'),
       account:        $.getsetdata('account'),
-      'check-number': $.getsetdata('check-number'),
 
       merchant: $.getset({
         get: function() { return $(this).data('widget').get('merchant'); },
@@ -299,9 +298,6 @@ jQuery(function($) {
         self.include(behaviors.transactionEdit);
         self.children('.edit').click(function(){
           self.fn('startEdit'); });
-
-        $('.check-number', self)
-          .kvobind(self, 'check-number', {property: 'text', transform: function(c){ return c ? (' — Check #'+c) : '' }});
 
         $('.account-name', self)
           .click(function(event) {
@@ -358,7 +354,6 @@ jQuery(function($) {
           .fn('uri', data['uri'])
           .fn('amount', data['amount'])
           .fn('merchant', merchant)
-          .fn('check-number', data['check-number'] || null)
           .fn('account', data['account'])
           .fn('attachments', data['attachments'] || []);
 
@@ -367,6 +362,7 @@ jQuery(function($) {
         widget.set('uri', data['id']);
         widget.set('note', data['note']);
         widget.set('date', data['date']);
+        widget.set('checkNumber', data['check-number']);
 
         widget.set('account', data['account']);
         widget.set('accountVisible', !selectingSingleAccount);
@@ -457,9 +453,10 @@ jQuery(function($) {
       }),
 
       uneditedName: function() {
-        var self = $(this);
-        var uneditedName = self.fn('merchant').uneditedName;
-        var checkNumber = self.fn('check-number');
+        var self = $(this),
+            widget = self.data('widget'),
+            uneditedName = self.fn('merchant').uneditedName,
+            checkNumber = widget.get('checkNumber');
 
         if ((checkNumber && checkNumber.length > 0) || uneditedName.length > 0) {
           var originalNameParts = [];
@@ -690,10 +687,12 @@ jQuery(function($) {
       },
 
       startMerchantAutocomplete: function() {
-        var self = $(this);
-        var options = {};
+        var self = $(this),
+            widget = self.data('widget'),
+            options = {};
+
         if (!self.hasClass("add-transaction")) {
-          var checkNumber = self.fn("check-number");
+          var checkNumber = widget.get("checkNumber");
           var merchant = self.fn("merchant");
           // show Happy Magic Check Autocomplete if this is a check and it is unedited
           if (checkNumber && checkNumber.length > 0 && !merchant.id) {

@@ -16,6 +16,8 @@ wesabe.$class('wesabe.views.widgets.transactions.Transaction', wesabe.views.widg
     _noteContainerElement: null,
     _noteLabel: null,
 
+    _checkNumberLabel: null,
+
     _balanceLabel: null,
     _amountLabel: null,
     _dateLabel: null,
@@ -46,6 +48,13 @@ wesabe.$class('wesabe.views.widgets.transactions.Transaction', wesabe.views.widg
       this._noteContainerElement = element.find('.notes');
       this._noteLabel = new wesabe.views.widgets.Label(this._noteContainerElement.find('.text-content'));
       this.registerChildWidget(this._noteLabel);
+
+      this._checkNumberLabel = new wesabe.views.widgets.Label(element.find('.check-number'), {
+                                 format: function(c) {
+                                   return c ? (' — Check #'+c) : '';
+                                 }
+                               });
+      this.registerChildWidget(this._checkNumberLabel);
 
       this._balanceLabel = new wesabe.views.widgets.MoneyLabel(element.find('.balance'));
       this._amountLabel = new wesabe.views.widgets.MoneyLabel(element.find('.amount'));
@@ -231,6 +240,24 @@ wesabe.$class('wesabe.views.widgets.transactions.Transaction', wesabe.views.widg
      */
     setBalance: function(balance) {
       this._balanceLabel.set('money', balance || {display: 'n/a'});
+    },
+
+    /**
+     * Returns the check number for this transaction or null if there is none.
+     *
+     * @return {?string}
+     */
+    checkNumber: function() {
+      return this._checkNumberLabel.get('value');
+    },
+
+    /**
+     * Sets the check number for this transaction, if it has one.
+     *
+     * @param {?string} checkNumber
+     */
+    setCheckNumber: function(checkNumber) {
+      this._checkNumberLabel.set('value', checkNumber);
     },
 
     /**
