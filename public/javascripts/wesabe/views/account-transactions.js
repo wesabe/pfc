@@ -353,7 +353,6 @@ jQuery(function($) {
         self
           .fn('uri', data['uri'])
           .fn('amount', data['amount'])
-          .fn('merchant', merchant)
           .fn('account', data['account'])
           .fn('attachments', data['attachments'] || []);
 
@@ -373,10 +372,7 @@ jQuery(function($) {
         widget.set('amount', data['display-amount'] || data['amount']);
         widget.set('tags', data['tags']);
         widget.set('transfer', data['transfer'] || null);
-        // widget.set('merchant', data['merchant']);
-
-        var toEdit = !(merchant && merchant.name && widget.get('tags').length > 0);
-        self.toggleClass('to-edit', toEdit);
+        widget.set('merchant', merchant);
 
         return self;
       },
@@ -455,7 +451,7 @@ jQuery(function($) {
       uneditedName: function() {
         var self = $(this),
             widget = self.data('widget'),
-            uneditedName = self.fn('merchant').uneditedName,
+            uneditedName = widget.get('merchant').uneditedName,
             checkNumber = widget.get('checkNumber');
 
         if ((checkNumber && checkNumber.length > 0) || uneditedName.length > 0) {
@@ -695,7 +691,7 @@ jQuery(function($) {
           var checkNumber = widget.get("checkNumber");
           var merchant = self.fn("merchant");
           // show Happy Magic Check Autocomplete if this is a check and it is unedited
-          if (checkNumber && checkNumber.length > 0 && !merchant.id) {
+          if (checkNumber && checkNumber.length > 0 && !widget.get('unedited')) {
             options.showChecks = true;
             options.txactionURI = self.fn("uri");
           }
@@ -713,8 +709,8 @@ jQuery(function($) {
 
         // REVIEW: kvobind the template fields to the txaction object?
         $('.name-edit', edit_box).val(
-          self.fn('merchant').name || self.fn('merchant').suggestedName);
-        if (self.fn('merchant').name) {
+          widget.get('merchant').name || widget.get('merchant').suggestedName);
+        if (widget.get('merchant').name) {
           setTimeout(function(){ self.fn('populateAutotagEdit') }, 150);
           setTimeout(function(){ self.fn('populateMerchantDefaults') }, 150);
         }
@@ -827,7 +823,7 @@ jQuery(function($) {
 
       populateAutotagEdit: function(merchantId) {
         var self = $(this);
-        merchantId = merchantId || self.fn('merchant').id;
+        merchantId = merchantId || widget.get('merchant').id;
         var sign = -1;
         if (!self.hasClass("add-transaction") && self.fn('amount').value > 0) {
           sign = 1;

@@ -596,7 +596,7 @@ a#add-transaction-link {
   margin-top: 10px;
   background-position:-163px 26px;
 }
-#transactions li.to-edit .edit,
+#transactions li.unedited .edit,
 #transactions li:hover .edit {
   background-position:-163px -10px;
 }

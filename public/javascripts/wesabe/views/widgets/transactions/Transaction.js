@@ -159,11 +159,11 @@ wesabe.$class('wesabe.views.widgets.transactions.Transaction', wesabe.views.widg
      * @param {object} merchant
      */
     setMerchant: function(merchant) {
-      var unedited = !merchant.name;
+      var unedited = !merchant || !merchant.name;
 
       this._merchant = merchant;
       this._merchantLink.setURI(unedited ? null : wesabe.views.shared.historyHash('/merchants/'+merchant.name));
-      this._merchantLink.setText(merchant.name || merchant.uneditedName);
+      this._merchantLink.setText(merchant && (merchant.name || merchant.uneditedName));
       this.setUnedited(unedited);
     },
 
@@ -307,8 +307,10 @@ wesabe.$class('wesabe.views.widgets.transactions.Transaction', wesabe.views.widg
       this._unedited = unedited;
       if (this._unedited) {
         this._merchantInfoElement.addClass('unedited');
+        this.addClassName('unedited');
       } else {
         this._merchantInfoElement.removeClass('unedited');
+        this.removeClassName('unedited');
       }
     },
 
