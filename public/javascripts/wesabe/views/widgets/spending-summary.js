@@ -38,11 +38,14 @@ jQuery(function($) {
           self.fn("update");
         });
 
-        $.address.change(function() {
+        $(window).bind('statechange', function() {
           self.fn('_restoreState');
         });
 
-        if ($.address.path() == "/trends") $.address.value("/trends/spending");
+        var state = History.getState(),
+            path  = state && state.url || window.location.pathname;
+
+        if (path == "/trends") History.pushState(null, null, "/trends/spending");
         else self.fn('_restoreState');
 
         $('#trends-summary li a').each(function() {
@@ -53,7 +56,9 @@ jQuery(function($) {
       },
 
       _restoreState: function() {
-        var match = $.address.path().match(/^\/trends\/(spending|earnings)$/),
+        var state = History.getState(),
+            path  = state && state.url || window.location.pathname,
+            match = path.match(/\/trends\/(spending|earnings)$/),
             mode = match && match[1];
 
         if (mode) {

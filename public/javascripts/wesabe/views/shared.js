@@ -40,14 +40,30 @@ wesabe.provide('views.shared', {
         search = null,
         params = {};
 
-    if (stateString !== undefined) {
+    if (!stateString) {
+      var state = History.getState();
+      if (state)
+        stateString = state.url;
+    }
+
+    if (stateString) {
       var pathAndSearch = stateString.split('?');
       path = pathAndSearch[0];
       search = pathAndSearch[1];
-    } else {
-      path = $.address.path();
-      search = $.address.queryString();
     }
+
+    if (path) {
+      var index = path.indexOf('://');
+      if (index != -1) {
+        index = path.indexOf('/', index+3);
+        path = (index == -1) ? '/' : path.substring(index);
+      }
+    } else {
+      path = window.location.pathname;
+    }
+
+    if (!search)
+      search = window.location.search;
 
     if (search) {
       var parts = search.split('&');
@@ -90,7 +106,7 @@ wesabe.provide('views.shared', {
     if (search)
       url += '?'+search;
 
-    $.address.value(url);
+    History.pushState(null, null, url);
   },
 
   statesEqual: function(state1, state2) {
@@ -181,7 +197,7 @@ wesabe.provide('views.shared', {
         return $('<a></a>')
           .attr('href', object.uri)
           .text(object.name)
-          .click(function(){ $.address.value(object.uri); });
+          .click(function(){ History.pushState(null, null, object.uri); });
       };
 
       $.each(data['account-groups'], function(i, group) {

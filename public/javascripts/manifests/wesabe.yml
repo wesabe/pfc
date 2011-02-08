@@ -10,6 +10,9 @@
 - jquery-ui/custom.js
 - jquery-ui/wesabe-extensions.js
 - json.js
+- json2.js
+- history.js
+- history.adapter.jquery.js
 - wesabe/base.js
 - wesabe/lang/date.js
 - wesabe/lang/number.js

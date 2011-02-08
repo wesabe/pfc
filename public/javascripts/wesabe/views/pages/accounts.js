@@ -57,7 +57,7 @@
         self.onSelectionChanged();
       });
 
-      $.address.change(function() {
+      $(window).bind('statechange', function() {
         self.attemptToReloadState();
       });
 
@@ -65,7 +65,7 @@
       $('#accounts .module-header :header a, #nav-accounts > a')
         .click(function(event) {
           self.selection.clear();
-          $.address.value('/accounts');
+          History.pushState('/accounts');
           return false;
         });
 
