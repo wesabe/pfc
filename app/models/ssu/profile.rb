@@ -32,6 +32,30 @@ module SSU
       path.join('statements')
     end
 
+    def created_at
+      path.ctime
+    end
+
+    def updated_at
+      path.mtime
+    end
+
+    def id
+      path.basename.to_s
+    end
+
+    def inspect
+      "#<#{self.class}:#{path}>"
+    end
+
+    def to_s
+      inspect
+    end
+
+    def ==(other)
+      other.is_a?(self.class) && (self.path == other.path)
+    end
+
     def archive
       (path.children - [config_path, pid_path, log_path, statements_path]).each do |child|
         child.rmtree
@@ -45,7 +69,15 @@ module SSU
     end
 
     def self.with_name(name)
-      new(Rails.root.join('tmp/profiles', name))
+      new(root_path.join(name))
+    end
+
+    def self.all
+      root_path.children.map {|path| new(path) }
+    end
+
+    def self.root_path
+      Rails.root.join('tmp/profiles')
     end
   end
 end

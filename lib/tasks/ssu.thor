@@ -19,6 +19,24 @@ class Ssu < Thor
     AccountCred.all.each {|c| enqueue(c) }
   end
 
+  desc 'cleanup-profiles', 'removes profiles older than a week and archives profiles older than a day'
+  def cleanup_profiles
+    environment
+    extend ActionView::Helpers::DateHelper
+
+    SSU::Profile.all.each do |profile|
+      if profile.created_at < 1.week.ago
+        puts "Removing profile: #{profile}"
+        profile.destroy
+      elsif profile.created_at < 1.day.ago
+        puts "Archiving profile: #{profile}"
+        profile.archive
+      else
+        puts "Ignoring profile: #{profile} (created #{time_ago_in_words(profile.created_at)} ago)"
+      end
+    end
+  end
+
   no_tasks do
     def enqueue(cred)
       cred.enqueue_sync
