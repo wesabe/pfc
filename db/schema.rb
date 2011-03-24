@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101029010419) do
+ActiveRecord::Schema.define(:version => 20110324173202) do
 
   create_table "account_balances", :force => true do |t|
     t.integer  "account_id",                                  :default => 0, :null => false
@@ -149,7 +149,7 @@ ActiveRecord::Schema.define(:version => 20101029010419) do
     t.boolean  "ofx_fee",                               :default => false,    :null => false
     t.string   "homepage_url"
     t.string   "login_url"
-    t.string   "wesabe_id",             :limit => 9
+    t.string   "wesabe_id"
     t.integer  "status",                                :default => 0
     t.integer  "mapped_to_id"
     t.string   "username_label"
