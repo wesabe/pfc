@@ -23,6 +23,7 @@ gem 'rdoc'
 gem 'thor' # for imports
 gem 'unicorn' # faster development server
 gem 'rchardet'
+gem 'iconv'
 
 group :development do
   gem 'mysql'           # in production: apt-get install libmysql-ruby
