@@ -144,7 +144,7 @@ module SSU
 
       while daemon.running?
         self.status = daemon.request('job.status')
-        self.statements = daemon.request('statement.list');
+        self.statements = daemon.request('statement.list')
 
         if complete?
           return

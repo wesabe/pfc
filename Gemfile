@@ -5,7 +5,7 @@ gem 'rails',             '3.0.1'
 gem 'resque',            '1.10.0'
 gem 'system_timer'
 gem 'daemon_controller', '0.2.5'
-
+gem 'json'
 
 platforms :mri_18 do
   gem "oniguruma", :require => 'oniguruma'

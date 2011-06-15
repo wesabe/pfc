@@ -122,7 +122,7 @@ module SSU
       def read
         body = socket.readline
         begin
-          return ActiveSupport::JSON.decode(body.chomp)
+          return JSON.parse(body.chomp)
         rescue
           Rails.logger.warn { "SSU(#{$$}) Unable to parse JSON response: #{body}" }
           raise
@@ -130,7 +130,7 @@ module SSU
       end
 
       def write(body)
-        socket.puts(ActiveSupport::JSON.encode(body))
+        socket.puts(JSON.dump(body))
       end
 
       def close
