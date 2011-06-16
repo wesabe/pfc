@@ -2,8 +2,9 @@ require File.expand_path('../boot', __FILE__)
 
 require 'rails/all'
 
-# Auto-require default libraries and those for the current Rails environment.
-Bundler.require :default, Rails.env
+# If you have a Gemfile, require the gems listed there, including any gems
+# you've limited to :test, :development, or :production.
+Bundler.require(:default, Rails.env) if defined?(Bundler)
 
 module Pfc
   class Application < Rails::Application
@@ -11,14 +12,14 @@ module Pfc
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
 
-    # Add additional load paths for your own custom dirs
+    # Custom directories with classes and modules you want to be autoloadable.
     config.autoload_paths += %W( #{config.root}/lib )
 
     # Only load the plugins named here, in the order given (default is alphabetical).
-    # :all can be used as a placeholder for all plugins not explicitly named
+    # :all can be used as a placeholder for all plugins not explicitly named.
     # config.plugins = [ :exception_notification, :ssl_requirement, :all ]
 
-    # Activate observers that should always be running
+    # Activate observers that should always be running.
     # config.active_record.observers = :cacher, :garbage_collector, :forum_observer
 
     # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
@@ -26,21 +27,11 @@ module Pfc
     # config.time_zone = 'Central Time (US & Canada)'
 
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
-    # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}')]
+    # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
 
-    # Configure generators values. Many other options are available, be sure to check the documentation.
-    # config.generators do |g|
-    #   g.orm             :active_record
-    #   g.template_engine :erb
-    #   g.test_framework  :test_unit, :fixture => true
-    # end
-
-    config.secret_token = "dbe8b7f34af822303bcd4a6a948b4d445e6730d1ed67d2d9fe5da7dd28ccd3bc"
-
-    config.session_store :cookie_store,
-      :key => '_pfc_session',
-      :secret => 'ef27f890e812ac3f40f1f83e96479a058306c223af36764183ce835c7c686'
+    # Configure the default encoding used in templates for Ruby 1.9.
+    config.encoding = "utf-8"
 
     # Configure sensitive parameters which will be filtered from the log file.
     config.filter_parameters += [:password, :password_confirmation, :account_number,
@@ -48,9 +39,8 @@ module Pfc
                              :answer_2, :upload, :visible_txaction_ids, :answers,
                              :data, :cookies, :creds]
 
-    config.active_support.deprecation = :log
-
-    config.active_record.include_root_in_json = false
+    # Enable the asset pipeline
+    config.assets.enabled = true
 
     def self.standalone?
       ENV['STANDALONE'] == '1'
