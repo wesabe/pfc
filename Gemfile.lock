@@ -83,6 +83,8 @@ GEM
       activesupport (= 3.1.0.rc4)
       bundler (~> 1.0)
       railties (= 3.1.0.rc4)
+    rails_autolink (1.0.1)
+      rails (~> 3.1.0.a)
     railties (3.1.0.rc4)
       actionpack (= 3.1.0.rc4)
       activesupport (= 3.1.0.rc4)
@@ -162,6 +164,7 @@ DEPENDENCIES
   mysql
   oniguruma
   rails (= 3.1.0.rc4)
+  rails_autolink
   rake (~> 0.8.0)
   rchardet
   rdoc
