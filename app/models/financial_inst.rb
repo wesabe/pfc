@@ -154,26 +154,17 @@ class FinancialInst < ActiveRecord::Base
     end
   end
 
-  # Returns an array of the names of the top +limit+ FIs, as determined by the
-  # number of accounts each FI has, sorted alphabetically. The results are
-  # stored in memcache for 4 hours.
-  def self.popular_names(limit)
-    Rails.cache.fetch("popular_names_#{limit}".to_sym) { uncached_popular_names(limit) }
-  end
-
   # Returns an array of name/id tuples for all financial institutions. Suitable
   # for use with the +select+ helper.
   #
   #     <%= select :account, :financial_inst_id, FinancialInst.ids_and_names %>
   def self.ids_and_names
-
-    connection.select_rows(
-      ["SELECT id, name, wesabe_id, homepage_url, login_url FROM financial_insts WHERE id != ? AND status = ? ORDER BY name",
-       UNKNOWN_FI_ID, Status::ACTIVE]
-    ).map { |id, name, wesabe_id, homepage_url, login_url|
-      site = (URI.parse((homepage_url || login_url).to_s).host || "none") rescue "none"
-      ["#{name} [#{site}] (#{wesabe_id})", id]
-    }
+    select(:id, :name, :wesabe_id, :homepage_url, :login_url).
+      where(['id != ? AND status = ?', UNKNOWN_FI_ID, Status::ACTIVE]).
+      order(:name).map do |fi|
+        site = (URI.parse(fi.url).host rescue nil) || "none"
+        ["#{fi.name} [#{site}] (#{fi.wesabe_id})", fi.id]
+      end
   end
 
   # Returns an array of the connection type options
@@ -317,28 +308,6 @@ class FinancialInst < ActiveRecord::Base
     ssu_support == SSUSupport::GENERAL
   end
 private
-
-  # Returns an array of the names of the top +limit+ FIs, as determined by the
-  # number of accounts each FI has, sorted alphabetically.
-  def self.uncached_popular_names(limit)
-    rows = connection.select_rows([
-      %q{
-        SELECT financial_insts.name, COUNT(accounts.id) AS accounts_count
-        FROM financial_insts
-        INNER JOIN accounts ON accounts.financial_inst_id = financial_insts.id
-        WHERE financial_insts.status = ? AND financial_insts.id != ?
-        GROUP BY financial_insts.name
-        ORDER BY accounts_count DESC
-        LIMIT ?
-      }, Status::ACTIVE, UNKNOWN_FI_ID, limit
-    ])
-
-    if rows.empty?
-      return []
-    else
-      return rows.transpose.first.sort_by { |x| x.downcase }
-    end
-  end
 
   # Generates an options hash for AR.find-alikes which will find all FIs usable
   # by a given user.

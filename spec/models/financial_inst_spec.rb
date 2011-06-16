@@ -153,15 +153,6 @@ describe FinancialInst, "activating" do
   end
 end
 
-describe FinancialInst, "selecting ids and names" do
-  it "should select the ids and names of all financial institutions, sorted by names" do
-    connection = mock(:connection)
-    FinancialInst.should_receive(:connection).and_return(connection)
-    connection.should_receive(:select_rows).with(["SELECT id, name, wesabe_id, homepage_url, login_url FROM financial_insts WHERE id != ? AND status = ? ORDER BY name", FinancialInst::UNKNOWN_FI_ID, Constants::Status::ACTIVE]).and_return([[1, "Bank Blah", "us-10000", nil, "http://blah.com"], [2, "Dingo Madness", "ie-19191", "https://dingo.com/woot", nil], [3, "Foot Foot McGee", "us-30029", nil, nil]])
-    FinancialInst.ids_and_names.should == [["Bank Blah [blah.com] (us-10000)", 1], ["Dingo Madness [dingo.com] (ie-19191)", 2], ["Foot Foot McGee [none] (us-30029)", 3]]
-  end
-end
-
 describe FinancialInst, "destroying" do
 
   before(:each) do
@@ -298,44 +289,5 @@ describe FinancialInst, "merging" do
   it "should update all the accounts of the old FI with the new FI's id" do
     FinancialInst.merge(@old_fi, @new_fi)
     @account.reload.financial_inst.should == @new_fi
-  end
-end
-
-describe FinancialInst, "listing names of popular FIs" do
-
-  before do
-    FinancialInst.delete_all
-    FinancialInst.connection.execute("ALTER TABLE financial_insts AUTO_INCREMENT = 1")
-    FinancialInst.make(:name => "UNKNOWN", :wesabe_id => "unknown")
-    @fi1 = FinancialInst.make(:name => "Ringo", :wesabe_id => "1")
-    @fi2 = FinancialInst.make(:name => "Blart", :wesabe_id => "2")
-    @fi3 = FinancialInst.make(:name => "Unapproved", :wesabe_id => "3", :approved => false)
-
-    Account.delete_all
-    Account.make(:financial_inst => @fi1)
-    Account.make(:financial_inst => @fi1)
-    Account.make(:financial_inst => @fi2)
-    Account.make(:financial_inst => @fi3)
-  end
-
-  after do
-    FinancialInst.delete_all
-    Account.delete_all
-  end
-
-  it "should cache the results in memcache" do
-    FinancialInst.popular_names(10)
-  end
-
-  it "should return the FIs with the most accounts" do
-    FinancialInst.popular_names(1).should == ["Ringo"]
-  end
-
-  it "should not include the Unknown FI" do
-    FinancialInst.popular_names(100).should_not include("UNKNOWN")
-  end
-
-  it "should not include any unapproved FIs" do
-    FinancialInst.popular_names(1000).should_not include("Unapproved")
   end
 end

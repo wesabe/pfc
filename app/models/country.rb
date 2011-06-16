@@ -4,7 +4,7 @@ class Country < ActiveRecord::Base
   #
   #     <%= select :user, :country_id, Country.ids_and_names %>
   def self.ids_and_names
-    connection.select_rows("SELECT name, id FROM countries ORDER BY name ASC").map { |name, id| [name, id.to_i] }
+    select(:id, :name).order(:name).map { |country| [country.name, country.id] }
   end
 
   def self.us
