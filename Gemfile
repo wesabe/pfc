@@ -1,7 +1,8 @@
 source :gemcutter
 
 # Regular gems
-gem 'rails',             '3.0.7'
+gem 'rails',             '3.1.0.rc4'
+gem 'rake',              '~>0.8.0'
 gem 'resque',            '1.10.0'
 gem 'system_timer'
 gem 'daemon_controller', '0.2.5'
