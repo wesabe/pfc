@@ -86,7 +86,7 @@
                   If <%=h @financial_inst.name %> offers OFX or QFX downloads, you won't have to fill in these additional questions.
                   We recommend OFX if it is available.
                 </p>
-            <% form_tag(uploads_path, {:class => 'account_upload'}) do -%>
+            <%= form_tag(uploads_path, {:class => 'account_upload'}) do -%>
               <fieldset>
                 <label for="account_type" class="field-title">What kind of account are you uploading?</label>
               <%= flash_error 'account_type' %>

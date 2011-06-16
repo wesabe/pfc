@@ -9,7 +9,7 @@
     <div class="middle"><div class="right">
     <div class="content">
       <div class="module-header"><h1>Profile Settings</h1></div>
-        <% form_tag("/profile", :multipart=>true, :class => 'user_profile', :method => :put) do %>
+        <%= form_tag("/profile", :multipart=>true, :class => 'user_profile', :method => :put) do %>
           <%= render :partial => 'shared/notification' %>
 
           <fieldset>

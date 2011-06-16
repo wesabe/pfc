@@ -32,7 +32,7 @@
 <!-- BEGIN form_body --><div id="form_body">
 
 <h6>Add Your Bank</h6>
-  <% form_for @financial_inst do |f| %>
+  <%= form_for @financial_inst do |f| %>
     <%= error_messages_for(:financial_inst).gsub("financial inst.", "financial institution.") %>
     <fieldset>
       <div class="field">

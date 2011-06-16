@@ -25,7 +25,7 @@
   <div class="right">
     <h2>Edit '<%=h @financial_inst.name %>'</h2>
 
-    <% form_for @financial_inst do |f| %>
+    <%= form_for @financial_inst do |f| %>
 
       <%= f.error_messages %>
 
@@ -95,7 +95,7 @@
 
     <br /><hr /><br />
 
-    <% form_tag("confirm_merge", :method => :get) do %>
+    <%= form_tag("confirm_merge", :method => :get) do %>
       <%- if @financial_inst.mapped_to_id -%>
           <h2>This FI is already merged to <%= @financial_inst.mapped_to_id %>.</h2>
       <%- end -%>

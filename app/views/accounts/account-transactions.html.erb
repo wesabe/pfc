@@ -112,7 +112,7 @@
         <li class="transaction-edit template" style="display:none">
           <div class="edit-dialog" style="display:none">
             <div class="top"><div class="right">
-              <%- form_tag('/transactions', :class => "field edit-transaction", :method => :post) do -%>
+              <%= form_tag('/transactions', :class => "field edit-transaction", :method => :post) do -%>
                 <div class="merchant-icons transfer"></div>
                 <div class="amount-edit">
                   <input type="text" name="amount" tabindex="3" autocomplete="off">
