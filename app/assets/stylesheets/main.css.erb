@@ -3,7 +3,7 @@ body {
   font-size: 16px;
   color:#363630;
   letter-spacing: 0.02em;
-  background: #afa194 url(/images/bg.gif) repeat-x;
+  background: #afa194 url(<%= asset_path 'bg.gif' %>) repeat-x;
   margin: 0 auto 1em;
 }
 
@@ -126,12 +126,12 @@ letter-spacing:0.035em;
 /** Header -----------------------------------------------------------------------------------------------------------------------------------------------**/
 .container {
   width:1042px;
-  background:transparent url(/images/header/header-bg-trans.png) scroll no-repeat 0 0;
+  background:transparent url(<%= asset_path 'header/header-bg-trans.png' %>) scroll no-repeat 0 0;
 }
 
 .container.two-col {
   width:680px;
-  background:transparent url(/images/header/2col-header-bg-trans.png) scroll no-repeat top left;
+  background:transparent url(<%= asset_path 'header/2col-header-bg-trans.png' %>) scroll no-repeat top left;
 }
 
 #header {
@@ -149,7 +149,7 @@ letter-spacing:0.035em;
   float: left;
   width: 367px;
   height: 36px;
-  background: url(/images/header/logo.png) no-repeat 0 0;
+  background: url(<%= asset_path 'header/logo.png' %>) no-repeat 0 0;
   text-indent: -1000em;
 }
 
@@ -169,7 +169,7 @@ letter-spacing:0.035em;
 /** Global Navigation **/
 
 #global-nav {
-  background: transparent url(/images/header/global-nav-bg-trans.png) no-repeat 0 0;
+  background: transparent url(<%= asset_path 'header/global-nav-bg-trans.png' %>) no-repeat 0 0;
   margin: 1em auto 0;
   height: 36px;
 }
@@ -195,7 +195,7 @@ letter-spacing:0.035em;
 /* The top-level options like My Accounts */
 #global-nav ul li a.menu-header {
   height: 36px;
-  background-image: url(/images/header/global-nav-trans.png);
+  background-image: url(<%= asset_path 'header/global-nav-trans.png' %>);
   background-repeat: no-repeat;
   text-indent: -1000em;
   position: relative;
@@ -232,7 +232,7 @@ letter-spacing:0.035em;
 /*temporary "more" tab to hold goals and tips for now --------------------------------*/
 #global-nav ul li#nav-more a.menu-header {
   width: 100px;
-  background-image: url(/images/header/global-nav-more-trans.png);
+  background-image: url(<%= asset_path 'header/global-nav-more-trans.png' %>);
 }
 
 #global-nav ul li#nav-more.current-tab a.menu-header {
@@ -281,7 +281,7 @@ letter-spacing:0.035em;
   color:#fff;
   margin:-7px 5px 0 0;
   padding:0 7px 5px;
-  background:transparent url(/images/header/newmessages-globalnav-right-trans.png) no-repeat top right;
+  background:transparent url(<%= asset_path 'header/newmessages-globalnav-right-trans.png' %>) no-repeat top right;
   text-indent:0;
   z-index:5;
 }
@@ -289,7 +289,7 @@ letter-spacing:0.035em;
 #new-messages #message-count,
 .current-tab:hover #new-messages #message-count {
  float:left;
- background:transparent url(/images/header/newmessages-globalnav-left-trans.png) no-repeat top left;
+ background:transparent url(<%= asset_path 'header/newmessages-globalnav-left-trans.png' %>) no-repeat top left;
  padding:0 0 5px 7px;
 }
 
@@ -302,11 +302,11 @@ letter-spacing:0.035em;
 }
 
 .current-tab #new-messages {
-  background:transparent url(/images/header/newmessages-on-globalnav-right-trans.png) no-repeat top right;
+  background:transparent url(<%= asset_path 'header/newmessages-on-globalnav-right-trans.png' %>) no-repeat top right;
 }
 
 .current-tab #new-messages #message-count {
-  background:transparent url(/images/header/newmessages-on-globalnav-left-trans.png) no-repeat top left;
+  background:transparent url(<%= asset_path 'header/newmessages-on-globalnav-left-trans.png' %>) no-repeat top left;
 }
 
 .current-tab #new-messages a,
@@ -342,7 +342,7 @@ letter-spacing:0.035em;
   padding: 0 10px;
 }
 #searchform {
-  background: transparent url(/images/header/global-nav-bg-trans.png) no-repeat middle right;
+  background: transparent url(<%= asset_path 'header/global-nav-bg-trans.png' %>) no-repeat middle right;
 }
 #searchform fieldset {
   margin: 0;
@@ -400,7 +400,7 @@ letter-spacing:0.035em;
 #global-nav li ul {
   margin-left: -13px;
   padding-left: 19px;
-  background: transparent url(/images/header/menu-bg-left-trans.png) no-repeat left bottom;
+  background: transparent url(<%= asset_path 'header/menu-bg-left-trans.png' %>) no-repeat left bottom;
   margin-top: 0px;
   z-index:3;
 }
@@ -408,12 +408,12 @@ letter-spacing:0.035em;
   width: 100%;
   height: 19px;
   margin-top: -14px;
-  background: transparent url(/images/header/menu-bg-top-trans.png) no-repeat right bottom;
+  background: transparent url(<%= asset_path 'header/menu-bg-top-trans.png' %>) no-repeat right bottom;
 }
 #global-nav .menu-content {
   font-size:0.74em;
   line-height: 1.1em;
-  background: transparent url(/images/header/menu-bg-trans.png) no-repeat right bottom;
+  background: transparent url(<%= asset_path 'header/menu-bg-trans.png' %>) no-repeat right bottom;
   padding: 0 2.5em 2.5em 0.8em;
 }
 #global-nav .menu-column {
@@ -591,7 +591,7 @@ input[type=email].error, input[type=text].error,input[type=password].error {bord
 }
 
 .tab-background {
-  background:transparent url(/images/homepage/tab-background-signup-trans.png) no-repeat scroll top left;
+  background:transparent url(<%= asset_path 'homepage/tab-background-signup-trans.png' %>) no-repeat scroll top left;
   padding:6px 0;
 }
 
@@ -628,24 +628,24 @@ input[type=email].error, input[type=text].error,input[type=password].error {bord
 /*default white modules --------------------------------------------------------------------------------------------------------*/
 
 .top {
-  background:transparent url(/images/maincontent/modules/tl-trans.png) no-repeat scroll left top;
+  background:transparent url(<%= asset_path 'maincontent/modules/tl-trans.png' %>) no-repeat scroll left top;
   clear:both;
   padding:0;
   margin:0;
   width:100%;
 }
 .top .right {
-  background:transparent url(/images/maincontent/modules/tr-trans.png) no-repeat scroll right top;
+  background:transparent url(<%= asset_path 'maincontent/modules/tr-trans.png' %>) no-repeat scroll right top;
   height:15px;
   margin-left:15px;
 }
 .middle {
-  background:transparent url(/images/maincontent/modules/ml-trans.png) repeat-y scroll left center;
+  background:transparent url(<%= asset_path 'maincontent/modules/ml-trans.png' %>) repeat-y scroll left center;
   clear:both;
   width:100%;
 }
 .middle .right {
-  background:transparent url(/images/maincontent/modules/mr-trans.png) repeat-y scroll right center;
+  background:transparent url(<%= asset_path 'maincontent/modules/mr-trans.png' %>) repeat-y scroll right center;
   margin-left:15px;
 }
 .middle .right .content {
@@ -653,13 +653,13 @@ input[type=email].error, input[type=text].error,input[type=password].error {bord
   padding:0;
 }
 .bottom {
-  background:transparent url(/images/maincontent/modules/bl-trans.png) no-repeat scroll left bottom;
+  background:transparent url(<%= asset_path 'maincontent/modules/bl-trans.png' %>) no-repeat scroll left bottom;
   clear:both;
   padding:0;
   width:100%;
 }
 .bottom .right {
-  background:transparent url(/images/maincontent/modules/br-trans.png) no-repeat scroll right bottom;
+  background:transparent url(<%= asset_path 'maincontent/modules/br-trans.png' %>) no-repeat scroll right bottom;
   height:15px;
   margin-left:15px;
 }
@@ -667,7 +667,7 @@ input[type=email].error, input[type=text].error,input[type=password].error {bord
 /* added style to allow the grip to appear for movable modules -----*/
 
 .movable .grip {
-  background:transparent url(/images/maincontent/modules/grip-trans.png) no-repeat scroll left top;
+  background:transparent url(<%= asset_path 'maincontent/modules/grip-trans.png' %>) no-repeat scroll left top;
   clear:both;
   margin:auto;
   height:15px;
@@ -678,24 +678,24 @@ input[type=email].error, input[type=text].error,input[type=password].error {bord
 /*this is the for the footer -------------------------------------------------------------------*/
 
 .transparent .top {
-  background:transparent url(/images/maincontent/modules/tl-transparent-trans.png) no-repeat scroll left top;
+  background:transparent url(<%= asset_path 'maincontent/modules/tl-transparent-trans.png' %>) no-repeat scroll left top;
   clear:both;
   padding:0;
   margin:0;
   width:100%;
 }
 .transparent .top .right {
-  background:transparent url(/images/maincontent/modules/tr-transparent-trans.png) no-repeat scroll right top;
+  background:transparent url(<%= asset_path 'maincontent/modules/tr-transparent-trans.png' %>) no-repeat scroll right top;
   height:15px;
   margin-left:15px;
 }
 .transparent .middle {
-  background:transparent url(/images/maincontent/modules/ml-transparent-trans.png) repeat-y scroll left center;
+  background:transparent url(<%= asset_path 'maincontent/modules/ml-transparent-trans.png' %>) repeat-y scroll left center;
   clear:both;
   width:100%;
 }
 .transparent .middle .right {
-  background:transparent url(/images/maincontent/modules/mr-transparent-trans.png) repeat-y scroll right center;
+  background:transparent url(<%= asset_path 'maincontent/modules/mr-transparent-trans.png' %>) repeat-y scroll right center;
   margin-left:15px;
 }
 .transparent .middle .right .content {
@@ -703,13 +703,13 @@ input[type=email].error, input[type=text].error,input[type=password].error {bord
   padding:0 1px;
 }
 .transparent .bottom {
-  background:transparent url(/images/maincontent/modules/bl-transparent-trans.png) no-repeat scroll left bottom;
+  background:transparent url(<%= asset_path 'maincontent/modules/bl-transparent-trans.png' %>) no-repeat scroll left bottom;
   clear:both;
   padding:0;
   width:100%;
 }
 .transparent .bottom .right {
-  background:transparent url(/images/maincontent/modules/br-transparent-trans.png) no-repeat scroll right bottom;
+  background:transparent url(<%= asset_path 'maincontent/modules/br-transparent-trans.png' %>) no-repeat scroll right bottom;
   height:15px;
   margin-left:15px;
 }
@@ -722,7 +722,7 @@ input[type=email].error, input[type=text].error,input[type=password].error {bord
 }
 
 .edit-dialog .top {
-  background:transparent url(/images/maincontent/modules/tl-edit-dialog-trans.png) no-repeat scroll left top;
+  background:transparent url(<%= asset_path 'maincontent/modules/tl-edit-dialog-trans.png' %>) no-repeat scroll left top;
   clear:both;
   padding:0;
   margin:0;
@@ -730,7 +730,7 @@ input[type=email].error, input[type=text].error,input[type=password].error {bord
 }
 
 .edit-dialog .top .right {
-  background:transparent url(/images/maincontent/modules/tr-edit-dialog-trans.png) no-repeat scroll right top;
+  background:transparent url(<%= asset_path 'maincontent/modules/tr-edit-dialog-trans.png' %>) no-repeat scroll right top;
   padding:15px 8px 0 0;
   min-height:25px;
   margin-left:28px;
@@ -742,14 +742,14 @@ input[type=email].error, input[type=text].error,input[type=password].error {bord
 }
 
 .edit-dialog .bottom {
-  background:transparent url(/images/maincontent/modules/bl-edit-dialog-trans.png) no-repeat scroll left bottom;
+  background:transparent url(<%= asset_path 'maincontent/modules/bl-edit-dialog-trans.png' %>) no-repeat scroll left bottom;
   clear:both;
   padding:0;
   width:100%;
 }
 
 .edit-dialog .bottom .right {
-  background:transparent url(/images/maincontent/modules/br-edit-dialog-trans.png) no-repeat scroll right bottom;
+  background:transparent url(<%= asset_path 'maincontent/modules/br-edit-dialog-trans.png' %>) no-repeat scroll right bottom;
   height:56px;
   padding-right:18px;
   margin-left:28px;
@@ -759,7 +759,7 @@ input[type=email].error, input[type=text].error,input[type=password].error {bord
 /*bottom-ralign edit-dialog styles -----------------------------------------------------------------------------*/
 
 .bottom-ralign .top {
-  background:transparent url(/images/maincontent/modules/tl-edit-dialog-bottom-ralign-trans.png) no-repeat scroll -15px 0;
+  background:transparent url(<%= asset_path 'maincontent/modules/tl-edit-dialog-bottom-ralign-trans.png' %>) no-repeat scroll -15px 0;
   clear:both;
   padding:0;
   margin:0;
@@ -767,7 +767,7 @@ input[type=email].error, input[type=text].error,input[type=password].error {bord
 }
 
 .bottom-ralign .top .right {
-  background:transparent url(/images/maincontent/modules/tr-edit-dialog-trans.png) no-repeat scroll right top;
+  background:transparent url(<%= asset_path 'maincontent/modules/tr-edit-dialog-trans.png' %>) no-repeat scroll right top;
   padding:20px 13px 0 5px;
   min-height:25px;
   margin-left:13px;
@@ -779,14 +779,14 @@ input[type=email].error, input[type=text].error,input[type=password].error {bord
 }
 
 .bottom-ralign .bottom {
-  background:transparent url(/images/maincontent/modules/bl-edit-dialog-trans.png) no-repeat scroll -15px 0;
+  background:transparent url(<%= asset_path 'maincontent/modules/bl-edit-dialog-trans.png' %>) no-repeat scroll -15px 0;
   clear:both;
   padding:0;
   width:100%;
 }
 
 .bottom-ralign .bottom .right {
-  background:transparent url(/images/maincontent/modules/br-edit-dialog-bottom-ralign-trans.png) no-repeat scroll right bottom;
+  background:transparent url(<%= asset_path 'maincontent/modules/br-edit-dialog-bottom-ralign-trans.png' %>) no-repeat scroll right bottom;
   height:70px;
   padding-right:18px;
   margin-left:13px;
@@ -806,7 +806,7 @@ input[type=email].error, input[type=text].error,input[type=password].error {bord
 
 /*edit-dialog with a right-aligned pointer ----------------------------------------------------*/
 .edit-dialog.r-align .top {
-  background:transparent url(/images/maincontent/modules/tl-edit-dialog-ralign-trans.png) no-repeat scroll left top;
+  background:transparent url(<%= asset_path 'maincontent/modules/tl-edit-dialog-ralign-trans.png' %>) no-repeat scroll left top;
   clear:both;
   padding:0;
   margin:0;
@@ -814,7 +814,7 @@ input[type=email].error, input[type=text].error,input[type=password].error {bord
 }
 
 .edit-dialog.r-align .top .right {
-  background:transparent url(/images/maincontent/modules/tr-edit-dialog-ralign-trans.png) no-repeat scroll right top;
+  background:transparent url(<%= asset_path 'maincontent/modules/tr-edit-dialog-ralign-trans.png' %>) no-repeat scroll right top;
   min-height:30px;
   padding:15px 35px 0 5px;
   margin-left:15px;
@@ -837,7 +837,7 @@ input[type=email].error, input[type=text].error,input[type=password].error {bord
 /*edit dialog with a bottom left aligned pointer ---------------------------------------------------------------*/
 
 .edit-dialog.left-b-align .top {
-  background:transparent url(/images/maincontent/modules/tl-edit-dialog-left-balign-trans.png) no-repeat scroll left top;
+  background:transparent url(<%= asset_path 'maincontent/modules/tl-edit-dialog-left-balign-trans.png' %>) no-repeat scroll left top;
 }
 
 .edit-dialog.left-b-align .top .right {
@@ -845,13 +845,13 @@ input[type=email].error, input[type=text].error,input[type=password].error {bord
 }
 
 .edit-dialog.left-b-align .bottom {
-  background:transparent url(/images/maincontent/modules/bl-edit-dialog-left-balign-trans.png) no-repeat scroll bottom left;
+  background:transparent url(<%= asset_path 'maincontent/modules/bl-edit-dialog-left-balign-trans.png' %>) no-repeat scroll bottom left;
 }
 
 /*edit dialog top right aligned pointer -----------------------------------------------------------------------*/
 
 .edit-dialog.top-r-align .top {
-  background:transparent url(/images/maincontent/modules/tl-edit-box-right-align-trans.png) no-repeat scroll left 12px;
+  background:transparent url(<%= asset_path 'maincontent/modules/tl-edit-box-right-align-trans.png' %>) no-repeat scroll left 12px;
   clear:both;
   padding:0;
   margin:0;
@@ -859,7 +859,7 @@ input[type=email].error, input[type=text].error,input[type=password].error {bord
 }
 
 .edit-dialog.top-r-align .top .right {
-  background:transparent url(/images/maincontent/modules/tr-edit-box-top-right-align-trans.png) no-repeat scroll top right;
+  background:transparent url(<%= asset_path 'maincontent/modules/tr-edit-box-top-right-align-trans.png' %>) no-repeat scroll top right;
   min-height:30px;
   padding:35px 22px 0 5px;
   margin-left:15px;
@@ -903,16 +903,16 @@ input[type=email].error, input[type=text].error,input[type=password].error {bord
 
 
 .edit-dialog a.edit-dialog-inset-tab.on {
-    background:transparent url(/images/maincontent/buttons/edit-dialog-inset-tab-a.gif) no-repeat scroll right top;
+  background:transparent url(<%= asset_path 'maincontent/buttons/edit-dialog-inset-tab-a.gif' %>) no-repeat scroll right top;
     color: #000000;
   }
 
 .edit-dialog a.edit-dialog-inset-tab.on span {
-    background:transparent url(/images/maincontent/buttons/edit-dialog-inset-tab-span.gif) no-repeat scroll left top;
+  background:transparent url(<%= asset_path 'maincontent/buttons/edit-dialog-inset-tab-span.gif' %>) no-repeat scroll left top;
   }
 
 .edit-dialog a.edit-dialog-inset-tab.first-child.on span {
-    background:transparent url(/images/maincontent/buttons/edit-dialog-inset-tab-first-child-span.gif) no-repeat scroll left top;
+  background:transparent url(<%= asset_path 'maincontent/buttons/edit-dialog-inset-tab-first-child-span.gif' %>) no-repeat scroll left top;
   }
 
 /*end of edit dialog inset tabs -----------------------------------------------*/
@@ -923,7 +923,7 @@ input[type=email].error, input[type=text].error,input[type=password].error {bord
 }
 
 .edit-dialog .edit-dialog-inset .top {
-  background:transparent url(/images/maincontent/modules/tl-edit-dialog-inset.gif) no-repeat scroll left top;
+  background:transparent url(<%= asset_path 'maincontent/modules/tl-edit-dialog-inset.gif' %>) no-repeat scroll left top;
   clear:both;
   padding:0;
   margin:0;
@@ -931,7 +931,7 @@ input[type=email].error, input[type=text].error,input[type=password].error {bord
 }
 
 .edit-dialog .edit-dialog-inset .top .right {
-  background:transparent url(/images/maincontent/modules/tr-edit-dialog-inset.gif) no-repeat scroll right top;
+  background:transparent url(<%= asset_path 'maincontent/modules/tr-edit-dialog-inset.gif' %>) no-repeat scroll right top;
   padding:8px 5px 5px 5px;
   min-height:10px;
   margin-left:5px;
@@ -940,14 +940,14 @@ input[type=email].error, input[type=text].error,input[type=password].error {bord
 }
 
 .edit-dialog .edit-dialog-inset .bottom {
-  background:transparent url(/images/maincontent/modules/bl-edit-dialog-inset.gif) no-repeat scroll left bottom;
+  background:transparent url(<%= asset_path 'maincontent/modules/bl-edit-dialog-inset.gif' %>) no-repeat scroll left bottom;
   clear:both;
   padding:0;
   width:100%;
 }
 
 .edit-dialog .edit-dialog-inset .bottom .right {
-  background:transparent url(/images/maincontent/modules/br-edit-dialog-inset.gif) no-repeat scroll right bottom;
+  background:transparent url(<%= asset_path 'maincontent/modules/br-edit-dialog-inset.gif' %>) no-repeat scroll right bottom;
   height:5px;
   min-height:5px;
   margin-left:5px;
@@ -1047,7 +1047,7 @@ input[type=email].error, input[type=text].error,input[type=password].error {bord
 
 .edit-box .top,
 .hover-box .top {
-  background:transparent url(/images/maincontent/modules/tl-edit-dialog-trans.png) no-repeat scroll left top;
+  background:transparent url(<%= asset_path 'maincontent/modules/tl-edit-dialog-trans.png' %>) no-repeat scroll left top;
   clear:both;
   padding:0;
   margin:0;
@@ -1056,7 +1056,7 @@ input[type=email].error, input[type=text].error,input[type=password].error {bord
 
 .edit-box .top .right,
 .hover-box .top .right {
-  background:transparent url(/images/maincontent/modules/tr-edit-dialog-trans.png) no-repeat scroll right top;
+  background:transparent url(<%= asset_path 'maincontent/modules/tr-edit-dialog-trans.png' %>) no-repeat scroll right top;
   padding:15px 15px 3px 5px;
   min-height:25px;
   margin-left:28px;
@@ -1068,14 +1068,14 @@ input[type=email].error, input[type=text].error,input[type=password].error {bord
 
 .edit-box .bottom,
 .hover-box .bottom {
-  background:transparent url(/images/maincontent/modules/bl-edit-box-trans.png) no-repeat scroll left bottom;
+  background:transparent url(<%= asset_path 'maincontent/modules/bl-edit-box-trans.png' %>) no-repeat scroll left bottom;
   clear:both;
   padding:0;
   width:100%;
 }
 .edit-box .bottom .right,
 .hover-box .bottom .right {
-  background:transparent url(/images/maincontent/modules/br-edit-box-trans.png) no-repeat scroll right bottom;
+  background:transparent url(<%= asset_path 'maincontent/modules/br-edit-box-trans.png' %>) no-repeat scroll right bottom;
   height:14px;
   margin-left:28px;
 }
@@ -1102,7 +1102,7 @@ input[type=email].error, input[type=text].error,input[type=password].error {bord
 /*-----------------------------------*/
 .edit-box.r-align .top,
 .hover-box.r-align .top {
-  background:transparent url(/images/maincontent/modules/tl-edit-dialog-ralign-trans.png) no-repeat scroll left top;
+  background:transparent url(<%= asset_path 'maincontent/modules/tl-edit-dialog-ralign-trans.png' %>) no-repeat scroll left top;
   clear:both;
   padding:0;
   margin:0;
@@ -1110,7 +1110,7 @@ input[type=email].error, input[type=text].error,input[type=password].error {bord
 }
 .edit-box.r-align .top .right,
 .hover-box.r-align .top .right {
-  background:transparent url(/images/maincontent/modules/tr-edit-dialog-ralign-trans.png) no-repeat scroll right top;
+  background:transparent url(<%= asset_path 'maincontent/modules/tr-edit-dialog-ralign-trans.png' %>) no-repeat scroll right top;
   min-height:30px;
   padding:22px 35px 0 8px;
   margin-left:17px;
@@ -1123,14 +1123,14 @@ input[type=email].error, input[type=text].error,input[type=password].error {bord
 
 .edit-box.r-align .bottom,
 .hover-box.r-align .bottom {
-  background:transparent url(/images/maincontent/modules/bl-edit-box-trans.png) no-repeat scroll -16px 0;
+  background:transparent url(<%= asset_path 'maincontent/modules/bl-edit-box-trans.png' %>) no-repeat scroll -16px 0;
   clear:both;
   padding:0;
   width:100%;
 }
 .edit-box.r-align .bottom .right,
 .hover-box.r-align .bottom .right {
-  background:transparent url(/images/maincontent/modules/br-edit-box-trans.png) no-repeat scroll right bottom;
+  background:transparent url(<%= asset_path 'maincontent/modules/br-edit-box-trans.png' %>) no-repeat scroll right bottom;
   height:14px;
   margin-right:15px;
   margin-left:12px;
@@ -1138,7 +1138,7 @@ input[type=email].error, input[type=text].error,input[type=password].error {bord
 
 .edit-box.top-l-align .top,
 .hover-box.top-l-align .top {
-  background:transparent url(/images/maincontent/modules/tl-edit-box-top-left-align-trans.png) no-repeat scroll -1px top;
+  background:transparent url(<%= asset_path 'maincontent/modules/tl-edit-box-top-left-align-trans.png' %>) no-repeat scroll -1px top;
   clear:both;
   padding:0;
   margin:0;
@@ -1147,7 +1147,7 @@ input[type=email].error, input[type=text].error,input[type=password].error {bord
 
 .edit-box.top-l-align .top .right,
 .hover-box.top-l-align .top .right {
-  background:transparent url(/images/maincontent/modules/tr-edit-box-trans.png) no-repeat scroll right 12px;
+  background:transparent url(<%= asset_path 'maincontent/modules/tr-edit-box-trans.png' %>) no-repeat scroll right 12px;
   min-height:30px;
   padding:35px 22px 0 0;
   margin-left:45px;
@@ -1167,7 +1167,7 @@ input[type=email].error, input[type=text].error,input[type=password].error {bord
 
 .edit-box.top-l-align .bottom,
 .hover-box.top-l-align .bottom {
-  background:transparent url(/images/maincontent/modules/bl-edit-box-right-align-trans.png) no-repeat scroll left bottom;
+  background:transparent url(<%= asset_path 'maincontent/modules/bl-edit-box-right-align-trans.png' %>) no-repeat scroll left bottom;
   clear:both;
   padding:0;
   width:100%;
@@ -1175,7 +1175,7 @@ input[type=email].error, input[type=text].error,input[type=password].error {bord
 
 .edit-box.top-l-align .bottom .right,
 .hover-box.top-l-align .bottom .right {
-  background:transparent url(/images/maincontent/modules/br-edit-box-right-align-trans.png) no-repeat scroll right bottom;
+  background:transparent url(<%= asset_path 'maincontent/modules/br-edit-box-right-align-trans.png' %>) no-repeat scroll right bottom;
   height:14px;
   margin-right:2px;
   margin-left:14px;
@@ -1183,7 +1183,7 @@ input[type=email].error, input[type=text].error,input[type=password].error {bord
 
 .edit-box.left-b-align .top,
 .hover-box.left-b-align .top {
-  background:transparent url(/images/maincontent/modules/tl-edit-box-right-align-trans.png) no-repeat scroll 15px top;
+  background:transparent url(<%= asset_path 'maincontent/modules/tl-edit-box-right-align-trans.png' %>) no-repeat scroll 15px top;
   clear:both;
   padding:0;
   margin:0;
@@ -1192,7 +1192,7 @@ input[type=email].error, input[type=text].error,input[type=password].error {bord
 
 .edit-box.left-b-align .top .right,
 .hover-box.left-b-align .top .right {
-  background:transparent url(/images/maincontent/modules/tr-edit-box-trans.png) no-repeat scroll right top;
+  background:transparent url(<%= asset_path 'maincontent/modules/tr-edit-box-trans.png' %>) no-repeat scroll right top;
   padding:22px 20px 0 10px;
   min-height:30px;
   margin-left:30px;
@@ -1211,7 +1211,7 @@ input[type=email].error, input[type=text].error,input[type=password].error {bord
 
 .edit-box.left-b-align .bottom,
 .hover-box.left-b-align .bottom {
-  background:transparent url(/images/maincontent/modules/bl-edit-box-bottom-left-trans.png) no-repeat scroll left bottom;
+  background:transparent url(<%= asset_path 'maincontent/modules/bl-edit-box-bottom-left-trans.png' %>) no-repeat scroll left bottom;
   clear:both;
   padding:0;
   width:100%;
@@ -1222,7 +1222,7 @@ input[type=email].error, input[type=text].error,input[type=password].error {bord
 
 .edit-box.left-b-align .bottom .right,
 .hover-box.left-b-align .bottom .right {
-  background:transparent url(/images/maincontent/modules/br-edit-box-bottom-align-trans.png) no-repeat scroll right bottom;
+  background:transparent url(<%= asset_path 'maincontent/modules/br-edit-box-bottom-align-trans.png' %>) no-repeat scroll right bottom;
   height:45px;
   margin-left:28px;
 }
@@ -1252,14 +1252,14 @@ input[type=email].error, input[type=text].error,input[type=password].error {bord
 }
 
 .notification .top {
-  background:transparent url(/images/maincontent/modules/tl-notification-trans.png) no-repeat scroll top left;
+  background:transparent url(<%= asset_path 'maincontent/modules/tl-notification-trans.png' %>) no-repeat scroll top left;
   clear:both;
   padding:0;
   margin:0;
   width:100%;
 }
 .notification .top .right {
-  background:transparent url(/images/maincontent/modules/tr-notification-trans.png) no-repeat scroll top right;
+  background:transparent url(<%= asset_path 'maincontent/modules/tr-notification-trans.png' %>) no-repeat scroll top right;
   padding: 10px 18px 0 0;
   min-height:36px;
   margin-left:36px;
@@ -1269,13 +1269,13 @@ input[type=email].error, input[type=text].error,input[type=password].error {bord
   clear:both;
 }
 .notification .bottom {
-  background:transparent url(/images/maincontent/modules/bl-notification-trans.png) no-repeat scroll bottom left;
+  background:transparent url(<%= asset_path 'maincontent/modules/bl-notification-trans.png' %>) no-repeat scroll bottom left;
   clear:both;
   padding:0;
   width:100%;
 }
 .notification .bottom .right {
-  background:transparent url(/images/maincontent/modules/br-notification-trans.png) no-repeat scroll bottom right;
+  background:transparent url(<%= asset_path 'maincontent/modules/br-notification-trans.png' %>) no-repeat scroll bottom right;
   height:10px;
   margin-left:36px;
 }
@@ -1301,36 +1301,36 @@ input[type=email].error, input[type=text].error,input[type=password].error {bord
   color:#F47878;
 }
 .notification.error .top {
-  background:transparent url(/images/maincontent/modules/tl-error-trans.png) no-repeat scroll left top;
+  background:transparent url(<%= asset_path 'maincontent/modules/tl-error-trans.png' %>) no-repeat scroll left top;
 }
 .notification.error .top .right {
-  background:transparent url(/images/maincontent/modules/tr-error-trans.png) no-repeat scroll right top;
+  background:transparent url(<%= asset_path 'maincontent/modules/tr-error-trans.png' %>) no-repeat scroll right top;
 }
 .notification.error .bottom {
-  background:transparent url(/images/maincontent/modules/bl-error-trans.png) no-repeat scroll left bottom;
+  background:transparent url(<%= asset_path 'maincontent/modules/bl-error-trans.png' %>) no-repeat scroll left bottom;
 }
 .notification.error .bottom .right {
-  background:transparent url(/images/maincontent/modules/br-error-trans.png) no-repeat scroll right bottom;
+  background:transparent url(<%= asset_path 'maincontent/modules/br-error-trans.png' %>) no-repeat scroll right bottom;
 }
 
 .notification.success .title {
   color:#078F48;
 }
 .notification.success .top {
-  background:transparent url(/images/maincontent/modules/tl-success-trans.png) no-repeat scroll left top;
+  background:transparent url(<%= asset_path 'maincontent/modules/tl-success-trans.png' %>) no-repeat scroll left top;
 }
 .notification.success .top .right {
-  background:transparent url(/images/maincontent/modules/tr-success-trans.png) no-repeat scroll right top;
+  background:transparent url(<%= asset_path 'maincontent/modules/tr-success-trans.png' %>) no-repeat scroll right top;
   padding-left:5px;
 }
 .notification.success .bottom {
-  background:transparent url(/images/maincontent/modules/bl-success-trans.png) no-repeat scroll left bottom;
+  background:transparent url(<%= asset_path 'maincontent/modules/bl-success-trans.png' %>) no-repeat scroll left bottom;
   clear:both;
   padding:0;
   width:100%;
 }
 .notification.success .bottom .right {
-  background:transparent url(/images/maincontent/modules/br-success-trans.png) no-repeat scroll right bottom;
+  background:transparent url(<%= asset_path 'maincontent/modules/br-success-trans.png' %>) no-repeat scroll right bottom;
   height:10px;
   margin-left:36px;
 }
@@ -1339,16 +1339,16 @@ input[type=email].error, input[type=text].error,input[type=password].error {bord
   color:#F7931E;
 }
 .notification.maintenance .top {
-  background:transparent url(/images/maincontent/modules/tl-maintenance-trans.png) no-repeat scroll left top;
+  background:transparent url(<%= asset_path 'maincontent/modules/tl-maintenance-trans.png' %>) no-repeat scroll left top;
 }
 .notification.maintenance .top .right {
-  background:transparent url(/images/maincontent/modules/tr-maintenance-trans.png) no-repeat scroll right top;
+  background:transparent url(<%= asset_path 'maincontent/modules/tr-maintenance-trans.png' %>) no-repeat scroll right top;
 }
 .notification.maintenance .bottom {
-  background:transparent url(/images/maincontent/modules/bl-maintenance-trans.png) no-repeat scroll left bottom;
+  background:transparent url(<%= asset_path 'maincontent/modules/bl-maintenance-trans.png' %>) no-repeat scroll left bottom;
 }
 .notification.maintenance .bottom .right {
-  background:transparent url(/images/maincontent/modules/br-maintenance-trans.png) no-repeat scroll right bottom;
+  background:transparent url(<%= asset_path 'maincontent/modules/br-maintenance-trans.png' %>) no-repeat scroll right bottom;
 }
 
 /*this is where all the buttons and module label are contained within the top of every module */
@@ -1388,7 +1388,7 @@ padding:0 5px;
 .one-col-list.group ul li.on.last-child,
 .one-col-list.group ul li.on.first-child,
 .one-col-list.group ul li.on:hover {
-  background:transparent url(/images/maincontent/lists/1column-group-sprites-trans.png) no-repeat scroll 0 -1px;
+  background:transparent url(<%= asset_path 'maincontent/lists/1column-group-sprites-trans.png' %>) no-repeat scroll 0 -1px;
   min-height:36px;
   margin:0;
   padding:0;
@@ -1410,7 +1410,7 @@ padding:0 5px;
 .one-col-list.group ul li.on.first-child,
 .one-col-list.group ul li.on:hover,
 .one-col-list.group ul li.even.on {
-  background:transparent url(/images/maincontent/lists/1column-group-sprites-trans.png) no-repeat scroll 0 -145px;
+  background:transparent url(<%= asset_path 'maincontent/lists/1column-group-sprites-trans.png' %>) no-repeat scroll 0 -145px;
   width:327px;
   min-height:36px;
   margin:0;
@@ -1453,14 +1453,14 @@ padding:0 5px;
 
 .one-col-list li,
 .one-col-list.group li {
-  background:#F4F6F1 url(/images/maincontent/lists/1column-group-sublist-bg-sprites-trans.gif) no-repeat scroll 0 -10px;
+  background:#F4F6F1 url(<%= asset_path 'maincontent/lists/1column-group-sublist-bg-sprites-trans.gif' %>) no-repeat scroll 0 -10px;
   font-size:0.75em;
   padding:0;
   margin:0;
 }
 
 .one-col-list.group li:hover {
-  background:#F4F6F1 url(/images/maincontent/lists/1column-group-sublist-bg-sprites-trans.gif) no-repeat scroll left bottom;
+  background:#F4F6F1 url(<%= asset_path 'maincontent/lists/1column-group-sublist-bg-sprites-trans.gif' %>) no-repeat scroll left bottom;
 }
 
 .one-col-list li {
@@ -1468,10 +1468,10 @@ padding:0 5px;
 }
 
 .one-col-list li.even {
-  background:#fff url(/images/maincontent/lists/1column-list-sprites-trans.png) scroll no-repeat top left;
+  background:#fff url(<%= asset_path 'maincontent/lists/1column-list-sprites-trans.png' %>) scroll no-repeat top left;
 }
 .one-col-list li:hover {
-  background:transparent url(/images/maincontent/lists/1column-list-sprites-trans.png) scroll no-repeat top right;
+  background:transparent url(<%= asset_path 'maincontent/lists/1column-list-sprites-trans.png' %>) scroll no-repeat top right;
 }
 
 .one-col-list li a,
@@ -1518,7 +1518,7 @@ h6 .list-totals,
 
 .one-col-list.header,
 .one-col-list.footer {
-  background:transparent url(/images/maincontent/lists/1column-header-footer-trans.png) no-repeat scroll top left;
+  background:transparent url(<%= asset_path 'maincontent/lists/1column-header-footer-trans.png' %>) no-repeat scroll top left;
   clear:both;
   height:36px;
 }
@@ -1532,7 +1532,7 @@ h6 .list-totals,
 /*2-column module list styles ------------------------------------------------------------*/
 .two-col-list.header,
 .two-col-list.footer {
- background:transparent url(/images/maincontent/lists/2column-header-footer-trans.png) scroll no-repeat top left;
+  background:transparent url(<%= asset_path 'maincontent/lists/2column-header-footer-trans.png' %>) scroll no-repeat top left;
  clear:both;
  height:36px;
  margin:0;
@@ -1548,12 +1548,12 @@ h6 .list-totals,
 }
 
 .two-col-list li.even { /*this is what creates the zebra stripped lists*/
-  background:transparent url(/images/maincontent/lists/2column-list-sprites-trans.png) scroll no-repeat top left;
+  background:transparent url(<%= asset_path 'maincontent/lists/2column-list-sprites-trans.png' %>) scroll no-repeat top left;
   clear:both;
 }
 
 .two-col-list li:hover {
-  background:transparent url(/images/maincontent/lists/2column-list-sprites-trans.png) scroll no-repeat top right;
+  background:transparent url(<%= asset_path 'maincontent/lists/2column-list-sprites-trans.png' %>) scroll no-repeat top right;
   clear:both;
 }
 
@@ -1661,81 +1661,81 @@ a.button.toggle-on, a.button.toggle-on:hover {
 
 /*the grey and blue buttons are to be used as general settings buttons, such as "edit" or "add target" they will most likely live in the top right control panel of a module*/
 a.button.gry {
-  background:transparent url(/images/maincontent/buttons/button-gry-a-trans.png) no-repeat scroll top right;
+  background:transparent url(<%= asset_path 'maincontent/buttons/button-gry-a-trans.png' %>) no-repeat scroll top right;
 }
 a.button.gry span{
-  background:transparent url(/images/maincontent/buttons/button-gry-span-trans.png) no-repeat top left;
+  background:transparent url(<%= asset_path 'maincontent/buttons/button-gry-span-trans.png' %>) no-repeat top left;
 }
 a.button.gry:active {
-  background:transparent url(/images/maincontent/buttons/button-gry-a-trans.png) no-repeat scroll bottom right;
+  background:transparent url(<%= asset_path 'maincontent/buttons/button-gry-a-trans.png' %>) no-repeat scroll bottom right;
 }
 a.button.gry span:active {
-  background:transparent url(/images/maincontent/buttons/button-gry-span-trans.png) no-repeat bottom left;
+  background:transparent url(<%= asset_path 'maincontent/buttons/button-gry-span-trans.png' %>) no-repeat bottom left;
 }
 
 a.button.blue {
-  background:transparent url(/images/maincontent/buttons/button-blue-a-trans.png) no-repeat scroll top right;
+  background:transparent url(<%= asset_path 'maincontent/buttons/button-blue-a-trans.png' %>) no-repeat scroll top right;
 }
 a.button.blue span{
-  background:transparent url(/images/maincontent/buttons/button-blue-span-trans.png) no-repeat top left;
+  background:transparent url(<%= asset_path 'maincontent/buttons/button-blue-span-trans.png' %>) no-repeat top left;
 }
 a.button.blue:active {
-  background:transparent url(/images/maincontent/buttons/button-blue-a-trans.png) no-repeat scroll bottom right;
+  background:transparent url(<%= asset_path 'maincontent/buttons/button-blue-a-trans.png' %>) no-repeat scroll bottom right;
 }
 a.button.blue span:active {
-  background:transparent url(/images/maincontent/buttons/button-blue-span-trans.png) no-repeat bottom left;
+  background:transparent url(<%= asset_path 'maincontent/buttons/button-blue-span-trans.png' %>) no-repeat bottom left;
 }
 
 /*the orange button is used as a call to action button for actions such as "add and account" or "create a discussion" */
 
 a.button.orange {
-  background:transparent url(/images/maincontent/buttons/button-orange-a-trans.png) no-repeat scroll top right;
+  background:transparent url(<%= asset_path 'maincontent/buttons/button-orange-a-trans.png' %>) no-repeat scroll top right;
 }
 a.button.orange span{
-  background:transparent url(/images/maincontent/buttons/button-orange-span-trans.png) no-repeat top left;
+  background:transparent url(<%= asset_path 'maincontent/buttons/button-orange-span-trans.png' %>) no-repeat top left;
 }
 a.button.orange:active {
-  background:transparent url(/images/maincontent/buttons/button-orange-a-trans.png) no-repeat scroll bottom right;
+  background:transparent url(<%= asset_path 'maincontent/buttons/button-orange-a-trans.png' %>) no-repeat scroll bottom right;
 }
 a.button.orange span:active {
-  background:transparent url(/images/maincontent/buttons/button-orange-span-trans.png) no-repeat bottom left;
+  background:transparent url(<%= asset_path 'maincontent/buttons/button-orange-span-trans.png' %>) no-repeat bottom left;
 }
 
 /* the green button is used as a call to action for routine elements, such as "save" or sign-up" */
 
 a.button.green {
-  background:transparent url(/images/maincontent/buttons/button-green-a-trans.png) no-repeat scroll top right;
+  background:transparent url(<%= asset_path 'maincontent/buttons/button-green-a-trans.png' %>) no-repeat scroll top right;
 }
 a.button.green span{
-  background:transparent url(/images/maincontent/buttons/button-green-span-trans.png) no-repeat top left;
+  background:transparent url(<%= asset_path 'maincontent/buttons/button-green-span-trans.png' %>) no-repeat top left;
 }
 a.button.green:active {
-  background:transparent url(/images/maincontent/buttons/button-green-a-trans.png) no-repeat scroll bottom right;
+  background:transparent url(<%= asset_path 'maincontent/buttons/button-green-a-trans.png' %>) no-repeat scroll bottom right;
 }
 a.button.green span:active {
-  background:transparent url(/images/maincontent/buttons/button-green-span-trans.png) no-repeat bottom left;
+  background:transparent url(<%= asset_path 'maincontent/buttons/button-green-span-trans.png' %>) no-repeat bottom left;
 }
 
 /*the red button is only to be used for actions such as "delete my account" - we want the user to think about it before pressing the button */
 
 a.button.red {
-  background:transparent url(/images/maincontent/buttons/button-red-a-trans.png) no-repeat scroll top right;
+  background:transparent url(<%= asset_path 'maincontent/buttons/button-red-a-trans.png' %>) no-repeat scroll top right;
 }
 a.button.red span {
-  background:transparent url(/images/maincontent/buttons/button-red-span-trans.png) no-repeat top left;
+  background:transparent url(<%= asset_path 'maincontent/buttons/button-red-span-trans.png' %>) no-repeat top left;
 }
 a.button.red:active {
-  background:transparent url(/images/maincontent/buttons/button-red-a-trans.png) no-repeat scroll bottom right;
+  background:transparent url(<%= asset_path 'maincontent/buttons/button-red-a-trans.png' %>) no-repeat scroll bottom right;
 }
 a.button.red span:active {
-  background:transparent url(/images/maincontent/buttons/button-red-span-trans.png) no-repeat bottom left;
+  background:transparent url(<%= asset_path 'maincontent/buttons/button-red-span-trans.png' %>) no-repeat bottom left;
 }
 
 
 /*delete item link------------------------------------------------------------------------------------------- */
 
 a.delete.conf.button {
-  background:transparent url(/images/maincontent/buttons/delete-icon-trans.png) no-repeat scroll top left;
+  background:transparent url(<%= asset_path 'maincontent/buttons/delete-icon-trans.png' %>) no-repeat scroll top left;
   height:20px;
   padding-left:25px;
   font-size:10px;
@@ -1781,34 +1781,34 @@ a.toggle-button.on:active {
 }
 
 a.toggle-button.on {
-  background:transparent url(/images/maincontent/buttons/button-toggle-on-a-trans.png) no-repeat scroll top right;
+  background:transparent url(<%= asset_path 'maincontent/buttons/button-toggle-on-a-trans.png' %>) no-repeat scroll top right;
 }
 a.toggle-button.on span {
-  background:transparent url(/images/maincontent/buttons/button-toggle-on-span-trans.png) no-repeat top left;
+  background:transparent url(<%= asset_path 'maincontent/buttons/button-toggle-on-span-trans.png' %>) no-repeat top left;
 }
 a.toggle-button.on:active {
-  background:transparent url(/images/maincontent/buttons/button-toggle-on-a-trans.png) no-repeat scroll bottom right;
+  background:transparent url(<%= asset_path 'maincontent/buttons/button-toggle-on-a-trans.png' %>) no-repeat scroll bottom right;
 }
 a.toggle-button.on span:active {
-  background:transparent url(/images/maincontent/buttons/button-toggle-on-span-trans.png) no-repeat bottom left;
+  background:transparent url(<%= asset_path 'maincontent/buttons/button-toggle-on-span-trans.png' %>) no-repeat bottom left;
 }
 
 a.toggle-button {
-  background:transparent url(/images/maincontent/buttons/button-toggle-off-a-trans.png) no-repeat scroll top right;
+  background:transparent url(<%= asset_path 'maincontent/buttons/button-toggle-off-a-trans.png' %>) no-repeat scroll top right;
 }
 a.toggle-button span {
-  background:transparent url(/images/maincontent/buttons/button-toggle-off-span-trans.png) no-repeat top left;
+  background:transparent url(<%= asset_path 'maincontent/buttons/button-toggle-off-span-trans.png' %>) no-repeat top left;
 }
 a.toggle-button:active {
-  background:transparent url(/images/maincontent/buttons/button-toggle-off-a-trans.png) no-repeat scroll bottom right;
+  background:transparent url(<%= asset_path 'maincontent/buttons/button-toggle-off-a-trans.png' %>) no-repeat scroll bottom right;
 }
 a.toggle-button span:active {
-  background:transparent url(/images/maincontent/buttons/button-toggle-off-span-trans.png) no-repeat bottom left;
+  background:transparent url(<%= asset_path 'maincontent/buttons/button-toggle-off-span-trans.png' %>) no-repeat bottom left;
 }
 
 
 a.toggle {
-  background: url(/images/maincontent/buttons/toggle-sprites-trans.png) no-repeat scroll 0 0;
+  background: url(<%= asset_path 'maincontent/buttons/toggle-sprites-trans.png' %>) no-repeat scroll 0 0;
   width:33px;
   height:19px;
   float:right;
@@ -1821,7 +1821,7 @@ a.toggle.active {
 }
 
 a.toggle.divider {
-  background:transparent url(/images/maincontent/buttons/toggle-divider-trans.png) no-repeat scroll 0 0;
+  background:transparent url(<%= asset_path 'maincontent/buttons/toggle-divider-trans.png' %>) no-repeat scroll 0 0;
   width:2px;
   margin:2px 6px 0;
 }
@@ -1964,20 +1964,20 @@ a.tab > span {
 
 
 a.tab {
-  background:transparent url(/images/maincontent/buttons/tab-a-trans.png) no-repeat scroll top right;
+  background:transparent url(<%= asset_path 'maincontent/buttons/tab-a-trans.png' %>) no-repeat scroll top right;
 }
 a.tab span{
-  background:transparent url(/images/maincontent/buttons/tab-span-trans.png) no-repeat scroll top left;
+  background:transparent url(<%= asset_path 'maincontent/buttons/tab-span-trans.png' %>) no-repeat scroll top left;
 }
 
 a.tab.on,
 a.tab:active {
-  background:transparent url(/images/maincontent/buttons/tab-on-a-trans.png) no-repeat scroll top right;
+  background:transparent url(<%= asset_path 'maincontent/buttons/tab-on-a-trans.png' %>) no-repeat scroll top right;
 }
 
 a.tab.on span,
 a.tab span:active {
-  background:transparent url(/images/maincontent/buttons/tab-on-span-trans.png) no-repeat scroll top left;
+  background:transparent url(<%= asset_path 'maincontent/buttons/tab-on-span-trans.png' %>) no-repeat scroll top left;
 }
 
 
@@ -1991,7 +1991,7 @@ a.tab span:active {
 
 .view, .add, .remove, .close, .help, .edit, .select, .left-arrow, .right-arrow, .calendar {
   float:right;
-  background:transparent url(/images/maincontent/buttons/line-item-buttons-sprites-trans.png?1244156602874) no-repeat scroll -2px 0;
+  background:transparent url(<%= asset_path 'maincontent/buttons/line-item-buttons-sprites-trans.png?1244156602874' %>) no-repeat scroll -2px 0;
   width:18px;
   height:18px;
   padding:8px;
@@ -2395,7 +2395,7 @@ color:#333;float:left;width:100%;margin:0;padding:0px 5px;cursor:default;white-s
 
 /*  from http://dominiek.com/108-ajax-snippet-blank-out-a-div-with-a-spinner */
 .spin_div {
-  background: #fff url(/images/large-spinner.gif) no-repeat center center;
+  background: #fff url(<%= asset_path 'large-spinner.gif' %>) no-repeat center center;
   opacity: 0.75;
   filter:alpha(opacity: 75);
   -moz-opacity: 0.75;

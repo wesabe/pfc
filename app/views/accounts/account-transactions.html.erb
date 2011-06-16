@@ -5,7 +5,7 @@
     <%= stylesheet_link_tag "ie6" %>
 <![endif]-->
 <% content_for :footer do -%>
-  <%= javascript_include_manifest :accounts %>
+  <%= javascript_include_tag :accounts %>
 <% end -%>
 
 <div id="right">
@@ -34,7 +34,7 @@
       </div>
       <ul class="two-col-list" id="transactions">
         <li class="loading-indicator">
-          <img src="/images/maincontent/animated-gifs/loading-dots-animated.gif" />
+          <%= image_tag 'maincontent/animated-gifs/loading-dots-animated.gif' %>
         </li>
 
         <li id="no-transactions" class="transactions-notice" style="display:none">
@@ -58,7 +58,7 @@
 
         <li class="transaction template">
           <div class="edit">
-            <img src="/images/maincontent/animated-gifs/uploading-spinner.gif" alt="Loading&hellip;" class="uploading-spinner">
+            <%= image_tag 'maincontent/animated-gifs/uploading-spinner.gif', :alt => 'Loading&hellip;', :class => 'uploading-spinner' %>
           </div>
           <div class="transaction-date"></div>
           <div class="merchant-info">

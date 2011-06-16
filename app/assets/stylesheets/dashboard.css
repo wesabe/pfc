@@ -1,3 +1,8 @@
+/*
+ *= require accounts.css
+ *= require widgets/targets.css
+*/
+
 #recent-transactions .module-header {
   height:18px;
   padding-bottom:0;
@@ -29,9 +34,3 @@
   width: 630px;
   height: 260px;
 }
-
-/*
- *= require accounts.css
- *= require widgets/targets.css
- *= require widgets/groups.css
-*/

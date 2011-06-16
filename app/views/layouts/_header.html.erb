@@ -23,7 +23,7 @@
     <%= stylesheet_link_tag s, :media => "screen" %>
   <%- end if stylesheets -%>
 
-  <%= javascript_include_manifest :wesabe %>
+  <%= javascript_include_tag :application %>
   <% if current_user -%>
     <%= javascript_tag %{wesabe.data.preferences.set(#{present(current_user.preferences).to_json});} %>
     <%= javascript_tag %{wesabe.views.shared.loggedIn(true);} %>

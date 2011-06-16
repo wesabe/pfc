@@ -1,3 +1,7 @@
+/*
+ *= require accounts.css
+*/
+
 #spending-summary #control-panel {
   width:600px;
   margin:0 0 18px 0;
@@ -51,15 +55,15 @@
 }
 
 #tags-list.spending .tag-bar-amount.current {
-  background: url(/images/spending-summary/spending-bar-small-trans.png) no-repeat;
+  background: url(<%= asset_path 'spending-summary/spending-bar-small-trans.png' %>) no-repeat;
 }
 
 #tags-list.earnings .tag-bar-amount.current {
-  background: url(/images/spending-summary/earnings-bar-small-trans.png) no-repeat;
+  background: url(<%= asset_path 'spending-summary/earnings-bar-small-trans.png' %>) no-repeat;
 }
 
 #tags-list .tag-bar-amount.comparison {
-  background: url(/images/spending-summary/comparison-bar-small-trans.png) no-repeat;
+  background: url(<%= asset_path 'spending-summary/comparison-bar-small-trans.png' %>) no-repeat;
 }
 
 #tags-list .tag-amount {

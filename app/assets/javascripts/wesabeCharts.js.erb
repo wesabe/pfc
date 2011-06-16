@@ -271,7 +271,7 @@ var wesCharts = {
 
       var fs = fontSize+2;
       label.innerHTML = (ops.loading ?
-         "<img src='/images/loading.gif' height='11px' width='11px' align='top' style='margin: 1px 5px 1px 0px;'/>" : '') + str;
+        "<img src='<%= asset_path 'loading.gif' %>' height='11px' width='11px' align='top' style='margin: 1px 5px 1px 0px;'/>" : '') + str;
       var metrics = wesCharts.textMetrics(curElement, str);
       label.style.left = (ops.x-(metrics.width/2)-11) + 'px';
       label.style.top = (ops.y-(metrics.height/2)-11) + 'px';

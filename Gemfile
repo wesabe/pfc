@@ -1,7 +1,7 @@
 source :gemcutter
 
 # Regular gems
-gem 'rails',             '3.1.0.rc4'
+gem 'rails', :git => 'git://github.com/rails/rails.git'
 gem 'rake',              '~>0.8.0'
 gem 'resque',            '1.10.0'
 gem 'system_timer'

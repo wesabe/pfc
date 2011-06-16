@@ -2,7 +2,7 @@
 
 #accounts .module-header .update-button {
   float:right;
-  background:transparent url(/images/maincontent/accounts/account-status-icons-sprites-trans.png) no-repeat scroll -45px 0;
+  background:transparent url(<%= asset_path 'maincontent/accounts/account-status-icons-sprites-trans.png' %>) no-repeat scroll -45px 0;
   width:21px;
   height:21px;
 }
@@ -10,7 +10,7 @@
   background-position:-81px 0;
 }
 #accounts .module-header .update-button.loading {
-  background:transparent url(/images/maincontent/animated-gifs/ssu-uploading-icon.png) no-repeat scroll 0 0;
+  background:transparent url(<%= asset_path 'maincontent/animated-gifs/ssu-uploading-icon.png' %>) no-repeat scroll 0 0;
   /* FIXME: this is a hack to make the offset correct as compared to the sprite above */
   padding:0 6px 6px 6px;
 }
@@ -23,7 +23,7 @@
 
 #accounts .group h6,
 #accounts .group.on h6 {
-  background:transparent url(/images/maincontent/accounts/account-group-icons-sprites-trans.png) no-repeat scroll;
+  background:transparent url(<%= asset_path 'maincontent/accounts/account-group-icons-sprites-trans.png' %>) no-repeat scroll;
   overflow:hidden;
   padding:0 0 0 40px;
   margin:0;
@@ -210,7 +210,7 @@
   height:27px;
   margin:7px 0 0 0;
   padding:0;
-  background:transparent url(/images/maincontent/accounts/account-status-icons-sprites-trans.png) no-repeat scroll 0 0;
+  background:transparent url(<%= asset_path 'maincontent/accounts/account-status-icons-sprites-trans.png' %>) no-repeat scroll 0 0;
   visibility:hidden;
   position:relative;
 }
@@ -399,14 +399,14 @@
 
 #accounts .edit-dialog .inset-tab-text.ssu {
   padding:0 0 0 50px;
-  background:transparent url(/images/maincontent/accounts/account-edit-au-uploader-trans.png) no-repeat 0 0;
+  background:transparent url(<%= asset_path 'maincontent/accounts/account-edit-au-uploader-trans.png' %>) no-repeat 0 0;
 }
 #accounts .edit-dialog .inset-tab-text.ssu-error {
-  background:transparent url(/images/maincontent/accounts/account-edit-ssu-error-trans.png) no-repeat 0 0;
+  background:transparent url(<%= asset_path 'maincontent/accounts/account-edit-ssu-error-trans.png' %>) no-repeat 0 0;
   padding:5px 0 5px 60px;
 }
 #accounts .update.error .hover-box .contents {
-  background:url(/images/maincontent/accounts/account-edit-ssu-error-trans.png) no-repeat 0 0;
+  background:url(<%= asset_path 'maincontent/accounts/account-edit-ssu-error-trans.png' %>) no-repeat 0 0;
   padding:5px 0 5px 60px;
 }
 
@@ -415,7 +415,7 @@
 }
 
 #accounts .edit-dialog .delete-details.confirmation {
-  background:transparent url(/images/maincontent/accounts/delete-confirmation-icon-trans.png) no-repeat 0 0;
+  background:transparent url(<%= asset_path 'maincontent/accounts/delete-confirmation-icon-trans.png' %>) no-repeat 0 0;
   padding:8px 20px 0 75px;
   margin:8px 20px 0 8px;
   min-height: 60px;
@@ -979,7 +979,7 @@ li.transactions-notice:hover {
 }
 
 .merchant-icons {
-  background:transparent url(/images/maincontent/accounts/transactions/transaction-icons-sprites-trans.png) no-repeat scroll 0 0;
+  background:transparent url(<%= asset_path 'maincontent/accounts/transactions/transaction-icons-sprites-trans.png' %>) no-repeat scroll 0 0;
   width:18px;
   height:26px;
   margin: 0 1px;
@@ -1220,36 +1220,36 @@ li.transactions-notice:hover {
 }
 
 #transaction-totals .top {
-  background:transparent url(/images/maincontent/accounts/tl-transaction-totals-trans.png) no-repeat scroll left top;
+  background:transparent url(<%= asset_path 'maincontent/accounts/tl-transaction-totals-trans.png' %>) no-repeat scroll left top;
   clear:both;
   padding:0;
   margin:0;
   width:100%;
 }
 #transaction-totals .top .right {
-  background:transparent url(/images/maincontent/accounts/tr-transaction-totals-trans.png) no-repeat scroll right top;
+  background:transparent url(<%= asset_path 'maincontent/accounts/tr-transaction-totals-trans.png' %>) no-repeat scroll right top;
   height:8px;
   margin-left:8px;
 }
 #transaction-totals .middle {
-  background:transparent url(/images/maincontent/accounts/ml-transaction-totals-trans.png) repeat-y scroll left center;
+  background:transparent url(<%= asset_path 'maincontent/accounts/ml-transaction-totals-trans.png' %>) repeat-y scroll left center;
   clear:both;
   width:100%;
 }
 #transaction-totals .middle .right {
-  background:transparent url(/images/maincontent/accounts/mr-transaction-totals-trans.png) repeat-y scroll right center;
+  background:transparent url(<%= asset_path 'maincontent/accounts/mr-transaction-totals-trans.png' %>) repeat-y scroll right center;
   margin-left:8px;
   padding:0 15px 0 10px;
 }
 
 #transaction-totals .bottom {
-  background:transparent url(/images/maincontent/accounts/bl-transaction-totals-trans.png) no-repeat scroll left bottom;
+  background:transparent url(<%= asset_path 'maincontent/accounts/bl-transaction-totals-trans.png' %>) no-repeat scroll left bottom;
   clear:both;
   padding:0;
   width:100%;
 }
 #transaction-totals .bottom .right {
-  background:transparent url(/images/maincontent/accounts/br-transaction-totals-trans.png) no-repeat scroll right bottom;
+  background:transparent url(<%= asset_path 'maincontent/accounts/br-transaction-totals-trans.png' %>) no-repeat scroll right bottom;
   height:8px;
   margin-left:8px;
 }
@@ -1285,7 +1285,7 @@ li.transactions-notice:hover {
 
 li.transaction-totals {
   position:relative;
-  background:transparent url(/images/maincontent/accounts/transaction-totals-pill-a-trans.png) no-repeat scroll top right;
+  background:transparent url(<%= asset_path 'maincontent/accounts/transaction-totals-pill-a-trans.png' %>) no-repeat scroll top right;
   float:left;
   color:#332C25;
   font-size:0.75em;
@@ -1297,7 +1297,7 @@ li.transaction-totals {
 }
 
 li.transaction-totals span {
-  background:transparent url(/images/maincontent/accounts/transaction-totals-pill-span-trans.png) no-repeat top left;
+  background:transparent url(<%= asset_path 'maincontent/accounts/transaction-totals-pill-span-trans.png' %>) no-repeat top left;
   display:block;
   line-height:12px;
   padding:4.5px 0 5px 4px;
@@ -1587,7 +1587,7 @@ li.transaction-totals span {
   width: 18px;
   height: 18px;
   background-color: transparent;
-  background-image: url(/images/maincontent/buttons/line-item-buttons-sprites-trans.png);
+  background-image: url(<%= asset_path 'maincontent/buttons/line-item-buttons-sprites-trans.png)' %>;
   background-position:-167px -8px;
 }
 #tags li.tag .edit-button:hover {
@@ -1645,19 +1645,19 @@ li.transaction-totals span {
 }
 
 #tags .edit-dialog .top .delete-panel p {
-  background: transparent url(/images/tags/tag-delete-trans.png) no-repeat 0 0;
+  background: transparent url(<%= asset_path 'tags/tag-delete-trans.png' %>) no-repeat 0 0;
   margin-top: 5px;
   padding-left:40px;
   min-height: 40px;
 }
 #tags .edit-dialog .top .rename-panel p {
-  background: transparent url(/images/tags/tag-rename-trans.png) no-repeat 0 0;
+  background: transparent url(<%= asset_path 'tags/tag-rename-trans.png' %>) no-repeat 0 0;
   margin-top: 5px;
   padding-left:45px;
   min-height: 40px;
 }
 #tags .edit-dialog .top .merge-panel p {
-  background: transparent url(/images/tags/tag-merge-trans.png) no-repeat 0 0;
+  background: transparent url(<%= asset_path 'tags/tag-merge-trans.png' %>) no-repeat 0 0;
   margin-top: 5px;
   padding-left:60px;
   min-height: 42px;
