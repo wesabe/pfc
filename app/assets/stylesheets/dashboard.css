@@ -29,3 +29,9 @@
   width: 630px;
   height: 260px;
 }
+
+/*
+ *= require accounts.css
+ *= require widgets/targets.css
+ *= require widgets/groups.css
+*/
