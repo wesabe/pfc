@@ -9,6 +9,11 @@ gem 'daemon_controller', '0.2.5'
 gem 'json'
 gem 'rails_autolink'
 
+gem 'coffee-script'
+gem 'sprockets', :git => 'git://github.com/sstephenson/sprockets.git'
+gem 'uglifier'
+gem 'jquery-rails'
+
 platforms :mri_18 do
   gem "oniguruma", :require => 'oniguruma'
 end
