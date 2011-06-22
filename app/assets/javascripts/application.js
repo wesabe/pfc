@@ -1,5 +1,6 @@
 /*
  *= require jquery.js
+ *= require jquery_ujs.js
  *= require jquery/background-position.js
  *= require jquery/wesabe-extensions.js
  *= require jquery/kvo.js
