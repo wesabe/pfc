@@ -1,5 +1,5 @@
 /*
- *= require jquery/base.js
+ *= require jquery.js
  *= require jquery/background-position.js
  *= require jquery/wesabe-extensions.js
  *= require jquery/kvo.js
