@@ -1,5 +1,5 @@
 class SsuJobsController < ApplicationController
-  before_filter :check_authentication, :except => [:update]
+  before_filter :check_authentication
 
   def create
     if @job = account_cred.enqueue_sync
