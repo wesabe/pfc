@@ -1,3 +1,5 @@
+require 'csv'
+
 namespace :stocks do
   task :import => :environment do
     SOURCES = [
@@ -26,7 +28,7 @@ namespace :stocks do
                                     HTTP_PROXY_USER, HTTP_PROXY_PASS).get_response(URI.parse(data[:url]))
         raise "Failed to get #{data[:url]}; response code: #{response.code}" if response.code != '200'
 
-        fcsv = FasterCSV.new(response.body)
+        fcsv = CSV.new(response.body)
         data[:header_lines].times { fcsv.readline } # get rid of header rows
         while true
           begin
@@ -44,7 +46,7 @@ namespace :stocks do
             else
               raise
             end
-          rescue FasterCSV::MalformedCSVError => ex
+          rescue CSV::MalformedCSVError => ex
             raise unless ex.message =~ /Illegal quoting|Unclosed quoted field/
           end
         end

@@ -1,4 +1,4 @@
-require "rchardet"
+require "rchardet19"
 require "xml/libxml" # libxml-ruby
 
 # class to parse and import OFX 2.0 files

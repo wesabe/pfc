@@ -1,3 +1,5 @@
+require 'csv'
+
 # REVIEW: None of these methods need to call Txaction#tags, they should all be using Txaction#taggings.
 module ExportHelper
   # Takes one account and one list of transactions.
@@ -164,7 +166,7 @@ module ExportHelper
   end
 
   def accounts_to_csv(accounts)
-    FasterCSV.generate do |csv|
+    CSV.generate do |csv|
       csv << %w{ id guid account-number name financial-institution-id financial-institution-name account-type currency current-balance last-uploaded-at }
       accounts.each do |account|
         account_data = []
@@ -359,7 +361,7 @@ module ExportHelper
   # Takes a list of accounts, each of which should hold a list of transactions.
   def txactions_to_csv(txactions, options = {})
     txactions.sort! {|a,b| a.date_posted <=> b.date_posted}
-    csv_text = FasterCSV.generate(options) do |csv|
+    csv_text = CSV.generate(options) do |csv|
       csv << ["Account Id", "Account Name", "Financial Institution", "Account Type", "Currency",
               "Transaction Date", "Check Number", "Amount", "Merchant", "Raw Name",
               "Memo", "Note", "Rating", "Tags"]

@@ -1,5 +1,5 @@
 GEM
-  remote: http://rubygems.org/
+  remote: https://rubygems.org/
   specs:
     abstract (1.0.0)
     actionmailer (3.0.7)
@@ -30,10 +30,10 @@ GEM
     activesupport (3.0.7)
     addressable (2.2.0)
     arel (2.0.10)
+    backports (3.6.0)
     builder (2.1.2)
     chronic (0.2.3)
       hoe (>= 1.2.1)
-    columnize (0.3.1)
     crack (0.1.8)
     daemon_controller (0.2.5)
     daemons (1.1.0)
@@ -41,16 +41,13 @@ GEM
     erubis (2.6.6)
       abstract (>= 1.0.0)
     faker (0.3.1)
-    fastercsv (1.5.3)
     hoe (2.6.1)
       rake (>= 0.8.7)
       rubyforge (>= 2.0.4)
     i18n (0.5.0)
-    iconv (0.1)
-    json (1.4.6)
+    json (1.8.1)
     json_pure (1.4.6)
-    libxml-ruby (1.1.3)
-    linecache (0.43)
+    libxml-ruby (2.7.0)
     machinist (1.0.6)
     mail (2.2.19)
       activesupport (>= 2.3.6)
@@ -59,10 +56,12 @@ GEM
       treetop (~> 1.4.8)
     memcache-client (1.8.5)
     mime-types (1.16)
+    mono_logger (1.1.0)
+    multi_json (1.10.1)
     mysql (2.8.1)
     oniguruma (1.1.0)
     polyglot (0.3.1)
-    rack (1.2.1)
+    rack (1.2.8)
     rack-mount (0.6.14)
       rack (>= 1.0.0)
     rack-test (0.5.7)
@@ -81,14 +80,15 @@ GEM
       rake (>= 0.8.7)
       thor (~> 0.14.4)
     rake (0.8.7)
-    rchardet (1.3)
+    rchardet19 (1.3.7)
     rdoc (2.5.9)
-    redis (2.0.11)
-    redis-namespace (0.8.0)
-      redis (< 3.0.0)
-    resque (1.10.0)
-      json (~> 1.4.6)
-      redis-namespace (~> 0.8.0)
+    redis (3.1.0)
+    redis-namespace (1.5.0)
+      redis (~> 3.0, >= 3.0.4)
+    resque (1.25.2)
+      mono_logger (~> 1.0)
+      multi_json (~> 1.0)
+      redis-namespace (~> 1.3)
       sinatra (>= 0.9.2)
       vegas (~> 0.1.2)
     rest-client (1.6.0)
@@ -105,30 +105,28 @@ GEM
       rspec-expectations (~> 2.0.1)
     rspec-rails (2.0.1)
       rspec (~> 2.0.0)
-    ruby-debug (0.10.3)
-      columnize (>= 0.1)
-      ruby-debug-base (~> 0.10.3.0)
-    ruby-debug-base (0.10.3)
-      linecache (>= 0.3)
     rubyforge (2.0.4)
       json_pure (>= 1.1.7)
-    rubyzip (0.9.4)
-    sinatra (1.1.0)
-      rack (~> 1.1)
-      tilt (~> 1.1)
-    system_timer (1.0)
+    rubyzip (1.1.4)
+    sinatra (1.2.9)
+      backports
+      rack (~> 1.1, < 1.5)
+      tilt (>= 1.2.2, < 2.0)
+    system-timer19 (0.0.5)
     thor (0.14.6)
-    tilt (1.1)
+    tilt (1.4.1)
     treetop (1.4.9)
       polyglot (>= 0.3.1)
     tzinfo (0.3.27)
     unicorn (1.1.2)
       rack
-    vegas (0.1.8)
+    vegas (0.1.11)
       rack (>= 1.0.0)
     webmock (1.3.3)
       addressable (>= 2.1.1)
       crack (>= 0.1.7)
+    zip-zip (0.3)
+      rubyzip (>= 1.0.0)
 
 PLATFORMS
   ruby
@@ -138,24 +136,22 @@ DEPENDENCIES
   daemon_controller (= 0.2.5)
   daemons
   faker
-  fastercsv
-  iconv
-  json
-  libxml-ruby (= 1.1.3)
+  json (= 1.8.1)
+  libxml-ruby (= 2.7.0)
   machinist
   memcache-client
   mime-types
   mysql
   oniguruma
   rails (= 3.0.7)
-  rchardet
+  rchardet19
   rdoc
-  resque (= 1.10.0)
+  resque (= 1.25.2)
   rest-client
   rspec-rails (>= 2.0.1)
-  ruby-debug
-  rubyzip
-  system_timer
+  rubyzip (= 1.1.4)
+  system-timer19
   thor
   unicorn
   webmock
+  zip-zip

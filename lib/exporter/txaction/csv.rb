@@ -1,3 +1,4 @@
+require 'csv'
 require 'exporter/txaction'
 
 class Exporter::Txaction::Csv < Exporter::Txaction
@@ -14,7 +15,7 @@ class Exporter::Txaction::Csv < Exporter::Txaction
   def convert
     options = @options.dup
     tag = options.delete(:tag)
-    return FasterCSV.generate(options) do |csv|
+    return CSV.generate(options) do |csv|
       csv << HEADERS
       @data["transactions"].each do |txaction|
         csv << convert_txaction(txaction, tag)
