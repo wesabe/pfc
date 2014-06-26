@@ -61,6 +61,8 @@ GEM
     mysql (2.8.1)
     oniguruma (1.1.0)
     polyglot (0.3.1)
+    puma (2.8.0)
+      rack (>= 1.1, < 2.0)
     rack (1.2.8)
     rack-mount (0.6.14)
       rack (>= 1.0.0)
@@ -118,8 +120,6 @@ GEM
     treetop (1.4.9)
       polyglot (>= 0.3.1)
     tzinfo (0.3.27)
-    unicorn (1.1.2)
-      rack
     vegas (0.1.11)
       rack (>= 1.0.0)
     webmock (1.3.3)
@@ -143,6 +143,7 @@ DEPENDENCIES
   mime-types
   mysql
   oniguruma
+  puma
   rails (= 3.0.7)
   rchardet19
   rdoc
@@ -152,6 +153,5 @@ DEPENDENCIES
   rubyzip (= 1.1.4)
   system-timer19
   thor
-  unicorn
   webmock
   zip-zip

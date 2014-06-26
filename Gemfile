@@ -21,7 +21,7 @@ gem 'libxml-ruby',       '=2.7.0',  :require => 'xml/libxml'
 gem 'daemons'
 gem 'rdoc'
 gem 'thor' # for imports
-gem 'unicorn' # faster development server
+gem 'puma' # faster development server
 gem 'rchardet19'
 
 group :development do
