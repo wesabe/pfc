@@ -21,7 +21,7 @@ class SimplePresenter < ActiveSupport::BasicObject
 
   def self.namespaced_constant(name)
     return nil unless name
-    name.split("::").inject(Object) do |l,r|
+    name.split("::").inject(::Object) do |l,r|
       begin
         l.const_get(r)
       rescue
